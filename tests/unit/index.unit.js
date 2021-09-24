@@ -13,11 +13,9 @@ window.ResizeObserver =
     unobserve: jest.fn()
   }));
 
-document.body.innerHTML = `<div id="app" style="height: 400px"></div>`;
-
 describe("Root.vue", () => {
   const wrapper = mount(Root, {
-    props: { data: dataList, dataIndex: "index" },
+    props: { data: dataList, dataIndex: "index" }
   });
 
   it("load table component", done => {
@@ -43,13 +41,11 @@ describe("Root.vue", () => {
 
 describe("Render", () => {
   const wrapper = mount(Root, {
-    props: { data: dataList, dataIndex: "index" },
-    attachTo: document.getElementById("app"),
+    props: { data: dataList, dataIndex: "index" }
   });
 
   it("render count", done => {
-    console.log(document.body.innerHTML);
-    expect(wrapper.findAll(".gt-gantt-row").length).toBe(15);
+    expect(wrapper.findAll(".gt-gantt-row").length).toBe(1);
     done();
-  })
-})
+  });
+});
