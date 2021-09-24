@@ -1,5 +1,7 @@
 # JzGantt
 
+![](./src/assets/logo.png)
+
 版本: 1.0
 
 [[English](./README.md)] [[中文](./README_cn.md)]
