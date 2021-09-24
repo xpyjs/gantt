@@ -1,0 +1,28 @@
+:root {
+  --j-text-color: #282828;
+  --j-primary-color: #ECA710;
+  --j-content-bg-color: white;
+  --j-content-border-color: #E5E5E5;
+}
+
+// 隐藏元素，但保留位置
+.gt-hide {
+  visibility: hidden;
+}
+
+.gt-line {
+  width: 100%;
+  height: 1px;
+  margin: 10px 0;
+  background-color: lightgrey;
+}
+
+.gt-noselect * {
+  -moz-user-select: none !important;
+  -webkit-user-select: none !important;
+  -ms-user-select: none !important;
+  -khtml-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none;
+  cursor: default !important;
+}

@@ -1,0 +1,83 @@
+{
+  "name": "jz-gantt",
+  "files": [
+    "dist",
+    "typings",
+    "src",
+    "public"
+  ],
+  "main": "./dist/jz-gantt.umd.js",
+  "module": "./dist/jz-gantt.es.js",
+  "typings": "typings/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/jz-gantt.es.js",
+      "require": "./dist/jz-gantt.umd.js"
+    },
+    "./dist/index.css": {
+      "import": "./dist/index.css",
+      "require": "./dist/index.css"
+    }
+  },
+  "version": "1.0.0-rc01",
+  "scripts": {
+    "dev": "vite",
+    "serve": "vite preview",
+    "build": "vue-tsc --noEmit && vite build",
+    "build:debug": "vue-tsc --noEmit && vite build --debug",
+    "lint": "eslint src/**/*.{js,vue,ts} --fix",
+    "lint:create": "eslint --init",
+    "test:unit": "jest",
+    "prepare": "husky install",
+    "commit": "git add -A && git-cz"
+  },
+  "lint-staged": {
+    "*.{vue,js,ts}": "eslint --fix"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.171",
+    "animate.css": "^4.1.1",
+    "lodash": "^4.17.21",
+    "vue": "^3.2.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "@babel/preset-typescript": "^7.15.0",
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.3.2",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "@vitejs/plugin-vue": "^1.6.0",
+    "@vue/babel-plugin-jsx": "^1.0.7",
+    "@vue/compiler-sfc": "^3.2.6",
+    "@vue/test-utils": "^2.0.0-rc.14",
+    "babel-jest": "26.0.0",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^6.3.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^7.17.0",
+    "husky": "^7.0.0",
+    "jest": "26.0.0",
+    "lint-staged": "^11.1.2",
+    "prettier": "^2.4.1",
+    "sass": "^1.35.2",
+    "ts-jest": "26.4.4",
+    "typescript": "^4.3.2",
+    "vite": "^2.5.4",
+    "vite-plugin-eslint": "^1.3.0",
+    "vue-jest": "^5.0.0-alpha.10",
+    "vue-tsc": "^0.2.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+/* 图标基类，所有类前需要添加该属性 */
+.icon {
+  display: inline-block;
+  line-height: 1;
+  width: 1rem;
+  font-size: 1.7rem;
+  font-style: normal;
+  font-variant: normal;
+  margin-left: 0;
+  margin-right: 0;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+@each $icon in more, operation, today {
+  .#{$icon}:before {
+    content: url("../assets/svg/#{$icon}.svg");
+  }
+}

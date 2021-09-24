@@ -1,0 +1,9 @@
+node_modules
+dist
+coverage
+scripts
+
+src/App.vue
+.eslintrc.js
+tests
+*.config.js

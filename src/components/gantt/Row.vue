@@ -1,0 +1,61 @@
+<script lang="ts">
+import useEvent from "@/composables/useEvent";
+import useParam from "@/composables/useParam";
+import useStyle from "@/composables/useStyle";
+import { Variables } from "@/constants/vars";
+import { Row } from "@/models/data/row";
+import { uuid } from "@/utils/common";
+import { computed, defineComponent, ref, toRefs } from "vue";
+import JGanttSlider from "../slider/index.vue";
+
+export default defineComponent({
+  name: Variables.name.ganttRow
+});
+</script>
+
+<script lang="ts" setup>
+const props = defineProps<{ data: Row }>();
+const { data } = toRefs(props);
+
+const { ganttRowStyle } = useStyle();
+
+const key = ref(data.value?.uuid ?? uuid(12));
+const { GtParam } = useParam();
+const sliderNode = computed(() => GtParam.sliderNode);
+
+const { onClickRow, onDbClickRow, onMouseEnterRow, onMouseLeaveRow } = useEvent(
+  data.value as Row
+);
+</script>
+
+<template>
+  <div
+    :key="key"
+    class="gt-gantt-row"
+    :style="ganttRowStyle(data.level)"
+    @click="onClickRow"
+    @dblclick="onDbClickRow"
+    @mouseenter="onMouseEnterRow"
+    @mouseleave="onMouseLeaveRow"
+  >
+    <template v-if="!!data">
+      <component :is="sliderNode" v-if="sliderNode" :data="data" />
+      <JGanttSlider v-else :data="data" />
+    </template>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.gt-gantt-row {
+  width: 100%;
+  position: relative;
+  background-color: var(--j-content-bg-color);
+  border-bottom: 1px solid var(--j-content-border-color);
+  background-image: linear-gradient(
+    270deg,
+    var(--j-content-border-color) 1px,
+    transparent 0
+  );
+  box-sizing: border-box;
+}
+</style>
