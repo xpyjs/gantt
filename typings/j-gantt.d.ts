@@ -2,13 +2,11 @@ import { App } from "vue";
 
 export function install(vue: App): void;
 
-import { JGanttRootComponent } from "./packages/root";
-import { JGanttColumnComponent } from "./packages/column";
-import { JGanttSliderComponent } from "./packages/slider";
+import { JGanttRootComponent } from "./packages/root.d";
+export { JGanttColumnComponent } from "./packages/column.d";
+export { JGanttSliderComponent } from "./packages/slider.d";
 
-export class JGantt extends JGanttRootComponent {
+export declare class JGanttComponent extends JGanttRootComponent {
   setSelected: (data: any) => void;
-  jumpToDate: (date: Date | undefined) => void;
+  jumpToDate: (date?: Date) => void;
 }
-export class JGanttColumn extends JGanttColumnComponent {}
-export class JGanttSlider extends JGanttSliderComponent {}

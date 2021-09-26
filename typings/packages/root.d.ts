@@ -1,10 +1,10 @@
-import { JGanttComponent } from "../component";
+import { JComponent } from "../component";
 import {
   ParamBodyOptions,
   ParamHeaderOptions
 } from "../../src/typings/ParamOptions";
 
-export declare class JGanttRootComponent extends JGanttComponent {
+declare class JGanttRootComponent extends JComponent {
   bodyStyle: ParamBodyOptions;
   border: number;
   borderColor: string;

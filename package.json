@@ -4,7 +4,7 @@
   "author": "jeremyjone",
   "license": "MIT",
   "private": false,
-  "version": "1.0.0-rc01",
+  "version": "1.0.0-rc2",
   "files": [
     "dist",
     "typings",

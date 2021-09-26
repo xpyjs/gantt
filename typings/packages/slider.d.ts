@@ -1,8 +1,8 @@
-import { JGanttComponent } from "../component";
+import { JComponent } from "../component";
 
 export type SliderAlignment = "left" | "center" | "right";
 
-export declare class JGanttSliderComponent extends JGanttComponent {
+declare class JGanttSliderComponent extends JComponent {
   alignment: SliderAlignment;
   bgColor: string;
   dateFormat: string;

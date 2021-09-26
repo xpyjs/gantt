@@ -25,6 +25,8 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, onMounted, PropType, ref, watch } from "vue";
+
 type Direction = "up" | "down" | "left" | "right";
 
 export default defineComponent({
@@ -33,8 +35,6 @@ export default defineComponent({
 </script>
 
 <script lang="ts" setup>
-import { defineComponent, onMounted, PropType, ref, watch } from "vue";
-
 const props = defineProps({
   size: {
     type: Number,

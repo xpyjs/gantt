@@ -1,10 +1,4 @@
 <script lang="ts">
-export default defineComponent({
-  name: Variables.name.column
-});
-</script>
-
-<script lang="ts" setup>
 import useEvent from "@/composables/useEvent";
 import useParam from "@/composables/useParam";
 import { Variables } from "@/constants/vars";
@@ -17,6 +11,12 @@ import useResize from "@/composables/useResize";
 import useRender from "@/composables/useRender";
 import { CustomCssProperties } from "@/typings/private/CSSProperties";
 
+export default defineComponent({
+  name: Variables.name.column
+});
+</script>
+
+<script lang="ts" setup>
 const props = defineProps(columnProps);
 const slots = useSlots();
 const attrs = useAttrs();
