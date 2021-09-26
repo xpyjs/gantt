@@ -31,6 +31,7 @@ module.exports = {
     { value: "utils", name: "utils:\tutils相关" },
     { value: "styles", name: "styles:\t样式相关" },
     { value: "dependencies", name: "dependencies:\t依赖相关" },
+    { value: "other", name: "other:\t其他" },
     // 选中自定义可以自行填写，或者开启 allowCustomScopes 亦可
     { value: "custom", name: "custom:\t自定义" }
   ],

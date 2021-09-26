@@ -1,5 +1,10 @@
 {
   "name": "jz-gantt",
+  "description": "A simple gantt component by vue3.",
+  "author": "jeremyjone",
+  "license": "MIT",
+  "private": false,
+  "version": "1.0.0-rc01",
   "files": [
     "dist",
     "typings",
@@ -19,7 +24,6 @@
       "require": "./dist/index.css"
     }
   },
-  "version": "1.0.0-rc01",
   "scripts": {
     "dev": "vite",
     "serve": "vite preview",
