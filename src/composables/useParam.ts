@@ -72,6 +72,8 @@ export function useInitParam(props: any, slots: Readonly<Slots>) {
   watch(
     () => [
       props.bodyStyle,
+      props.borderColor,
+      props.primaryColor,
       props.levelColor,
       props.showCheckbox,
       props.showExpand,
