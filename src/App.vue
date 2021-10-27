@@ -1,4 +1,8 @@
 <template>
+  <div style="margin: 0 auto; width: 500px">
+    <img src="@/assets/logo.png" alt="" width="500" />
+  </div>
+
   <div style="height: 400px; padding-bottom: 10px">
     <JGantt
       ref="gantt"
