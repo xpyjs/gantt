@@ -10,3 +10,5 @@ yarn-*
 *-lock.json
 yarn.lock
 coverage
+
+.cz-config.js
