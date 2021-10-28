@@ -51,11 +51,6 @@ const { onClickRow, onDbClickRow, onMouseEnterRow, onMouseLeaveRow } = useEvent(
   position: relative;
   background-color: var(--j-content-bg-color);
   border-bottom: 1px solid var(--j-content-border-color);
-  background-image: linear-gradient(
-    270deg,
-    var(--j-content-border-color) 1px,
-    transparent 0
-  );
   box-sizing: border-box;
 }
 </style>

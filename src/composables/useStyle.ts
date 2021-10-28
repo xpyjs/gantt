@@ -7,7 +7,7 @@ import useParam from "./useParam";
 import useResize from "./useResize";
 
 export default function () {
-  const { GtParam, colWidth } = useParam();
+  const { GtParam, oneDayWidth } = useParam();
   const { GtData } = useData();
   const { rowHeight } = useResize();
   const { colorSelectStr } = useDark();
@@ -43,9 +43,12 @@ export default function () {
         borderColor: "var(--j-content-border-color)",
         color: GtParam.ganttOptions.body?.textColor,
 
-        backgroundSize: `${colWidth.value}px`,
-        backgroundImage:
-          "linear-gradient(270deg, var(--j-content-border-color) 1px, transparent 0)",
+        backgroundSize: `${
+          oneDayWidth.value * (GtParam.headerUnit === "week" ? 7 : 1)
+        }px`,
+        backgroundImage: ["day", "week"].includes(GtParam.headerUnit)
+          ? "linear-gradient(270deg, var(--j-content-border-color) 1px, transparent 0)"
+          : "",
         ...rowBgColor.value(level)
       };
     };

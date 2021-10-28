@@ -1,18 +1,8 @@
-import { isString, isNumber, isDate } from "./is";
-
-/**
- * 创建日期的工厂函数，生成一个指定日期，如果无效，返回当日日期
- * @param date 日期
- */
-export function createDate(date?: string | number | Date | null): Date {
-  if (isString(date) || isNumber(date)) {
-    return new Date(date);
-  } else if (isDate(date)) {
-    return date as Date;
-  } else {
-    return new Date();
-  }
-}
+import { Variables } from "@/constants/vars";
+import { HeaderDateOptions, HeaderDateUnit } from "@/typings/ParamOptions";
+import dayjs from "dayjs";
+import weekOfYear from "dayjs/plugin/weekOfYear";
+import { isDate } from "./is";
 
 /**
  * 判断给定的日期是否有效
@@ -80,29 +70,6 @@ export function sameDate(
   )
     return true;
   return false;
-}
-
-/**
- * 获取两个日期间的所有日期列表
- * @param startDate
- * @param endDate
- * @param format
- */
-export function dateList(
-  startDate: string | number | Date,
-  endDate: string | number | Date,
-  format = "yyyy-MM-dd"
-) {
-  const r = [];
-  const startTime = createDate(startDate).getTime();
-  const endTime = createDate(endDate).getTime();
-
-  for (let i = startTime; i <= endTime; ) {
-    r.push(formatDate(i, format));
-    i += 24 * 60 * 60 * 1000;
-  }
-
-  return r;
 }
 
 /**
@@ -184,4 +151,112 @@ export function formatDate(
     fmt = fmt.replace(RegExp.$1, WEEK[lang][date.getDay()]);
   }
   return fmt;
+}
+
+export function getMillisecond(unit: HeaderDateUnit) {
+  switch (unit) {
+    case "week":
+    case "month":
+    case "day":
+    default:
+      return Variables.time.millisecondOfDay;
+  }
+}
+
+// TODO: 上面的方法有时间改成 dayjs 的
+/*************************************/
+/***** 下面方法全部使用 dayjs 实现 *****/
+/*************************************/
+
+// 添加周数
+dayjs.extend(weekOfYear);
+
+/**
+ * 创建日期的工厂函数，生成一个指定日期，如果无效，返回当日日期
+ * @param date 日期
+ */
+export function createDate(date?: string | number | Date | null): Date {
+  return dayjs(date).toDate();
+}
+
+/**
+ * 获取两个日期间的所有日期列表
+ * @param startDate
+ * @param endDate
+ * @param format
+ */
+export function dateList(
+  startDate: string | number | Date,
+  endDate: string | number | Date,
+  unit: HeaderDateUnit
+): HeaderDateOptions[] {
+  const r = {} as { [key: string]: { len: number; text: string }[] };
+  const startTime = createDate(startDate).getTime();
+  const endTime = createDate(endDate).getTime();
+
+  for (let i = startTime; i <= endTime; ) {
+    const year = dayjs(i).year();
+    const month = dayjs(i).month() + 1;
+    console.log(dayjs(i).daysInMonth());
+    switch (unit) {
+      case "week":
+        if (r[`${year}-${month}`]) {
+          r[`${year}-${month}`].push({
+            text: `第 ${dayjs(i).week()} 周`,
+            len: 7
+          });
+        } else {
+          r[`${year}-${month}`] = [
+            {
+              text: `第 ${dayjs(i).week()} 周`,
+              len: 7
+            }
+          ];
+        }
+
+        i += Variables.time.millisecondOfWeek;
+        break;
+      case "month":
+        if (r[`${year}`]) {
+          r[`${year}`].push({
+            text: `${month} 月`,
+            len: dayjs(i).daysInMonth()
+          });
+        } else {
+          r[`${year}`] = [
+            {
+              text: `${month} 月`,
+              len: dayjs(i).daysInMonth()
+            }
+          ];
+        }
+
+        i += dayjs(i).daysInMonth() * Variables.time.millisecondOfDay;
+        break;
+      case "day":
+      default:
+        if (r[`${year}-${month}`]) {
+          r[`${year}-${month}`].push({
+            text: dayjs(i).date().toString(),
+            len: 1
+          });
+        } else {
+          r[`${year}-${month}`] = [
+            {
+              text: dayjs(i).date().toString(),
+              len: 1
+            }
+          ];
+        }
+
+        i += Variables.time.millisecondOfDay;
+    }
+  }
+
+  const res = [] as HeaderDateOptions[];
+  for (const key in r) {
+    res.push({ unit: key, one: r[key] });
+  }
+
+  return res;
 }

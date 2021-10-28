@@ -1,10 +1,8 @@
 <script lang="ts">
-import useData from "@/composables/useData";
 import { useToday } from "@/composables/useDate";
 import useParam from "@/composables/useParam";
 import useStyle from "@/composables/useStyle";
 import { Variables } from "@/constants/vars";
-import { createDate, formatDate, sameDate } from "@/utils/date";
 import { computed, defineComponent } from "vue";
 
 export default defineComponent({
@@ -13,34 +11,21 @@ export default defineComponent({
 </script>
 
 <script lang="ts" setup>
-const { GtParam, colWidth } = useParam();
-const { GtData } = useData();
+const { GtParam, oneDayWidth } = useParam();
 const { headerStyle } = useStyle();
 
 const ganttHeaders = computed(() => GtParam.ganttHeaders);
 
 const chunkStyle = computed(() => {
-  return {
-    width: `${colWidth.value}px`,
-    borderColor: "var(--j-content-border-color)"
+  return (len: number) => {
+    return {
+      width: `${oneDayWidth.value * len}px`,
+      borderColor: "var(--j-content-border-color)"
+    };
   };
 });
 
 const { showTodayLine, todayArrowStyle } = useToday();
-
-function showMonth(item: string): boolean {
-  return (
-    sameDate(item, GtData.start as Date) || createDate(item).getDate() === 1
-  );
-}
-
-function getDateStr(item: string) {
-  return createDate(item).getDate().toString();
-}
-
-function getMonthStr(item: string) {
-  return formatDate(createDate(item), "yyyy-MM");
-}
 </script>
 
 <template>
@@ -53,14 +38,22 @@ function getMonthStr(item: string) {
     />
 
     <div
-      v-for="(item, i) in ganttHeaders"
+      v-for="(item, i) in ganttHeaders.list"
       :key="i"
       class="gt-gantt-header-chunk"
-      :style="chunkStyle"
+      :style="chunkStyle(item.one.reduce((pre, cur) => cur.len + pre, 0))"
     >
-      {{ getDateStr(item) }}
-      <div v-if="showMonth(item)" class="gt-gantt-header-chunk-month">
-        {{ getMonthStr(item) }}
+      <div class="gt-gantt-header-chunk-unit">
+        {{ item.unit }}
+      </div>
+      <div class="gt-gantt-header-chunk-one">
+        <div
+          v-for="(one, index) in item.one"
+          :key="index"
+          :style="chunkStyle(one.len)"
+        >
+          {{ one.text }}
+        </div>
       </div>
     </div>
   </div>
@@ -81,24 +74,34 @@ function getMonthStr(item: string) {
 
   .gt-gantt-header-chunk {
     display: inline-block;
-    position: relative;
-    text-align: center;
     white-space: nowrap;
     height: 100%;
-    top: 50%;
-    font-size: 12px;
+    font-size: 1rem;
     font-weight: bold;
-    border-top: 1px solid var(--j-content-border-color);
     border-right: 1px solid var(--j-content-border-color);
     box-sizing: border-box;
-  }
 
-  .gt-gantt-header-chunk-month {
-    display: inline-block;
-    position: absolute;
-    font-size: 12px;
-    font-weight: bold;
-    top: -40%;
+    &-unit {
+      padding: 4px 0 0 4px;
+      height: 50%;
+      border-bottom: 1px solid var(--j-content-border-color);
+      box-sizing: border-box;
+    }
+
+    &-one {
+      font-size: 0.5rem;
+      font-weight: bold;
+      height: 50%;
+
+      & > div {
+        display: inline-flex;
+        border-right: 1px solid var(--j-content-border-color);
+        box-sizing: border-box;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+      }
+    }
   }
 
   .gt-gantt-header-today-arrow {

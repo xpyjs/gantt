@@ -1,5 +1,6 @@
 import { JComponent } from "../component";
 import {
+  GanttColumnSize,
   ParamBodyOptions,
   ParamHeaderOptions
 } from "../../src/typings/ParamOptions";
@@ -13,7 +14,8 @@ declare class JGanttRootComponent extends JComponent {
   dataIndex: string;
   endKey: string;
   expandAll: boolean;
-  ganttColumnWidth: number | string;
+  // ganttColumnWidth: number | string;
+  ganttColumnSize: GanttColumnSize;
   headerHeight: number | string;
   headerStyle: ParamHeaderOptions;
   levelColor: string[];

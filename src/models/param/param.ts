@@ -1,6 +1,11 @@
 import { Errors } from "@/constants/errors";
 import { Variables } from "@/constants/vars";
-import { ParamOptions } from "@/typings/ParamOptions";
+import {
+  GanttColumnSize,
+  HeaderDateOptions,
+  HeaderDateUnit,
+  ParamOptions
+} from "@/typings/ParamOptions";
 import { parseNumber } from "@/utils/common";
 import { dateList } from "@/utils/date";
 import { isArray } from "@/utils/is";
@@ -10,11 +15,13 @@ import { ColumnNode } from "./columnNode";
 import { TableHeader } from "./header";
 
 class DefaultOptions {
-  colWidth: number;
+  // colWidth: number;
+  colSize: GanttColumnSize;
   rowHeight: number;
 
   constructor() {
-    this.colWidth = Variables.size.minGanttColumnWidth;
+    // this.colWidth = Variables.size.minGanttColumnWidth;
+    this.colSize = "normal";
     this.rowHeight = Variables.size.defaultContentRowHeight;
   }
 }
@@ -23,7 +30,7 @@ export class ParamData {
   private __cns: ColumnNode[];
   private __sn: VNode | null;
   private __ths: TableHeader[];
-  private __ghs: string[];
+  private __ghs: { length: number; list: HeaderDateOptions[] };
   private __cbw: number;
   private __rh: number;
   private __hh: number;
@@ -32,6 +39,7 @@ export class ParamData {
   private __start: Date;
   private __end: Date;
   private __default: DefaultOptions;
+  private __hu: HeaderDateUnit = "day";
 
   /**
    * 层级颜色，循环展示
@@ -62,7 +70,7 @@ export class ParamData {
     this.__cns = [];
     this.__sn = null;
     this.__ths = [];
-    this.__ghs = [];
+    this.__ghs = { length: 0, list: [] };
     this.__cbw = 15;
     this.__rh = Variables.size.defaultContentRowHeight;
     this.__hh = Variables.size.defaultHeaderHeight;
@@ -78,7 +86,8 @@ export class ParamData {
 
     // 默认值
     this.__gos = {
-      columnWidth: Variables.size.minGanttColumnWidth,
+      // columnWidth: Variables.size.minGanttColumnWidth,
+      columnSize: "normal",
       showToday: true,
       showWeekend: true,
       header: {},
@@ -203,6 +212,22 @@ export class ParamData {
   }
 
   /**
+   * 获取表头的显示单位，用于切换
+   */
+  get headerUnit() {
+    return this.__hu;
+  }
+
+  /**
+   * 设置表头的显示单位
+   */
+  set headerUnit(unit: HeaderDateUnit) {
+    this.__hu = unit;
+
+    this.updateGanttHeaders();
+  }
+
+  /**
    * 设置甘特属性参数，自动与当前的参数合并
    * @param opt
    */
@@ -216,13 +241,27 @@ export class ParamData {
    * @param end 截止日期
    */
   setGanttHeaders(start: Date | number | string, end: Date | number | string) {
-    this.ganttHeaders.splice(
-      0,
-      this.ganttHeaders.length,
-      ...dateList(start, end)
-    );
+    // const list = dateList(start, end, this.__hu);
+    // this.ganttHeaders.list = list;
+    // this.ganttHeaders.length = list.reduce(
+    //   (pre, cur) => cur.one.length + pre,
+    //   0
+    // );
+
     this.__start = new Date(start);
     this.__end = new Date(end);
+
+    this.updateGanttHeaders();
+  }
+
+  updateGanttHeaders() {
+    const list = dateList(this.__start, this.__end, this.__hu);
+    this.ganttHeaders.list = list;
+    this.ganttHeaders.length = list.reduce(
+      // (pre, cur) => cur.one.length + pre,
+      (pre, cur) => cur.one.reduce((p, c) => c.len + p, 0) + pre,
+      0
+    );
   }
 
   private __addCNode(data: ColumnNode) {
@@ -324,7 +363,7 @@ export class ParamData {
    */
   resetSize() {
     this.setGanttOptions({
-      [Variables.key.columnWidth]: parseNumber(this.__default.colWidth)
+      [Variables.key.columnSize]: this.__default.colSize
     });
     this.rowHeight = parseNumber(this.__default.rowHeight);
   }

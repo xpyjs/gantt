@@ -17,7 +17,8 @@ export const Variables = {
   key: {
     start: "startDate",
     end: "endDate",
-    columnWidth: "columnWidth",
+    // columnWidth: "columnWidth",
+    columnSize: "columnSize",
     showToday: "showToday",
     showWeekend: "showWeekend",
     header: "header",
@@ -43,8 +44,8 @@ export const Variables = {
     minContentRowHeight: 20,
     maxContentRowHeight: 70,
     minHeaderHeight: 30,
-    minGanttColumnWidth: 15,
-    maxGanttColumnWidth: 100,
+    // minGanttColumnWidth: 15,
+    // maxGanttColumnWidth: 100,
     minTableColumnWidth: 30
   },
 

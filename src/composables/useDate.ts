@@ -1,6 +1,11 @@
 import { Variables } from "@/constants/vars";
 import { parseNumber } from "@/utils/common";
-import { createDate, formatDate, getDateInterval } from "@/utils/date";
+import {
+  createDate,
+  formatDate,
+  getDateInterval,
+  getMillisecond
+} from "@/utils/date";
 import { isDate, isUndefined } from "@/utils/is";
 import { computed } from "vue";
 import useData from "./useData";
@@ -11,8 +16,9 @@ import useResize from "./useResize";
 import { useDark } from "./useStyle";
 
 function _getDateInterval(start: Date, date: Date | number) {
+  const { GtParam } = useParam();
   const sd = new Date(formatDate(start)).setHours(0);
-  return getDateInterval(sd, date) / Variables.time.millisecondOfDay;
+  return getDateInterval(sd, date) / getMillisecond(GtParam.headerUnit);
 }
 
 export function useCheckDate() {
@@ -30,7 +36,7 @@ export function useCheckDate() {
 }
 
 export function useToday() {
-  const { GtParam, colWidth } = useParam();
+  const { GtParam, oneDayWidth } = useParam();
   const { GtData } = useData();
   const { isInArea } = useCheckDate();
   const { colorSelectStr } = useDark();
@@ -46,14 +52,14 @@ export function useToday() {
   const todayLeft = computed(() => {
     const today = new Date().setHours(0);
     return parseNumber(
-      _getDateInterval(GtData.start as Date, today) * colWidth.value
+      _getDateInterval(GtData.start as Date, today) * oneDayWidth.value
     );
   });
 
   const todayLineStyle = computed(() => {
     return {
-      left: `${todayLeft.value}px`,
-      width: `${colWidth.value}px`,
+      left: `${todayLeft.value - 1}px`,
+      width: `${GtParam.headerUnit === "day" ? oneDayWidth.value : 5}px`,
       height: "100%",
       "background-color":
         GtParam.ganttOptions.body?.todayColor ||
@@ -62,12 +68,20 @@ export function useToday() {
   });
 
   const arrowWidth = computed(() => {
-    return colWidth.value > 50 ? 50 : colWidth.value;
+    return GtParam.headerUnit === "day"
+      ? oneDayWidth.value > 50
+        ? 50
+        : oneDayWidth.value
+      : 15;
   });
 
   const todayArrowStyle = computed(() => {
     return {
-      left: `${todayLeft.value + (colWidth.value - arrowWidth.value) / 2}px`,
+      left: `${
+        GtParam.headerUnit === "day"
+          ? todayLeft.value + (oneDayWidth.value - arrowWidth.value) / 2
+          : todayLeft.value - arrowWidth.value / 2 + 2
+      }px`,
       "border-width": `${arrowWidth.value / 2}px`,
       "border-top-color": GtParam.ganttOptions.body?.todayColor
     };
@@ -84,13 +98,14 @@ export function useToday() {
 
 export function useWeekend() {
   const { GtData } = useData();
-  const { GtParam, colWidth } = useParam();
+  const { GtParam, oneDayWidth } = useParam();
   const { ganttWidth } = useResize();
   const { colorSelectStr } = useDark();
 
   const weekendList = computed(() => {
     const r: Array<number> = [];
-    if (!GtParam.ganttOptions.showWeekend) return r;
+    if (!GtParam.ganttOptions.showWeekend || GtParam.headerUnit !== "day")
+      return r;
 
     const sd = createDate(GtData.start);
     let d = sd.getDay();
@@ -110,7 +125,7 @@ export function useWeekend() {
     }
 
     // Cycle to find Saturday and Sunday
-    while (i * colWidth.value < ganttWidth.value) {
+    while (i * oneDayWidth.value < ganttWidth.value) {
       r.push(i);
       r.push(++i);
       ++d;
@@ -124,8 +139,8 @@ export function useWeekend() {
   const weekendStyle = computed(() => {
     return function (item: number) {
       return {
-        left: `${item * colWidth.value}px`,
-        width: `${colWidth.value}px`,
+        left: `${item * oneDayWidth.value}px`,
+        width: `${oneDayWidth.value}px`,
         height: "100%",
         "background-color":
           GtParam.ganttOptions.body?.weekendColor ||
@@ -142,7 +157,7 @@ export function useWeekend() {
 
 export function useJumpDate() {
   const { GtData } = useData();
-  const { colWidth } = useParam();
+  const { oneDayWidth } = useParam();
   const { isInArea } = useCheckDate();
   const { INoDateError } = useRootEmit();
   const { ganttRef } = useGanttRef();
@@ -165,7 +180,7 @@ export function useJumpDate() {
 
     date.setHours(0);
     const width = parseNumber(
-      _getDateInterval(GtData.start as Date, date) * colWidth.value
+      _getDateInterval(GtData.start as Date, date) * oneDayWidth.value
     );
 
     let left = 0,

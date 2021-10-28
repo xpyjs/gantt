@@ -25,12 +25,15 @@
       @move-slider="moveSlider"
       @no-date-error="noDateError"
     >
+      <!-- 无效 slot -->
       <template>
         <div>123</div>
       </template>
 
+      <!-- 无效 slot -->
       <div>a</div>
 
+      <!-- 无效 slot -->
       <div>b</div>
 
       <JGanttSlider

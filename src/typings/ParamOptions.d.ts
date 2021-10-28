@@ -5,6 +5,8 @@ declare interface ParamHeaderOptions {
   textColor?: string;
 }
 
+declare type GanttColumnSize = "normal" | "small" | "large";
+
 declare interface ParamBodyOptions {
   todayColor?: string;
   weekendColor?: string;
@@ -15,7 +17,8 @@ declare interface ParamBodyOptions {
 }
 
 declare interface ParamOptions {
-  columnWidth?: number;
+  // columnWidth?: number;
+  columnSize?: GanttColumnSize;
   showToday?: boolean;
   showWeekend?: boolean;
   header?: ParamHeaderOptions;
@@ -41,6 +44,28 @@ declare interface ColumnNodeDataOptions {
   node: VNode;
   merge: boolean;
 }
+
+declare interface HeaderDateOptions {
+  /**
+   * 单位，显示在表头的上策
+   */
+  unit: string;
+  /**
+   * 每一格显示的内容
+   */
+  one: {
+    /**
+     * 每一格所包含的天数
+     */
+    len: number;
+    /**
+     * 每一格的显示内容
+     */
+    text: string;
+  }[];
+}
+
+declare type HeaderDateUnit = "day" | "week" | "month";
 
 declare type Alignment = "left" | "center" | "right";
 

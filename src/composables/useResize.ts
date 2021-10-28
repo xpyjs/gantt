@@ -15,14 +15,14 @@ import useData from "./useData";
 import useRootRef from "./useRootRef";
 
 export default function () {
-  const { GtParam, colWidth } = useParam();
+  const { GtParam, oneDayWidth } = useParam();
 
   const tableWidth = computed(() =>
     GtParam.tableHeaders.reduce((p, x) => p + x.width, 0)
   );
 
   const ganttWidth = computed(() => {
-    const width = colWidth.value || Variables.size.minGanttColumnWidth;
+    const width = oneDayWidth.value;
     return GtParam.ganttHeaders.length * width;
   });
 

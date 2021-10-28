@@ -18,7 +18,11 @@
         position: 'relative'
       }"
     >
-      <RowWrap :data="rowData" :name="Variables.name.ganttRow" />
+      <RowWrap
+        :data="rowData"
+        :name="Variables.name.ganttRow"
+        style="z-index: 10"
+      />
 
       <!-- 时间线 - 今天 -->
       <div v-if="showTodayLine" class="gt-today-line" :style="todayLineStyle" />
@@ -89,6 +93,17 @@ const { ganttRef } = useInitGanttRef();
     opacity: 0.5;
     pointer-events: none;
     background-color: lightblue;
+  }
+
+  .gt-gantt-bg-v-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 200px;
+    z-index: 3;
+    width: 1px;
+    height: 100%;
+    background-color: var(--j-content-border-color);
   }
 }
 </style>

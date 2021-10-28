@@ -2,29 +2,74 @@
   <div ref="drawerRef" class="gt-operation-drawer" :style="drawerStyle">
     <!-- 系统设置 -->
     <div>
-      <div class="gt-text-title" style="margin-bottom: 20px">系统设置</div>
+      <div class="gt-text-title" style="margin-bottom: 1rem">系统设置</div>
 
-      <div style="display: inline-block">
-        <div class="gt-text-secondary-title">修改甘特图列宽</div>
-        <j-slider
-          v-model="colWidth"
-          style="margin: 5px 20px 10px 20px"
-          :min="minColWidth"
-          :max="maxColWidth"
-        />
+      <div style="display: inline-flex; gap: 1rem">
+        <div style="display: inline-block">
+          <div class="gt-text-secondary-title">修改甘特图列宽</div>
+          <div style="display: flex; gap: 0.5rem">
+            <button
+              class="gt-drawer-reset-btn"
+              style="font-size: 10px"
+              @click="() => changeColWidth('small')"
+            >
+              小
+            </button>
+            <button
+              class="gt-drawer-reset-btn"
+              style="font-size: 10px"
+              @click="() => changeColWidth('normal')"
+            >
+              中
+            </button>
+            <button
+              class="gt-drawer-reset-btn"
+              style="font-size: 10px"
+              @click="() => changeColWidth('large')"
+            >
+              大
+            </button>
+          </div>
+        </div>
+
+        <div style="display: inline-block">
+          <div class="gt-text-secondary-title">修改行高</div>
+          <j-slider
+            v-model="rowHeight"
+            style="margin: 5px 20px 10px 0px"
+            :min="minRowHeight"
+            :max="maxRowHeight"
+          />
+        </div>
+
+        <div style="margin: auto 0">
+          <button class="gt-drawer-reset-btn" @click="reset">重置</button>
+        </div>
       </div>
+    </div>
 
-      <div style="display: inline-block">
-        <div class="gt-text-secondary-title">修改行高</div>
-        <j-slider
-          v-model="rowHeight"
-          style="margin: 5px 20px 10px 20px"
-          :min="minRowHeight"
-          :max="maxRowHeight"
-        />
+    <div style="margin-top: 1rem">
+      <div class="gt-text-title" style="margin-bottom: 1rem">甘特显示</div>
+      <div style="display: flex; gap: 1rem">
+        <button
+          class="gt-drawer-reset-btn"
+          @click="() => updateGanttHeaderUnit('day')"
+        >
+          日
+        </button>
+        <button
+          class="gt-drawer-reset-btn"
+          @click="() => updateGanttHeaderUnit('week')"
+        >
+          周
+        </button>
+        <button
+          class="gt-drawer-reset-btn"
+          @click="() => updateGanttHeaderUnit('month')"
+        >
+          月
+        </button>
       </div>
-
-      <button class="gt-drawer-reset-btn" @click="reset">重置</button>
     </div>
 
     <div class="gt-line gt-shadow" />
@@ -37,6 +82,7 @@
 <script lang="ts">
 import useParam from "@/composables/useParam";
 import { Variables } from "@/constants/vars";
+import { GanttColumnSize, HeaderDateUnit } from "@/typings/ParamOptions";
 import { parseNumber } from "@/utils/common";
 import { defineComponent, toRefs, ref, onMounted, computed } from "vue";
 import JSlider from "./Slider.vue";
@@ -59,14 +105,15 @@ const drawerRef = ref<HTMLDivElement>();
 
 const { GtParam } = useParam();
 
-function changeColWidth(v: number) {
-  if (
-    v < Variables.size.minGanttColumnWidth ||
-    v > Variables.size.maxGanttColumnWidth
-  )
-    return;
+function changeColWidth(v: GanttColumnSize) {
+  // if (
+  //   v < Variables.size.minGanttColumnWidth ||
+  //   v > Variables.size.maxGanttColumnWidth
+  // )
+  //   return;
 
-  GtParam.setGanttOptions({ [Variables.key.columnWidth]: v });
+  // GtParam.setGanttOptions({ [Variables.key.columnWidth]: v });
+  GtParam.setGanttOptions({ [Variables.key.columnSize]: v });
 }
 
 function changeRowHeight(v: number) {
@@ -77,6 +124,10 @@ function reset() {
   GtParam.resetSize();
 }
 
+function updateGanttHeaderUnit(unit: HeaderDateUnit) {
+  GtParam.headerUnit = unit;
+}
+
 const drawerStyle = computed(() => {
   return {
     "min-width": "200px",
@@ -85,21 +136,23 @@ const drawerStyle = computed(() => {
 });
 
 const settingsSlot = computed(() => GtParam.getSlot(Variables.slots.settings));
-const colWidth = computed({
-  get: () =>
-    parseNumber(
-      GtParam.ganttOptions.columnWidth,
-      Variables.size.minGanttColumnWidth
-    ),
-  set: v => changeColWidth(v as number)
-});
+// const colWidth = computed({
+//   // get: () =>
+//   //   parseNumber(
+//   //     GtParam.ganttOptions.columnWidth,
+//   //     Variables.size.minGanttColumnWidth
+//   //   ),
+//   // set: v => changeColWidth(v as number)
+//   get: () => colSize.value,
+//   set: v => changeColWidth(v)
+// });
 const rowHeight = computed({
   get: () =>
     parseNumber(GtParam.rowHeight, Variables.size.defaultContentRowHeight),
   set: v => changeRowHeight(v)
 });
-const minColWidth = computed(() => Variables.size.minGanttColumnWidth);
-const maxColWidth = computed(() => Variables.size.maxGanttColumnWidth);
+// const minColWidth = computed(() => Variables.size.minGanttColumnWidth);
+// const maxColWidth = computed(() => Variables.size.maxGanttColumnWidth);
 const minRowHeight = computed(() => Variables.size.minContentRowHeight);
 const maxRowHeight = computed(() => Variables.size.maxContentRowHeight);
 
@@ -109,6 +162,11 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.gt-text-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
 .gt-operation-drawer {
   height: 100%;
   padding: 20px;

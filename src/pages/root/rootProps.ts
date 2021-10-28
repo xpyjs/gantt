@@ -1,6 +1,10 @@
 import { Errors } from "@/constants/errors";
 import { Variables } from "@/constants/vars";
-import { ParamBodyOptions, ParamHeaderOptions } from "@/typings/ParamOptions";
+import {
+  GanttColumnSize,
+  ParamBodyOptions,
+  ParamHeaderOptions
+} from "@/typings/ParamOptions";
 import { parseNumber } from "@/utils/common";
 import { PropType } from "vue";
 
@@ -147,30 +151,38 @@ export const props = {
   /**
    * 甘特图的每一列宽度
    */
-  ganttColumnWidth: {
-    type: [Number, String],
-    default: Variables.size.minGanttColumnWidth,
-    validator: (v: number | string) => {
-      const minR = parseNumber(v) >= Variables.size.minGanttColumnWidth;
-      if (!minR) {
-        throw (
-          Errors.header +
-          Errors.invalidProps +
-          `"ganttColumnWidth" should be at least ${Variables.size.minGanttColumnWidth}.`
-        );
-      }
+  // ganttColumnWidth: {
+  //   type: [Number, String],
+  //   default: Variables.size.minGanttColumnWidth,
+  //   validator: (v: number | string) => {
+  //     const minR = parseNumber(v) >= Variables.size.minGanttColumnWidth;
+  //     if (!minR) {
+  //       throw (
+  //         Errors.header +
+  //         Errors.invalidProps +
+  //         `"ganttColumnWidth" should be at least ${Variables.size.minGanttColumnWidth}.`
+  //       );
+  //     }
 
-      const maxR = parseNumber(v) <= Variables.size.maxGanttColumnWidth;
-      if (!maxR) {
-        throw (
-          Errors.header +
-          Errors.invalidProps +
-          `"ganttColumnWidth" should be no more than ${Variables.size.maxGanttColumnWidth}.`
-        );
-      }
+  //     const maxR = parseNumber(v) <= Variables.size.maxGanttColumnWidth;
+  //     if (!maxR) {
+  //       throw (
+  //         Errors.header +
+  //         Errors.invalidProps +
+  //         `"ganttColumnWidth" should be no more than ${Variables.size.maxGanttColumnWidth}.`
+  //       );
+  //     }
 
-      return minR && maxR;
-    }
+  //     return minR && maxR;
+  //   }
+  // },
+
+  /**
+   * 甘特图表的每一列宽度
+   */
+  ganttColumnSize: {
+    type: String as PropType<GanttColumnSize>,
+    default: "normal"
   },
 
   /**

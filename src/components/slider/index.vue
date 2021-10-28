@@ -10,7 +10,8 @@ import {
   createDate,
   formatDate,
   getDateInterval,
-  getDateOffset
+  getDateOffset,
+  getMillisecond
 } from "@/utils/date";
 import { isBoolean, isFunction } from "@/utils/is";
 import { isSymbol } from "lodash";
@@ -48,7 +49,7 @@ const {
   linkedResize
 } = toRefs(props);
 
-const { colWidth } = useParam();
+const { oneDayWidth, GtParam } = useParam();
 const { GtData } = useData();
 
 const startOfData = computed(() => data.start as Date);
@@ -57,8 +58,8 @@ const startOfEnd = computed(() => data.end as Date);
 const sliderWidth = computed(
   () =>
     (getDateInterval(startOfData.value, startOfEnd.value) /
-      Variables.time.millisecondOfDay) *
-    colWidth.value
+      getMillisecond(GtParam.headerUnit)) *
+    oneDayWidth.value
 );
 
 const canMove = computed(() => {
@@ -72,13 +73,13 @@ const canMove = computed(() => {
 // 滑块的初始偏移量
 const sliderLeft = computed(() => {
   // 最左侧一定是一个整天的宽度，将时间调整为0时，保证没有位移。非0会产生位移
-  let sd = new Date(formatDate(createDate(GtData.start)));
-  let sdTime = sd.setHours(0) - sd.getTimezoneOffset();
+  const sd = createDate(GtData.start);
+  const sdTime = sd.setHours(0);
 
   return (
     (getDateInterval(sdTime, startOfData.value) /
-      Variables.time.millisecondOfDay) *
-    colWidth.value
+      getMillisecond(GtParam.headerUnit)) *
+    oneDayWidth.value
   );
 });
 
@@ -254,11 +255,13 @@ function sliderMoveHandle(e: MouseEvent, flag = "") {
     }
 
     const offset =
-      ((targetX - srcX) / colWidth.value) * Variables.time.millisecondOfDay;
+      ((targetX - srcX) / oneDayWidth.value) *
+      getMillisecond(GtParam.headerUnit);
 
     if (flag === "move" || flag === "left") {
       data.setStart(
         createDate(getDateOffset(srcStartDate, offset)),
+        GtParam.headerUnit,
         linkedResize.value
       );
     }
@@ -266,6 +269,7 @@ function sliderMoveHandle(e: MouseEvent, flag = "") {
     if (flag === "move" || flag === "right") {
       data.setEnd(
         createDate(getDateOffset(srcEndDate, offset)),
+        GtParam.headerUnit,
         linkedResize.value
       );
     }
