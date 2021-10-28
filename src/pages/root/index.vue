@@ -39,26 +39,29 @@
 </template>
 
 <script lang="ts">
-import { useInitData } from "@/composables/useData";
-import { useExportEvent, useInitEvent } from "@/composables/useEvent";
-import { useInitParam } from "@/composables/useParam";
-import { useInitRootRef } from "@/composables/useRootRef";
-import { Variables } from "@/constants/vars";
-import { CustomCssProperties } from "@/typings/private/CSSProperties";
-import { computed, defineComponent, ref, toRefs, useSlots } from "vue";
-import { props as rootProps } from "./rootProps";
-import JTable from "@/components/table/index.vue";
-import JGantt from "@/components/gantt/index.vue";
-import JBtn from "@/components/common/Btn.vue";
-import JDrawer from "@/components/common/Drawer.vue";
-import useWheel from "@/composables/useWheel";
+import { computed, defineComponent, ref, toRefs, useSlots } from 'vue';
+import { useInitParam } from '@/composables/useParam';
+import { useInitRootRef } from '@/composables/useRootRef';
+import { Variables } from '@/constants/vars';
+import rootProps from './rootProps';
+import JTable from '@/components/table/index.vue';
+import JGantt from '@/components/gantt/index.vue';
+import JBtn from '@/components/common/Btn.vue';
+import JDrawer from '@/components/common/Drawer.vue';
+import useWheel from '@/composables/useWheel';
 import useResize, {
   useBtnPosition,
   useResizeGanttObserver,
   useResizeTableColumn
-} from "@/composables/useResize";
-import useMask from "@/composables/useMask";
-import { useDark } from "@/composables/useStyle";
+} from '@/composables/useResize';
+import useMask from '@/composables/useMask';
+import { useDark } from '@/composables/useStyle';
+import useInitEvent from '@/composables/event/useInitEvent';
+import useExportEvent from '@/composables/event/useExportEvent';
+import { useInitData } from '@/composables/data/useData';
+// eslint-disable-next-line import/named
+import { CustomCssProperties } from '@/typings/private/CSSProperties';
+
 export default defineComponent({
   name: Variables.name.root
 });
@@ -67,11 +70,11 @@ export default defineComponent({
 <script lang="ts" setup>
 const props = defineProps(rootProps);
 const emit = defineEmits<{
-  (e: "row-click", data: any): void;
-  (e: "row-dbl-click", data: any): void;
-  (e: "row-checked", state: boolean, data: any): void;
-  (e: "move-slider", data: any, old: { start: Date; end: Date }): void;
-  (e: "no-date-error"): void;
+  (e: 'row-click', data: any): void;
+  (e: 'row-dbl-click', data: any): void;
+  (e: 'row-checked', state: boolean, data: any): void;
+  (e: 'move-slider', data: any, old: { start: Date; end: Date }): void;
+  (e: 'no-date-error'): void;
 }>();
 const slots = useSlots();
 
@@ -111,16 +114,16 @@ useResizeGanttObserver();
 const { colorSelectStr } = useDark();
 const rootStyle = computed(() => {
   return {
-    "--root-border": `${border.value}px`,
-    "--table-width": `${tableWidth.value}px`,
-    "--scrollbar-width": `${scrollBarHeight.value}px`,
-    "--header-height": `${headerHeight.value}px`,
-    "--j-content-border-color":
+    '--root-border': `${border.value}px`,
+    '--table-width': `${tableWidth.value}px`,
+    '--scrollbar-width': `${scrollBarHeight.value}px`,
+    '--header-height': `${headerHeight.value}px`,
+    '--j-content-border-color':
       borderColor.value || Variables.color.border[colorSelectStr.value],
-    "--j-primary-color":
+    '--j-primary-color':
       primaryColor.value || Variables.color.primary[colorSelectStr.value],
-    "--j-content-bg-color": Variables.color.background[colorSelectStr.value],
-    "--j-text-color": Variables.color.text[colorSelectStr.value]
+    '--j-content-bg-color': Variables.color.background[colorSelectStr.value],
+    '--j-text-color': Variables.color.text[colorSelectStr.value]
   } as CustomCssProperties;
 });
 
@@ -159,7 +162,7 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-@use "sass:color";
+@use 'sass:color';
 
 .gt-root {
   width: calc(100% - var(--root-border) * 2);

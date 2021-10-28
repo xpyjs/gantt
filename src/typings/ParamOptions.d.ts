@@ -1,11 +1,11 @@
-import { VNode } from "vue";
+import { VNode } from 'vue';
 
 declare interface ParamHeaderOptions {
   bgColor?: string;
   textColor?: string;
 }
 
-declare type GanttColumnSize = "normal" | "small" | "large";
+declare type GanttColumnSize = 'normal' | 'small' | 'large';
 
 declare interface ParamBodyOptions {
   todayColor?: string;
@@ -65,8 +65,8 @@ declare interface HeaderDateOptions {
   }[];
 }
 
-declare type HeaderDateUnit = "day" | "week" | "month";
+declare type HeaderDateUnit = 'day' | 'week' | 'month';
 
-declare type Alignment = "left" | "center" | "right";
+declare type Alignment = 'left' | 'center' | 'right';
 
-declare type ColorSelectStr = "default" | "dark";
+declare type ColorSelectStr = 'default' | 'dark';

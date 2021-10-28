@@ -1,9 +1,9 @@
 <script lang="ts">
-import { useToday } from "@/composables/useDate";
-import useParam from "@/composables/useParam";
-import useStyle from "@/composables/useStyle";
-import { Variables } from "@/constants/vars";
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent } from 'vue';
+import { useToday } from '@/composables/useDate';
+import useParam from '@/composables/useParam';
+import useStyle from '@/composables/useStyle';
+import { Variables } from '@/constants/vars';
 
 export default defineComponent({
   name: Variables.name.ganttHeader
@@ -20,7 +20,7 @@ const chunkStyle = computed(() => {
   return (len: number) => {
     return {
       width: `${oneDayWidth.value * len}px`,
-      borderColor: "var(--j-content-border-color)"
+      borderColor: 'var(--j-content-border-color)'
     };
   };
 });

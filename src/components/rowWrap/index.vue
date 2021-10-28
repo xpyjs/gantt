@@ -12,13 +12,13 @@
 </template>
 
 <script lang="ts">
-import useInView from "@/composables/useInView";
-import { Row } from "@/models/data/row";
-import { camelToKebabCased } from "@/utils/common";
-import JTableRow from "../table/Row.vue";
-import JGanttRow from "../gantt/Row.vue";
-import { defineComponent, Ref, toRefs } from "vue";
-import useStyle from "@/composables/useStyle";
+import { defineComponent, Ref, toRefs } from 'vue';
+import useInView from '@/composables/useInView';
+import { Row } from '@/models/data/row';
+import { camelToKebabCased } from '@/utils/common';
+import JTableRow from '../table/Row.vue';
+import JGanttRow from '../gantt/Row.vue';
+import useStyle from '@/composables/useStyle';
 
 export default defineComponent({
   components: {

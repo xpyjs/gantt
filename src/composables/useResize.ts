@@ -1,5 +1,3 @@
-import { Variables } from "@/constants/vars";
-import { TableHeader } from "@/models/param/header";
 import {
   computed,
   onBeforeMount,
@@ -7,14 +5,16 @@ import {
   onUnmounted,
   readonly,
   ref
-} from "vue";
-import useParam, { useSetGanttHeader } from "./useParam";
-import { isNumber } from "@/utils/is";
-import useGanttRef from "./useGanttRef";
-import useData from "./useData";
-import useRootRef from "./useRootRef";
+} from 'vue';
+import { Variables } from '@/constants/vars';
+import { TableHeader } from '@/models/param/header';
+import useParam, { useSetGanttHeader } from './useParam';
+import { isNumber } from '@/utils/is';
+import useGanttRef from './useGanttRef';
+import useRootRef from './useRootRef';
+import useData from './data/useData';
 
-export default function () {
+export default () => {
   const { GtParam, oneDayWidth } = useParam();
 
   const tableWidth = computed(() =>
@@ -32,7 +32,7 @@ export default function () {
     ganttWidth: readonly(ganttWidth),
     headerHeight: computed(() => GtParam.headerHeight)
   };
-}
+};
 
 /**
  * 监听甘特横向大小变化
@@ -45,6 +45,7 @@ export function useResizeGanttObserver() {
 
   onBeforeMount(() => {
     ganttResizeObserver.value = new ResizeObserver(entries => {
+      // eslint-disable-next-line no-restricted-syntax
       for (const entry of entries) {
         initGanttWidth.value = entry.contentRect.width;
         setHeaders();
@@ -53,6 +54,7 @@ export function useResizeGanttObserver() {
   });
 
   onMounted(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     ganttRef?.value && ganttResizeObserver.value?.observe(ganttRef.value);
   });
 
@@ -102,8 +104,8 @@ export function useResizeTableColumn() {
     const srcX = e.pageX;
     const w = GtParam.tableHeaders[GtParam.tableHeaders.length - 1].width;
 
-    document.onmousemove = e => {
-      let targetX = e.pageX;
+    document.onmousemove = moveEvent => {
+      let targetX = moveEvent.pageX;
       // 如果鼠标离从左侧离开浏览器, 那么鼠标的位置停留在浏览器最左侧的位置, 也就是targetX = 0.
       if (targetX < 0) {
         targetX = 0;
@@ -132,10 +134,11 @@ export function useResizeTableColumn() {
     };
 
     document.onmouseup = () => {
-      document.onmousemove = document.onmouseup = null;
-      const w = GtParam.tableHeaders[GtParam.tableHeaders.length - 1].width;
+      document.onmousemove = null;
+      document.onmouseup = null;
+      const tmpW = GtParam.tableHeaders[GtParam.tableHeaders.length - 1].width;
       GtParam.tableHeaders[GtParam.tableHeaders.length - 1].setWidth(
-        w + offset
+        tmpW + offset
       );
       onHiddenColumnSliderLine();
     };
@@ -145,8 +148,8 @@ export function useResizeTableColumn() {
     let offset = 0;
     const srcX = e.pageX;
 
-    document.onmousemove = e => {
-      let targetX = e.pageX;
+    document.onmousemove = moveEvent => {
+      let targetX = moveEvent.pageX;
       // 如果鼠标离从左侧离开浏览器, 那么鼠标的位置停留在浏览器最左侧的位置, 也就是targetX = 0.
       if (targetX < 0) {
         targetX = 0;
@@ -185,7 +188,8 @@ export function useResizeTableColumn() {
     };
 
     document.onmouseup = () => {
-      document.onmousemove = document.onmouseup = null;
+      document.onmousemove = null;
+      document.onmouseup = null;
       item.setWidth(item.width + offset);
       onHiddenColumnSliderLine();
     };
@@ -193,7 +197,7 @@ export function useResizeTableColumn() {
 
   const sliderLineClass = computed(() => {
     return {
-      "gt-hide": !columnSliderLineVisible.value
+      'gt-hide': !columnSliderLineVisible.value
     };
   });
 
@@ -222,7 +226,7 @@ export function useBtnPosition() {
 
   const opBtnStyle = computed(() => {
     return {
-      position: " absolute",
+      position: ' absolute',
       right: `${right.value}px`,
       top: `${top.value}px`,
       zIndex: 99

@@ -25,26 +25,26 @@
 </template>
 
 <script lang="ts" setup>
-import { Row } from "@/models/data/row";
-import useResize from "@/composables/useResize";
-import RowWrap from "@/components/rowWrap/index.vue";
-import TableHeader from "./Header.vue";
-import { Variables } from "@/constants/vars";
-import { useInitTableRef } from "@/composables/useTableRef";
+import { Row } from '@/models/data/row';
+import useResize from '@/composables/useResize';
+import RowWrap from '@/components/rowWrap/index.vue';
+import TableHeader from './Header.vue';
+import { Variables } from '@/constants/vars';
+import { useInitTableRef } from '@/composables/useTableRef';
 
 defineProps<{
   rowData: Array<Row>;
 }>();
 
 const emit = defineEmits<{
-  (e: "table-scroll", event: WheelEvent): void;
+  (e: 'table-scroll', event: WheelEvent): void;
 }>();
 
 const { rowHeight } = useResize();
 
 function onMouseWheel(e: WheelEvent) {
   e.stopPropagation();
-  emit("table-scroll", e);
+  emit('table-scroll', e);
 }
 
 const { tableRef } = useInitTableRef();

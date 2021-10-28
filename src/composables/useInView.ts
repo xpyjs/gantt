@@ -1,9 +1,9 @@
-import { Row } from "@/models/data/row";
-import { computed, Ref } from "vue";
-import useResize from "./useResize";
-import useWheel from "./useWheel";
+import { computed, Ref } from 'vue';
+import { Row } from '@/models/data/row';
+import useResize from './useResize';
+import useWheel from './useWheel';
 
-export default function (data: Ref<Array<Row>>) {
+export default (data: Ref<Array<Row>>) => {
   const { rowHeight } = useResize();
   const { scrollTop, rootHeight } = useWheel();
 
@@ -19,12 +19,12 @@ export default function (data: Ref<Array<Row>>) {
   // 数据展示最下面的 index
   const bottom = computed(() => {
     const count = Math.ceil(rootHeight.value / rowHeight.value);
-    const _t = Math.ceil(scrollTop.value / rowHeight.value) + count + preload;
-    return _t > data.value.length ? data.value.length : _t;
+    const t = Math.ceil(scrollTop.value / rowHeight.value) + count + preload;
+    return t > data.value.length ? data.value.length : t;
   });
 
   // 切出要展示的数据
   const inView = computed(() => data.value.slice(top.value, bottom.value));
 
   return { inView };
-}
+};

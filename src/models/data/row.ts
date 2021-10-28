@@ -1,21 +1,24 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-underscore-dangle */
 /*
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-10-27 17:49:36
+ * @LastEditTime: 2021-10-28 16:39:38
  * @Description: 一条数据类
  */
 
-import { Variables } from "@/constants/vars";
-import { HeaderDateUnit } from "@/typings/ParamOptions";
-import { uuid } from "@/utils/common";
+import { Variables } from '@/constants/vars';
+import { HeaderDateUnit } from '@/typings/ParamOptions';
+import { uuid } from '@/utils/common';
 import {
   compareDate,
   createDate,
   getDateOffset,
   getMillisecond
-} from "@/utils/date";
-import { isArray, isDeepEqual, isObject } from "@/utils/is";
+} from '@/utils/date';
+import { isArray, isDeepEqual, isObject } from '@/utils/is';
 
 export class Row {
   /**
@@ -59,6 +62,7 @@ export class Row {
   __uindex: number;
 
   private __data: any;
+
   private __isExpand: boolean;
   // private __start: Date | null;
   // private __end: Date | null;
@@ -97,14 +101,14 @@ export class Row {
    * 起始时间
    */
   get start() {
-    return createDate(this.__data[this.options["sl"] as string]);
+    return createDate(this.__data[this.options.sl as string]);
   }
 
   /**
    * 截止时间
    */
   get end() {
-    return createDate(this.__data[this.options["el"] as string]);
+    return createDate(this.__data[this.options.el as string]);
   }
 
   /**
@@ -165,13 +169,12 @@ export class Row {
   _clone(data: any) {
     if (!isObject(data)) {
       return data;
-    } else {
-      const d = isArray(data) ? [] : ({} as any);
-      for (const i in data) {
-        d[i] = isObject(data[i]) ? this._clone(data[i]) : data[i];
-      }
-      return d;
     }
+    const d = isArray(data) ? [] : ({} as any);
+    for (const i in data) {
+      d[i] = isObject(data[i]) ? this._clone(data[i]) : data[i];
+    }
+    return d;
   }
 
   /**
@@ -188,16 +191,16 @@ export class Row {
    * @param linkage 联动
    */
   setStart(date: Date, unit: HeaderDateUnit, linkage = false) {
-    this.data[this.options["sl"] as string] = date;
+    this.data[this.options.sl as string] = date;
 
     // 首先判断起始日期不能大于结束日期
     if (
       compareDate(
         date,
         getDateOffset(this.end as Date, -getMillisecond(unit))
-      ) === "r"
+      ) === 'r'
     )
-      this.data[this.options["el"] as string] = getDateOffset(
+      this.data[this.options.el as string] = getDateOffset(
         date,
         getMillisecond(unit)
       );
@@ -207,7 +210,7 @@ export class Row {
     // 查看父节点
     let pNode = this.parentNode;
     while (pNode !== null) {
-      if (compareDate(this.start as Date, pNode.start as Date) === "l") {
+      if (compareDate(this.start as Date, pNode.start as Date) === 'l') {
         // 赋值应该给data的日期数据赋值
         pNode.setStart(this.start as Date, unit);
       } else {
@@ -217,20 +220,20 @@ export class Row {
     }
 
     // 查看子节点
-    this.__setChildrenDate(this, "start", unit);
+    this.__setChildrenDate(this, 'start', unit);
   }
 
   setEnd(date: Date, unit: HeaderDateUnit, linkage = false) {
-    this.data[this.options["el"] as string] = date;
+    this.data[this.options.el as string] = date;
 
     // 首先判断起始日期不能大于结束日期
     if (
       compareDate(
         date,
         getDateOffset(this.start as Date, getMillisecond(unit))
-      ) === "l"
+      ) === 'l'
     )
-      this.data[this.options["sl"] as string] = getDateOffset(
+      this.data[this.options.sl as string] = getDateOffset(
         date,
         -getMillisecond(unit)
       );
@@ -239,7 +242,7 @@ export class Row {
 
     let pNode = this.parentNode;
     while (pNode !== null) {
-      if (compareDate(this.end as Date, pNode.end as Date) === "r") {
+      if (compareDate(this.end as Date, pNode.end as Date) === 'r') {
         pNode.setEnd(this.end as Date, unit);
       } else {
         break;
@@ -248,23 +251,23 @@ export class Row {
     }
 
     // 查看子节点
-    this.__setChildrenDate(this, "end", unit);
+    this.__setChildrenDate(this, 'end', unit);
   }
 
   private __setChildrenDate(
     node: Row,
-    key: "start" | "end",
+    key: 'start' | 'end',
     unit: HeaderDateUnit
   ) {
     for (let i = 0; i < node.children.length; i++) {
       const c = node.children[i];
-      if (key === "start") {
-        if (compareDate(c.start as Date, node.start as Date) === "l") {
+      if (key === 'start') {
+        if (compareDate(c.start as Date, node.start as Date) === 'l') {
           c.setStart(node.start as Date, unit);
           this.__setChildrenDate(c, key, unit);
         }
-      } else if (key === "end") {
-        if (compareDate(c.end as Date, node.end as Date) === "r") {
+      } else if (key === 'end') {
+        if (compareDate(c.end as Date, node.end as Date) === 'r') {
           c.setEnd(node.end as Date, unit);
           this.__setChildrenDate(c, key, unit);
         }
@@ -272,3 +275,5 @@ export class Row {
     }
   }
 }
+
+export default Row;

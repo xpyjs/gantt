@@ -3,14 +3,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
+
 export default defineComponent({
-  name: "GantttLine",
+  name: 'GantttLine',
 
   props: {
     color: {
       type: String,
-      default: "lightgrey"
+      default: 'lightgrey'
     }
   }
 });

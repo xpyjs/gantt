@@ -8,9 +8,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, toRefs } from "vue";
+import { computed, defineComponent, toRefs } from 'vue';
+
 export default defineComponent({
-  name: "GanttSlider",
+  name: 'GanttSlider',
 
   props: {
     modelValue: Number,
@@ -30,7 +31,7 @@ export default defineComponent({
     const value = computed({
       get: () => modelValue.value,
       set: v => {
-        ctx.emit("update:modelValue", v);
+        ctx.emit('update:modelValue', v);
       }
     });
 
@@ -44,7 +45,7 @@ export default defineComponent({
   display: flex;
   flex-shrink: 0;
 
-  input[type="range"] {
+  input[type='range'] {
     -webkit-appearance: none; /*去除默认样式*/
     margin: 0;
     padding: 0;
@@ -55,7 +56,7 @@ export default defineComponent({
     border: none;
   }
 
-  input[type="range"]::-webkit-slider-thumb {
+  input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none; /*去除默认样式*/
     cursor: default;
     top: 0;

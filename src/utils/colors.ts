@@ -1,3 +1,5 @@
+/* eslint-disable no-bitwise */
+/* eslint-disable no-param-reassign */
 const reRGBA = /^rgb(a)?\((\d{1,3}),(\d{1,3}),(\d{1,3}),?([01]?\.?\d*?)?\)$/;
 
 interface Rgba {
@@ -8,11 +10,11 @@ interface Rgba {
 }
 
 function hexToRgb(hex: string) {
-  if (typeof hex !== "string") {
-    throw new TypeError("Expected a string");
+  if (typeof hex !== 'string') {
+    throw new TypeError('Expected a string');
   }
 
-  hex = hex.replace(/^#/, "");
+  hex = hex.replace(/^#/, '');
 
   if (hex.length === 3) {
     hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
@@ -33,11 +35,11 @@ function hexToRgb(hex: string) {
 }
 
 export function textToRgb(str: string) {
-  if (typeof str !== "string") {
-    throw new TypeError("Expected a string");
+  if (typeof str !== 'string') {
+    throw new TypeError('Expected a string');
   }
 
-  const color = str.replace(/ /g, "");
+  const color = str.replace(/ /g, '');
 
   const m = reRGBA.exec(color);
 
@@ -53,14 +55,14 @@ export function textToRgb(str: string) {
 
   if (m[1]) {
     const alpha = parseFloat(m[5]);
-    rgb.a = Math.min(1, isNaN(alpha) === true ? 1 : alpha) * 100;
+    rgb.a = Math.min(1, Number.isNaN(alpha) === true ? 1 : alpha) * 100;
   }
 
   return rgb;
 }
 
 function rgbToHex({ r, g, b, a }: Rgba) {
-  const alpha = a !== void 0;
+  const alpha = a !== undefined;
 
   r = Math.round(r);
   g = Math.round(g);
@@ -68,26 +70,26 @@ function rgbToHex({ r, g, b, a }: Rgba) {
 
   if (r > 255 || g > 255 || b > 255 || (alpha && (a as number) > 100)) {
     throw new TypeError(
-      "Expected 3 numbers below 256 (and optionally one below 100)"
+      'Expected 3 numbers below 256 (and optionally one below 100)'
     );
   }
 
-  const _a = alpha
+  const newAlpha = alpha
     ? (Math.round((255 * (a as number)) / 100) | (1 << 8)).toString(16).slice(1)
-    : "";
+    : '';
 
-  return (
-    "#" + (b | (g << 8) | (r << 16) | (1 << 24)).toString(16).slice(1) + _a
-  );
+  return `#${(b | (g << 8) | (r << 16) | (1 << 24))
+    .toString(16)
+    .slice(1)}${newAlpha}`;
 }
 
 export function changeAlpha(color: string, alpha: number) {
-  if (typeof color !== "string") {
-    throw new TypeError("Expected a string as color");
+  if (typeof color !== 'string') {
+    throw new TypeError('Expected a string as color');
   }
 
-  if (alpha === void 0 || alpha < 0 || alpha > 1) {
-    throw new TypeError("Expected offset to be between 0 and 1");
+  if (alpha === undefined || alpha < 0 || alpha > 1) {
+    throw new TypeError('Expected offset to be between 0 and 1');
   }
 
   const { r, g, b } = textToRgb(color);

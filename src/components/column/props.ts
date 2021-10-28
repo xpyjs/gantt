@@ -1,8 +1,8 @@
-import { Errors } from "@/constants/errors";
-import { Variables } from "@/constants/vars";
-import { parseNumber } from "@/utils/common";
+import { Errors } from '@/constants/errors';
+import { Variables } from '@/constants/vars';
+import { parseNumber } from '@/utils/common';
 
-export const columnProps = {
+export default {
   /**
    * 数据键
    */
@@ -25,9 +25,7 @@ export const columnProps = {
         console.error(
           Errors.header,
           Errors.invalidProps,
-          'column width should be more than "' +
-            Variables.size.minTableColumnWidth +
-            '".'
+          `column width should be more than "${Variables.size.minTableColumnWidth}".`
         );
       }
       return r;

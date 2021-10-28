@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref } from 'vue';
 
 const tableRef = ref<HTMLDivElement>();
 
@@ -6,6 +6,6 @@ export function useInitTableRef() {
   return { tableRef };
 }
 
-export default function () {
+export default () => {
   return { tableRef };
-}
+};

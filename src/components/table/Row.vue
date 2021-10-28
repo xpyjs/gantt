@@ -1,11 +1,11 @@
 <script lang="ts">
-import useEvent from "@/composables/useEvent";
-import useParam from "@/composables/useParam";
-import useRender from "@/composables/useRender";
-import useStyle from "@/composables/useStyle";
-import { Variables } from "@/constants/vars";
-import { Row } from "@/models/data/row";
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
+import useEvent from '@/composables/event/useEvent';
+import useParam from '@/composables/useParam';
+import useRender from '@/composables/useRender';
+import useStyle from '@/composables/useStyle';
+import { Variables } from '@/constants/vars';
+import { Row } from '@/models/data/row';
 
 export default defineComponent({
   name: Variables.name.tableRow

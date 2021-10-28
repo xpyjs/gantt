@@ -12,7 +12,7 @@
     "lib": ["esnext", "dom"],
     "baseUrl": ".",
     "types": ["node"],
-    "typeRoots": ["./typings", "./node_moudles/@types/"],
+    "typeRoots": ["./typings", "./node_moudles/@types/", "./src/typings"],
     "paths": {
       "@/*": ["./src/*"],
       "components/*": ["./src/components/*"],
@@ -20,6 +20,12 @@
       "utils/*": ["./src/utils/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "typings/packages/ParamOptions.d.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "typings/packages/ParamOptions.d.ts"
+  ],
   "exclude": ["node_modules"]
 }

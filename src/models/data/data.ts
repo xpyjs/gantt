@@ -1,14 +1,15 @@
+/* eslint-disable no-underscore-dangle */
 /*
  * @Author: JeremyJone
  * @Date: 2021-09-09 16:20:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-09-15 11:12:20
+ * @LastEditTime: 2021-10-28 16:37:50
  * @Description: 整个表格的数据类
  */
 
-import { compareDate } from "@/utils/date";
-import { isArray, isDate } from "@/utils/is";
-import { Row } from "./row";
+import { compareDate } from '@/utils/date';
+import { isArray, isDate } from '@/utils/is';
+import { Row } from './row';
 
 interface RowOperateOptions {
   index: number;
@@ -33,11 +34,17 @@ export class GanttData {
   originData: any[];
 
   private __start: Date | null;
+
   private __end: Date | null;
+
   private __hierarchy: number;
+
   private __selected: RowOperateOptions;
+
   private __hovered: RowOperateOptions;
+
   private __len: number;
+
   private readonly __that: GanttData;
 
   constructor() {
@@ -177,11 +184,11 @@ export class GanttData {
    * 更新起止时间
    */
   private __updateDate(item: Row) {
-    if (!this.start || compareDate(item.start as Date, this.start) === "l") {
+    if (!this.start || compareDate(item.start as Date, this.start) === 'l') {
       this.__start = item.start;
     }
 
-    if (!this.end || compareDate(item.end as Date, this.end) === "r") {
+    if (!this.end || compareDate(item.end as Date, this.end) === 'r') {
       this.__end = item.end;
     }
   }
@@ -198,7 +205,7 @@ export class GanttData {
     // 更新选择条
     if (!item) return;
     const t = this.flatData.find(x => x.uuid === item.uuid);
-    this.__selected = { index: t?.__uindex ?? -1, uuid: t?.uuid ?? void 0 };
+    this.__selected = { index: t?.__uindex ?? -1, uuid: t?.uuid ?? undefined };
   }
 
   /**
@@ -246,7 +253,7 @@ export class GanttData {
       }
 
       // 新节点超出了原有节点，直接创建新的节点即可
-      if (originData[i] === void 0) {
+      if (originData[i] === undefined) {
         const item = this.__createDataNode(
           newData[i],
           i,
@@ -267,7 +274,7 @@ export class GanttData {
       // 这里手动更新一下就可以了
       this.__updateDate(originData[i]);
 
-      i++;
+      i += 1;
     }
 
     // 如果循环完成，旧数据后面还有，则全部删除
@@ -334,7 +341,9 @@ export class GanttData {
 
   private __flatten(data: Row[], arr: Row[]) {
     for (let i = 0; i < data.length; i++) {
-      data[i].__uindex = UID++;
+      // eslint-disable-next-line no-param-reassign
+      data[i].__uindex = UID;
+      UID += 1;
       arr.push(data[i]);
 
       if (data[i].isExpand && isArray(data[i].children)) {
@@ -343,3 +352,5 @@ export class GanttData {
     }
   }
 }
+
+export default GanttData;

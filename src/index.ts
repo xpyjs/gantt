@@ -1,11 +1,11 @@
-import { App } from "vue";
-import JGantt from "./pages/root/index.vue";
-import JGanttColumn from "components/column/index.vue";
-import JGanttSlider from "components/slider/index.vue";
+import { App } from 'vue';
+import JGanttColumn from 'components/column/index.vue';
+import JGanttSlider from 'components/slider/index.vue';
+import JGantt from './pages/root/index.vue';
 
-import "animate.css";
-import "./styles/index.scss";
-import { Variables } from "./constants/vars";
+import 'animate.css';
+import './styles/index.scss';
+import { Variables } from './constants/vars';
 
 const components = [JGantt, JGanttColumn, JGanttSlider];
 

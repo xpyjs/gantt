@@ -1,20 +1,5 @@
 <script lang="ts">
-import useData from "@/composables/useData";
-import { useRootEmit } from "@/composables/useEvent";
-import useParam, { useSetGanttHeader } from "@/composables/useParam";
-import useRender from "@/composables/useRender";
-import { Variables } from "@/constants/vars";
-import { Row } from "@/models/data/row";
-import {
-  compareDate,
-  createDate,
-  formatDate,
-  getDateInterval,
-  getDateOffset,
-  getMillisecond
-} from "@/utils/date";
-import { isBoolean, isFunction } from "@/utils/is";
-import { isSymbol } from "lodash";
+import { isSymbol } from 'lodash';
 import {
   computed,
   defineComponent,
@@ -23,8 +8,22 @@ import {
   toRefs,
   useAttrs,
   useSlots
-} from "vue";
-import { sliderProps } from "./props";
+} from 'vue';
+import useParam, { useSetGanttHeader } from '@/composables/useParam';
+import useRender from '@/composables/useRender';
+import { Variables } from '@/constants/vars';
+import { Row } from '@/models/data/row';
+import {
+  compareDate,
+  createDate,
+  getDateInterval,
+  getDateOffset,
+  getMillisecond
+} from '@/utils/date';
+import { isBoolean, isFunction } from '@/utils/is';
+import sliderProps from './props';
+import useRootEmit from '@/composables/event/useRootEmit';
+import useData from '@/composables/data/useData';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -92,7 +91,8 @@ const sliderLeft = computed(() => {
 
 // 判断用户是否提供了 content 插槽
 const customContentScoped = computed(() => {
-  let slot = undefined;
+  let slot;
+  // eslint-disable-next-line prefer-destructuring
   if (slots?.content) slot = slots.content(scopeData(dateFormat?.value))[0];
   return slot && isSymbol(slot.type) ? undefined : slot;
 });
@@ -106,8 +106,10 @@ const isCustomRightChunkScoped = computed(() => !!slots?.right);
 // 滑块内容
 const { scopeData, textData } = useRender(data);
 const sliderSlot = computed(() => {
-  let slot = undefined;
+  let slot;
+  // eslint-disable-next-line prefer-destructuring
   if (slots?.content) slot = slots.content(scopeData(dateFormat?.value))[0];
+  // eslint-disable-next-line prefer-destructuring
   if (slots?.default) slot = slots.default(scopeData(dateFormat?.value))[0];
 
   return slot && isSymbol(slot.type) ? undefined : slot;
@@ -125,21 +127,21 @@ const rightChunkSlot = computed(() => {
 
 const contentClass = computed(() => {
   return {
-    "gt-slider-content": !customContentScoped.value,
-    "gt-custom-slider-content": customContentScoped.value,
-    "gt-noselect": true,
-    "gt-text-nowrap": true
+    'gt-slider-content': !customContentScoped.value,
+    'gt-custom-slider-content': customContentScoped.value,
+    'gt-noselect': true,
+    'gt-text-nowrap': true
   };
 });
 
 const realAlignment = computed(() => {
   switch (alignment.value) {
-    case "center":
-      return "center";
-    case "right":
-      return "flex-end";
+    case 'center':
+      return 'center';
+    case 'right':
+      return 'flex-end';
     default:
-      return "flex-start";
+      return 'flex-start';
   }
 });
 
@@ -151,30 +153,30 @@ const contentStyle = computed(() => {
 
 const leftChunkClass = computed(() => {
   return {
-    "gt-slider-ctrl__left": !isCustomLeftChunkScoped.value
+    'gt-slider-ctrl__left': !isCustomLeftChunkScoped.value
   };
 });
 
 const rightChunkClass = computed(() => {
   return {
-    "gt-slider-ctrl__right": !isCustomRightChunkScoped.value
+    'gt-slider-ctrl__right': !isCustomRightChunkScoped.value
   };
 });
 
 // 移动滑块样式函数
 function getMoveChunkStyle(v: boolean) {
-  return v ? { opacity: 1, height: "100%" } : { opacity: 0 };
+  return v ? { opacity: 1, height: '100%' } : { opacity: 0 };
 }
 
 const backgroundColor = computed(() => {
-  return bgColor.value || "var(--j-primary-color)";
+  return bgColor.value || 'var(--j-primary-color)';
 });
 
 const rightChunkStyle = computed(() =>
   isCustomRightChunkScoped.value
     ? {
-        transition: "all 0.2s",
-        right: "0",
+        transition: 'all 0.2s',
+        right: '0',
         ...getMoveChunkStyle(showCtrlChunk.value && resizeRight.value)
       }
     : {
@@ -186,8 +188,8 @@ const rightChunkStyle = computed(() =>
 const leftChunkStyle = computed(() =>
   isCustomLeftChunkScoped.value
     ? {
-        transition: "all 0.2s",
-        left: "0",
+        transition: 'all 0.2s',
+        left: '0',
         ...getMoveChunkStyle(showCtrlChunk.value && resizeLeft.value)
       }
     : {
@@ -204,7 +206,7 @@ const sliderStyle = computed(() => {
   return {
     width: `${sliderWidth.value}px`,
     left: `${sliderLeft.value}px`,
-    backgroundColor: !customContentScoped.value ? backgroundColor.value : ""
+    backgroundColor: !customContentScoped.value ? backgroundColor.value : ''
     // cursor: canMove.value ? "ew-resize" : "not-allowed"
   };
 });
@@ -223,17 +225,17 @@ function onMouseLeave() {
 
 function onMouseDown(e: MouseEvent) {
   if (!canMove.value) return;
-  sliderMoveHandle(e, "move");
+  sliderMoveHandle(e, 'move');
 }
 
 function onLeftChunkMouseDown(e: MouseEvent) {
   if (!canMove.value) return;
-  sliderMoveHandle(e, "left");
+  sliderMoveHandle(e, 'left');
 }
 
 function onRightChunkMouseDown(e: MouseEvent) {
   if (!canMove.value) return;
-  sliderMoveHandle(e, "right");
+  sliderMoveHandle(e, 'right');
 }
 
 const { IFMoveSlider } = useRootEmit();
@@ -242,7 +244,7 @@ const { setHeaders } = useSetGanttHeader();
 /**
  * 移动处理
  */
-function sliderMoveHandle(e: MouseEvent, flag = "") {
+function sliderMoveHandle(e: MouseEvent, flag = '') {
   const srcX = e.pageX;
   const srcStartDate = createDate(data.start);
   const srcEndDate = createDate(data.end);
@@ -258,7 +260,7 @@ function sliderMoveHandle(e: MouseEvent, flag = "") {
       ((targetX - srcX) / oneDayWidth.value) *
       getMillisecond(GtParam.headerUnit);
 
-    if (flag === "move" || flag === "left") {
+    if (flag === 'move' || flag === 'left') {
       data.setStart(
         createDate(getDateOffset(srcStartDate, offset)),
         GtParam.headerUnit,
@@ -266,7 +268,7 @@ function sliderMoveHandle(e: MouseEvent, flag = "") {
       );
     }
 
-    if (flag === "move" || flag === "right") {
+    if (flag === 'move' || flag === 'right') {
       data.setEnd(
         createDate(getDateOffset(srcEndDate, offset)),
         GtParam.headerUnit,
@@ -276,12 +278,13 @@ function sliderMoveHandle(e: MouseEvent, flag = "") {
   };
 
   document.onmouseup = () => {
-    document.onmousemove = document.onmouseup = null;
+    document.onmousemove = null;
+    document.onmouseup = null;
 
     // 日期没有变动，不执行移动事件
     if (
-      compareDate(data.start as Date, srcStartDate) === "e" &&
-      compareDate(data.end as Date, srcEndDate) === "e"
+      compareDate(data.start as Date, srcStartDate) === 'e' &&
+      compareDate(data.end as Date, srcEndDate) === 'e'
     )
       return;
 
@@ -292,12 +295,12 @@ function sliderMoveHandle(e: MouseEvent, flag = "") {
 
 function setBetweenDate() {
   // 左边界
-  if (compareDate(data.start as Date, GtData.start as Date) === "l") {
+  if (compareDate(data.start as Date, GtData.start as Date) === 'l') {
     GtData.setStart(data.start);
   }
 
   // 右边界
-  if (compareDate(data.end as Date, GtData.end as Date) === "r") {
+  if (compareDate(data.end as Date, GtData.end as Date) === 'r') {
     GtData.setEnd(data.end);
   }
 
@@ -346,7 +349,7 @@ function setBetweenDate() {
 </template>
 
 <style scoped lang="scss">
-@use "sass:math";
+@use 'sass:math';
 
 $default-slider-border-radius: 3px;
 

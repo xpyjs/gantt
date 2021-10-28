@@ -39,22 +39,22 @@
 </template>
 
 <script lang="ts" setup>
-import { Row } from "@/models/data/row";
-import useResize from "@/composables/useResize";
-import GanttHeader from "./Header.vue";
-import RowWrap from "@/components/rowWrap/index.vue";
-import { Variables } from "@/constants/vars";
-import { useInitGanttRef } from "@/composables/useGanttRef";
-import { useToday, useWeekend } from "@/composables/useDate";
+import { Row } from '@/models/data/row';
+import useResize from '@/composables/useResize';
+import GanttHeader from './Header.vue';
+import RowWrap from '@/components/rowWrap/index.vue';
+import { Variables } from '@/constants/vars';
+import { useInitGanttRef } from '@/composables/useGanttRef';
+import { useToday, useWeekend } from '@/composables/useDate';
 
 defineProps<{ rowData: Array<Row> }>();
 
 const emit = defineEmits<{
-  (e: "gantt-scroll", event: UIEvent): void;
+  (e: 'gantt-scroll', event: UIEvent): void;
 }>();
 
 function onMouseWheel(e: UIEvent) {
-  emit("gantt-scroll", e);
+  emit('gantt-scroll', e);
 }
 
 const { rowHeight, ganttWidth } = useResize();

@@ -1,5 +1,5 @@
-import { ColumnNodeDataOptions } from "@/typings/ParamOptions";
-import { VNode } from "vue";
+import { VNode } from 'vue';
+import { ColumnNodeDataOptions } from '@/typings/ParamOptions';
 
 export class ColumnNode {
   /**
@@ -24,7 +24,7 @@ export class ColumnNode {
 
   constructor() {
     this.key = -1;
-    this.label = "";
+    this.label = '';
     this.node = null;
     this.merge = false;
 
@@ -40,3 +40,5 @@ export class ColumnNode {
     return this;
   }
 }
+
+export default ColumnNode;

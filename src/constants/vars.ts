@@ -1,39 +1,39 @@
 // 所有的默认变量
 export const Variables = {
-  noData: "无数据 😢",
+  noData: '无数据 😢',
 
   name: {
-    root: "JGantt",
-    column: "JGanttColumn",
-    slider: "JGanttSlider",
-    table: "JTableContent",
-    gantt: "JGanttContent",
-    tableHeader: "JTableHeader",
-    ganttHeader: "JGanttHeader",
-    tableRow: "JTableContentRow",
-    ganttRow: "JGanttContentRow"
+    root: 'JGantt',
+    column: 'JGanttColumn',
+    slider: 'JGanttSlider',
+    table: 'JTableContent',
+    gantt: 'JGanttContent',
+    tableHeader: 'JTableHeader',
+    ganttHeader: 'JGanttHeader',
+    tableRow: 'JTableContentRow',
+    ganttRow: 'JGanttContentRow'
   },
 
   key: {
-    start: "startDate",
-    end: "endDate",
+    start: 'startDate',
+    end: 'endDate',
     // columnWidth: "columnWidth",
-    columnSize: "columnSize",
-    showToday: "showToday",
-    showWeekend: "showWeekend",
-    header: "header",
-    body: "body",
-    todayColor: "todayColor",
-    weekendColor: "weekendColor",
-    bgColor: "bgColor",
-    borderColor: "borderColor",
-    textColor: "textColor",
-    hoverColor: "hoverColor",
-    selectColor: "selectColor"
+    columnSize: 'columnSize',
+    showToday: 'showToday',
+    showWeekend: 'showWeekend',
+    header: 'header',
+    body: 'body',
+    todayColor: 'todayColor',
+    weekendColor: 'weekendColor',
+    bgColor: 'bgColor',
+    borderColor: 'borderColor',
+    textColor: 'textColor',
+    hoverColor: 'hoverColor',
+    selectColor: 'selectColor'
   },
 
   slots: {
-    settings: "settings"
+    settings: 'settings'
   },
 
   size: {
@@ -51,36 +51,36 @@ export const Variables = {
 
   color: {
     selected: {
-      default: "#999",
-      dark: "#666"
+      default: '#999',
+      dark: '#666'
     },
     hovered: {
-      default: "#ccc",
-      dark: "#333"
+      default: '#ccc',
+      dark: '#333'
     },
     today: {
-      default: "lightblue",
-      dark: "steelblue"
+      default: 'lightblue',
+      dark: 'steelblue'
     },
     weekend: {
-      default: "lightgrey",
-      dark: "grey"
+      default: 'lightgrey',
+      dark: 'grey'
     },
     primary: {
-      default: "#ECA710",
-      dark: "#ECA710"
+      default: '#ECA710',
+      dark: '#ECA710'
     },
     text: {
-      default: "#282828",
-      dark: "#E5E5E5"
+      default: '#282828',
+      dark: '#E5E5E5'
     },
     border: {
-      default: "#E5E5E5",
-      dark: "#212121"
+      default: '#E5E5E5',
+      dark: '#212121'
     },
     background: {
-      default: "white",
-      dark: "#181818"
+      default: 'white',
+      dark: '#181818'
     }
   },
 
@@ -89,3 +89,5 @@ export const Variables = {
     millisecondOfWeek: 604800000
   }
 };
+
+export default Variables;

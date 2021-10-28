@@ -1,5 +1,6 @@
-import { Variables } from "@/constants/vars";
-import { TableHeaderDataOptions } from "@/typings/ParamOptions";
+/* eslint-disable no-underscore-dangle */
+import { Variables } from '@/constants/vars';
+import { TableHeaderDataOptions } from '@/typings/ParamOptions';
 
 export class TableHeader {
   /**
@@ -21,8 +22,8 @@ export class TableHeader {
 
   constructor() {
     this.key = -1;
-    this.label = "";
-    this.text = "";
+    this.label = '';
+    this.text = '';
     this.__w = Variables.size.defaultTableColumnWidth;
 
     return this;
@@ -52,3 +53,5 @@ export class TableHeader {
     this.__w = v;
   }
 }
+
+export default TableHeader;

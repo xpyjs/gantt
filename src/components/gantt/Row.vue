@@ -1,12 +1,12 @@
 <script lang="ts">
-import useEvent from "@/composables/useEvent";
-import useParam from "@/composables/useParam";
-import useStyle from "@/composables/useStyle";
-import { Variables } from "@/constants/vars";
-import { Row } from "@/models/data/row";
-import { uuid } from "@/utils/common";
-import { computed, defineComponent, ref, toRefs } from "vue";
-import JGanttSlider from "../slider/index.vue";
+import { computed, defineComponent, ref, toRefs } from 'vue';
+import useEvent from '@/composables/event/useEvent';
+import useParam from '@/composables/useParam';
+import useStyle from '@/composables/useStyle';
+import { Variables } from '@/constants/vars';
+import { Row } from '@/models/data/row';
+import { uuid } from '@/utils/common';
+import JGanttSlider from '../slider/index.vue';
 
 export default defineComponent({
   name: Variables.name.ganttRow

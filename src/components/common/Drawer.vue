@@ -80,15 +80,16 @@
 </template>
 
 <script lang="ts">
-import useParam from "@/composables/useParam";
-import { Variables } from "@/constants/vars";
-import { GanttColumnSize, HeaderDateUnit } from "@/typings/ParamOptions";
-import { parseNumber } from "@/utils/common";
-import { defineComponent, toRefs, ref, onMounted, computed } from "vue";
-import JSlider from "./Slider.vue";
+import { defineComponent, toRefs, ref, onMounted, computed } from 'vue';
+import useParam from '@/composables/useParam';
+import { Variables } from '@/constants/vars';
+import { parseNumber } from '@/utils/common';
+import JSlider from './Slider.vue';
+// eslint-disable-next-line import/named
+import { GanttColumnSize, HeaderDateUnit } from '@/typings/ParamOptions';
 
 export default defineComponent({
-  name: "GanttDrawer"
+  name: 'GanttDrawer'
 });
 </script>
 
@@ -130,8 +131,8 @@ function updateGanttHeaderUnit(unit: HeaderDateUnit) {
 
 const drawerStyle = computed(() => {
   return {
-    "min-width": "200px",
-    right: show.value ? "0px" : `-${width.value + 10}px`
+    'min-width': '200px',
+    right: show.value ? '0px' : `-${width.value + 10}px`
   };
 });
 

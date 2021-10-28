@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 // 对象相等
 export function isDeepEqual(a: any, b: any) {
   const o1 = a instanceof Object;
@@ -7,8 +9,8 @@ export function isDeepEqual(a: any, b: any) {
     return a === b;
   }
 
-  //Object.keys() 返回一个由对象的自身可枚举属性(key值)组成的数组,
-  //例如：数组返回下表：let arr = ["a", "b", "c"];console.log(Object.keys(arr))->0,1,2;
+  // Object.keys() 返回一个由对象的自身可枚举属性(key值)组成的数组,
+  // 例如：数组返回下表：let arr = ["a", "b", "c"];console.log(Object.keys(arr))->0,1,2;
   if (Object.keys(a).length !== Object.keys(b).length) {
     return false;
   }
@@ -34,14 +36,14 @@ function isType(o: any, t: string) {
  * @param o 任意对象
  * @returns 如果为 Null 返回 true，否则返回 false
  */
-export const isNull = (o: any): o is null => isType(o, "Null");
+export const isNull = (o: any): o is null => isType(o, 'Null');
 
 /**
  * 对象类型是否为 Undefined
  * @param o 任意对象
  * @returns 如果为 Undefined 返回 true，否则返回 false
  */
-export const isUndefined = (o: any): o is undefined => isType(o, "Undefined");
+export const isUndefined = (o: any): o is undefined => isType(o, 'Undefined');
 
 /**
  * 对象类型是否为 Object
@@ -49,21 +51,21 @@ export const isUndefined = (o: any): o is undefined => isType(o, "Undefined");
  * @returns 如果为 Object 返回 true，否则返回 false
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export const isObject = (o: any): o is Object => isType(o, "Object");
+export const isObject = (o: any): o is Object => isType(o, 'Object');
 
 /**
  * 对象类型是否为 Array
  * @param o 任意对象
  * @returns 如果为 Array 返回 true，否则返回 false
  */
-export const isArray = (o: any): o is Array<any> => isType(o, "Array");
+export const isArray = (o: any): o is Array<any> => isType(o, 'Array');
 
 /**
  * 对象类型是否为 Date
  * @param o 任意对象
  * @returns 如果为 Date 返回 true，否则返回 false
  */
-export const isDate = (o: any): o is Date => isType(o, "Date");
+export const isDate = (o: any): o is Date => isType(o, 'Date');
 
 /**
  * 对象类型是否为 Function
@@ -71,25 +73,25 @@ export const isDate = (o: any): o is Date => isType(o, "Date");
  * @returns 如果为 Function 返回 true，否则返回 false
  */
 // eslint-disable-next-line @typescript-eslint/ban-types
-export const isFunction = (o: any): o is Function => isType(o, "Function");
+export const isFunction = (o: any): o is Function => isType(o, 'Function');
 
 /**
  * 对象类型是否为 Boolean
  * @param o 任意对象
  * @returns 如果为 Boolean 返回 true，否则返回 false
  */
-export const isBoolean = (o: any): o is boolean => isType(o, "Boolean");
+export const isBoolean = (o: any): o is boolean => isType(o, 'Boolean');
 
 /**
  * 对象类型是否为 String
  * @param o 任意对象
  * @returns 如果为 String 返回 true，否则返回 false
  */
-export const isString = (o: any): o is string => isType(o, "String");
+export const isString = (o: any): o is string => isType(o, 'String');
 
 /**
  * 对象类型是否为 Number
  * @param o 任意对象
  * @returns 如果为 Number 返回 true，否则返回 false
  */
-export const isNumber = (o: any): o is number => isType(o, "Number");
+export const isNumber = (o: any): o is number => isType(o, 'Number');

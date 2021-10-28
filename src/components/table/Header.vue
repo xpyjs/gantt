@@ -1,10 +1,10 @@
 <script lang="ts">
-import useParam from "@/composables/useParam";
-import { useResizeTableColumn } from "@/composables/useResize";
-import useStyle from "@/composables/useStyle";
-import { Variables } from "@/constants/vars";
-import { TableHeader } from "@/models/param/header";
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent } from 'vue';
+import useParam from '@/composables/useParam';
+import { useResizeTableColumn } from '@/composables/useResize';
+import useStyle from '@/composables/useStyle';
+import { Variables } from '@/constants/vars';
+import { TableHeader } from '@/models/param/header';
 
 export default defineComponent({
   name: Variables.name.tableHeader

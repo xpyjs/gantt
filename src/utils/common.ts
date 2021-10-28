@@ -1,3 +1,5 @@
+/* eslint-disable no-bitwise */
+/* eslint-disable no-param-reassign */
 /**
  * 从任意对象中获取一个数字，如果无法获取，返回默认值（如果没有提供，返回0）
  * @param v 任何需要转成数字的内容
@@ -9,7 +11,7 @@ export function parseNumber(v: any, defaultNumber = 0, radix = 10): number {
     v = defaultNumber;
   } else {
     v = parseInt(v, radix);
-    if (isNaN(v)) {
+    if (Number.isNaN(v)) {
       v = defaultNumber;
     }
   }
@@ -23,33 +25,34 @@ export function parseNumber(v: any, defaultNumber = 0, radix = 10): number {
  */
 export function uuid(len: number, radix = 16): string {
   const chars =
-    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".split("");
-  const uuid = [];
+    '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+  const res = [];
   let i;
   radix = radix || chars.length;
 
   if (len) {
     // Compact form
-    for (i = 0; i < len; i++) uuid[i] = chars[0 | (Math.random() * radix)];
+    for (i = 0; i < len; i++) res[i] = chars[0 | (Math.random() * radix)];
   } else {
     // rfc4122, version 4 form
     let r;
 
     // rfc4122 requires these characters
-    uuid[8] = uuid[13] = uuid[18] = uuid[23] = "-";
-    uuid[14] = "4";
+    // eslint-disable-next-line no-multi-assign
+    res[8] = res[13] = res[18] = res[23] = '-';
+    res[14] = '4';
 
     // Fill in random data.  At i==19 set the high bits of clock sequence as
     // per rfc4122, sec. 4.1.5
     for (i = 0; i < 36; i++) {
-      if (!uuid[i]) {
+      if (!res[i]) {
         r = 0 | (Math.random() * 16);
-        uuid[i] = chars[i === 19 ? (r & 0x3) | 0x8 : r];
+        res[i] = chars[i === 19 ? (r & 0x3) | 0x8 : r];
       }
     }
   }
 
-  return uuid.join("");
+  return res.join('');
 }
 
 /**
@@ -59,9 +62,9 @@ export function uuid(len: number, radix = 16): string {
 export function getRandomString(len: number): string {
   len = len || 4;
   const $chars =
-    "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghijklmnopqrstuvwxyz0123456789";
+    'ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghijklmnopqrstuvwxyz0123456789';
   const maxPos = $chars.length;
-  let s = "";
+  let s = '';
   for (let i = 0; i < len; i++) {
     s += $chars.charAt(Math.floor(Math.random() * maxPos));
   }
@@ -74,9 +77,9 @@ export function getRandomString(len: number): string {
  */
 export function kebabCasedToCamel(str: string): string {
   return str
-    .split("-")
+    .split('-')
     .map(x => x.length > 0 && x[0].toUpperCase())
-    .join("");
+    .join('');
 }
 
 /**
@@ -85,5 +88,5 @@ export function kebabCasedToCamel(str: string): string {
  * @returns
  */
 export function camelToKebabCased(str: string): string {
-  return str.replace(/([A-Z])/g, "-$1".toLowerCase()).replace(/^-/, "");
+  return str.replace(/([A-Z])/g, '-$1'.toLowerCase()).replace(/^-/, '');
 }

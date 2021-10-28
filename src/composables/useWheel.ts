@@ -1,13 +1,13 @@
-import { Variables } from "@/constants/vars";
-import { onMounted, onUpdated, readonly, ref } from "vue";
-import useGanttRef from "./useGanttRef";
-import useTableRef from "./useTableRef";
+import { onMounted, onUpdated, readonly, ref } from 'vue';
+import { Variables } from '@/constants/vars';
+import useGanttRef from './useGanttRef';
+import useTableRef from './useTableRef';
 
 const scrollTop = ref(0);
 const rootHeight = ref(0);
 const scrollBarHeight = ref(Variables.size.defaultScrollBarHeight);
 
-export default function () {
+export default () => {
   const { ganttRef } = useGanttRef();
   const { tableRef } = useTableRef();
 
@@ -35,18 +35,19 @@ export default function () {
   }
 
   function ganttWheelHandle() {
-    tableRef.value &&
-      (scrollTop.value = tableRef.value.scrollTop =
-        ganttRef.value?.scrollTop as number);
+    if (tableRef.value) {
+      const st = ganttRef.value?.scrollTop as number;
+      scrollTop.value = st;
+      tableRef.value.scrollTop = st;
+    }
   }
 
   function updateScrollBarHeight() {
-    tableRef.value &&
-      ganttRef.value &&
-      (scrollBarHeight.value =
-        tableRef.value.offsetHeight - ganttRef.value.clientHeight);
+    if (tableRef.value && ganttRef.value)
+      scrollBarHeight.value =
+        tableRef.value.offsetHeight - ganttRef.value.clientHeight;
 
-    tableRef.value && (rootHeight.value = tableRef.value.offsetHeight);
+    if (tableRef.value) rootHeight.value = tableRef.value.offsetHeight;
   }
 
   // UI 加载后需要更新数据
@@ -61,4 +62,4 @@ export default function () {
     tableWheelHandle,
     ganttWheelHandle
   };
-}
+};

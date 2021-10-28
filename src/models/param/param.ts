@@ -1,45 +1,46 @@
-import { Errors } from "@/constants/errors";
-import { Variables } from "@/constants/vars";
+/* eslint-disable no-underscore-dangle */
+import { merge } from 'lodash';
+import { VNode, Component } from 'vue';
+import { Errors } from '@/constants/errors';
+import { Variables } from '@/constants/vars';
 import {
-  GanttColumnSize,
   HeaderDateOptions,
   HeaderDateUnit,
   ParamOptions
-} from "@/typings/ParamOptions";
-import { parseNumber } from "@/utils/common";
-import { dateList } from "@/utils/date";
-import { isArray } from "@/utils/is";
-import { merge } from "lodash";
-import { VNode, Component } from "vue";
-import { ColumnNode } from "./columnNode";
-import { TableHeader } from "./header";
-
-class DefaultOptions {
-  // colWidth: number;
-  colSize: GanttColumnSize;
-  rowHeight: number;
-
-  constructor() {
-    // this.colWidth = Variables.size.minGanttColumnWidth;
-    this.colSize = "normal";
-    this.rowHeight = Variables.size.defaultContentRowHeight;
-  }
-}
+} from '@/typings/ParamOptions';
+import { parseNumber } from '@/utils/common';
+import { dateList } from '@/utils/date';
+import { isArray } from '@/utils/is';
+import { ColumnNode } from './columnNode';
+import { TableHeader } from './header';
+import DefaultOptions from './options';
 
 export class ParamData {
   private __cns: ColumnNode[];
+
   private __sn: VNode | null;
+
   private __ths: TableHeader[];
+
   private __ghs: { length: number; list: HeaderDateOptions[] };
+
   private __cbw: number;
+
   private __rh: number;
+
   private __hh: number;
+
   private __gos: ParamOptions;
+
   private __slots: any;
+
   private __start: Date;
+
   private __end: Date;
+
   private __default: DefaultOptions;
-  private __hu: HeaderDateUnit = "day";
+
+  private __hu: HeaderDateUnit = 'day';
 
   /**
    * 层级颜色，循环展示
@@ -87,15 +88,15 @@ export class ParamData {
     // 默认值
     this.__gos = {
       // columnWidth: Variables.size.minGanttColumnWidth,
-      columnSize: "normal",
+      columnSize: 'normal',
       showToday: true,
       showWeekend: true,
       header: {},
       body: {
-        todayColor: "",
-        weekendColor: "",
-        hoverColor: "",
-        selectColor: ""
+        todayColor: '',
+        weekendColor: '',
+        hoverColor: '',
+        selectColor: ''
       }
     };
   }
@@ -272,13 +273,13 @@ export class ParamData {
     this.tableHeaders.push(data);
   }
 
-  private __checkType(type: string, target: string) {
+  private static __checkType(type: string, target: string) {
     return (
-      type.replace(/-/g, "").toLocaleLowerCase() === target.toLocaleLowerCase()
+      type.replace(/-/g, '').toLocaleLowerCase() === target.toLocaleLowerCase()
     );
   }
 
-  private __isComponent(v: any): v is Component {
+  private static __isComponent(v: any): v is Component {
     return !!v.type?.name && !!v.type?.setup;
   }
 
@@ -300,20 +301,21 @@ export class ParamData {
         return (
           // 接收自定义组件，不接受原生元素
           type &&
-          this.__isComponent(v) &&
+          ParamData.__isComponent(v) &&
           // 接受 JGanttColumn 插槽，并且该插槽需要携带 label 属性
-          ((this.__checkType(type, Variables.name.column) &&
+          ((ParamData.__checkType(type, Variables.name.column) &&
             !!v.props?.label) ||
             // 或者接受一个 JGanttSlider 组件。多个 JGanttSlider 保留最后一个
-            this.__checkType(type, Variables.name.slider))
+            ParamData.__checkType(type, Variables.name.slider))
         );
       })
       .forEach(v => {
         const type = (v.type as Component).name as string;
 
         // 分别对不同组件进行整理
-        if (this.__checkType(type, Variables.name.column)) {
+        if (ParamData.__checkType(type, Variables.name.column)) {
           // 添加唯一 key
+          // eslint-disable-next-line no-param-reassign
           v.key = colVNodeKey;
           Object.assign(v.props, { __key: colVNodeKey });
 
@@ -324,8 +326,8 @@ export class ParamData {
           );
 
           // 添加 merge 方法，忽略第一行
-          let merge = v.props?.merge;
-          if (v.key === 0) merge = undefined;
+          let mergeOps = v.props?.merge;
+          if (v.key === 0) mergeOps = undefined;
 
           this.__addTHeader(
             new TableHeader().initData({
@@ -338,13 +340,15 @@ export class ParamData {
 
           this.__addCNode(
             new ColumnNode().initData({
-              key: colVNodeKey++,
+              key: colVNodeKey,
               label,
               node: v,
-              merge
+              merge: mergeOps
             })
           );
-        } else if (this.__checkType(type, Variables.name.slider)) {
+
+          colVNodeKey += 1;
+        } else if (ParamData.__checkType(type, Variables.name.slider)) {
           this.__sn = v;
         }
       });
@@ -368,3 +372,5 @@ export class ParamData {
     this.rowHeight = parseNumber(this.__default.rowHeight);
   }
 }
+
+export default ParamData;

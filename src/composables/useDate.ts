@@ -1,19 +1,22 @@
-import { Variables } from "@/constants/vars";
-import { parseNumber } from "@/utils/common";
+/* eslint-disable no-plusplus */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/naming-convention */
+import { computed } from 'vue';
+import { Variables } from '@/constants/vars';
+import { parseNumber } from '@/utils/common';
 import {
   createDate,
   formatDate,
   getDateInterval,
   getMillisecond
-} from "@/utils/date";
-import { isDate, isUndefined } from "@/utils/is";
-import { computed } from "vue";
-import useData from "./useData";
-import { useRootEmit } from "./useEvent";
-import useGanttRef from "./useGanttRef";
-import useParam from "./useParam";
-import useResize from "./useResize";
-import { useDark } from "./useStyle";
+} from '@/utils/date';
+import { isDate, isUndefined } from '@/utils/is';
+import useGanttRef from './useGanttRef';
+import useParam from './useParam';
+import useResize from './useResize';
+import { useDark } from './useStyle';
+import useRootEmit from './event/useRootEmit';
+import useData from './data/useData';
 
 function _getDateInterval(start: Date, date: Date | number) {
   const { GtParam } = useParam();
@@ -59,31 +62,31 @@ export function useToday() {
   const todayLineStyle = computed(() => {
     return {
       left: `${todayLeft.value - 1}px`,
-      width: `${GtParam.headerUnit === "day" ? oneDayWidth.value : 5}px`,
-      height: "100%",
-      "background-color":
+      width: `${GtParam.headerUnit === 'day' ? oneDayWidth.value : 5}px`,
+      height: '100%',
+      'background-color':
         GtParam.ganttOptions.body?.todayColor ||
         Variables.color.today[colorSelectStr.value]
     };
   });
 
   const arrowWidth = computed(() => {
-    return GtParam.headerUnit === "day"
-      ? oneDayWidth.value > 50
-        ? 50
-        : oneDayWidth.value
-      : 15;
+    if (GtParam.headerUnit === 'day') {
+      if (oneDayWidth.value > 50) return 50;
+      return oneDayWidth.value;
+    }
+    return 15;
   });
 
   const todayArrowStyle = computed(() => {
     return {
       left: `${
-        GtParam.headerUnit === "day"
+        GtParam.headerUnit === 'day'
           ? todayLeft.value + (oneDayWidth.value - arrowWidth.value) / 2
           : todayLeft.value - arrowWidth.value / 2 + 2
       }px`,
-      "border-width": `${arrowWidth.value / 2}px`,
-      "border-top-color": GtParam.ganttOptions.body?.todayColor
+      'border-width': `${arrowWidth.value / 2}px`,
+      'border-top-color': GtParam.ganttOptions.body?.todayColor
     };
   });
 
@@ -104,7 +107,7 @@ export function useWeekend() {
 
   const weekendList = computed(() => {
     const r: Array<number> = [];
-    if (!GtParam.ganttOptions.showWeekend || GtParam.headerUnit !== "day")
+    if (!GtParam.ganttOptions.showWeekend || GtParam.headerUnit !== 'day')
       return r;
 
     const sd = createDate(GtData.start);
@@ -137,12 +140,12 @@ export function useWeekend() {
   });
 
   const weekendStyle = computed(() => {
-    return function (item: number) {
+    return (item: number) => {
       return {
         left: `${item * oneDayWidth.value}px`,
         width: `${oneDayWidth.value}px`,
-        height: "100%",
-        "background-color":
+        height: '100%',
+        'background-color':
           GtParam.ganttOptions.body?.weekendColor ||
           Variables.color.weekend[colorSelectStr.value]
       };
@@ -170,6 +173,7 @@ export function useJumpDate() {
 
     // 未定义日期，默认跳转到今天
     if (isUndefined(date) || !isDate(date)) {
+      // eslint-disable-next-line no-param-reassign
       date = new Date();
     }
 
@@ -183,8 +187,8 @@ export function useJumpDate() {
       _getDateInterval(GtData.start as Date, date) * oneDayWidth.value
     );
 
-    let left = 0,
-      right = 0;
+    let left = 0;
+    let right = 0;
 
     if (ganttRef.value.scrollLeft < width) {
       // 日期在右侧

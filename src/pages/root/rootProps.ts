@@ -1,14 +1,14 @@
-import { Errors } from "@/constants/errors";
-import { Variables } from "@/constants/vars";
+import { PropType } from 'vue';
+import { Errors } from '@/constants/errors';
+import { Variables } from '@/constants/vars';
 import {
   GanttColumnSize,
   ParamBodyOptions,
   ParamHeaderOptions
-} from "@/typings/ParamOptions";
-import { parseNumber } from "@/utils/common";
-import { PropType } from "vue";
+} from '@/typings/ParamOptions';
+import { parseNumber } from '@/utils/common';
 
-export const props = {
+export default {
   /**
    * 数据列表
    */
@@ -25,10 +25,10 @@ export const props = {
     required: true,
     validator: (v: string) => {
       if (!v) {
-        throw (
-          Errors.header +
-          Errors.invalidProps +
-          '"dataIndex" should be a valid string.'
+        throw new Error(
+          `${
+            Errors.header + Errors.invalidProps
+          }"dataIndex" should be a valid string.`
         );
       }
       return !!v;
@@ -60,10 +60,10 @@ export const props = {
     validator: (v: number | string) => {
       const r = parseNumber(v) >= Variables.size.minHeaderHeight;
       if (!r) {
-        throw (
-          Errors.header +
-          Errors.invalidProps +
-          `"headerHeight" should be at least ${Variables.size.minHeaderHeight}.`
+        throw new Error(
+          `${
+            Errors.header + Errors.invalidProps
+          }"headerHeight" should be at least ${Variables.size.minHeaderHeight}.`
         );
       }
       return r;
@@ -79,19 +79,23 @@ export const props = {
     validator: (v: number | string) => {
       const minR = parseNumber(v) >= Variables.size.minContentRowHeight;
       if (!minR) {
-        throw (
-          Errors.header +
-          Errors.invalidProps +
-          `"rowHeight" should be at least ${Variables.size.minContentRowHeight}.`
+        throw new Error(
+          `${
+            Errors.header + Errors.invalidProps
+          }"rowHeight" should be at least ${
+            Variables.size.minContentRowHeight
+          }.`
         );
       }
 
       const maxR = parseNumber(v) <= Variables.size.maxContentRowHeight;
       if (!maxR) {
-        throw (
-          Errors.header +
-          Errors.invalidProps +
-          `"rowHeight" should be no more than ${Variables.size.maxContentRowHeight}.`
+        throw new Error(
+          `${
+            Errors.header + Errors.invalidProps
+          }"rowHeight" should be no more than ${
+            Variables.size.maxContentRowHeight
+          }.`
         );
       }
       return minR && maxR;
@@ -107,10 +111,10 @@ export const props = {
     validator: (v: number) => {
       const r = parseNumber(v) >= 0;
       if (!r) {
-        throw (
-          Errors.header +
-          Errors.invalidProps +
-          '"border" should be a positive integer.'
+        throw new Error(
+          `${
+            Errors.header + Errors.invalidProps
+          }"border" should be a positive integer.`
         );
       }
       return r;
@@ -122,7 +126,7 @@ export const props = {
    */
   borderColor: {
     type: String,
-    default: ""
+    default: ''
   },
 
   /**
@@ -149,40 +153,11 @@ export const props = {
   },
 
   /**
-   * 甘特图的每一列宽度
-   */
-  // ganttColumnWidth: {
-  //   type: [Number, String],
-  //   default: Variables.size.minGanttColumnWidth,
-  //   validator: (v: number | string) => {
-  //     const minR = parseNumber(v) >= Variables.size.minGanttColumnWidth;
-  //     if (!minR) {
-  //       throw (
-  //         Errors.header +
-  //         Errors.invalidProps +
-  //         `"ganttColumnWidth" should be at least ${Variables.size.minGanttColumnWidth}.`
-  //       );
-  //     }
-
-  //     const maxR = parseNumber(v) <= Variables.size.maxGanttColumnWidth;
-  //     if (!maxR) {
-  //       throw (
-  //         Errors.header +
-  //         Errors.invalidProps +
-  //         `"ganttColumnWidth" should be no more than ${Variables.size.maxGanttColumnWidth}.`
-  //       );
-  //     }
-
-  //     return minR && maxR;
-  //   }
-  // },
-
-  /**
    * 甘特图表的每一列宽度
    */
   ganttColumnSize: {
     type: String as PropType<GanttColumnSize>,
-    default: "normal"
+    default: 'normal'
   },
 
   /**
@@ -244,6 +219,6 @@ export const props = {
    */
   primaryColor: {
     type: String,
-    default: ""
+    default: ''
   }
 };

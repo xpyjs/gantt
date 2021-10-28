@@ -1,8 +1,8 @@
-import { Variables } from "@/constants/vars";
-import { Alignment } from "@/typings/ParamOptions";
-import { PropType } from "vue";
+import { PropType } from 'vue';
+import { Variables } from '@/constants/vars';
+import { Alignment } from '@/typings/ParamOptions';
 
-export const sliderProps = {
+export default {
   /**
    * 设置需要显示的内容字段
    */
@@ -32,7 +32,7 @@ export const sliderProps = {
    */
   bgColor: {
     type: String,
-    default: ""
+    default: ''
   },
 
   /**
@@ -41,9 +41,9 @@ export const sliderProps = {
    */
   alignment: {
     type: String as PropType<Alignment>,
-    default: "left",
+    default: 'left',
     validator: (v: Alignment) => {
-      return ["left", "center", "right"].includes(v);
+      return ['left', 'center', 'right'].includes(v);
     }
   },
 

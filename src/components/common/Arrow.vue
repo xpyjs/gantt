@@ -25,12 +25,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, ref, watch } from "vue";
+import { defineComponent, onMounted, PropType, ref, watch } from 'vue';
 
-type Direction = "up" | "down" | "left" | "right";
+type Direction = 'up' | 'down' | 'left' | 'right';
 
 export default defineComponent({
-  name: "GanttArrowIcon"
+  name: 'GanttArrowIcon'
 });
 </script>
 
@@ -43,17 +43,17 @@ const props = defineProps({
 
   direction: {
     type: String as PropType<Direction>,
-    default: "right",
+    default: 'right',
     validator: (v: Direction) => {
-      return ["up", "down", "left", "right"].includes(v);
+      return ['up', 'down', 'left', 'right'].includes(v);
     }
   }
 });
 
-let up = ref(false);
-let down = ref(false);
-let left = ref(false);
-let right = ref(true);
+const up = ref(false);
+const down = ref(false);
+const left = ref(false);
+const right = ref(true);
 
 function checkDirection() {
   up.value = false;
@@ -62,13 +62,13 @@ function checkDirection() {
   right.value = false;
 
   switch (props.direction) {
-    case "up":
+    case 'up':
       up.value = true;
       break;
-    case "down":
+    case 'down':
       down.value = true;
       break;
-    case "left":
+    case 'left':
       left.value = true;
       break;
     default:

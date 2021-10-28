@@ -1,15 +1,22 @@
 <script lang="ts">
-import useEvent from "@/composables/useEvent";
-import useParam from "@/composables/useParam";
-import { Variables } from "@/constants/vars";
-import { Row } from "@/models/data/row";
-import { toRefs } from "@vue/runtime-core";
-import { computed, defineComponent, ref, useAttrs, useSlots } from "vue";
-import { columnProps } from "./props";
-import ArrowIcon from "../common/Arrow.vue";
-import useResize from "@/composables/useResize";
-import useRender from "@/composables/useRender";
-import { CustomCssProperties } from "@/typings/private/CSSProperties";
+import {
+  toRefs,
+  computed,
+  defineComponent,
+  ref,
+  useAttrs,
+  useSlots
+} from 'vue';
+import useEvent from '@/composables/event/useEvent';
+import useParam from '@/composables/useParam';
+import { Variables } from '@/constants/vars';
+import { Row } from '@/models/data/row';
+import columnProps from './props';
+import ArrowIcon from '../common/Arrow.vue';
+import useResize from '@/composables/useResize';
+import useRender from '@/composables/useRender';
+// eslint-disable-next-line import/named
+import { CustomCssProperties } from '@/typings/private/CSSProperties';
 
 export default defineComponent({
   name: Variables.name.column
@@ -22,6 +29,7 @@ const slots = useSlots();
 const attrs = useAttrs();
 
 const { dateFormat, label, emptyData, center } = toRefs(props);
+// eslint-disable-next-line no-underscore-dangle
 const nodeKey = attrs.__key as number;
 const data = attrs.data as Row;
 const { GtParam } = useParam();
@@ -51,15 +59,15 @@ const colWidth = computed(() => {
 });
 const rootStyle = computed(() => {
   return {
-    "--column-width": `${colWidth.value - 1}px`,
-    borderColor: "var(--j-content-border-color)"
+    '--column-width': `${colWidth.value - 1}px`,
+    borderColor: 'var(--j-content-border-color)'
   } as CustomCssProperties;
 });
 
 // checkbox & expandbox
 const boxSize = ref(15);
 const boxSizeStyle = computed(() => {
-  return { "--box-size": `${boxSize.value}px` } as CustomCssProperties;
+  return { '--box-size': `${boxSize.value}px` } as CustomCssProperties;
 });
 const showCheckbox = computed(() => GtParam.showCheckbox && nodeKey === 0);
 const showExpand = computed(() => GtParam.showExpand && nodeKey === 0);
@@ -75,8 +83,8 @@ function onClickExpand() {
 const { rowHeight } = useResize();
 const chunkStyle = computed(() => {
   return {
-    "--row-height": `${rowHeight.value}px`,
-    justifyContent: center.value ? "center" : "flex-start"
+    '--row-height': `${rowHeight.value}px`,
+    justifyContent: center.value ? 'center' : 'flex-start'
   } as CustomCssProperties;
 });
 
