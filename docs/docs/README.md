@@ -8,6 +8,10 @@
 这是 vue3 版本的 Gantt 组件，如果需要使用 vue2 版本，请移步 [这里](./v0/)
 :::
 
+::: tip 演示
+现已提供演示页面，如需要，请移步 [演示页面](https://docs.xiaopangying.com/gantt-demo/)。
+:::
+
 ## 什么是 JzGantt
 
 `JzGantt` 是一个基于 `vue` 的甘特图表插件，它包含常用的甘特图功能，如：

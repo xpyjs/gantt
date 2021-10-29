@@ -2,7 +2,7 @@
 
 ![](./src/assets/logo.png)
 
-版本: 1.0
+版本: 1.x
 
 [[English](./README.md)] [[中文](./README_cn.md)]
 
@@ -28,6 +28,14 @@
 - [x] 支持多种日期显示模式切换
 - [ ] 更多持续更新
 
+## 文档
+
+要查看源码，参见 [Github](http://github.com/jeremyjone/jz-gantt)
+
+有关更详细的文档，参见 [document web](https://docs.xiaopangying.com/gantt/)
+
+要看示例，参见 [example web](https://docs.xiaopangying.com/gantt-demo/)
+
 ## 如何使用
 
 ### 安装
@@ -46,12 +54,6 @@ import "jz-gantt/dist/index.css";
 
 createApp(App).use(Gantt).mount("#app");
 ```
-
-## 文档
-
-要查看源码，参见 [Github](http://github.com/jeremyjone/jz-gantt)
-
-有关更详细的文档，参见 [document web](https://docs.xiaopangying.com/gantt/)
 
 ### 基本用法
 

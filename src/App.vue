@@ -141,6 +141,13 @@
   <button @click="() => (showExpand = !showExpand)">显示expand</button>
   <button @click="setSelected">设置选择</button>
   <button @click="jumpTo">跳转到</button>
+
+  <div class="code-link">
+    该页面源代码在
+    <a href="https://github.com/jeremyjone/jz-gantt/blob/master/src/App.vue"
+      >这里</a
+    >
+  </div>
 </template>
 
 <script>
@@ -511,5 +518,11 @@ export default defineComponent({
   border-top-color: #123456;
   border-bottom-color: transparent;
   border-right-color: transparent;
+}
+
+.code-link {
+  margin-top: 1rem;
+  color: red;
+  text-decoration: none;
 }
 </style>

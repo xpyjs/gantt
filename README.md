@@ -2,7 +2,7 @@
 
 ![](./src/assets/logo.png)
 
-version: 1.0
+version: 1.x
 
 [[English](./README.md)] [[中文](./README_cn.md)]
 
@@ -28,6 +28,14 @@ A simple gantt component by vue3.
 - [x] Multiple date display modes switch
 - [ ] More
 
+## Document
+
+For resource code, see [Github](http://github.com/jeremyjone/jz-gantt)
+
+For more detailed documentation, see [document web](https://docs.xiaopangying.com/gantt/)
+
+For example, see [Example web](https://docs.xiaopangying.com/gantt-demo/)
+
 ## How to use
 
 ### install
@@ -46,12 +54,6 @@ import "jz-gantt/dist/index.css";
 
 createApp(App).use(Gantt).mount('#app')
 ```
-
-## Document
-
-For resource code, see [Github](http://github.com/jeremyjone/jz-gantt)
-
-For more detailed documentation, see [document web](https://docs.xiaopangying.com/gantt/)
 
 ### Basic use
 

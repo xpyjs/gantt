@@ -18,6 +18,7 @@ module.exports = {
     project: ['./tsconfig.json'],
     extraFileExtensions: ['.vue']
   },
+  ignorePatterns: ['vite.config.ts'],
   globals: {
     defineProps: 'readonly',
     defineEmits: 'readonly',
