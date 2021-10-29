@@ -1,5 +1,5 @@
-import { useInitData } from "@/composables/useData";
-import { ref } from "vue";
+import { useInitData } from '@/composables/data/useData';
+import { ref } from 'vue';
 
 // 测试数据
 export const dataList = [];
@@ -20,10 +20,10 @@ for (let i = 0; i < 1000; i++) {
     startDate: `2021-06-${s++}`,
     endDate: `2021-08-${e++}`,
     ttt: {
-      a: "aaa",
-      b: "bbb"
+      a: 'aaa',
+      b: 'bbb'
     },
-    name: "我的数据: " + s,
+    name: '我的数据: ' + s,
     children: []
   });
   if (s > 30) s = 2;
@@ -39,14 +39,14 @@ for (let i = 0; i < 50; i++) {
     e = t;
   }
   [0, 1, 3, 4, 5, 7, 9].forEach(index => {
-    dataList[index]["children"].push({
+    dataList[index]['children'].push({
       index: i,
       startDate: `2021-06-${s++}`,
       endDate: `2021-07-${e++}`,
-      name: "子数据: " + s,
+      name: '子数据: ' + s,
       ttt: {
-        a: "s-aaa",
-        b: "s-bbb"
+        a: 's-aaa',
+        b: 's-bbb'
       },
       children: []
     });
@@ -64,14 +64,14 @@ for (let i = 0; i < 50; i++) {
     e = t;
   }
   [0, 2].forEach(index => {
-    dataList[0]["children"][index]["children"].push({
+    dataList[0]['children'][index]['children'].push({
       index: i,
       startDate: `2021-07-${s++}`,
       endDate: `2021-08-${e++}`,
-      name: "孙数据: " + s,
+      name: '孙数据: ' + s,
       ttt: {
-        a: "gs-aaa",
-        b: "gs-bbb"
+        a: 'gs-aaa',
+        b: 'gs-bbb'
       },
       children: []
     });
@@ -80,11 +80,10 @@ for (let i = 0; i < 50; i++) {
   if (e > 30) e = 5;
 }
 
-
 const dataOptions = {
   isExpand: true,
-  startLabel: "startDate",
-  endLabel: "endDate"
+  startLabel: 'startDate',
+  endLabel: 'endDate'
 };
 
 export const { allData } = useInitData(ref(dataList), dataOptions);
