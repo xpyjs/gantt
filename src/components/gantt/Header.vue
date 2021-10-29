@@ -86,6 +86,7 @@ const { showTodayLine, todayArrowStyle } = useToday();
       height: 50%;
       border-bottom: 1px solid var(--j-content-border-color);
       box-sizing: border-box;
+      overflow: hidden;
     }
 
     &-one {
@@ -100,6 +101,7 @@ const { showTodayLine, todayArrowStyle } = useToday();
         height: 100%;
         justify-content: center;
         align-items: center;
+        overflow: hidden;
       }
     }
   }

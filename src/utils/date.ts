@@ -3,9 +3,9 @@
 /* eslint-disable no-param-reassign */
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
+import IsoWeek from 'dayjs/plugin/isoWeek';
 import { Variables } from '@/constants/vars';
 import { HeaderDateOptions, HeaderDateUnit } from '@/typings/ParamOptions';
-import { isDate } from './is';
 
 /** ********************************** */
 /** *** 下面方法全部使用 dayjs 实现 **** */
@@ -13,6 +13,7 @@ import { isDate } from './is';
 
 // 添加周数
 dayjs.extend(weekOfYear);
+dayjs.extend(IsoWeek);
 
 /**
  * 创建日期的工厂函数，生成一个指定日期，如果无效，返回当日日期
@@ -20,6 +21,14 @@ dayjs.extend(weekOfYear);
  */
 export function createDate(date?: string | number | Date | null): Date {
   return dayjs(date).toDate();
+}
+
+/**
+ * 判断给定的日期是否有效
+ * @param date 日期
+ */
+export function isValidDate(date: number | Date | string) {
+  return dayjs(date).isValid();
 }
 
 /**
@@ -40,7 +49,6 @@ export function dateList(
   for (let i = startTime; i <= endTime; ) {
     const year = dayjs(i).year();
     const month = dayjs(i).month() + 1;
-    console.log(dayjs(i).daysInMonth());
     switch (unit) {
       case 'week':
         if (r[`${year}-${month}`]) {
@@ -52,12 +60,15 @@ export function dateList(
           r[`${year}-${month}`] = [
             {
               text: `第 ${dayjs(i).week()} 周`,
-              len: 7
+              len: i === startTime ? 7 - dayjs(i).day() : 7
             }
           ];
         }
 
-        i += Variables.time.millisecondOfWeek;
+        i +=
+          i === startTime
+            ? (7 - dayjs(i).day()) * Variables.time.millisecondOfDay
+            : Variables.time.millisecondOfWeek;
         break;
       case 'month':
         if (r[`${year}`]) {
@@ -69,12 +80,19 @@ export function dateList(
           r[`${year}`] = [
             {
               text: `${month} 月`,
-              len: dayjs(i).daysInMonth()
+              len:
+                i === startTime
+                  ? dayjs(i).daysInMonth() - dayjs(i).date() + 1
+                  : dayjs(i).daysInMonth()
             }
           ];
         }
 
-        i += dayjs(i).daysInMonth() * Variables.time.millisecondOfDay;
+        i +=
+          i === startTime
+            ? (dayjs(i).daysInMonth() - dayjs(i).date() + 1) *
+              Variables.time.millisecondOfDay
+            : dayjs(i).daysInMonth() * Variables.time.millisecondOfDay;
         break;
       case 'day':
       default:
@@ -104,20 +122,6 @@ export function dateList(
   return res;
 }
 
-/** ********************************** */
-// TODO: 下面的方法有时间改为 dayjs 实现
-/** ********************************** */
-
-/**
- * 判断给定的日期是否有效
- * @param date 日期
- */
-export function isValidDate(date: number | Date | string) {
-  return isDate(date) || typeof date === 'number'
-    ? true
-    : Number.isNaN(Date.parse(date as string)) === false;
-}
-
 /**
  * 获取两个时间的间隔时间戳
  * @param startDate 起始日期
@@ -145,6 +149,10 @@ export function compareDate(
   if (l > r) return 'r';
   return 'e';
 }
+
+/** ********************************** */
+// TODO: 下面的方法有时间改为 dayjs 实现
+/** ********************************** */
 
 /**
  * 计算日期偏移值，给定一个偏移值，返回新日期的时间戳

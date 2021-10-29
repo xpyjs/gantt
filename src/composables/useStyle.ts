@@ -57,9 +57,10 @@ export default () => {
         backgroundSize: `${
           oneDayWidth.value * (GtParam.headerUnit === 'week' ? 7 : 1)
         }px`,
-        backgroundImage: ['day', 'week'].includes(GtParam.headerUnit)
-          ? 'linear-gradient(270deg, var(--j-content-border-color) 1px, transparent 0)'
-          : '',
+        backgroundImage:
+          GtParam.headerUnit === 'day'
+            ? 'linear-gradient(270deg, var(--j-content-border-color) 1px, transparent 0)'
+            : '',
         ...rowBgColor.value(level)
       };
     };

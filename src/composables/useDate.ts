@@ -61,7 +61,7 @@ export function useToday() {
 
   const todayLineStyle = computed(() => {
     return {
-      left: `${todayLeft.value - 1}px`,
+      left: `${todayLeft.value}px`,
       width: `${GtParam.headerUnit === 'day' ? oneDayWidth.value : 5}px`,
       height: '100%',
       'background-color':

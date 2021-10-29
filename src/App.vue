@@ -144,12 +144,12 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue';
 
 let INDEX = 1;
 
 export default defineComponent({
-  name: "App",
+  name: 'App',
 
   data() {
     return {
@@ -162,13 +162,13 @@ export default defineComponent({
       showExpand: true,
       levelColor: [],
       headerStyle: {
-        bgColor: "",
-        textColor: ""
+        bgColor: '',
+        textColor: ''
       },
       bodyStyle: {
-        textColor: "",
-        todayColor: "",
-        weekendColor: ""
+        textColor: '',
+        todayColor: '',
+        weekendColor: ''
         // hoverColor: "#f00",
         // selectColor: "#0f0"
       }
@@ -190,10 +190,10 @@ export default defineComponent({
         startDate: `2021-08-${s++}`,
         endDate: `2021-10-${e++}`,
         ttt: {
-          a: "aaa",
-          b: "bbb"
+          a: 'aaa',
+          b: 'bbb'
         },
-        name: "我的数据: " + s,
+        name: '我的数据: ' + s,
         children: []
       });
       if (s > 30) s = 2;
@@ -207,14 +207,14 @@ export default defineComponent({
         e = t;
       }
       [0, 1, 3, 4, 5, 7, 9].forEach(index => {
-        this.dataList[index]["children"].push({
+        this.dataList[index]['children'].push({
           index: i,
           startDate: `2021-08-${s++}`,
           endDate: `2021-10-${e++}`,
-          name: "子数据: " + s,
+          name: '子数据: ' + s,
           ttt: {
-            a: "s-aaa",
-            b: "s-bbb"
+            a: 's-aaa',
+            b: 's-bbb'
           },
           children: []
         });
@@ -230,14 +230,14 @@ export default defineComponent({
         e = t;
       }
       [0, 2].forEach(index => {
-        this.dataList[0]["children"][index]["children"].push({
+        this.dataList[0]['children'][index]['children'].push({
           index: i,
           startDate: `2021-08-${s++}`,
           endDate: `2021-10-${e++}`,
-          name: "孙数据: " + s,
+          name: '孙数据: ' + s,
           ttt: {
-            a: "gs-aaa",
-            b: "gs-bbb"
+            a: 'gs-aaa',
+            b: 'gs-bbb'
           },
           children: []
         });
@@ -249,19 +249,19 @@ export default defineComponent({
 
   methods: {
     rowClick: function (data) {
-      console.log("click row data:", data);
+      console.log('click row data:', data);
     },
 
     rowDblClick: function (data) {
-      console.log("double click row data:", data);
+      console.log('double click row data:', data);
     },
 
     rowChecked: function (state, data) {
-      console.log("check row:", state, data);
+      console.log('check row:', state, data);
     },
 
     moveSlider: function (newValue, data) {
-      console.log("move slider:", newValue, data);
+      console.log('move slider:', newValue, data);
     },
 
     noDateError: function (date) {
@@ -298,10 +298,10 @@ export default defineComponent({
           startDate: `2020-06-${s++}`,
           endDate: `2020-08-${e++}`,
           ttt: {
-            a: "aaa",
-            b: "bbb"
+            a: 'aaa',
+            b: 'bbb'
           },
-          name: "我的数据: " + s,
+          name: '我的数据: ' + s,
           children: []
         });
         if (s > 30) s = 2;
@@ -315,14 +315,14 @@ export default defineComponent({
           e = t;
         }
         [0, 1, 3, 4, 5, 7, 9].forEach(index => {
-          this.dataList[index]["children"].push({
+          this.dataList[index]['children'].push({
             index: i,
             startDate: `2021-06-${s++}`,
             endDate: `2021-07-${e++}`,
-            name: "子数据: " + s,
+            name: '子数据: ' + s,
             ttt: {
-              a: "s-aaa",
-              b: "s-bbb"
+              a: 's-aaa',
+              b: 's-bbb'
             },
             children: []
           });
@@ -338,14 +338,14 @@ export default defineComponent({
           e = t;
         }
         [0, 2].forEach(index => {
-          this.dataList[0]["children"][index]["children"].push({
+          this.dataList[0]['children'][index]['children'].push({
             index: i,
             startDate: `2021-07-${s++}`,
             endDate: `2021-08-${e++}`,
-            name: "孙数据: " + s,
+            name: '孙数据: ' + s,
             ttt: {
-              a: "gs-aaa",
-              b: "gs-bbb"
+              a: 'gs-aaa',
+              b: 'gs-bbb'
             },
             children: []
           });
@@ -361,14 +361,14 @@ export default defineComponent({
 
     handleClickModify: function () {
       Object.assign(this.dataList[0], {
-        startDate: "2020-08-10",
-        endDate: "2020-09-21"
+        startDate: '2020-08-10',
+        endDate: '2020-09-21'
       });
 
-      Object.assign(this.dataList[0]["children"][2]["children"][0], {
+      Object.assign(this.dataList[0]['children'][2]['children'][0], {
         startDate: `2020-08-13`,
         endDate: `2020-09-17`,
-        name: "孙数据: abcde"
+        name: '孙数据: abcde'
       });
     },
 
@@ -379,34 +379,34 @@ export default defineComponent({
         index: INDEX++,
         startDate: `2020-08-10`,
         endDate: `2020-09-20`,
-        name: "数据: " + INDEX,
+        name: '数据: ' + INDEX,
         ttt: {
-          a: "s-aaa" + INDEX,
-          b: "s-bbb" + INDEX
+          a: 's-aaa' + INDEX,
+          b: 's-bbb' + INDEX
         },
         children: []
       });
     },
 
     handleClickInsert2: function () {
-      this.dataList[0]["children"].unshift({
+      this.dataList[0]['children'].unshift({
         index: INDEX++,
         startDate: `2020-08-15`,
         endDate: `2020-09-13`,
-        name: "子数据: " + INDEX,
+        name: '子数据: ' + INDEX,
         ttt: {
-          a: "s-aaa" + INDEX,
-          b: "s-bbb" + INDEX
+          a: 's-aaa' + INDEX,
+          b: 's-bbb' + INDEX
         },
         children: [
           {
             index: INDEX++,
             startDate: `2020-08-21`,
             endDate: `2020-09-5`,
-            name: "孙数据: " + INDEX,
+            name: '孙数据: ' + INDEX,
             ttt: {
-              a: "s-aaa" + INDEX,
-              b: "s-bbb" + INDEX
+              a: 's-aaa' + INDEX,
+              b: 's-bbb' + INDEX
             },
             children: []
           }
@@ -424,26 +424,26 @@ export default defineComponent({
       this.changeColor++;
 
       if (this.changeColor % 2 !== 0) {
-        this.levelColor = ["green", "yellow", "red"];
+        this.levelColor = ['green', 'yellow', 'red'];
 
         this.headerStyle = {
-          bgColor: "black",
-          textColor: "lightgrey"
+          bgColor: 'black',
+          textColor: 'lightgrey'
         };
 
         this.bodyStyle = {
-          bgColor: "grey",
-          textColor: "grey"
+          bgColor: 'grey',
+          textColor: 'grey'
         };
       } else {
-        this.levelColor = ["azure", "cornsilk"];
+        this.levelColor = ['azure', 'cornsilk'];
         this.headerStyle = {
-          bgColor: "",
-          textColor: ""
+          bgColor: '',
+          textColor: ''
         };
         this.bodyStyle = {
-          bgColor: "",
-          textColor: ""
+          bgColor: '',
+          textColor: ''
         };
       }
     },
@@ -480,7 +480,7 @@ export default defineComponent({
 }
 
 .slider-level-one::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0px;
   height: 0px;
@@ -497,7 +497,7 @@ export default defineComponent({
 }
 
 .slider-level-one::after {
-  content: "";
+  content: '';
   position: absolute;
   right: 0px;
   height: 0px;

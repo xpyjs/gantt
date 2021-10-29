@@ -77,8 +77,6 @@ export function useInitParam(props: any, slots: Readonly<Slots>) {
       rowHeight: rowHeight.value ?? Variables.size.defaultContentRowHeight
     });
     GtParam.setGanttOptions(opts);
-
-    console.log(GtParam);
   }
 
   // 处理 slot 组件
@@ -135,6 +133,8 @@ export function useSetGanttHeader() {
     let tmpEnd = end as Date | string | number;
     const d =
       getDateInterval(start, tmpEnd) / getMillisecond(GtParam.headerUnit);
+
+    console.log(tmpEnd, d, initGanttWidth.value);
 
     if (d * oneDayWidth.value < initGanttWidth.value) {
       const offset =

@@ -25,6 +25,7 @@ A simple gantt component by vue3.
 - [x] Dynamic update data
 - [x] Custom any style
 - [x] Support dark model
+- [x] Multiple date display modes switch
 - [ ] More
 
 ## How to use
