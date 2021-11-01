@@ -24,7 +24,6 @@ export default defineConfig({
   // base: 'https://docs.xiaopangying.com/gantt-demo/',
 
   build: {
-    cssCodeSplit: true,
     // sourcemap: true,
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
@@ -39,6 +38,6 @@ export default defineConfig({
           vue: 'Vue'
         }
       }
-    }
+    } // cssCodeSplit: true,
   }
 });

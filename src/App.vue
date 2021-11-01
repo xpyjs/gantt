@@ -142,6 +142,8 @@
   <button @click="setSelected">设置选择</button>
   <button @click="jumpTo">跳转到</button>
 
+  <div class="tip-text">按 F12 打开控制台以查看事件输出内容。</div>
+
   <div class="code-link">
     该页面源代码在
     <a href="https://github.com/jeremyjone/jz-gantt/blob/master/src/App.vue"
@@ -518,6 +520,12 @@ export default defineComponent({
   border-top-color: #123456;
   border-bottom-color: transparent;
   border-right-color: transparent;
+}
+
+.tip-text {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  color: red;
 }
 
 .code-link {

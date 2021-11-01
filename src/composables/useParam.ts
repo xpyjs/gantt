@@ -134,8 +134,6 @@ export function useSetGanttHeader() {
     const d =
       getDateInterval(start, tmpEnd) / getMillisecond(GtParam.headerUnit);
 
-    console.log(tmpEnd, d, initGanttWidth.value);
-
     if (d * oneDayWidth.value < initGanttWidth.value) {
       const offset =
         (initGanttWidth.value - d * oneDayWidth.value) / oneDayWidth.value;
