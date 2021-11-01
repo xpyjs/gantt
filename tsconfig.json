@@ -25,7 +25,7 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "typings/packages/ParamOptions.d.ts"
+    "typings/*"
   ],
   "exclude": ["node_modules"]
 }
