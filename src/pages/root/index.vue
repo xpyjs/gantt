@@ -1,7 +1,7 @@
 <template>
   <div ref="rootRef" class="gt-root" :style="rootStyle">
     <!-- 悬停操作按钮，外部遮罩一层，用于定位 -->
-    <div class="gt-root-btn-mask">
+    <div v-if="showSettingBtn" class="gt-root-btn-mask">
       <JBtn
         icon="more"
         :size="btnSize"
@@ -86,7 +86,8 @@ const {
   startKey,
   endKey,
   borderColor,
-  primaryColor
+  primaryColor,
+  showSettingBtn
 } = toRefs(props);
 // 绑定根元素
 const { rootRef } = useInitRootRef();
@@ -154,10 +155,11 @@ function onOpBtnClick() {
 }
 
 // ***** 对外方法 ***** //
-const { setSelected, jumpToDate } = useExportEvent();
+const { setSelected, jumpToDate, setHeaderUnit } = useExportEvent();
 defineExpose({
   setSelected,
-  jumpToDate
+  jumpToDate,
+  setHeaderUnit
 });
 </script>
 

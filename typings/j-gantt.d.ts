@@ -1,4 +1,5 @@
 import { App } from 'vue';
+import { HeaderDateUnit } from '@/typings/ParamOptions';
 
 import { JGanttRootComponent } from './packages/root.d';
 
@@ -11,4 +12,6 @@ export declare class JGanttComponent extends JGanttRootComponent {
   setSelected: (data: any) => void;
 
   jumpToDate: (date?: Date) => void;
+
+  setHeaderUnit: (unit: HeaderDateUnit) => void;
 }

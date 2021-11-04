@@ -5,6 +5,8 @@ import { parseNumber } from '@/utils/common';
 import { getDateInterval, getDateOffset, getMillisecond } from '@/utils/date';
 // eslint-disable-next-line import/no-cycle
 import useData from './data/useData';
+import { HeaderDateUnit } from '@/typings/ParamOptions';
+import { Errors } from '@/constants/errors';
 
 // 全局共享一个参数对象
 const GtParam = reactive(new ParamData());
@@ -63,19 +65,19 @@ export function useInitParam(props: any, slots: Readonly<Slots>) {
       [Variables.key.showToday]: showToday.value,
       [Variables.key.showWeekend]: showWeekend.value,
       [Variables.key.header]: headerStyle.value || {},
-      [Variables.key.body]: bodyStyle.value || {}
+      [Variables.key.body]: bodyStyle.value || {},
+      [Variables.key.columnSize]: ganttColumnSize.value
     };
 
     if (init) {
       GtParam.rowHeight = parseNumber(rowHeight.value);
-    } else {
-      opts[Variables.key.columnSize] = GtParam.ganttOptions.columnSize;
+
+      GtParam.init({
+        colSize: ganttColumnSize.value,
+        rowHeight: rowHeight.value ?? Variables.size.defaultContentRowHeight
+      });
     }
 
-    GtParam.init({
-      colSize: ganttColumnSize.value,
-      rowHeight: rowHeight.value ?? Variables.size.defaultContentRowHeight
-    });
     GtParam.setGanttOptions(opts);
   }
 
@@ -150,4 +152,22 @@ export function useSetGanttHeader() {
     initGanttWidth,
     setHeaders
   };
+}
+
+export function useExportParamFunc() {
+  function updateGanttHeaderUnit(unit: HeaderDateUnit) {
+    if (['day', 'week', 'month'].includes(unit)) {
+      GtParam.headerUnit = unit;
+    } else {
+      console.warn(
+        Errors.header,
+        Errors.invalidProps,
+        `input value '${unit}' is not a valid header unit. It should be 'day', 'week' or 'month'.`
+      );
+
+      GtParam.headerUnit = 'day';
+    }
+  }
+
+  return { updateGanttHeaderUnit };
 }

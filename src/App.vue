@@ -11,6 +11,7 @@
       data-index="index"
       expand-all
       :dark="isDark"
+      :gantt-column-size="colSize"
       :show-checkbox="showCheckbox"
       :show-weekend="showWeekend"
       :show-today="showToday"
@@ -19,6 +20,7 @@
       :header-style="headerStyle"
       :body-style="bodyStyle"
       :level-color="levelColor"
+      :show-setting-btn="showSettingBtn"
       @row-click="rowClick"
       @row-dbl-click="rowDblClick"
       @row-checked="rowChecked"
@@ -141,6 +143,24 @@
   <button @click="() => (showExpand = !showExpand)">显示expand</button>
   <button @click="setSelected">设置选择</button>
   <button @click="jumpTo">跳转到</button>
+  <button @click="() => (showSettingBtn = !showSettingBtn)">
+    显示设置按钮
+  </button>
+  <template v-if="!showSettingBtn">
+    <div style="display: inline-block">
+      选择列宽
+      <button @click="() => (colSize = 'small')">小</button>
+      <button @click="() => (colSize = 'normal')">中</button>
+      <button @click="() => (colSize = 'large')">大</button>
+    </div>
+
+    <div style="display: inline-block">
+      选择显示
+      <button @click="() => setHeaderUnit('day1')">日</button>
+      <button @click="() => setHeaderUnit('week')">周</button>
+      <button @click="() => setHeaderUnit('month')">月</button>
+    </div>
+  </template>
 
   <div class="tip-text">按 F12 打开控制台以查看事件输出内容。</div>
 
@@ -180,7 +200,9 @@ export default defineComponent({
         weekendColor: ''
         // hoverColor: "#f00",
         // selectColor: "#0f0"
-      }
+      },
+      colSize: 'normal',
+      showSettingBtn: true
     };
   },
 
@@ -467,6 +489,10 @@ export default defineComponent({
 
     jumpTo() {
       this.$refs.gantt.jumpToDate();
+    },
+
+    setHeaderUnit(unit) {
+      this.$refs.gantt.setHeaderUnit(unit);
     }
   }
 });

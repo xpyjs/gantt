@@ -22,7 +22,6 @@ declare class JGanttRootComponent extends JComponent {
 
   expandAll: boolean;
 
-  // ganttColumnWidth: number | string;
   ganttColumnSize: GanttColumnSize;
 
   headerHeight: number | string;
@@ -37,7 +36,9 @@ declare class JGanttRootComponent extends JComponent {
 
   showCheckbox: boolean;
 
-  showexpand: boolean;
+  showExpand: boolean;
+
+  showSettingBtn: boolean;
 
   showToday: boolean;
 

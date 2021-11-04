@@ -157,7 +157,10 @@ export default {
    */
   ganttColumnSize: {
     type: String as PropType<GanttColumnSize>,
-    default: 'normal'
+    default: 'normal',
+    validator: (v: GanttColumnSize) => {
+      return ['small', 'normal', 'large'].includes(v);
+    }
   },
 
   /**
@@ -220,5 +223,13 @@ export default {
   primaryColor: {
     type: String,
     default: ''
+  },
+
+  /**
+   * 显示设置按钮
+   */
+  showSettingBtn: {
+    type: Boolean,
+    default: true
   }
 };

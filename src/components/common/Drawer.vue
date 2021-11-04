@@ -107,13 +107,6 @@ const drawerRef = ref<HTMLDivElement>();
 const { GtParam } = useParam();
 
 function changeColWidth(v: GanttColumnSize) {
-  // if (
-  //   v < Variables.size.minGanttColumnWidth ||
-  //   v > Variables.size.maxGanttColumnWidth
-  // )
-  //   return;
-
-  // GtParam.setGanttOptions({ [Variables.key.columnWidth]: v });
   GtParam.setGanttOptions({ [Variables.key.columnSize]: v });
 }
 
@@ -137,23 +130,11 @@ const drawerStyle = computed(() => {
 });
 
 const settingsSlot = computed(() => GtParam.getSlot(Variables.slots.settings));
-// const colWidth = computed({
-//   // get: () =>
-//   //   parseNumber(
-//   //     GtParam.ganttOptions.columnWidth,
-//   //     Variables.size.minGanttColumnWidth
-//   //   ),
-//   // set: v => changeColWidth(v as number)
-//   get: () => colSize.value,
-//   set: v => changeColWidth(v)
-// });
 const rowHeight = computed({
   get: () =>
     parseNumber(GtParam.rowHeight, Variables.size.defaultContentRowHeight),
   set: v => changeRowHeight(v)
 });
-// const minColWidth = computed(() => Variables.size.minGanttColumnWidth);
-// const maxColWidth = computed(() => Variables.size.maxGanttColumnWidth);
 const minRowHeight = computed(() => Variables.size.minContentRowHeight);
 const maxRowHeight = computed(() => Variables.size.maxContentRowHeight);
 

@@ -1,9 +1,11 @@
 import { useJumpDate } from '../useDate';
 import useData from '../data/useData';
+import { useExportParamFunc } from '../useParam';
 
 export default () => {
   const { GtData } = useData();
   const { handleJumpTo } = useJumpDate();
+  const { updateGanttHeaderUnit } = useExportParamFunc();
 
   /**
    * 将数据对应行设置为选中行
@@ -15,6 +17,7 @@ export default () => {
 
   return {
     setSelected,
-    jumpToDate: handleJumpTo
+    jumpToDate: handleJumpTo,
+    setHeaderUnit: updateGanttHeaderUnit
   };
 };
