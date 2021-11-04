@@ -6,7 +6,7 @@ version: 1.x
 
 [[English](./README.md)] [[中文](./README_cn.md)]
 
-A simple gantt component by vue3.
+A high-performance vue gantt component, support vue2 & vue3.
 ![vue 3.x](https://img.shields.io/badge/vue-3.x-43B984) ![animate.css](https://img.shields.io/badge/animate.css-4.x-9E84E2)
 
 ## Snipaste

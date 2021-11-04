@@ -1,6 +1,6 @@
 {
   "name": "jz-gantt",
-  "description": "A simple gantt component by vue3.",
+  "description": "A high-performance vue gantt component.",
   "author": "jeremyjone",
   "license": "MIT",
   "private": false,
