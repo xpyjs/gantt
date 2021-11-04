@@ -1,6 +1,6 @@
 # 根组件 JGantt
 
-<Description author="jeremyjone" date="2021-09-26" copyright="jeremyjone" />
+<Description author="jeremyjone" date="2021-11-04" copyright="jeremyjone" />
 
 对于 `JGantt` 组件，它具有非常丰富的属性。
 
@@ -225,6 +225,22 @@
 通常情况下，您不用设置这两个属性，因为它们已经处于使用的状态。除非您不希望展开功能，设置 `show-expand` 为 `false` 即可。
 :::
 
+### show-setting-btn <Badge type="tip" text="+v1.1.1" vertical="top" />
+
+<DataParameter t="Boolean" d="true" />
+
+设置是否显示右上角的设置栏按钮。默认为 `true`。
+
+如果关闭该选项，同时提供了对应的设置方法，可以供使用者通过调用对应方法进行设置，这给样式的自定义提供了一种便利。
+
+::: tip 提示
+设置栏中提供的内容可以进行如下替换：
+
+- 列宽：可以通过修改 [gantt-column-size](#gantt-column-size) 属性
+- 行高：可以通过修改 [row-height](#row-height) 属性
+- 显示方式：可以通过调用 [setHeaderUnit](#setHeaderUnit) 方法
+  :::
+
 ### show-today
 
 <DataParameter t="Boolean" d="true" />
@@ -304,6 +320,12 @@
 ::: tip
 参数 `data` 应该是数据列表中的某一个元素。
 :::
+
+### setHeaderUnit <Badge type="tip" text="+v1.1.1" vertical="top" />
+
+<DataParameter f="setSelected: (data: 'day' | 'week' | 'month') => void" />
+
+允许使用者切换甘特表头的显示方式。只接收被允许的值，如果给错误值，则默认显示为 `day`。
 
 ## 插槽
 

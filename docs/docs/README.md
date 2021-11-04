@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.1.0" date="2021-10-29" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.1.1" date="2021-11-04" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 
@@ -149,6 +149,12 @@ import {
 ::: tip
 您可以跳过此内容以继续深入学习具体配置 JGantt。
 :::
+
+### v1.1.1
+
+**新增：**
+
+- 新增设置按钮的显示控制（[show-setting-btn](./root.html#show-setting-btn)），同时外置了设置内容方法（[setHeaderUnit](./root.html#setheaderunit)）。
 
 ### v1.1.0
 
