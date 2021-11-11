@@ -118,11 +118,11 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-import { dataList } from "./data";
-import JGantt from "@/pages/root/index.vue";
-import JGanttColumn from "@/components/column/index.vue";
-import JGanttSlider from "@/components/slider/index.vue";
+import { reactive, ref } from 'vue';
+import { dataList } from './data';
+import JGantt from '@/pages/root/index.vue';
+import JGanttColumn from '@/components/column/index.vue';
+import JGanttSlider from '@/components/slider/index.vue';
 
 const isDark = ref(false);
 const showCheckbox = ref(false);
@@ -131,31 +131,31 @@ const showToday = ref(false);
 const showExpand = ref(false);
 
 const headerStyle = reactive({
-  bgColor: "",
-  textColor: ""
+  bgColor: '',
+  textColor: ''
 });
 const bodyStyle = reactive({
-  textColor: "",
-  todayColor: "",
-  weekendColor: ""
+  textColor: '',
+  todayColor: '',
+  weekendColor: ''
   // hoverColor: "#f00",
   // selectColor: "#0f0"
 });
 const levelColor = reactive([]);
 
 function rowClick(data) {
-  console.log("click row data:", data);
+  console.log('click row data:', data);
 }
 function rowDblClick(data) {
-  console.log("double click row data:", data);
+  console.log('double click row data:', data);
 }
 
 function rowChecked(state, data) {
-  console.log("check row:", state, data);
+  console.log('check row:', state, data);
 }
 
 function moveSlider(newValue, data) {
-  console.log("move slider:", newValue, data);
+  console.log('move slider:', newValue, data);
 }
 
 function noDateError(date) {

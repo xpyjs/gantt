@@ -1,7 +1,7 @@
-import { isDeepEqual, isString, isNumber } from "@/utils/is";
+import { isDeepEqual, isString, isNumber } from '@/utils/is';
 
-describe("Utils.Is", () => {
-  it("isDeepEqual", done => {
+describe('Utils.Is', () => {
+  it('isDeepEqual', done => {
     const a = { a: 1, b: 2 };
     const b = { a: 1, b: 2 };
     const c = { a: 1, b: 2, c: 3 };
@@ -10,8 +10,8 @@ describe("Utils.Is", () => {
     done();
   });
 
-  it("isType", done => {
-    expect(isString("string")).toBe(true);
+  it('isType', done => {
+    expect(isString('string')).toBe(true);
     expect(isNumber(123)).toBe(true);
     done();
   });
