@@ -59,9 +59,20 @@ export function useToday() {
     );
   });
 
+  const leftOffsetDiff = computed(() => {
+    switch (GtParam.ganttOptions.columnSize) {
+      case 'large':
+        return 2;
+      case 'normal':
+        return 1;
+      default:
+        return 0;
+    }
+  });
+
   const todayLineStyle = computed(() => {
     return {
-      left: `${todayLeft.value}px`,
+      left: `${todayLeft.value - leftOffsetDiff.value}px`,
       width: `${GtParam.headerUnit === 'day' ? oneDayWidth.value : 5}px`,
       height: '100%',
       'background-color':
