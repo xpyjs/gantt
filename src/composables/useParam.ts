@@ -39,7 +39,38 @@ export default () => {
   };
 };
 
+const initGanttWidth = ref(0);
+export function useSetGanttHeader() {
+  const { GtData } = useData();
+
+  function setHeaders() {
+    const start = GtData.start as Date;
+    const end = GtData.end as Date;
+
+    let tmpEnd = end as Date | string | number;
+    const d =
+      getDateInterval(start, tmpEnd) / getMillisecond(GtParam.headerUnit);
+
+    if (d * oneDayWidth.value < initGanttWidth.value) {
+      const offset =
+        (initGanttWidth.value - d * oneDayWidth.value) / oneDayWidth.value;
+      tmpEnd = getDateOffset(
+        tmpEnd,
+        offset * getMillisecond(GtParam.headerUnit)
+      );
+    }
+
+    GtParam.setGanttHeaders(start, tmpEnd);
+  }
+
+  return {
+    initGanttWidth,
+    setHeaders
+  };
+}
+
 export function useInitParam(props: any, slots: Readonly<Slots>) {
+  const { setHeaders } = useSetGanttHeader();
   const {
     showCheckbox,
     showExpand,
@@ -122,36 +153,13 @@ export function useInitParam(props: any, slots: Readonly<Slots>) {
       saveParams(true);
     }
   );
-}
 
-const initGanttWidth = ref(0);
-export function useSetGanttHeader() {
-  const { GtData } = useData();
-
-  function setHeaders() {
-    const start = GtData.start as Date;
-    const end = GtData.end as Date;
-
-    let tmpEnd = end as Date | string | number;
-    const d =
-      getDateInterval(start, tmpEnd) / getMillisecond(GtParam.headerUnit);
-
-    if (d * oneDayWidth.value < initGanttWidth.value) {
-      const offset =
-        (initGanttWidth.value - d * oneDayWidth.value) / oneDayWidth.value;
-      tmpEnd = getDateOffset(
-        tmpEnd,
-        offset * getMillisecond(GtParam.headerUnit)
-      );
+  watch(
+    () => [GtParam.headerUnit, GtParam.ganttOptions.columnSize],
+    () => {
+      setHeaders();
     }
-
-    GtParam.setGanttHeaders(start, tmpEnd);
-  }
-
-  return {
-    initGanttWidth,
-    setHeaders
-  };
+  );
 }
 
 export function useExportParamFunc() {
