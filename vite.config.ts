@@ -21,8 +21,6 @@ export default defineConfig({
     }
   },
 
-  // base: 'https://docs.xiaopangying.com/gantt-demo/',
-
   build: {
     // sourcemap: true,
     lib: {
@@ -38,6 +36,6 @@ export default defineConfig({
           vue: 'Vue'
         }
       }
-    } // cssCodeSplit: true,
+    }
   }
 });

@@ -2,6 +2,7 @@ node_modules
 dist
 coverage
 scripts
+sundry
 
 src/App.vue
 .eslintrc.js
