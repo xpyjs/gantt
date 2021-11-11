@@ -18,11 +18,7 @@
         position: 'relative'
       }"
     >
-      <RowWrap
-        :data="rowData"
-        :name="Variables.name.ganttRow"
-        style="z-index: 10"
-      />
+      <RowWrap :data="rowData" :name="Variables.name.ganttBackgroundRow" />
 
       <!-- 时间线 - 今天 -->
       <div v-if="showTodayLine" class="gt-today-line" :style="todayLineStyle" />
@@ -34,6 +30,8 @@
         class="gt-weekend-line"
         :style="weekendStyle(item)"
       />
+
+      <RowWrap :data="rowData" :name="Variables.name.ganttRow" />
     </div>
   </div>
 </template>
@@ -89,7 +87,6 @@ const { ganttRef } = useInitGanttRef();
   .gt-today-line {
     top: 0;
     position: absolute;
-    z-index: 6;
     opacity: 0.5;
     pointer-events: none;
     background-color: lightblue;

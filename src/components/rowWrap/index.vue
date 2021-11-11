@@ -5,25 +5,27 @@
       v-for="view in inView"
       :key="view.uuid"
       :data="view"
-      :style="rowWrapStyle(view.__uindex, view.uuid)"
+      :style="rowWrapStyle(view.__uindex, view.uuid, isTransparent)"
       class="gt-update-animate-item"
     />
   </transition-group>
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, toRefs } from 'vue';
+import { computed, defineComponent, Ref, toRefs } from 'vue';
 import useInView from '@/composables/useInView';
 import { Row } from '@/models/data/row';
 import { camelToKebabCased } from '@/utils/common';
 import JTableRow from '../table/Row.vue';
 import JGanttRow from '../gantt/Row.vue';
+import JGanttBackgroundRow from '../gantt/BackgroundRow.vue';
 import useStyle from '@/composables/useStyle';
 
 export default defineComponent({
   components: {
     [JTableRow.name]: JTableRow,
-    [JGanttRow.name]: JGanttRow
+    [JGanttRow.name]: JGanttRow,
+    [JGanttBackgroundRow.name]: JGanttBackgroundRow
   }
 });
 </script>
@@ -37,6 +39,10 @@ const props = defineProps<{
 const { data } = toRefs(props);
 const { inView } = useInView(data as Ref<Array<Row>>);
 const { rowWrapStyle } = useStyle();
+
+const isTransparent = computed(() => {
+  return props.name !== JGanttBackgroundRow.name;
+});
 </script>
 
 <style scoped lang="scss">

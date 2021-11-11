@@ -67,28 +67,30 @@ export default () => {
   });
 
   const rowWrapStyle = computed(() => {
-    return (index: number, uuid: string) => {
+    return (index: number, uuid: string, transparent = true) => {
       let style = {};
 
-      // 先写选择，后写悬停，注意顺序。悬停时可以覆盖选择样式
-      if (GtData.selected.index === index && GtData.selected.uuid === uuid) {
-        style = {
-          backgroundColor: `${changeAlpha(
-            GtParam.ganttOptions.body?.selectColor ||
-              Variables.color.selected[colorSelectStr.value],
-            0.5
-          )} !important`
-        };
-      }
+      if (transparent) {
+        // 先写选择，后写悬停，注意顺序。悬停时可以覆盖选择样式
+        if (GtData.selected.index === index && GtData.selected.uuid === uuid) {
+          style = {
+            backgroundColor: `${changeAlpha(
+              GtParam.ganttOptions.body?.selectColor ||
+                Variables.color.selected[colorSelectStr.value],
+              0.5
+            )} !important`
+          };
+        }
 
-      if (GtData.hovered.index === index && GtData.hovered.uuid === uuid) {
-        style = {
-          backgroundColor: `${changeAlpha(
-            GtParam.ganttOptions?.body?.hoverColor ||
-              Variables.color.hovered[colorSelectStr.value],
-            0.5
-          )} !important`
-        };
+        if (GtData.hovered.index === index && GtData.hovered.uuid === uuid) {
+          style = {
+            backgroundColor: `${changeAlpha(
+              GtParam.ganttOptions?.body?.hoverColor ||
+                Variables.color.hovered[colorSelectStr.value],
+              0.5
+            )} !important`
+          };
+        }
       }
 
       return {

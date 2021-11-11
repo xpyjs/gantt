@@ -60,6 +60,7 @@ const { tableRef } = useInitTableRef();
   .gt-table-row-wrap {
     width: 100%;
     position: relative;
+    background-color: var(--j-content-bg-color);
   }
 
   .gt-table-bottom-bar {

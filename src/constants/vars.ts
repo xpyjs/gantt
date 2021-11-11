@@ -11,7 +11,8 @@ export const Variables = {
     tableHeader: 'JTableHeader',
     ganttHeader: 'JGanttHeader',
     tableRow: 'JTableContentRow',
-    ganttRow: 'JGanttContentRow'
+    ganttRow: 'JGanttContentRow',
+    ganttBackgroundRow: 'JGanttContentBackgroundRow'
   },
 
   key: {
