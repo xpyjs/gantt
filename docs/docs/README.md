@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.1.1" date="2021-11-04" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.1.2" date="2021-11-04" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 
@@ -149,6 +149,14 @@ import {
 ::: tip
 您可以跳过此内容以继续深入学习具体配置 JGantt。
 :::
+
+### v1.1.2
+
+**修复问题：**
+
+- 修复切换视图时甘特表不重置导致过长的问题。
+- 修复今日线的位移问题。
+- 修复时间线（今日线和周末线等）在甘特条之上的问题。
 
 ### v1.1.1
 
