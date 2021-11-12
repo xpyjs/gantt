@@ -261,12 +261,12 @@
 
 `跳转到` 事件触发后，如果给出的日期不在当前甘特范围内，则触发该异常，可以接收该异常并自定义后续事件。
 
-### move-slider
+### move-slider <Badge type="tip" text="uupdate v1.1.3" vertical="top" />
 
-<DataParameter f="@move-slider -> function(data: any, {start: Date, end: Date})" />
+<DataParameter f="@move-slider -> function(data: any[], {start: Date, end: Date})" />
 
-- data: 更新后的数据内容，Object
-- {start: Date, end: Date}: 旧的起止日期
+- data: 更新后的数据内容数组，Array\<Object\>。它的第一项是当前选择拖动的内容，如果启用了子父级联动（[linked-resize](./slider.html#linked-resize)），则当子父级有变化时，会一同抛出，方便保存到数据库。
+- {start: Date, end: Date}: 当前拖动项的旧的起止日期。
 
 移动甘特行滑块后的事件。
 
