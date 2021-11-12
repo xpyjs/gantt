@@ -36,7 +36,7 @@
     "test:unit": "jest",
     "prepare": "husky install",
     "commit": "git add -A && git-cz",
-    "publish": "git push --follow-tags origin master && npm publish"
+    "publish": "git push --follow-tags origin master"
   },
   "lint-staged": {
     "*.{vue,js,ts}": "eslint --fix"
