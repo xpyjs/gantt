@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/jeremyjone/jz-gantt/compare/v1.1.2...v1.1.3) (2021-11-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* **components:** the format of the data thrown by move-slider emit changes to Array<any>
+
+### Bug Fixes
+
+* **components:** fix incomplete data thrown by move-slider emit in linkage ([4bec2d1](https://github.com/jeremyjone/jz-gantt/commit/4bec2d1eab429881b601b77383c6d5592b5094c7))
+
 ### [1.1.2](https://github.com/jeremyjone/jz-gantt/compare/v1.1.1...v1.1.2) (2021-11-11)
 
 
