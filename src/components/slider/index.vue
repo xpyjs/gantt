@@ -248,6 +248,7 @@ function sliderMoveHandle(e: MouseEvent, flag = '') {
   const srcX = e.pageX;
   const srcStartDate = createDate(data.start);
   const srcEndDate = createDate(data.end);
+  const modifyArr = [data.data];
 
   document.onmousemove = e => {
     let targetX = e.pageX;
@@ -264,7 +265,8 @@ function sliderMoveHandle(e: MouseEvent, flag = '') {
       data.setStart(
         createDate(getDateOffset(srcStartDate, offset)),
         GtParam.headerUnit,
-        linkedResize.value
+        linkedResize.value,
+        modifyArr
       );
     }
 
@@ -272,7 +274,8 @@ function sliderMoveHandle(e: MouseEvent, flag = '') {
       data.setEnd(
         createDate(getDateOffset(srcEndDate, offset)),
         GtParam.headerUnit,
-        linkedResize.value
+        linkedResize.value,
+        modifyArr
       );
     }
   };
@@ -288,7 +291,7 @@ function sliderMoveHandle(e: MouseEvent, flag = '') {
     )
       return;
 
-    IFMoveSlider(data, { start: srcStartDate, end: srcEndDate });
+    IFMoveSlider(modifyArr, { start: srcStartDate, end: srcEndDate });
     setBetweenDate();
   };
 }

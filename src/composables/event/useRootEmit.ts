@@ -27,15 +27,14 @@ export default () => {
 
   /**
    * 移动甘特滑块
-   * @param data
-   * @param old
    */
-  function IFMoveSlider(
-    data: Row | undefined,
-    old: { start: Date; end: Date }
-  ) {
+  function IFMoveSlider(data: Array<any>, old: { start: Date; end: Date }) {
     // 抛出接口事件
-    rootEmit.value('move-slider', { ...toRaw(data?.data) }, old);
+    rootEmit.value(
+      'move-slider',
+      data.map(d => toRaw(d)),
+      old
+    );
   }
 
   /**

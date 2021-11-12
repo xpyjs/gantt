@@ -90,3 +90,13 @@ export function kebabCasedToCamel(str: string): string {
 export function camelToKebabCased(str: string): string {
   return str.replace(/([A-Z])/g, '-$1'.toLowerCase()).replace(/^-/, '');
 }
+
+/**
+ * 查找一个数组是否存在该元素，如果不存在，则将其添加
+ */
+export function addIfNotExist<T>(arr: T[], item: T): T[] {
+  if (arr.indexOf(item) === -1) {
+    arr.push(item);
+  }
+  return arr;
+}
