@@ -261,7 +261,7 @@
 
 `跳转到` 事件触发后，如果给出的日期不在当前甘特范围内，则触发该异常，可以接收该异常并自定义后续事件。
 
-### move-slider <Badge type="tip" text="uupdate v1.1.3" vertical="top" />
+### move-slider <Badge type="tip" text="update v1.1.3" vertical="top" />
 
 <DataParameter f="@move-slider -> function(data: any[], {start: Date, end: Date})" />
 
