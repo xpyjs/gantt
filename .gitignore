@@ -13,3 +13,5 @@ yarn.lock
 coverage
 
 .cz-config.js
+gh-pages
+gh-pages.pub
