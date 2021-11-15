@@ -266,11 +266,15 @@ export class ParamData {
   }
 
   private __addCNode(data: ColumnNode) {
-    this.colNodes.push(data);
+    if (this.colNodes.findIndex(item => item.key === data.key) === -1) {
+      this.colNodes.push(data);
+    }
   }
 
   private __addTHeader(data: TableHeader) {
-    this.tableHeaders.push(data);
+    if (this.tableHeaders.findIndex(item => item.key === data.key) === -1) {
+      this.tableHeaders.push(data);
+    }
   }
 
   private static __checkType(type: string, target: string) {

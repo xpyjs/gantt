@@ -115,6 +115,7 @@ const { showTodayLine, todayArrowStyle } = useToday();
     border-width: 7.5px;
     border-color: transparent;
     border-top-color: lightblue;
+    animation: today-arrow 0.8s infinite;
     -webkit-animation: today-arrow 0.8s infinite;
 
     // 让上面的箭头动起来
