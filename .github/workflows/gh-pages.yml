@@ -26,7 +26,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/master' }}
         with:
-          publish_dir: .docs/docs/.vuepress/dist
+          publish_dir: ./docs/docs/.vuepress/dist
           github_token: ${{ secrets.GITHUB_TOKEN }}
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           commit_message: Update docs
