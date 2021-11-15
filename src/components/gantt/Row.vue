@@ -46,7 +46,7 @@ const { onClickRow, onDbClickRow, onMouseEnterRow, onMouseLeaveRow } = useEvent(
   width: 100%;
   position: relative;
   background-color: transparent;
-  border-bottom: 1px solid var(--j-content-border-color);
+  border-bottom: 1px solid transparent;
   box-sizing: border-box;
 }
 </style>
