@@ -6,7 +6,7 @@ export default defineUserConfig<DefaultThemeOptions>({
   lang: 'zh-CN',
   title: 'Jz Gantt Docuemnt',
   description: 'Jz-Gantt document site',
-  base: '/jz-gantt/',
+  base: '/jz-gantt/docs',
 
   head: [
     [
