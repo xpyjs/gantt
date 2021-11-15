@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/jeremyjone/jz-gantt/compare/v1.1.3...v1.1.4) (2021-11-15)
+
+
+### Bug Fixes
+
+* **components:** fix JGanttColumn repeated loading ([8f520bf](https://github.com/jeremyjone/jz-gantt/commit/8f520bfb3940504e6b7c387402ffb1f73248eda3)), closes [#5](https://github.com/jeremyjone/jz-gantt/issues/5)
+
 ### [1.1.3](https://github.com/jeremyjone/jz-gantt/compare/v1.1.2...v1.1.3) (2021-11-12)
 
 
