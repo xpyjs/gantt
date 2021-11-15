@@ -29,11 +29,10 @@
     "serve": "vite preview",
     "build": "vue-tsc --noEmit && vite build",
     "build:debug": "vue-tsc --noEmit && vite build --debug",
-    "build:all": "vue-tsc --noEmit && vite build --config ./sundry/demo.config.ts && vite build",
     "release": "standard-version",
     "lint": "eslint src/**/*.{js,vue,ts} --fix",
     "lint:create": "eslint --init",
-    "test:unit": "jest",
+    "test": "jest",
     "prepare": "husky install",
     "commit": "git add -A && git-cz",
     "publish": "git push --follow-tags origin master"
