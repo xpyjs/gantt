@@ -17,7 +17,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install
-        run: cd docs && yarn
+        run: yarn && cd docs && yarn
 
       - name: Build
         run: yarn vite build --config ./sundry/demo.config.ts && cd docs && yarn docs:build && mv ./docs/.vuepress/dist/ ../gh-pages/docs/
@@ -26,7 +26,8 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/master' }}
         with:
-          publish_dir: ./docs/docs/.vuepress/dist
+          # publish_dir: ./docs/docs/.vuepress/dist
+          publish_dir: ./gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           commit_message: Update docs
