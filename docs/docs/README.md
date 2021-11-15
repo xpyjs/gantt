@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.1.3" date="2021-11-12" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.1.4" date="2021-11-15" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 
@@ -149,6 +149,12 @@ import {
 ::: tip
 您可以跳过此内容以继续深入学习具体配置 JGantt。
 :::
+
+### v1.1.4
+
+**修复问题：**
+
+- 修复 `JGanttColumn` 重复加载的问题。
 
 ### v1.1.3
 
