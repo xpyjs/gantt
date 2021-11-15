@@ -21,7 +21,7 @@ export default defineConfig({
     }
   },
 
-  base: 'https://jeremyjone.github.com/jz-gantt/demo/',
+  base: 'https://jeremyjone.github.io/jz-gantt/demo/',
 
   build: {
     outDir: path.resolve(__dirname, '../gh-pages/demo')
