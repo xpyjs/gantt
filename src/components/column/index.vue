@@ -167,7 +167,7 @@ const chunkText = computed(() => {
   .gt-column__chunk {
     width: 100%;
     height: calc(var(--row-height) - 4px);
-    line-height: height;
+    line-height: calc(var(--row-height) - 4px);
     display: flex;
     white-space: nowrap;
     overflow: hidden;
