@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.5](https://github.com/jeremyjone/jz-gantt/compare/v1.1.4...v1.1.5) (2021-11-24)
+
+
+### Bug Fixes
+
+* **styles:** fix column chunk style ([dd14eac](https://github.com/jeremyjone/jz-gantt/commit/dd14eacb4fb4c6957e3a98f9e3509fc368893dc5)), closes [#6](https://github.com/jeremyjone/jz-gantt/issues/6)
+* **styles:** fix repeated row bottom border ([bfe7e21](https://github.com/jeremyjone/jz-gantt/commit/bfe7e219786cf296cdcf4028843455a4d9ad6915))
+
 ### [1.1.4](https://github.com/jeremyjone/jz-gantt/compare/v1.1.3...v1.1.4) (2021-11-15)
 
 
