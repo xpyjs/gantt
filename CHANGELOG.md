@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.6](https://github.com/jeremyjone/jz-gantt/compare/v1.1.5...v1.1.6) (2021-11-24)
+
+
+### Bug Fixes
+
+* **dependencies:** fix import css bug ([56f1bda](https://github.com/jeremyjone/jz-gantt/commit/56f1bda8edfe64fbfa89faa0e35f9de3dd693b97)), closes [#8](https://github.com/jeremyjone/jz-gantt/issues/8)
+
 ### [1.1.5](https://github.com/jeremyjone/jz-gantt/compare/v1.1.4...v1.1.5) (2021-11-24)
 
 
