@@ -176,7 +176,7 @@ defineExpose({
   position: relative;
   display: flex;
   box-sizing: initial;
-  background-color: blueviolet;
+  background-color: var(--j-content-bg-color);
 
   .gt-root-btn-mask {
     position: absolute;

@@ -20,8 +20,12 @@
       "require": "./dist/jz-gantt.umd.js"
     },
     "./dist/index.css": {
-      "import": "./dist/index.css",
-      "require": "./dist/index.css"
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    },
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
     }
   },
   "scripts": {
@@ -35,7 +39,7 @@
     "test": "jest",
     "prepare": "husky install",
     "commit": "git add -A && git-cz",
-    "publish": "git push --follow-tags origin master"
+    "pub": "git push --follow-tags origin master && npm publish"
   },
   "lint-staged": {
     "*.{vue,js,ts}": "eslint --fix"
