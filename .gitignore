@@ -4,7 +4,6 @@ dist
 demo
 dist-ssr
 *.local
-scripts
 .vscode
 
 yarn-*

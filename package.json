@@ -97,5 +97,10 @@
     "commitizen": {
       "path": "./node_modules/cz-customizable"
     }
+  },
+  "standard-version": {
+    "scripts": {
+      "pretag": "bash ./scripts/update-doc.sh"
+    }
   }
 }
