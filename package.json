@@ -39,6 +39,7 @@
     "test": "jest",
     "prepare": "husky install",
     "commit": "git add -A && git-cz",
+    "push": "git push --follow-tags origin master",
     "pub": "git push --follow-tags origin master && npm publish"
   },
   "lint-staged": {
