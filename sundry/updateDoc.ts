@@ -3,7 +3,7 @@
  * @Author: JeremyJone
  * @Date: 2021-11-25 15:10:18
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-11-25 18:26:30
+ * @LastEditTime: 2021-11-26 16:29:39
  * @Description: 自动更新文档更新内容。在每次版本发布时使用
  */
 
@@ -19,6 +19,7 @@ function getContent(file, regex) {
   return match ? match[1] : '';
 }
 
+const isCi = process.argv[3] === 'true';
 const version = process.argv[2];
 const regex = new RegExp('#+ \\[?(' + version + '\\]?[\\s\\S]*)');
 const changelog = '### [' + getContent(changelogPath, regex);
@@ -32,7 +33,7 @@ const currentLog = changelog
   .filter(x => x.length > 0)
   .map(x => {
     if (x.startsWith(`${version}`)) {
-      return `### v${version}`;
+      return isCi ? '' : `### v${version}`;
     } else if (x.startsWith('###')) {
       x = x.replace('###', '').trim();
       if (x.toLowerCase().match('bug fixes')) {
@@ -59,24 +60,35 @@ const currentLog = changelog
       return x;
     }
   })
+  .filter(x => x.length > 0)
   .join('\n\n');
 
-console.log(currentLog);
+if (isCi) {
+  function writeCurrentLog() {
+    fs.writeFileSync(
+      path.resolve(__dirname, '../desc.txt'),
+      currentLog,
+      'utf8'
+    );
+  }
 
-const doc = getContent(docPath, /([\s\S]*)/);
+  writeCurrentLog();
+} else {
+  const doc = getContent(docPath, /([\s\S]*)/);
 
-function setDocs() {
-  const updateTitle = doc.match(/(## 更新日志[\s\S]*:::\s+)/)[1];
-  const newDoc = doc
-    .replace(
-      /<Description[\s\S]+copyright="jeremyjone" \/>/,
-      `<Description author="jeremyjone" version="${version}" date="${currentDate}" copyright="jeremyjone" />`
-    )
-    .replace(updateTitle, `${updateTitle}${currentLog}\n\n`);
+  function setDocs() {
+    const updateTitle = doc.match(/(## 更新日志[\s\S]*:::\s+)/)[1];
+    const newDoc = doc
+      .replace(
+        /<Description[\s\S]+copyright="jeremyjone" \/>/,
+        `<Description author="jeremyjone" version="${version}" date="${currentDate}" copyright="jeremyjone" />`
+      )
+      .replace(updateTitle, `${updateTitle}${currentLog}\n\n`);
 
-  fs.writeFileSync(docPath, newDoc);
+    fs.writeFileSync(docPath, newDoc);
+  }
+
+  setDocs();
 }
-
-setDocs();
 
 process.exit(0);

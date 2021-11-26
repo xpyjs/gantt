@@ -1,32 +1,32 @@
-name: Build and Deploy
+name: 部署文档和 Demo
 on:
   push:
-    branches: [master]
+    tags:
+      - '*'
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      - name: Checkout
+      - name: 1. 检查分支
         uses: actions/checkout@v2
 
-      - name: Setup Node.js ${{ env.NODE_VERSION }}
+      - name: 2. 设置 Node.js
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install
+      - name: 3. 安装依赖
         run: yarn && cd docs && yarn
 
-      - name: Build
+      - name: 4. 构建文档和 Demo 页面
         run: yarn vite build --config ./sundry/demo.config.ts && cd docs && yarn docs:build && mv ./docs/.vuepress/dist/ ../gh-pages/docs/
 
-      - name: Deploy
+      - name: 5. 保存并发布文档
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/master' }}
         with:
-          # publish_dir: ./docs/docs/.vuepress/dist
           publish_dir: ./gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
