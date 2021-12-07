@@ -16,4 +16,8 @@ declare class JGanttColumnComponent extends JComponent {
   selectable: boolean;
 
   width: number | string;
+
+  columnStyle: Object | String;
+
+  columnClass: Object | String;
 }
