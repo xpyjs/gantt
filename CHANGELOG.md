@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.7](https://github.com/jeremyjone/jz-gantt/compare/v1.1.6...v1.1.7) (2021-12-07)
+
+
+### Features
+
+* **components:** add column label prop depth read attr ([c9b25f1](https://github.com/jeremyjone/jz-gantt/commit/c9b25f135b52b1a16c96aecce9e72fdef23c8aa4))
+* **components:** add two props in column component(class & style) ([edd2bbf](https://github.com/jeremyjone/jz-gantt/commit/edd2bbf74eaffd55230c93debfafaef43fa3667e)), closes [#7](https://github.com/jeremyjone/jz-gantt/issues/7)
+* **other:** update typings ([05d3acf](https://github.com/jeremyjone/jz-gantt/commit/05d3acfbd0e717996c266fae934c8b64ba84a095))
+
 ### [1.1.6](https://github.com/jeremyjone/jz-gantt/compare/v1.1.5...v1.1.6) (2021-11-24)
 
 
