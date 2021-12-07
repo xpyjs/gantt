@@ -69,5 +69,21 @@ export default {
   selectable: {
     type: Boolean,
     default: false
+  },
+
+  /**
+   * 内容样式
+   */
+  columnStyle: {
+    type: [Object, String],
+    default: () => ({})
+  },
+
+  /**
+   * 内容类名
+   */
+  columnClass: {
+    type: [Object, String],
+    default: () => ({})
   }
 };

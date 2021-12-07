@@ -77,7 +77,15 @@
         </template>
       </JGanttColumn>
 
-      <JGanttColumn label="aaa" date-format :merge="merge5">
+      <JGanttColumn
+        label="startDate"
+        date-format="yy-MM"
+        :merge="merge5"
+        column-style="backgroundColor: #cde; padding-left: 10px"
+        column-class="test-class"
+      />
+
+      <JGanttColumn label="bbb" date-format :merge="merge5">
         <template #default>
           <div v-for="i in 100" :key="i">
             {{ i }}
@@ -558,5 +566,9 @@ export default defineComponent({
   margin-top: 1rem;
   color: red;
   text-decoration: none;
+}
+
+.test-class {
+  color: red;
 }
 </style>

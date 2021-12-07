@@ -12,4 +12,6 @@ declare interface CustomCssProperties extends CSSProperties {
   '--j-text-color': string;
   '--j-primary-color': string;
   '--j-content-bg-color': string;
+
+  [key: string]: any;
 }

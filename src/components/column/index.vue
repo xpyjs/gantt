@@ -17,6 +17,8 @@ import useResize from '@/composables/useResize';
 import useRender from '@/composables/useRender';
 // eslint-disable-next-line import/named
 import { CustomCssProperties } from '@/typings/private/CSSProperties';
+import { isString } from '@/utils/is';
+import { addStyleStrToObject } from '@/utils/common';
 
 export default defineComponent({
   name: Variables.name.column
@@ -28,7 +30,8 @@ const props = defineProps(columnProps);
 const slots = useSlots();
 const attrs = useAttrs();
 
-const { dateFormat, label, emptyData, center } = toRefs(props);
+const { dateFormat, label, emptyData, center, columnStyle, columnClass } =
+  toRefs(props);
 // eslint-disable-next-line no-underscore-dangle
 const nodeKey = attrs.__key as number;
 const data = attrs.data as Row;
@@ -82,10 +85,20 @@ function onClickExpand() {
 // chunk content
 const { rowHeight } = useResize();
 const chunkStyle = computed(() => {
-  return {
+  let h = {
     '--row-height': `${rowHeight.value}px`,
     justifyContent: center.value ? 'center' : 'flex-start'
   } as CustomCssProperties;
+
+  if (columnStyle.value && Object.keys(columnStyle.value).length > 0) {
+    if (isString(columnStyle.value)) {
+      addStyleStrToObject(h, columnStyle.value);
+    } else {
+      h = { ...h, ...columnStyle.value };
+    }
+  }
+
+  return h;
 });
 
 const isChunkNode = computed(() => !!slots?.default);
@@ -132,7 +145,7 @@ const chunkText = computed(() => {
     </div>
 
     <!-- 加载内容 -->
-    <div class="gt-column__chunk" :style="chunkStyle">
+    <div class="gt-column__chunk" :class="columnClass" :style="chunkStyle">
       <component :is="chunkNode" v-if="isChunkNode" />
       <template v-else>
         {{ chunkText }}

@@ -100,3 +100,18 @@ export function addIfNotExist<T>(arr: T[], item: T): T[] {
   }
   return arr;
 }
+
+/**
+ * 将一个具有样式格式的字符串按照对象格式添加到对象中
+ */
+export function addStyleStrToObject(
+  obj: { [key: string]: string },
+  styleStr: string
+): void {
+  styleStr.split(';').forEach(item => {
+    const [key, value] = item.split(':');
+    if (key && value) {
+      obj[key.trim()] = value.trim();
+    }
+  });
+}
