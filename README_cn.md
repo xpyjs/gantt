@@ -2,7 +2,7 @@
 
 ![](./src/assets/logo.png)
 
-版本: 1.x
+![](https://shields.io/github/v/release/jeremyjone/jz-gantt?display_name=tag&include_prereleases&label=version) ![](https://img.shields.io/npm/v/jz-gantt.svg) ![](https://badgen.net/npm/dt/jz-gantt) ![](https://img.shields.io/npm/l/jz-gantt.svg) ![](https://shields.io/github/workflow/status/jeremyjone/jz-gantt/%E5%8F%91%E5%B8%83%20Release%20%E5%8C%85) ![](https://shields.io/github/workflow/status/jeremyjone/jz-gantt/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3%E5%92%8C%20Demo?label=gh-pages) ![](https://img.shields.io/github/stars/jeremyjone/jz-gantt.svg?style=social) ![](https://shields.io/github/forks/jeremyjone/jz-gantt?label=Fork&style=social)
 
 [[English](./README.md)] [[中文](./README_cn.md)]
 
