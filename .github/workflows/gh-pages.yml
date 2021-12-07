@@ -1,10 +1,10 @@
 name: 部署文档和 Demo
 on:
   push:
-    tags:
-      - '*'
+    branches: [master]
+
 jobs:
-  build-and-deploy:
+  create-gh-pages:
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
@@ -16,23 +16,14 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODE_VERSION }}
-          registry-url: 'https://registry.npmjs.org'
 
       - name: 3. 安装依赖
         run: yarn && cd docs && yarn
 
-      - name: 4. 测试
-        run: yarn test
-
-      - name: 5. 发布 npm 包
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: 6. 构建文档和 Demo 页面
+      - name: 4. 构建文档和 Demo 页面
         run: yarn vite build --config ./sundry/demo.config.ts && cd docs && yarn docs:build && mv ./docs/.vuepress/dist/ ../gh-pages/docs/
 
-      - name: 7. 保存并发布文档
+      - name: 5. 保存并发布文档
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/master' }}
         with:
