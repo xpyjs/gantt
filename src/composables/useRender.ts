@@ -42,8 +42,12 @@ export default (data: Row) => {
   ): string => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const { data } = scopeData(dateFormat);
-    if (isString(label) && label in data) {
-      return data[label];
+    if (isString(label)) {
+      if (label in data) return data[label];
+      if (label.includes('.')) {
+        const [l, ...rest] = label.split('.');
+        if (l in data) return rest.reduce((acc, v) => acc[v], data[l]);
+      }
     }
 
     return empty ?? Variables.noData;

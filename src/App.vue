@@ -78,8 +78,7 @@
       </JGanttColumn>
 
       <JGanttColumn
-        label="startDate"
-        date-format="yy-MM"
+        label="ttt.a"
         :merge="merge5"
         column-style="backgroundColor: #cde; padding-left: 10px"
         column-class="test-class"
