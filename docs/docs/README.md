@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.1.6" date="2021-11-25" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.1.7" date="2021-12-07" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 
@@ -149,6 +149,16 @@ import {
 ::: tip
 您可以跳过此内容以继续深入学习具体配置 JGantt。
 :::
+
+### v1.1.7
+
+**新增功能：**
+
+- add column label prop depth read attr ([c9b25f1](https://github.com/jeremyjone/jz-gantt/commit/c9b25f135b52b1a16c96aecce9e72fdef23c8aa4))
+
+- add two props in column component(class & style) ([edd2bbf](https://github.com/jeremyjone/jz-gantt/commit/edd2bbf74eaffd55230c93debfafaef43fa3667e)), closes [#7](https://github.com/jeremyjone/jz-gantt/issues/7)
+
+- update typings ([05d3acf](https://github.com/jeremyjone/jz-gantt/commit/05d3acfbd0e717996c266fae934c8b64ba84a095))
 
 ### v1.1.6
 
