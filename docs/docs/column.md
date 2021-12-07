@@ -33,6 +33,18 @@
 
 可以控制当前列的内容居中，默认居左。
 
+### column-class <Badge type="tip" text="+v1.1.7" vertical="top" />
+
+<DataParameter t="Object | String" d="{}" />
+
+允许向列块内注入类名，与原生使用方法一样。
+
+### column-style <Badge type="tip" text="+v1.1.7" vertical="top" />
+
+<DataParameter t="Object | String" d="{}" />
+
+允许向列块内注入样式，与原生使用方法一样。
+
 ### date-format
 
 <DataParameter t="String" d="yyyy-MM-dd" />
@@ -51,13 +63,31 @@
 
 设置空数据时显示的内容。如果数据内容为空，则会显示空数据内容。
 
-### label* <Badge text="required" type="danger"/>
+### label\* <Badge text="required" type="danger"/> <Badge type="tip" text="update v1.1.7" vertical="top" />
 
 <DataParameter r t="String" />
 
 `label` 是一个必填属性，它应当对应您给出数据的某一个键名。
 
 它将加载该字段数据的内容显示在列内容中，同时表头的名称默认也会显示为该 `label` 名称。当然，您可以通过设置 [`name`](#name) 来自定义。
+
+::: tip 更新
+从 `v1.1.7` 开始，它支持通过 `.` 深度读取对象内部属性。
+
+比如原始对象为：
+
+```js
+const data = {
+  a: {
+    b: {
+      c: '1'
+    }
+  }
+};
+```
+
+那么，`label` 可以通过 `a.b.c` 直接读取到值，而不用像之前那样需要通过模板导出数据再读取内部属性。
+:::
 
 ### merge
 
