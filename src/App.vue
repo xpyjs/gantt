@@ -25,6 +25,7 @@
       @row-dbl-click="rowDblClick"
       @row-checked="rowChecked"
       @move-slider="moveSlider"
+      @move-progress="moveProgress"
       @no-date-error="noDateError"
     >
       <!-- 无效 slot -->
@@ -43,14 +44,16 @@
         label="startDate"
         date-format="MM-dd H:mm:s"
         empty-data=""
+        alignment="center"
         :move="handleMove"
         :resize-left="true"
         :resize-right="true"
         :linked-resize="true"
+        progress
       >
-        <!-- <template v-slot="data">
+        <template v-slot="{ data }">
           <div>{{ data.name }}</div>
-        </template> -->
+        </template>
         <template #content="{ data, level }">
           <div v-if="level === 1" class="slider-level-one"></div>
           <!-- <div v-else style="background-color: #123456; height: 5px"></div> -->
@@ -163,7 +166,7 @@
 
     <div style="display: inline-block">
       选择显示
-      <button @click="() => setHeaderUnit('day1')">日</button>
+      <button @click="() => setHeaderUnit('day')">日</button>
       <button @click="() => setHeaderUnit('week')">周</button>
       <button @click="() => setHeaderUnit('month')">月</button>
     </div>
@@ -196,7 +199,7 @@ export default defineComponent({
       showWeekend: true,
       showToday: true,
       showExpand: true,
-      levelColor: [],
+      levelColor: ['azure', 'cornsilk'],
       headerStyle: {
         bgColor: '',
         textColor: ''
@@ -277,6 +280,7 @@ export default defineComponent({
             a: 'gs-aaa',
             b: 'gs-bbb'
           },
+          progress: Math.random(),
           children: []
         });
       });
@@ -298,8 +302,14 @@ export default defineComponent({
       console.log('check row:', state, data);
     },
 
-    moveSlider: function (newValue, data) {
-      console.log('move slider:', newValue, data);
+    // start 与 end 为旧的日期
+    moveSlider: function (data, { start, end }) {
+      console.log('move slider:', data, start, end);
+    },
+
+    // old 为旧的进度
+    moveProgress: function (data, old) {
+      console.log('move progress:', data, old);
     },
 
     noDateError: function (date) {

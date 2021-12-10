@@ -5,7 +5,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-11-12 15:28:46
+ * @LastEditTime: 2021-12-10 17:03:59
  * @Description: 一条数据类
  */
 
@@ -64,6 +64,7 @@ export class Row {
   private __data: any;
 
   private __isExpand: boolean;
+
   // private __start: Date | null;
   // private __end: Date | null;
 
@@ -109,6 +110,28 @@ export class Row {
    */
   get end() {
     return createDate(this.__data[this.options.el as string]);
+  }
+
+  /**
+   * 进度
+   */
+  get progress() {
+    // TODO：进度计算。有子项的，需要计算子项的进度之和
+    if (this.children.length > 0) {
+      let progress = 0;
+      for (const child of this.children) {
+        progress += child.progress ?? 0;
+      }
+      return progress / this.children.length;
+    }
+
+    return this.__data.progress ?? 0;
+  }
+
+  setProgress(v: number) {
+    if (v < 0) this.__data.progress = 0;
+    else if (v > 1) this.__data.progress = 1;
+    else this.__data.progress = v;
   }
 
   /**

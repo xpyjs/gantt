@@ -22,4 +22,6 @@ declare class JGanttSliderComponent extends JComponent {
   resizeLeft: boolean;
 
   resizeRight: boolean;
+
+  progress: boolean;
 }

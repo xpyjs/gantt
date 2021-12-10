@@ -84,5 +84,13 @@ export default {
    */
   linkedResize: {
     type: Boolean
+  },
+
+  /**
+   * 启用进度条显示
+   */
+  progress: {
+    type: Boolean,
+    default: false
   }
 };
