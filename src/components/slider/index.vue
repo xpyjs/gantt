@@ -423,7 +423,7 @@ function onProgressBtnMouseDown(e: MouseEvent) {
 
     <!-- 进度条拉块 -->
     <div
-      v-if="isProgress"
+      v-if="isProgress && data.children.length === 0"
       class="gt-slider-progress-btn"
       :style="{ left: `${progressValue}%`, opacity: showProgressBtn ? 1 : 0 }"
       @mousedown.stop="onProgressBtnMouseDown"

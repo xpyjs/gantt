@@ -1,6 +1,6 @@
 # 滑块组件 JGanttSlider
 
-<Description author="jeremyjone" date="2021-09-26" copyright="jeremyjone" />
+<Description author="jeremyjone" date="2021-12-10" copyright="jeremyjone" />
 
 因为我们在内部已经将其加载，所以您并不需要显示的再次导入到您的组件中就可以使用。
 
@@ -103,6 +103,18 @@
 - Function：类型 `({ data: any, level: Number }) => Boolean`。将数据和层级抛出，用于更加精准的定义哪些数据可以移动
 
 如果设置了 `true`，则意味着滑块可以被任意拖动。当拖动结束时，修改数据，同时会抛出 [`move-slider`](./root.html#move-slider) 事件。
+
+### progress <Badge type="tip" text="+ v1.2.0" vertical="top" />
+
+<DataParameter t="Boolean" d="false" />
+
+启用进度条显示。
+
+允许使用者打开进度条选项。如果开启了该选项，则可以读取源数据中的 `progress` 数值，范围为 `[0~1]`，系统会自动转换为百分比数值。
+
+需要注意的是，该属性尽管可以存在于每一个数据中，但是只有末层数据会被正确展示，父级的进度会自动根据子项 `children` 的完成度进行换算，所以只需要确保每一个子项内容正确即可。
+
+同时，如果您自定义了滑块插槽，那么无论您是否开启了进度条，都不会显示这个功能。
 
 ### resize-left
 
