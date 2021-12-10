@@ -152,19 +152,17 @@ import {
 
 ### v1.2.0-alpha.0
 
-**新增功能：**
+**新增预览功能：**
 
-- add progress-bar in slider ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
+- 增加滑块的进度条显示([progress](./slider.html#progress)) ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
 
 ### v1.1.7
 
 **新增功能：**
 
-- add column label prop depth read attr ([c9b25f1](https://github.com/jeremyjone/jz-gantt/commit/c9b25f135b52b1a16c96aecce9e72fdef23c8aa4))
+- 添加列标签深度读取属性功能 ([c9b25f1](https://github.com/jeremyjone/jz-gantt/commit/c9b25f135b52b1a16c96aecce9e72fdef23c8aa4))
 
-- add two props in column component(class & style) ([edd2bbf](https://github.com/jeremyjone/jz-gantt/commit/edd2bbf74eaffd55230c93debfafaef43fa3667e)), closes [#7](https://github.com/jeremyjone/jz-gantt/issues/7)
-
-- update typings ([05d3acf](https://github.com/jeremyjone/jz-gantt/commit/05d3acfbd0e717996c266fae934c8b64ba84a095))
+- 添加两个列属性([column-class](./column.html#column-class) 和 [column-style](./column.html#column-style)) ([edd2bbf](https://github.com/jeremyjone/jz-gantt/commit/edd2bbf74eaffd55230c93debfafaef43fa3667e)), closes [#7](https://github.com/jeremyjone/jz-gantt/issues/7)
 
 ### v1.1.6
 
