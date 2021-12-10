@@ -16,31 +16,28 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: 3. 测试
-        run: yarn test
-
-      - name: 4. 发布 npm 包
+      - name: 3. 发布 npm 包
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: 5. 读取当前版本号
+      - name: 4. 读取当前版本号
         id: version
         uses: ashley-taylor/read-json-property-action@v1.0
         with:
           path: ./package.json
           property: version
 
-      - name: 6. 生成描述文件
+      - name: 5. 生成描述文件
         run: node ./sundry/updateDoc.ts ${{ steps.version.outputs.value }} true
 
-      - name: 7. 读取描述文件
+      - name: 6. 读取描述文件
         id: description
         uses: juliangruber/read-file-action@v1
         with:
           path: ./desc.txt
 
-      - name: 8. 生成 Release
+      - name: 7. 生成 Release
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -52,5 +49,5 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: 9. 删除临时文件
+      - name: 8. 删除临时文件
         run: rm -rf ./desc.txt
