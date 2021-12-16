@@ -22,28 +22,31 @@ jobs:
       - name: 4. 测试
         run: yarn test
 
-      - name: 5. 发布 npm 包
+      - name: 5. 打包
+        run: yarn build
+
+      - name: 6. 发布 npm 包
         run: npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: 6. 读取当前版本号
+      - name: 7. 读取当前版本号
         id: version
         uses: ashley-taylor/read-json-property-action@v1.0
         with:
           path: ./package.json
           property: version
 
-      - name: 7. 生成描述文件
+      - name: 8. 生成描述文件
         run: node ./sundry/updateDoc.ts ${{ steps.version.outputs.value }} true
 
-      - name: 8. 读取描述文件
+      - name: 9. 读取描述文件
         id: description
         uses: juliangruber/read-file-action@v1
         with:
           path: ./desc.txt
 
-      - name: 9. 生成 Release
+      - name: 10. 生成 Release
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -55,5 +58,5 @@ jobs:
           draft: false
           prerelease: true
 
-      - name: 10. 删除临时文件
+      - name: 11. 删除临时文件
         run: rm -rf ./desc.txt
