@@ -156,6 +156,12 @@ import {
 
 - added highlight header when hover slider ([0f50c24](https://github.com/jeremyjone/jz-gantt/commit/0f50c248df8f3f815335a189d23a6ddc3702e248))
 
+### v1.2.0-alpha.0
+
+**新增预览功能：**
+
+- 增加滑块的进度条显示([progress](./slider.html#progress)) ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
+
 ### v1.1.7
 
 **新增功能：**
