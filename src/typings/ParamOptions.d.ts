@@ -47,7 +47,7 @@ declare interface ColumnNodeDataOptions {
 
 declare interface HeaderDateOptions {
   /**
-   * 单位，显示在表头的上策
+   * 单位，显示在表头的上侧
    */
   unit: string;
   /**
