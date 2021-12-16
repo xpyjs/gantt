@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.1.7" date="2021-12-07" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.1.8" date="2021-12-16" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 
@@ -149,6 +149,12 @@ import {
 ::: tip
 您可以跳过此内容以继续深入学习具体配置 JGantt。
 :::
+
+### v1.1.8
+
+**修复问题：**
+
+- added highlight header when hover slider ([0f50c24](https://github.com/jeremyjone/jz-gantt/commit/0f50c248df8f3f815335a189d23a6ddc3702e248))
 
 ### v1.1.7
 
