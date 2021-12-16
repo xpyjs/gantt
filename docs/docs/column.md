@@ -128,6 +128,10 @@ mergeFunc: function(data) {
 
 ## 插槽
 
+### default
+
+<DataParameter f="scope = data:any" />
+
 列组件内部允许您插入任何内容，同时它会抛出当前行的数据以供您使用。
 
 一个简单的示例：
