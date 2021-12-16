@@ -5,6 +5,19 @@
   "license": "MIT",
   "private": false,
   "version": "1.2.0-alpha.0",
+  "preview": false,
+  "bugs": {
+    "url": "https://github.com/jeremyjone/jz-gantt/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jeremyjone/jz-gantt.git"
+  },
+  "keywords": [
+    "vue",
+    "gantt",
+    "vue-gantt"
+  ],
   "files": [
     "dist",
     "typings",

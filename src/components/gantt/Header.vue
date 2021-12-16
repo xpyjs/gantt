@@ -4,6 +4,8 @@ import { useToday } from '@/composables/useDate';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
 import { Variables } from '@/constants/vars';
+import useShowDate from '@/composables/useShowDate';
+import { formatDate, getDayStr, getMonthStr, getWeekStr } from '@/utils/date';
 
 export default defineComponent({
   name: Variables.name.ganttHeader
@@ -15,13 +17,44 @@ const { GtParam, oneDayWidth } = useParam();
 const { headerStyle } = useStyle();
 
 const ganttHeaders = computed(() => GtParam.ganttHeaders);
+const { showDateList } = useShowDate();
 
 const chunkStyle = computed(() => {
-  return (len: number) => {
+  return (len: number, isBgColor = false) => {
     return {
       width: `${oneDayWidth.value * len}px`,
-      borderColor: 'var(--j-content-border-color)'
+      borderColor: 'var(--j-content-border-color)',
+      backdropFilter: isBgColor ? 'brightness(1.2)' : ''
     };
+  };
+});
+
+const useCustomBgColor = computed(() => {
+  return (unit: string, one: string) => {
+    for (let i = 0; i < showDateList.length; i++) {
+      const date = showDateList[i];
+      const dateUnit = formatDate(
+        date,
+        GtParam.headerUnit === 'month' ? 'yyyy' : 'yyyy-MM'
+      );
+      let dateOne;
+      switch (GtParam.headerUnit) {
+        case 'month':
+          dateOne = getMonthStr(date);
+          break;
+        case 'week':
+          dateOne = getWeekStr(date);
+          break;
+        case 'day':
+        default:
+          dateOne = getDayStr(date);
+          break;
+      }
+
+      if (unit === dateUnit && one === dateOne) return true;
+    }
+
+    return false;
   };
 });
 
@@ -50,7 +83,7 @@ const { showTodayLine, todayArrowStyle } = useToday();
         <div
           v-for="(one, index) in item.one"
           :key="index"
-          :style="chunkStyle(one.len)"
+          :style="chunkStyle(one.len, useCustomBgColor(item.unit, one.text))"
         >
           {{ one.text }}
         </div>

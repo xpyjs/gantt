@@ -24,6 +24,7 @@ import { isBoolean, isFunction } from '@/utils/is';
 import sliderProps from './props';
 import useRootEmit from '@/composables/event/useRootEmit';
 import useData from '@/composables/data/useData';
+import useShowDate from '@/composables/useShowDate';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -250,14 +251,23 @@ const sliderStyle = computed(() => {
 const showCtrlChunk = ref(false);
 const showProgressBtn = ref(false);
 
+const { addShowDate, clearShowDateList } = useShowDate();
+
 function onMouseEnter() {
   showProgressBtn.value = true;
+
+  addShowDate(data.start);
+  addShowDate(data.end);
+
   if (!canMove.value) return;
   showCtrlChunk.value = true;
 }
 
 function onMouseLeave() {
   showProgressBtn.value = false;
+
+  clearShowDateList();
+
   if (!canMove.value) return;
   showCtrlChunk.value = false;
 }

@@ -1,6 +1,10 @@
 # 入门
 
+<<<<<<< HEAD
 <Description author="jeremyjone" version="1.2.0-alpha.0" date="2021-12-10" copyright="jeremyjone" />
+=======
+<Description author="jeremyjone" version="1.1.8" date="2021-12-16" copyright="jeremyjone" />
+>>>>>>> master
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 

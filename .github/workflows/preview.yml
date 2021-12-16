@@ -1,10 +1,10 @@
-name: 发布 Release 包
+name: 发布 Preview 包
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+' # 仅发布正式版本
+      - 'v[0-9]+.[0-9]+.[0-9]+-*' # 仅发布预览版本
 jobs:
-  build-publish-release:
+  build-publish-preview:
     runs-on: ubuntu-latest
     steps:
       - name: 1. 检查分支
@@ -23,7 +23,7 @@ jobs:
         run: yarn test
 
       - name: 5. 发布 npm 包
-        run: npm publish
+        run: npm publish --tag beta
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -53,7 +53,7 @@ jobs:
           release_name: v${{steps.version.outputs.value}}
           body: ${{steps.description.outputs.content}}
           draft: false
-          prerelease: false
+          prerelease: true
 
       - name: 10. 删除临时文件
         run: rm -rf ./desc.txt

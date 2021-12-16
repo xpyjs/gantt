@@ -31,6 +31,18 @@ export function isValidDate(date: number | Date | string) {
   return dayjs(date).isValid();
 }
 
+export function getWeekStr(date: Date | number) {
+  return `第 ${dayjs(date).week()} 周`;
+}
+
+export function getMonthStr(date: Date | number) {
+  return `${dayjs(date).month() + 1} 月`;
+}
+
+export function getDayStr(date: Date | number) {
+  return dayjs(date).date().toString();
+}
+
 /**
  * 获取两个日期间的所有日期列表
  * @param startDate
@@ -48,18 +60,18 @@ export function dateList(
 
   for (let i = startTime; i <= endTime; ) {
     const year = dayjs(i).year();
-    const month = dayjs(i).month() + 1;
+    const month = `${dayjs(i).month() + 1}`.padStart(2, '0');
     switch (unit) {
       case 'week':
         if (r[`${year}-${month}`]) {
           r[`${year}-${month}`].push({
-            text: `第 ${dayjs(i).week()} 周`,
+            text: getWeekStr(i),
             len: 7
           });
         } else {
           r[`${year}-${month}`] = [
             {
-              text: `第 ${dayjs(i).week()} 周`,
+              text: getWeekStr(i),
               len: i === startTime ? 7 - dayjs(i).day() : 7
             }
           ];
@@ -73,13 +85,13 @@ export function dateList(
       case 'month':
         if (r[`${year}`]) {
           r[`${year}`].push({
-            text: `${month} 月`,
+            text: getMonthStr(i),
             len: dayjs(i).daysInMonth()
           });
         } else {
           r[`${year}`] = [
             {
-              text: `${month} 月`,
+              text: getMonthStr(i),
               len:
                 i === startTime
                   ? dayjs(i).daysInMonth() - dayjs(i).date() + 1
@@ -98,13 +110,13 @@ export function dateList(
       default:
         if (r[`${year}-${month}`]) {
           r[`${year}-${month}`].push({
-            text: dayjs(i).date().toString(),
+            text: getDayStr(i),
             len: 1
           });
         } else {
           r[`${year}-${month}`] = [
             {
-              text: dayjs(i).date().toString(),
+              text: getDayStr(i),
               len: 1
             }
           ];

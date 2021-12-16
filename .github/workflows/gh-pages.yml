@@ -2,6 +2,9 @@ name: 部署文档和 Demo
 on:
   push:
     branches: [master]
+    paths:
+      - 'docs'
+      - 'src/App.vue'
 
 jobs:
   create-gh-pages:
