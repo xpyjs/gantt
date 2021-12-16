@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.1.8" date="2021-12-16" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.1.9" date="2021-12-16" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 
@@ -149,6 +149,8 @@ import {
 ::: tip
 您可以跳过此内容以继续深入学习具体配置 JGantt。
 :::
+
+### v1.1.9
 
 ### v1.1.8
 
