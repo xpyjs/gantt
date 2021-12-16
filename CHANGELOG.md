@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0-alpha.1](https://github.com/jeremyjone/jz-gantt/compare/v1.1.9...v1.2.0-alpha.1) (2021-12-16)
+
+## [1.2.0-alpha.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.7...v1.2.0-alpha.0) (2021-12-13)
+
+
+### Features
+
+* **components:** add progress-bar in slider ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
+
 ## [1.2.0-alpha.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.7...v1.2.0-alpha.0) (2021-12-10)
 
 ### [1.1.9](https://github.com/jeremyjone/jz-gantt/compare/v1.1.8...v1.1.9) (2021-12-16)
