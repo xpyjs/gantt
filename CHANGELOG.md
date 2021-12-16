@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.8](https://github.com/jeremyjone/jz-gantt/compare/v1.1.7...v1.1.8) (2021-12-16)
+
+
+### Bug Fixes
+
+* **styles:** added highlight header when hover slider ([0f50c24](https://github.com/jeremyjone/jz-gantt/commit/0f50c248df8f3f815335a189d23a6ddc3702e248))
+
 ### [1.1.7](https://github.com/jeremyjone/jz-gantt/compare/v1.1.6...v1.1.7) (2021-12-07)
 
 
