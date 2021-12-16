@@ -132,6 +132,8 @@
 
 ### default
 
+<DataParameter f="scope = {data:any, level:number}" />
+
 滑块组件内部允许您插入任何内容，它将向滑块内注入您提供的所有模板内容。同时它会抛出当前行的数据以供您使用。
 
 一个简单的示例：
@@ -150,6 +152,8 @@
 
 ### content
 
+<DataParameter f="scope = {data:any, level:number}" />
+
 有时候，您可能需要重新定义滑块样式，那么这个插槽一定适合您。它会使用您提供的插槽元素来替换默认的滑块元素，而不是向默认滑块内部插入内容。
 
 一个简单的示例：
@@ -167,6 +171,8 @@
 ```
 
 ### left
+
+<DataParameter f="scope = {data:any, level:number}" />
 
 当您重新定义了滑块的样式，那么侧边的滑动块一定也不符合现有的需求，所以我们提供了重载左右滑动块的插槽。通常情况下，它与 `content` 应该配套使用。
 
@@ -201,6 +207,8 @@
 ```
 
 ### right
+
+<DataParameter f="scope = {data:any, level:number}" />
 
 它的功能与 `left` 插槽一致，仅仅是将 `left` 更换为 `right` 即可，参数与功能完全一致，不再赘述。
 
