@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.10](https://github.com/jeremyjone/jz-gantt/compare/v1.1.9...v1.1.10) (2021-12-20)
+
+
+### Features
+
+* **components:** add a toast ([f618194](https://github.com/jeremyjone/jz-gantt/commit/f61819473963f897f1a1f4930a43c8c2e3faa62b))
+* **styles:** add success bar when move slider succeed ([e8c2916](https://github.com/jeremyjone/jz-gantt/commit/e8c2916ef434d2f3b753ca2c6590364a42adc434))
+
+
+### Bug Fixes
+
+* **components:** optimize header highlight ([e83d3c9](https://github.com/jeremyjone/jz-gantt/commit/e83d3c97c49a0387804b8521490e17218c09a3ec))
+
 ### [1.1.9](https://github.com/jeremyjone/jz-gantt/compare/v1.1.8...v1.1.9) (2021-12-16)
 
 ### [1.1.8](https://github.com/jeremyjone/jz-gantt/compare/v1.1.7...v1.1.8) (2021-12-16)
