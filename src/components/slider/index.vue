@@ -305,6 +305,7 @@ function sliderMoveHandle(e: MouseEvent, flag = '') {
 
     IFMoveSlider(modifyArr, { start: srcStartDate, end: srcEndDate });
     setBetweenDate();
+
     showToast('移动成功');
     pushSucceessBar(modifyArr);
   };

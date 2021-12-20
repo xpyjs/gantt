@@ -25,7 +25,7 @@ const { isShowToast, toastMessage } = useToast();
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
+  color: white;
   z-index: 9999;
 }
 </style>

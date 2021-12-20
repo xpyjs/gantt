@@ -33,6 +33,7 @@ export default () => {
           }, 3000)
         );
       } else {
+        // 如果为 false，清除列表中所有定时器，否则会有意想不到的显示效果
         toastQueue.forEach(clearTimeout);
         toastQueue.length = 0;
       }
