@@ -28,11 +28,11 @@ export default () => {
   /**
    * 移动甘特滑块
    */
-  function IFMoveSlider(data: Array<any>, old: { start: Date; end: Date }) {
+  function IFMoveSlider(data: Array<Row>, old: { start: Date; end: Date }) {
     // 抛出接口事件
     rootEmit.value(
       'move-slider',
-      data.map(d => toRaw(d)),
+      data.map(d => toRaw(d.data)),
       old
     );
   }

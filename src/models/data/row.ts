@@ -5,7 +5,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-11-12 15:28:46
+ * @LastEditTime: 2021-12-20 15:40:01
  * @Description: 一条数据类
  */
 
@@ -195,7 +195,7 @@ export class Row {
     date: Date,
     unit: HeaderDateUnit,
     linkage = false,
-    modifyArr: any[] = []
+    modifyArr: Row[] = []
   ) {
     this.data[this.options.sl as string] = date;
 
@@ -219,7 +219,7 @@ export class Row {
       if (compareDate(this.start as Date, pNode.start as Date) === 'l') {
         // 赋值应该给data的日期数据赋值
         pNode.setStart(this.start as Date, unit);
-        addIfNotExist(modifyArr, pNode.data);
+        addIfNotExist<Row>(modifyArr, pNode);
       } else {
         break;
       }
@@ -234,7 +234,7 @@ export class Row {
     date: Date,
     unit: HeaderDateUnit,
     linkage = false,
-    modifyArr: any[] = []
+    modifyArr: Row[] = []
   ) {
     this.data[this.options.el as string] = date;
 
@@ -256,7 +256,7 @@ export class Row {
     while (pNode !== null) {
       if (compareDate(this.end as Date, pNode.end as Date) === 'r') {
         pNode.setEnd(this.end as Date, unit);
-        addIfNotExist(modifyArr, pNode.data);
+        addIfNotExist<Row>(modifyArr, pNode);
       } else {
         break;
       }
@@ -276,20 +276,20 @@ export class Row {
     node: Row,
     key: 'start' | 'end',
     unit: HeaderDateUnit,
-    modifyArr: any[]
+    modifyArr: Row[]
   ) {
     for (let i = 0; i < node.children.length; i++) {
       const c = node.children[i];
       if (key === 'start') {
         if (compareDate(c.start as Date, node.start as Date) === 'l') {
           c.setStart(node.start as Date, unit);
-          modifyArr.push(c.data);
+          modifyArr.push(c);
           this.__setChildrenDate(c, key, unit, modifyArr);
         }
       } else if (key === 'end') {
         if (compareDate(c.end as Date, node.end as Date) === 'r') {
           c.setEnd(node.end as Date, unit);
-          modifyArr.push(c.data);
+          modifyArr.push(c);
           this.__setChildrenDate(c, key, unit, modifyArr);
         }
       }
