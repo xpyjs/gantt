@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.1.9" date="2021-12-16" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.1.10" date="2021-12-20" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 
@@ -149,6 +149,18 @@ import {
 ::: tip
 您可以跳过此内容以继续深入学习具体配置 JGantt。
 :::
+
+### v1.1.10
+
+**新增功能：**
+
+- add a toast ([f618194](https://github.com/jeremyjone/jz-gantt/commit/f61819473963f897f1a1f4930a43c8c2e3faa62b))
+
+- add success bar when move slider succeed ([e8c2916](https://github.com/jeremyjone/jz-gantt/commit/e8c2916ef434d2f3b753ca2c6590364a42adc434))
+
+**修复问题：**
+
+- optimize header highlight ([e83d3c9](https://github.com/jeremyjone/jz-gantt/commit/e83d3c97c49a0387804b8521490e17218c09a3ec))
 
 ### v1.1.9
 
