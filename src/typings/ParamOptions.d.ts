@@ -67,6 +67,6 @@ declare interface HeaderDateOptions {
 
 declare type HeaderDateUnit = 'day' | 'week' | 'month';
 
-declare type Alignment = 'left' | 'center' | 'right';
+declare type SliderAlignment = 'left' | 'center' | 'right';
 
 declare type ColorSelectStr = 'default' | 'dark';

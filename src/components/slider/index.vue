@@ -1,5 +1,5 @@
 <script lang="ts">
-import { isSymbol } from 'lodash';
+import { isNumber, isSymbol } from 'lodash';
 import {
   computed,
   defineComponent,
@@ -47,7 +47,8 @@ const {
   resizeLeft,
   resizeRight,
   linkedResize,
-  progress
+  progress,
+  progressDecimal
 } = toRefs(props);
 
 const { oneDayWidth, GtParam } = useParam();
@@ -59,7 +60,16 @@ const progressValue = computed(() => {
   let v = data.progress ?? 0;
   if (v > 1) v = 1;
   else if (v < 0) v = 0;
-  return Math.floor(v * 100);
+
+  // 显示方式，默认整数
+  if (isNumber(progressDecimal.value)) {
+    let fixed = Math.floor(progressDecimal.value);
+    if (fixed < 0) fixed = 0;
+    else if (fixed > 10) fixed = 10;
+    return (v * 100).toFixed(fixed);
+  }
+
+  return progressDecimal.value ? (v * 100).toFixed(2) : Math.floor(v * 100);
 });
 
 // 滑块的宽度

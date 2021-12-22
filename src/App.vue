@@ -50,6 +50,7 @@
         :resize-right="true"
         :linked-resize="true"
         progress
+        progress-decimal
       >
         <template v-slot="{ data }">
           <div>{{ data.name }}</div>
