@@ -1,6 +1,6 @@
 {
     "name": "gantt-doc",
-    "version": "v1.2.0-alpha.1",
+    "version": "1.2.0-alpha.2",
     "description": "jz-gantt document",
     "main": "index.js",
     "author": "jeremyjone <jeremyjone@qq.com>",

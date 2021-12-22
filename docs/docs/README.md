@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.2.0-alpha.1" date="2021-12-16" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.2.0-alpha.2" date="2021-12-22" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 
@@ -149,6 +149,40 @@ import {
 ::: tip
 您可以跳过此内容以继续深入学习具体配置 JGantt。
 :::
+
+### v1.2.0-alpha.2
+
+**修复问题：**
+
+- update silder progress decimal ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
+
+## [1.2.0-alpha.1](https://github.com/jeremyjone/jz-gantt/compare/v1.1.9...v1.2.0-alpha.1) (2021-12-16)
+
+## [1.2.0-alpha.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.7...v1.2.0-alpha.0) (2021-12-13)
+
+**新增功能：**
+
+- add progress-bar in slider ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
+
+## [1.2.0-alpha.1](https://github.com/jeremyjone/jz-gantt/compare/v1.1.9...v1.2.0-alpha.1) (2021-12-16)
+
+
+
+## [1.2.0-alpha.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.7...v1.2.0-alpha.0) (2021-12-13)
+
+
+
+**新增功能：**
+
+
+
+- add progress-bar in slider ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
+
+
+
+## [1.2.0-alpha.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.7...v1.2.0-alpha.0) (2021-12-10)
+
+
 
 ### v1.2.0-alpha.1
 

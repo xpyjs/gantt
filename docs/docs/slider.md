@@ -116,6 +116,14 @@
 
 同时，如果您自定义了滑块插槽，那么无论您是否开启了进度条，都不会显示这个功能。
 
+### progressDecimal <Badge type="tip" text="+ v1.2.0" vertical="top" />
+
+<DataParameter t="[Boolean, Number]" d="false" />
+
+允许自定义进度条数值位数，默认只显示整数，通过传递 `true` 值，可以启动默认 2 位的小数。
+
+也可以传递一个数字（范围：[0, 10]）来自定义显示位数。
+
 ### resize-left
 
 <DataParameter t="Boolean" d="false" />
