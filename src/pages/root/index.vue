@@ -35,6 +35,14 @@
 
     <!-- 遮罩层 -->
     <div :class="maskClass" @click.stop="onClickMask" />
+
+    <!-- toast -->
+    <JToast />
+
+    <!-- success bar -->
+    <template v-for="row in successBarList" :key="row.uuid">
+      <JSuccessBar :row="row" />
+    </template>
   </div>
 </template>
 
@@ -48,6 +56,8 @@ import JTable from '@/components/table/index.vue';
 import JGantt from '@/components/gantt/index.vue';
 import JBtn from '@/components/common/Btn.vue';
 import JDrawer from '@/components/common/Drawer.vue';
+import JToast from '@/components/common/Toast.vue';
+import JSuccessBar from '@/components/common/SuccessBar.vue';
 import useWheel from '@/composables/useWheel';
 import useResize, {
   useBtnPosition,
@@ -61,6 +71,7 @@ import useExportEvent from '@/composables/event/useExportEvent';
 import { useInitData } from '@/composables/data/useData';
 // eslint-disable-next-line import/named
 import { CustomCssProperties } from '@/typings/private/CSSProperties';
+import useSuccessBar from '@/composables/useSuccessBar';
 
 export default defineComponent({
   name: Variables.name.root
@@ -109,6 +120,7 @@ const { allData } = useInitData(data, dataOptions);
 
 const { tableWheelHandle, ganttWheelHandle, scrollBarHeight } = useWheel();
 const { tableWidth, headerHeight } = useResize();
+const { successBarList } = useSuccessBar();
 
 // 设置表头
 useResizeGanttObserver();

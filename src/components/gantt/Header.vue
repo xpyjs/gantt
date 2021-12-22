@@ -51,7 +51,13 @@ const useCustomBgColor = computed(() => {
           break;
       }
 
-      if (unit === dateUnit && one === dateOne) return true;
+      if (
+        (GtParam.headerUnit === 'day' &&
+          unit === dateUnit &&
+          one === dateOne) ||
+        (GtParam.headerUnit !== 'day' && one === dateOne)
+      )
+        return true;
     }
 
     return false;

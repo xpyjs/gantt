@@ -25,6 +25,8 @@ import sliderProps from './props';
 import useRootEmit from '@/composables/event/useRootEmit';
 import useData from '@/composables/data/useData';
 import useShowDate from '@/composables/useShowDate';
+import useToast from '@/composables/useToast';
+import useSuccessBar from '@/composables/useSuccessBar';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -299,6 +301,8 @@ function onRightChunkMouseDown(e: MouseEvent) {
 
 const { IFMoveSlider, IFMoveProgress } = useRootEmit();
 const { setHeaders } = useSetGanttHeader();
+const { showToast } = useToast();
+const { pushSucceessBar } = useSuccessBar();
 
 /**
  * 移动处理
@@ -307,7 +311,7 @@ function sliderMoveHandle(e: MouseEvent, flag = '') {
   const srcX = e.pageX;
   const srcStartDate = createDate(data.start);
   const srcEndDate = createDate(data.end);
-  const modifyArr = [data.data];
+  const modifyArr = [data];
 
   document.onmousemove = e => {
     let targetX = e.pageX;
@@ -352,6 +356,9 @@ function sliderMoveHandle(e: MouseEvent, flag = '') {
 
     IFMoveSlider(modifyArr, { start: srcStartDate, end: srcEndDate });
     setBetweenDate();
+
+    showToast('移动成功');
+    pushSucceessBar(modifyArr);
   };
 }
 

@@ -3,7 +3,7 @@
  * @Author: JeremyJone
  * @Date: 2021-11-25 15:10:18
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-12-16 17:14:14
+ * @LastEditTime: 2021-12-21 10:48:19
  * @Description: 自动更新文档更新内容。在每次版本发布时使用
  */
 
@@ -12,7 +12,6 @@ const path = require('path');
 
 const changelogPath = path.resolve(__dirname, '../CHANGELOG.md');
 const docPath = path.resolve(__dirname, '../docs/docs/README.md');
-const versionPath = path.resolve(__dirname, '../docs/package.json');
 
 function getContent(file, regex) {
   const content = fs.readFileSync(file, 'utf8');
@@ -88,15 +87,7 @@ if (isCi) {
     fs.writeFileSync(docPath, newDoc);
   }
 
-  function setVersion() {
-    const versionFile = JSON.parse(fs.readFileSync(versionPath, 'utf8'));
-    versionFile.version = versionFile.version.replace(/^v/, '');
-    versionFile.version = `v${version}`;
-    fs.writeFileSync(versionPath, JSON.stringify(versionFile), 'utf8');
-  }
-
   setDocs();
-  setVersion();
 }
 
 process.exit(0);
