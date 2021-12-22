@@ -53,7 +53,7 @@
     "test": "jest",
     "prepare": "husky install",
     "commit": "git add -A && git-cz",
-    "push": "git push --follow-tags origin master"
+    "push": "git push --follow-tags origin beta-version:@next"
   },
   "lint-staged": {
     "*.{vue,js,ts}": "eslint --fix"
