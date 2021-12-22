@@ -38,6 +38,8 @@ For more detailed documentation, see [document web](https://docs.xiaopangying.co
 
 For example, see [Example web](https://docs.xiaopangying.com/gantt-demo/)
 
+If you has any problem, please [issue](https://github.com/jeremyjone/jz-gantt/issues).
+
 ## How to use
 
 ### install
