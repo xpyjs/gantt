@@ -17,6 +17,7 @@ import useResize from './useResize';
 import { useDark } from './useStyle';
 import useRootEmit from './event/useRootEmit';
 import useData from './data/useData';
+import useToast from './useToast';
 
 function _getDateInterval(start: Date, date: Date | number) {
   const { GtParam } = useParam();
@@ -175,6 +176,7 @@ export function useJumpDate() {
   const { isInArea } = useCheckDate();
   const { INoDateError } = useRootEmit();
   const { ganttRef } = useGanttRef();
+  const { showToast } = useToast();
 
   /**
    * 跳转到某个日期
@@ -189,6 +191,7 @@ export function useJumpDate() {
     }
 
     if (!isInArea(date)) {
+      showToast('时间超出范围');
       INoDateError(date);
       return;
     }
