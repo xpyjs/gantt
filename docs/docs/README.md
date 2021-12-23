@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.1.10" date="2021-12-20" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.1.11" date="2021-12-23" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 
@@ -149,6 +149,16 @@ import {
 ::: tip
 您可以跳过此内容以继续深入学习具体配置 JGantt。
 :::
+
+### v1.1.11
+
+**新增功能：**
+
+- add a toast when trigger no-date-error event ([efa707e](https://github.com/jeremyjone/jz-gantt/commit/efa707ed1ca8bd429758b092d77be809ce1dc776))
+
+**修复问题：**
+
+- fix start-key and end-key invalid ([a501b32](https://github.com/jeremyjone/jz-gantt/commit/a501b329f5dc21fa30249183d473e48f375fdcf6)), closes [#11](https://github.com/jeremyjone/jz-gantt/issues/11)
 
 ### v1.1.10
 
