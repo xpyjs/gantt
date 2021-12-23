@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.11](https://github.com/jeremyjone/jz-gantt/compare/v1.1.10...v1.1.11) (2021-12-23)
+
+
+### Features
+
+* **components:** add a toast when trigger no-date-error event ([efa707e](https://github.com/jeremyjone/jz-gantt/commit/efa707ed1ca8bd429758b092d77be809ce1dc776))
+
+
+### Bug Fixes
+
+* **components:** fix start-key and end-key invalid ([a501b32](https://github.com/jeremyjone/jz-gantt/commit/a501b329f5dc21fa30249183d473e48f375fdcf6)), closes [#11](https://github.com/jeremyjone/jz-gantt/issues/11)
+
 ### [1.1.10](https://github.com/jeremyjone/jz-gantt/compare/v1.1.9...v1.1.10) (2021-12-20)
 
 
