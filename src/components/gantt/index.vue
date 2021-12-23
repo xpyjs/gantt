@@ -71,7 +71,6 @@ const { ganttRef } = useInitGanttRef();
   height: 100%;
 
   .gt-gantt-row-wrap {
-    min-height: 100px;
     z-index: 2;
     position: relative;
   }
