@@ -34,7 +34,7 @@ export function useInitData(
       const select = GtData.selected.index;
       if (select > -1) item = allData.value[select];
 
-      GtData.update(val.value, item);
+      GtData.update(val.value, item, options.value);
       setHeaders();
 
       // 数据发生变化，如果 selectIndex 变为 -1，表示数据已经被删除，选择的行内容需要抛出清空

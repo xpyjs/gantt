@@ -5,7 +5,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-12-20 15:40:01
+ * @LastEditTime: 2021-12-23 10:12:36
  * @Description: 一条数据类
  */
 
@@ -101,6 +101,12 @@ export class Row {
    * 起始时间
    */
   get start() {
+    // console.log(
+    //   this.__data,
+    //   this.options.sl,
+    //   this.__data[this.options.sl as string]
+    // );
+
     return createDate(this.__data[this.options.sl as string]);
   }
 

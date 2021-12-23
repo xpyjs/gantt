@@ -8,7 +8,9 @@
       ref="gantt"
       header-height="48"
       row-height="30"
-      data-index="index"
+      data-index="id"
+      start-key="startTime"
+      end-key="endTime"
       expand-all
       :dark="isDark"
       :gantt-column-size="colSize"
@@ -40,7 +42,7 @@
 
       <JGanttSlider
         flat
-        label="startDate"
+        label="startTime"
         date-format="MM-dd H:mm:s"
         empty-data=""
         :move="handleMove"
@@ -63,7 +65,7 @@
         </template> -->
       </JGanttSlider>
 
-      <JGanttColumn label="index" :merge="merge3">
+      <JGanttColumn label="id" :merge="merge3">
         <template #default="{ data }">
           <div style="background-color: #ccc; width: 100%">
             {{ data.name }}
@@ -93,7 +95,7 @@
       </JGanttColumn>
 
       <JGanttColumn
-        label="startDate"
+        label="startTime"
         width="180"
         center
         date-format
@@ -101,7 +103,7 @@
       />
 
       <j-gantt-column
-        label="endDate"
+        label="endTime"
         name="自定义标签"
         width="200"
         date-format="q yyyy-MM-dd HH:mm:ss"
@@ -112,7 +114,7 @@
             name="end"
             :style="{ backgroundColor: `#${555}`, color: '#789' }"
           >
-            abc - {{ data.endDate }}
+            abc - {{ data.endTime }}
           </span>
         </template>
       </j-gantt-column>
@@ -224,9 +226,9 @@ export default defineComponent({
         e = t;
       }
       this.dataList.push({
-        index: i,
-        startDate: `2021-08-${s++}`,
-        endDate: `2021-10-${e++}`,
+        id: i,
+        startTime: `2021-08-${s++}`,
+        endTime: `2021-10-${e++}`,
         ttt: {
           a: 'aaa',
           b: 'bbb'
@@ -246,9 +248,9 @@ export default defineComponent({
       }
       [0, 1, 3, 4, 5, 7, 9].forEach(index => {
         this.dataList[index]['children'].push({
-          index: i,
-          startDate: `2021-08-${s++}`,
-          endDate: `2021-10-${e++}`,
+          id: i,
+          startTime: `2021-08-${s++}`,
+          endTime: `2021-10-${e++}`,
           name: '子数据: ' + s,
           ttt: {
             a: 's-aaa',
@@ -269,9 +271,9 @@ export default defineComponent({
       }
       [0, 2].forEach(index => {
         this.dataList[0]['children'][index]['children'].push({
-          index: i,
-          startDate: `2021-08-${s++}`,
-          endDate: `2021-10-${e++}`,
+          id: i,
+          startTime: `2021-08-${s++}`,
+          endTime: `2021-10-${e++}`,
           name: '孙数据: ' + s,
           ttt: {
             a: 'gs-aaa',
@@ -307,15 +309,15 @@ export default defineComponent({
     },
 
     merge3: function (data) {
-      return data.index % 3 !== 0;
+      return data.id % 3 !== 0;
     },
 
     merge4: function (data) {
-      return data.index % 4 !== 0;
+      return data.id % 4 !== 0;
     },
 
     merge5: function (data) {
-      return data.index % 5 !== 0;
+      return data.id % 5 !== 0;
     },
 
     handleMove: function ({ level }) {
@@ -332,9 +334,9 @@ export default defineComponent({
           e = t;
         }
         this.dataList.push({
-          index: i,
-          startDate: `2020-06-${s++}`,
-          endDate: `2020-08-${e++}`,
+          id: i,
+          startTime: `2020-06-${s++}`,
+          endTime: `2020-08-${e++}`,
           ttt: {
             a: 'aaa',
             b: 'bbb'
@@ -354,9 +356,9 @@ export default defineComponent({
         }
         [0, 1, 3, 4, 5, 7, 9].forEach(index => {
           this.dataList[index]['children'].push({
-            index: i,
-            startDate: `2021-06-${s++}`,
-            endDate: `2021-07-${e++}`,
+            id: i,
+            startTime: `2021-06-${s++}`,
+            endTime: `2021-07-${e++}`,
             name: '子数据: ' + s,
             ttt: {
               a: 's-aaa',
@@ -377,9 +379,9 @@ export default defineComponent({
         }
         [0, 2].forEach(index => {
           this.dataList[0]['children'][index]['children'].push({
-            index: i,
-            startDate: `2021-07-${s++}`,
-            endDate: `2021-08-${e++}`,
+            id: i,
+            startTime: `2021-07-${s++}`,
+            endTime: `2021-08-${e++}`,
             name: '孙数据: ' + s,
             ttt: {
               a: 'gs-aaa',
@@ -399,13 +401,13 @@ export default defineComponent({
 
     handleClickModify: function () {
       Object.assign(this.dataList[0], {
-        startDate: '2020-08-10',
-        endDate: '2020-09-21'
+        startTime: '2020-08-10',
+        endTime: '2020-09-21'
       });
 
       Object.assign(this.dataList[0]['children'][2]['children'][0], {
-        startDate: `2020-08-13`,
-        endDate: `2020-09-17`,
+        startTime: `2020-08-13`,
+        endTime: `2020-09-17`,
         name: '孙数据: abcde'
       });
     },
@@ -414,9 +416,9 @@ export default defineComponent({
       // 数组的增减，根级操作直接更新，子级操作需要重新赋值，以促使DOM更新
       // 修改原有数据不需要这样的操作，因为内部使用了Proxy
       this.dataList.unshift({
-        index: INDEX++,
-        startDate: `2020-08-10`,
-        endDate: `2020-09-20`,
+        id: INDEX++,
+        startTime: `2020-08-10`,
+        endTime: `2020-09-20`,
         name: '数据: ' + INDEX,
         ttt: {
           a: 's-aaa' + INDEX,
@@ -428,9 +430,9 @@ export default defineComponent({
 
     handleClickInsert2: function () {
       this.dataList[0]['children'].unshift({
-        index: INDEX++,
-        startDate: `2020-08-15`,
-        endDate: `2020-09-13`,
+        id: INDEX++,
+        startTime: `2020-08-15`,
+        endTime: `2020-09-13`,
         name: '子数据: ' + INDEX,
         ttt: {
           a: 's-aaa' + INDEX,
@@ -438,9 +440,9 @@ export default defineComponent({
         },
         children: [
           {
-            index: INDEX++,
-            startDate: `2020-08-21`,
-            endDate: `2020-09-5`,
+            id: INDEX++,
+            startTime: `2020-08-21`,
+            endTime: `2020-09-5`,
             name: '孙数据: ' + INDEX,
             ttt: {
               a: 's-aaa' + INDEX,

@@ -3,7 +3,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 16:20:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-10-28 16:37:50
+ * @LastEditTime: 2021-12-23 10:16:56
  * @Description: 整个表格的数据类
  */
 
@@ -197,10 +197,11 @@ export class GanttData {
    * 更新数据
    * @param newData 新的数据集合
    * @param item 选中的内容，如果存在，将在更新数据后选中该内容
+   * @param options 数据属性参数
    * @returns
    */
-  update(newData: any[], item: Row | null = null) {
-    this.__diff(this.data, newData);
+  update(newData: any[], item: Row | null = null, options: DataOptions = {}) {
+    this.__diff(options, this.data, newData);
 
     // 更新选择条
     if (!item) return;
@@ -210,11 +211,13 @@ export class GanttData {
 
   /**
    * 更新算法
+   * @param options 数据属性参数
    * @param originData 原数据
    * @param newData 新数据
    * @param parentNode 父节点
    */
   private __diff(
+    options: DataOptions,
     originData: Row[],
     newData: any[],
     parentNode: Row | null = null
@@ -236,7 +239,7 @@ export class GanttData {
             originData[i].parentId,
             originData[i].level,
             originData[i].parentNode,
-            originData[i].options
+            options
           );
           originData.splice(i, 0, item);
         } else {
@@ -246,7 +249,7 @@ export class GanttData {
             originData[i].parentId,
             originData[i].level,
             originData[i].parentNode,
-            originData[i].options
+            options
           );
           originData.splice(i, 1, item);
         }
@@ -260,12 +263,17 @@ export class GanttData {
           parentNode ? [...parentNode.parentId, parentNode.index] : [],
           parentNode ? parentNode.level + 1 : 0,
           parentNode,
-          parentNode ? parentNode.options : {}
+          options
         );
         originData.splice(i, 1, item);
       }
 
-      this.__diff(originData[i].children, newData[i].children, originData[i]);
+      this.__diff(
+        options,
+        originData[i].children,
+        newData[i].children,
+        originData[i]
+      );
 
       // 更新日期
       // ***** 说明 *****
