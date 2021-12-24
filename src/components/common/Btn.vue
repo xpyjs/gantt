@@ -7,7 +7,7 @@
       height: `${size}px`
     }"
   >
-    <i :class="`icon ${icon}`" />
+    <i :class="`gt-icon gt-${icon}`" />
   </div>
 </template>
 

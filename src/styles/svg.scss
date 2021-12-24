@@ -1,5 +1,5 @@
 /* 图标基类，所有类前需要添加该属性 */
-.icon {
+.gt-icon {
   display: inline-block;
   line-height: 1;
   width: 1rem;
@@ -13,7 +13,7 @@
 }
 
 @each $icon in more, operation, today {
-  .#{$icon}:before {
+  .gt-#{$icon}:before {
     content: url('../assets/svg/#{$icon}.svg');
   }
 }
