@@ -8,7 +8,7 @@ import {
   HeaderDateUnit,
   ParamOptions
 } from '@/typings/ParamOptions';
-import { parseNumber } from '@/utils/common';
+import { parseNumber, uuid } from '@/utils/common';
 import { dateList } from '@/utils/date';
 import { isArray } from '@/utils/is';
 import { ColumnNode } from './columnNode';
@@ -67,7 +67,10 @@ export class ParamData {
    */
   dark: boolean;
 
+  private uuid: string;
+
   constructor() {
+    this.uuid = uuid(12);
     this.__cns = [];
     this.__sn = null;
     this.__ths = [];

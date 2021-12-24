@@ -1,5 +1,5 @@
 <template>
-  <div ref="drawerRef" class="gt-operation-drawer" :style="drawerStyle">
+  <div class="gt-operation-drawer" :style="drawerStyle">
     <!-- 系统设置 -->
     <div>
       <div class="gt-text-title" style="margin-bottom: 1rem">系统设置</div>
@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, ref, onMounted, computed } from 'vue';
+import { defineComponent, toRefs, computed } from 'vue';
 import useParam from '@/composables/useParam';
 import { Variables } from '@/constants/vars';
 import { parseNumber } from '@/utils/common';
@@ -101,8 +101,6 @@ const props = defineProps({
 });
 
 const { show } = toRefs(props);
-const width = ref(2000);
-const drawerRef = ref<HTMLDivElement>();
 
 const { GtParam } = useParam();
 
@@ -125,7 +123,8 @@ function updateGanttHeaderUnit(unit: HeaderDateUnit) {
 const drawerStyle = computed(() => {
   return {
     'min-width': '200px',
-    right: show.value ? '0px' : `-${width.value + 10}px`
+    'max-width': '400px',
+    right: show.value ? '0px' : '-410px'
   };
 });
 
@@ -137,10 +136,6 @@ const rowHeight = computed({
 });
 const minRowHeight = computed(() => Variables.size.minContentRowHeight);
 const maxRowHeight = computed(() => Variables.size.maxContentRowHeight);
-
-onMounted(() => {
-  width.value = drawerRef.value?.clientWidth ?? 2000;
-});
 </script>
 
 <style scoped lang="scss">

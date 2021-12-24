@@ -3,10 +3,11 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 16:20:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-12-23 10:16:56
+ * @LastEditTime: 2021-12-24 15:25:52
  * @Description: 整个表格的数据类
  */
 
+import { uuid } from '@/utils/common';
 import { compareDate } from '@/utils/date';
 import { isArray, isDate } from '@/utils/is';
 import { Row } from './row';
@@ -47,7 +48,10 @@ export class GanttData {
 
   private readonly __that: GanttData;
 
+  private uid: string;
+
   constructor() {
+    this.uid = uuid(12);
     this.data = [];
     this.originData = [];
     this.__start = null;
