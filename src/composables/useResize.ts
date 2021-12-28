@@ -219,7 +219,7 @@ export function useResizeTableColumn() {
  */
 export function useBtnPosition() {
   const size = ref(30);
-  const top = ref(size.value / 2);
+  const top = ref(size.value * 2);
   const right = ref(-size.value / 2);
 
   const opBtnStyle = computed(() => {

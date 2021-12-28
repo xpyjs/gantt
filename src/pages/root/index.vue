@@ -187,7 +187,8 @@ defineExpose({
 
   .gt-root-btn-mask {
     position: absolute;
-    width: calc(100% - var(--scrollbar-width));
+    // width: calc(100% - var(--scrollbar-width));
+    width: 100%;
     height: 100%;
     overflow: hidden;
     min-width: var(--table-width);
