@@ -145,7 +145,6 @@ export function useInitParam(props: any, slots: Readonly<Slots>) {
       props.showCheckbox,
       props.showExpand,
       props.headerHeight,
-      props.rowHeight,
       props.ganttColumnSize,
       props.showToday,
       props.showWeekend,
@@ -159,7 +158,7 @@ export function useInitParam(props: any, slots: Readonly<Slots>) {
   );
 
   watch(
-    () => [GtParam.headerUnit],
+    () => [GtParam.headerUnit, props.rowHeight],
     () => {
       saveParams(true);
     }

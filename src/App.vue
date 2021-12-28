@@ -34,7 +34,7 @@
       <JGantt
         ref="gantt"
         header-height="48"
-        row-height="30"
+        :row-height="rowHeight1"
         data-index="id"
         start-key="startTime"
         end-key="endTime"
@@ -179,6 +179,7 @@
     <button @click="() => (showExpand = !showExpand)">显示expand</button>
     <button @click="setSelected">设置选择</button>
     <button @click="jumpTo">跳转到</button>
+    <input type="range" name="" id="" min="20" max="70" v-model="rowHeight1" />
     <button @click="() => (showSettingBtn = !showSettingBtn)">
       显示设置按钮
     </button>
@@ -205,7 +206,7 @@
         <JGantt
           ref="gantt2"
           header-height="60"
-          row-height="40"
+          :row-height="rowHeight2"
           data-index="index"
           expand-all
           :dark="isDark2"
@@ -279,6 +280,14 @@
       <button @click="() => (showExpand2 = !showExpand2)">显示expand</button>
       <button @click="setSelected2">设置选择</button>
       <button @click="jumpTo2">跳转到</button>
+      <input
+        type="range"
+        name=""
+        id=""
+        min="20"
+        max="70"
+        v-model="rowHeight2"
+      />
       <button @click="() => (showSettingBtn2 = !showSettingBtn2)">
         显示设置按钮
       </button>
@@ -304,7 +313,7 @@
         <JGantt
           ref="gantt3"
           header-height="30"
-          row-height="20"
+          :row-height="rowHeight3"
           data-index="uid"
           expand-all
           :dark="isDark3"
@@ -370,6 +379,14 @@
       <button @click="() => (showExpand3 = !showExpand3)">显示expand</button>
       <button @click="setSelected3">设置选择</button>
       <button @click="jumpTo3">跳转到</button>
+      <input
+        type="range"
+        name=""
+        id=""
+        min="20"
+        max="70"
+        v-model="rowHeight3"
+      />
       <button @click="() => (showSettingBtn3 = !showSettingBtn3)">
         显示设置按钮
       </button>
@@ -415,6 +432,7 @@ export default defineComponent({
       changeColor: 0,
       isDark: false,
       dataList: [] as any[],
+      rowHeight1: 30,
       showCheckbox: true,
       showWeekend: true,
       showToday: true,
@@ -436,6 +454,7 @@ export default defineComponent({
 
       isDark2: false,
       dataList2: [] as any[],
+      rowHeight2: 30,
       showCheckbox2: true,
       showWeekend2: true,
       showToday2: true,
@@ -457,6 +476,7 @@ export default defineComponent({
 
       isDark3: false,
       dataList3: [] as any[],
+      rowHeight3: 20,
       showCheckbox3: true,
       showWeekend3: true,
       showToday3: true,
