@@ -338,7 +338,7 @@
 
           <JGanttColumn label="name" width="150">
             <template #default="{ data }">
-              <div>{{ data.uid - data.name }}</div>
+              <div>{{ data.uid }} - {{ data.name }}</div>
             </template>
           </JGanttColumn>
 
