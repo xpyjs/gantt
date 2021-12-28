@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useSlots } from 'vue';
+import { defineComponent, ref, useSlots } from 'vue';
 import Root from './index.vue';
 import { initStore } from '@/store';
 
@@ -20,6 +20,25 @@ const slots = useSlots();
 
 // 初始全局数据
 initStore();
+
+const rootRef = ref();
+const setSelected = (args: any) => {
+  rootRef.value.setSelected(args);
+};
+const jumpToDate = (args: any) => {
+  rootRef.value.jumpToDate(args);
+};
+
+const setHeaderUnit = (args: any) => {
+  rootRef.value.setHeaderUnit(args);
+};
+
+// ***** 对外方法 ***** //
+defineExpose({
+  setSelected,
+  jumpToDate,
+  setHeaderUnit
+});
 </script>
 
 <style scoped lang="scss"></style>

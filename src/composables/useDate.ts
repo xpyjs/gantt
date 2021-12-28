@@ -18,11 +18,16 @@ import { useDark } from './useStyle';
 import useRootEmit from './event/useRootEmit';
 import useData from './data/useData';
 import useToast from './useToast';
+import { HeaderDateUnit } from '@/typings/ParamOptions';
 
-function _getDateInterval(start: Date, date: Date | number) {
-  const { GtParam } = useParam();
+function _getDateInterval(
+  start: Date,
+  date: Date | number,
+  unit: HeaderDateUnit
+) {
   const sd = new Date(formatDate(start)).setHours(0);
-  return getDateInterval(sd, date) / getMillisecond(GtParam.headerUnit);
+
+  return getDateInterval(sd, date) / getMillisecond(unit);
 }
 
 export function useCheckDate() {
@@ -56,7 +61,8 @@ export function useToday() {
   const todayLeft = computed(() => {
     const today = new Date().setHours(0);
     return parseNumber(
-      _getDateInterval(GtData.start as Date, today) * oneDayWidth.value
+      _getDateInterval(GtData.start as Date, today, GtParam.headerUnit) *
+        oneDayWidth.value
     );
   });
 
@@ -172,7 +178,7 @@ export function useWeekend() {
 
 export function useJumpDate() {
   const { GtData } = useData();
-  const { oneDayWidth } = useParam();
+  const { oneDayWidth, GtParam } = useParam();
   const { isInArea } = useCheckDate();
   const { INoDateError } = useRootEmit();
   const { ganttRef } = useGanttRef();
@@ -198,7 +204,8 @@ export function useJumpDate() {
 
     date.setHours(0);
     const width = parseNumber(
-      _getDateInterval(GtData.start as Date, date) * oneDayWidth.value
+      _getDateInterval(GtData.start as Date, date, GtParam.headerUnit) *
+        oneDayWidth.value
     );
 
     let left = 0;

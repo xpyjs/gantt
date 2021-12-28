@@ -277,8 +277,8 @@
       <button @click="() => (showWeekend2 = !showWeekend2)">显示weekend</button>
       <button @click="() => (showToday2 = !showToday2)">显示today</button>
       <button @click="() => (showExpand2 = !showExpand2)">显示expand</button>
-      <button @click="setSelected">设置选择</button>
-      <button @click="jumpTo">跳转到</button>
+      <button @click="setSelected2">设置选择</button>
+      <button @click="jumpTo2">跳转到</button>
       <button @click="() => (showSettingBtn2 = !showSettingBtn2)">
         显示设置按钮
       </button>
@@ -292,9 +292,9 @@
 
         <div style="display: inline-block">
           选择显示
-          <button @click="() => setHeaderUnit('day')">日</button>
-          <button @click="() => setHeaderUnit('week')">周</button>
-          <button @click="() => setHeaderUnit('month')">月</button>
+          <button @click="() => setHeaderUnit2('day')">日</button>
+          <button @click="() => setHeaderUnit2('week')">周</button>
+          <button @click="() => setHeaderUnit2('month')">月</button>
         </div>
       </template>
     </div>
@@ -368,8 +368,8 @@
       <button @click="() => (showWeekend3 = !showWeekend3)">显示weekend</button>
       <button @click="() => (showToday3 = !showToday3)">显示today</button>
       <button @click="() => (showExpand3 = !showExpand3)">显示expand</button>
-      <button @click="setSelected">设置选择</button>
-      <button @click="jumpTo">跳转到</button>
+      <button @click="setSelected3">设置选择</button>
+      <button @click="jumpTo3">跳转到</button>
       <button @click="() => (showSettingBtn3 = !showSettingBtn3)">
         显示设置按钮
       </button>
@@ -383,9 +383,9 @@
 
         <div style="display: inline-block">
           选择显示
-          <button @click="() => setHeaderUnit('day')">日</button>
-          <button @click="() => setHeaderUnit('week')">周</button>
-          <button @click="() => setHeaderUnit('month')">月</button>
+          <button @click="() => setHeaderUnit3('day')">日</button>
+          <button @click="() => setHeaderUnit3('week')">周</button>
+          <button @click="() => setHeaderUnit3('month')">月</button>
         </div>
       </template>
     </div>
@@ -440,9 +440,9 @@ export default defineComponent({
       showWeekend2: true,
       showToday2: true,
       showExpand2: true,
-      levelColor2: [] as string[],
+      levelColor2: ['#123456', '#654321'] as string[],
       headerStyle2: {
-        bgColor: '',
+        bgColor: '#684',
         textColor: ''
       } as any,
       bodyStyle2: {
@@ -461,17 +461,18 @@ export default defineComponent({
       showWeekend3: true,
       showToday3: true,
       showExpand3: true,
-      levelColor3: [] as string[],
+      levelColor3: ['', '#7A1', '#123'] as string[],
       headerStyle3: {
-        bgColor: '',
+        bgColor: '#9c5',
         textColor: ''
       } as any,
       bodyStyle3: {
-        textColor: '',
+        bgColor: '#491614',
+        textColor: 'white',
         todayColor: '',
-        weekendColor: ''
-        // hoverColor: "#f00",
-        // selectColor: "#0f0"
+        weekendColor: '',
+        hoverColor: '#f00',
+        selectColor: '#501'
       } as any,
       colSize3: 'small',
       showSettingBtn3: true
@@ -913,14 +914,14 @@ export default defineComponent({
     handleClickInsertChildren2() {
       this.dataList2[0]['children'].unshift({
         index: INDEX++,
-        startDate: `2021-11-15`,
-        endDate: `2021-11-13`,
+        startDate: `2021-11-13`,
+        endDate: `2021-11-15`,
         name: '2号子数据: ' + INDEX,
         children: [
           {
             index: INDEX++,
-            startDate: `2021-11-21`,
-            endDate: `2021-11-5`,
+            startDate: `2021-11-5`,
+            endDate: `2021-11-21`,
             name: '2号孙数据: ' + INDEX,
             children: []
           }
@@ -936,7 +937,7 @@ export default defineComponent({
     handleClickColor2() {
       this.changeColor++;
 
-      if (this.changeColor % 3 !== 0) {
+      if (this.changeColor % 2 !== 0) {
         this.levelColor2 = ['blue', 'pink', 'gray'];
 
         this.headerStyle2 = {
@@ -959,6 +960,18 @@ export default defineComponent({
           textColor: ''
         };
       }
+    },
+
+    setSelected2() {
+      (this.$refs.gantt2 as any).setSelected(this.dataList2[0]);
+    },
+
+    jumpTo2() {
+      (this.$refs.gantt2 as any).jumpToDate();
+    },
+
+    setHeaderUnit2(unit: 'day' | 'week' | 'month') {
+      (this.$refs.gantt2 as any).setHeaderUnit(unit);
     },
 
     handleClickReloadData3() {
@@ -1044,8 +1057,8 @@ export default defineComponent({
     handleClickInsertChildren3() {
       this.dataList3[0]['children'].unshift({
         uid: INDEX++,
-        startDate: `2021-11-15`,
-        endDate: `2021-11-13`,
+        startDate: `2021-11-12`,
+        endDate: `2021-11-15`,
         name: '3号子数据: ' + INDEX,
         ttt: {
           a: 'aaa',
@@ -1054,8 +1067,8 @@ export default defineComponent({
         children: [
           {
             uid: INDEX++,
-            startDate: `2021-11-21`,
-            endDate: `2021-11-5`,
+            startDate: `2021-11-11`,
+            endDate: `2021-11-15`,
             name: '3号孙数据: ' + INDEX,
             ttt: {
               a: 'aaa',
@@ -1075,7 +1088,7 @@ export default defineComponent({
     handleClickColor3() {
       this.changeColor++;
 
-      if (this.changeColor % 5 !== 0) {
+      if (this.changeColor % 2 !== 0) {
         this.levelColor3 = ['purple', 'orange', 'green'];
 
         this.headerStyle3 = {
@@ -1088,16 +1101,28 @@ export default defineComponent({
           textColor: 'white'
         };
       } else {
-        this.levelColor3 = ['#7A1', '#123'];
+        this.levelColor3 = ['', '#7A1', '#123'];
         this.headerStyle3 = {
           bgColor: '#9c5',
           textColor: ''
         };
         this.bodyStyle3 = {
           bgColor: '#491614',
-          textColor: ''
+          textColor: 'white'
         };
       }
+    },
+
+    setSelected3() {
+      (this.$refs.gantt3 as any).setSelected(this.dataList3[0]);
+    },
+
+    jumpTo3() {
+      (this.$refs.gantt3 as any).jumpToDate();
+    },
+
+    setHeaderUnit3(unit: 'day' | 'week' | 'month') {
+      (this.$refs.gantt3 as any).setHeaderUnit(unit);
     }
   }
 });
