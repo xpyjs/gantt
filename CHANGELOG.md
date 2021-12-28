@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.12](https://github.com/jeremyjone/jz-gantt/compare/v1.1.11...v1.1.12) (2021-12-28)
+
+
+### Bug Fixes
+
+* **components:** fix multi gantt component in one page problem ([8f1f9db](https://github.com/jeremyjone/jz-gantt/commit/8f1f9dba7087d8e16ac64cc1c8df89e3997fb6ce)), closes [#10](https://github.com/jeremyjone/jz-gantt/issues/10)
+* **composables:** fix jump function error ([88c9f71](https://github.com/jeremyjone/jz-gantt/commit/88c9f719ed00d0648b42e6c54bbccac584bae5a2))
+* **styles:** adjust setting btn position ([9f123a7](https://github.com/jeremyjone/jz-gantt/commit/9f123a705d9e65ece6ed3a83aeff3e20a99474d5))
+* **styles:** fix icon class prefix ([cafae5b](https://github.com/jeremyjone/jz-gantt/commit/cafae5b3a4c7397b4e63c343a3d351bd988ff07d)), closes [#12](https://github.com/jeremyjone/jz-gantt/issues/12)
+* **styles:** fix weekend line height ([21e75df](https://github.com/jeremyjone/jz-gantt/commit/21e75df0320ba519efb2ecb1251f1444570b6353))
+
 ### [1.1.11](https://github.com/jeremyjone/jz-gantt/compare/v1.1.10...v1.1.11) (2021-12-23)
 
 
