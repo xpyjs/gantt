@@ -1,5 +1,5 @@
 import { shallowMount, mount } from '@vue/test-utils';
-import Root from '@/pages/root/index.vue';
+import Root from '@/pages/root/RootWrap.vue';
 import Gantt from '@/components/gantt/index.vue';
 import Table from '@/components/table/index.vue';
 import JBtn from '@/components/common/Btn.vue';

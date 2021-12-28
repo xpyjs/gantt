@@ -6,7 +6,6 @@ module.exports = {
   moduleFileExtensions: ['vue', 'js', 'json', 'jsx', 'ts', 'tsx', 'node'],
   testMatch: ['**/?(*.)+(unit|test).[jt]s?(x)'],
   testPathIgnorePatterns: ['/node_modules/'],
-  plugins: ['@vue/babel-plugin-jsx'],
   transform: {
     '^.+\\.jsx?$': 'babel-jest',
     '^.+\\.vue?$': 'vue-jest',

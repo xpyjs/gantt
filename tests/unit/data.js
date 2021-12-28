@@ -1,8 +1,8 @@
-import { useInitData } from '@/composables/data/useData';
-import { ref } from 'vue';
+import { reactive, computed } from 'vue';
+import { GanttData } from '@/models/data/data';
 
 // 测试数据
-export const dataList = [];
+export const dataList = reactive([]);
 export let dataCount = 0;
 
 let s = 2;
@@ -86,4 +86,7 @@ const dataOptions = {
   endLabel: 'endDate'
 };
 
-export const { allData } = useInitData(ref(dataList), dataOptions);
+// 处理数据
+const GtData = reactive(new GanttData());
+GtData.initData(dataList, dataOptions);
+export const allData = computed(() => GtData.flatData);
