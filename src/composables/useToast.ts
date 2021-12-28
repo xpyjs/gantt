@@ -1,48 +1,46 @@
-import { ref, watch } from 'vue';
-
-const isShowToast = ref(false);
-const toastMessage = ref('');
-
-const toastQueue: any[] = [];
+import { watch } from 'vue';
+import { useStore } from '@/store';
 
 export default () => {
+  const store = useStore();
+
   function hideToast() {
-    isShowToast.value = false;
-    toastMessage.value = '';
+    store.isShowToast.value = false;
+    store.toastMessage.value = '';
   }
 
   function showToast(message: string) {
-    if (isShowToast.value) {
-      isShowToast.value = false;
+    if (store.isShowToast.value) {
+      store.isShowToast.value = false;
       setTimeout(() => {
         showToast(message);
       }, 500);
       return;
     }
-    toastMessage.value = message;
-    isShowToast.value = true;
+    store.toastMessage.value = message;
+    store.isShowToast.value = true;
   }
 
   watch(
-    () => isShowToast.value,
+    () => store.isShowToast.value,
     val => {
       if (val) {
-        toastQueue.push(
+        store.toastQueue.push(
           setTimeout(() => {
             hideToast();
           }, 3000)
         );
       } else {
         // 如果为 false，清除列表中所有定时器，否则会有意想不到的显示效果
-        toastQueue.forEach(clearTimeout);
-        toastQueue.length = 0;
+        store.toastQueue.forEach(clearTimeout);
+        store.toastQueue.length = 0;
       }
     }
   );
 
   return {
-    isShowToast,
-    toastMessage,
+    isShowToast: store.isShowToast,
+    toastMessage: store.toastMessage,
     showToast,
     hideToast
   };

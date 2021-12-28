@@ -1,11 +1,11 @@
-import { ref } from 'vue';
-
-const tableRef = ref<HTMLDivElement>();
+import { useStore } from '@/store';
 
 export function useInitTableRef() {
-  return { tableRef };
+  const store = useStore();
+  return { tableRef: store.tableRef };
 }
 
 export default () => {
-  return { tableRef };
+  const store = useStore();
+  return { tableRef: store.tableRef };
 };

@@ -13,6 +13,7 @@ import { isNumber } from '@/utils/is';
 import useGanttRef from './useGanttRef';
 import useRootRef from './useRootRef';
 import useData from './data/useData';
+import { useStore } from '@/store';
 
 export default () => {
   const { GtParam, oneDayWidth } = useParam();
@@ -65,10 +66,6 @@ export function useResizeGanttObserver() {
   return {};
 }
 
-// 设置移动线
-const columnSliderLineVisible = ref(false);
-const columnSliderLineLeft = ref(0);
-const columnDefaultLeft = ref(-1);
 /**
  * 左侧表格调整列宽方法
  */
@@ -76,24 +73,25 @@ export function useResizeTableColumn() {
   const { GtParam } = useParam();
   const { GtData } = useData();
   const { rootRef } = useRootRef();
+  const store = useStore();
 
   const rootClientWidth = computed(() => rootRef.value?.clientWidth || 0);
 
   function onHiddenColumnSliderLine() {
-    columnSliderLineVisible.value = false;
-    columnDefaultLeft.value = -1;
+    store.columnSliderLineVisible.value = false;
+    store.columnDefaultLeft.value = -1;
   }
 
   function onMoveColumnSliderLine(offset: number) {
-    if (columnSliderLineVisible.value === false) {
-      columnSliderLineVisible.value = true;
+    if (store.columnSliderLineVisible.value === false) {
+      store.columnSliderLineVisible.value = true;
     }
 
-    if (columnDefaultLeft.value === -1) {
-      columnDefaultLeft.value = rootRef.value?.offsetLeft as number;
+    if (store.columnDefaultLeft.value === -1) {
+      store.columnDefaultLeft.value = rootRef.value?.offsetLeft as number;
     }
 
-    columnSliderLineLeft.value = offset - columnDefaultLeft.value;
+    store.columnSliderLineLeft.value = offset - store.columnDefaultLeft.value;
   }
 
   /**
@@ -197,13 +195,13 @@ export function useResizeTableColumn() {
 
   const sliderLineClass = computed(() => {
     return {
-      'gt-hide': !columnSliderLineVisible.value
+      'gt-hide': !store.columnSliderLineVisible.value
     };
   });
 
   const sliderLineStyle = computed(() => {
     return {
-      left: `${columnSliderLineLeft.value}px`
+      left: `${store.columnSliderLineLeft.value}px`
     };
   });
 

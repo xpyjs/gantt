@@ -1,20 +1,21 @@
-import { computed, ref } from 'vue';
-
-const isShowMask = ref(false);
+import { computed } from 'vue';
+import { useStore } from '@/store';
 
 export default () => {
+  const store = useStore();
+
   function showMask() {
-    isShowMask.value = true;
+    store.isShowMask.value = true;
   }
 
   function hideMask() {
-    isShowMask.value = false;
+    store.isShowMask.value = false;
   }
 
   const maskClass = computed(() => {
     return {
-      'gt-mask-show': isShowMask.value,
-      'gt-mask-hide': !isShowMask.value
+      'gt-mask-show': store.isShowMask.value,
+      'gt-mask-hide': !store.isShowMask.value
     };
   });
 

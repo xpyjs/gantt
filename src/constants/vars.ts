@@ -15,6 +15,29 @@ export const Variables = {
     ganttBackgroundRow: 'JGanttContentBackgroundRow'
   },
 
+  provider: {
+    gtData: 'GanttData',
+    gtParam: 'GanttParam',
+    gtRootEmit: 'GanttRootEmit',
+    gtRootRef: 'GanttRootRef',
+    gtGanttRef: 'GanttGanttRef',
+    gtTableRef: 'GanttTableRef',
+    gtIsShowMask: 'GanttIsShowMask',
+    gtShowDateList: 'GanttShowDateList',
+    gtSuccessBarList: 'GanttSuccessBarList',
+    gtInitGanttWidth: 'GanttInitGanttWidth',
+    gtColumnSliderLineVisible: 'GanttColumnSliderLineVisible',
+    gtColumnSliderLineLeft: 'GanttColumnSliderLineLeft',
+    gtColumnDefaultLeft: 'GanttColumnDefaultLeft',
+    gtSuccessBarTimeout: 'GanttSuccessBarTimeout',
+    gtIsShowToast: 'GanttIsShowToast',
+    gtToastMessage: 'GanttToastMessage',
+    gtToastQueue: 'GanttToastQueue',
+    gtScrollTop: 'GanttScrollTop',
+    gtRootHeight: 'GanttRootHeight',
+    gtScrollBarHeight: 'GanttScrollBarHeight'
+  },
+
   key: {
     start: 'startDate',
     end: 'endDate',

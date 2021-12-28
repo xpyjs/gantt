@@ -1,35 +1,42 @@
-import { reactive, Slots, toRefs, watch, ref, computed } from 'vue';
+import { Slots, toRefs, watch, computed } from 'vue';
 import { Variables } from '@/constants/vars';
-import { ParamData } from '@/models/param/param';
 import { parseNumber } from '@/utils/common';
 import { getDateInterval, getDateOffset, getMillisecond } from '@/utils/date';
 // eslint-disable-next-line import/no-cycle
 import useData from './data/useData';
 import { HeaderDateUnit } from '@/typings/ParamOptions';
 import { Errors } from '@/constants/errors';
+import { useStore } from '@/store';
 
-// 全局共享一个参数对象
-const GtParam = reactive(new ParamData());
-const oneDayWidth = computed(() => {
-  const size = GtParam.ganttOptions.columnSize ?? 'normal';
-  switch (size) {
-    case 'small':
-      if (GtParam.headerUnit === 'week') return 7;
-      if (GtParam.headerUnit === 'month') return 4;
-      return 15;
-    case 'large':
-      if (GtParam.headerUnit === 'week') return 30;
-      if (GtParam.headerUnit === 'month') return 15;
-      return 60;
-    case 'normal':
-    default:
-      if (GtParam.headerUnit === 'week') return 15;
-      if (GtParam.headerUnit === 'month') return 8;
-      return 30;
-  }
-});
+const useParamObject = () => {
+  const store = useStore();
+  const { GtParam } = store;
+
+  return {
+    GtParam,
+    oneDayWidth: computed(() => {
+      const size = GtParam.ganttOptions.columnSize ?? 'normal';
+      switch (size) {
+        case 'small':
+          if (GtParam.headerUnit === 'week') return 7;
+          if (GtParam.headerUnit === 'month') return 4;
+          return 15;
+        case 'large':
+          if (GtParam.headerUnit === 'week') return 30;
+          if (GtParam.headerUnit === 'month') return 15;
+          return 60;
+        case 'normal':
+        default:
+          if (GtParam.headerUnit === 'week') return 15;
+          if (GtParam.headerUnit === 'month') return 8;
+          return 30;
+      }
+    })
+  };
+};
 
 export default () => {
+  const { GtParam, oneDayWidth } = useParamObject();
   return {
     GtParam,
     colSize: computed(() => GtParam.ganttOptions.columnSize ?? 'normal'),
@@ -39,9 +46,11 @@ export default () => {
   };
 };
 
-const initGanttWidth = ref(0);
 export function useSetGanttHeader() {
+  const { GtParam, oneDayWidth } = useParamObject();
   const { GtData } = useData();
+
+  const store = useStore();
 
   function setHeaders() {
     const start = GtData.start as Date;
@@ -51,9 +60,10 @@ export function useSetGanttHeader() {
     const d =
       getDateInterval(start, tmpEnd) / getMillisecond(GtParam.headerUnit);
 
-    if (d * oneDayWidth.value < initGanttWidth.value) {
+    if (d * oneDayWidth.value < store.initGanttWidth.value) {
       const offset =
-        (initGanttWidth.value - d * oneDayWidth.value) / oneDayWidth.value;
+        (store.initGanttWidth.value - d * oneDayWidth.value) /
+        oneDayWidth.value;
       tmpEnd = getDateOffset(
         tmpEnd,
         offset * getMillisecond(GtParam.headerUnit)
@@ -64,13 +74,14 @@ export function useSetGanttHeader() {
   }
 
   return {
-    initGanttWidth,
+    initGanttWidth: store.initGanttWidth,
     setHeaders
   };
 }
 
 export function useInitParam(props: any, slots: Readonly<Slots>) {
   const { setHeaders } = useSetGanttHeader();
+  const { GtParam } = useParamObject();
   const {
     showCheckbox,
     showExpand,
@@ -163,6 +174,8 @@ export function useInitParam(props: any, slots: Readonly<Slots>) {
 }
 
 export function useExportParamFunc() {
+  const { GtParam } = useParamObject();
+
   function updateGanttHeaderUnit(unit: HeaderDateUnit) {
     if (['day', 'week', 'month'].includes(unit)) {
       GtParam.headerUnit = unit;

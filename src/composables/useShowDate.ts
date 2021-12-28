@@ -1,20 +1,21 @@
-import { reactive, readonly } from 'vue';
-
-const showDateList = reactive<Date[]>([]);
+import { readonly } from 'vue';
+import { useStore } from '@/store';
 
 export default () => {
+  const store = useStore();
+
   function clearShowDateList() {
-    showDateList.length = 0;
+    store.showDateList.length = 0;
   }
 
   function addShowDate(showDate: Date) {
-    showDateList.push(showDate);
+    store.showDateList.push(showDate);
   }
 
   return {
     clearShowDateList,
     addShowDate,
 
-    showDateList: readonly(showDateList)
+    showDateList: readonly(store.showDateList)
   };
 };

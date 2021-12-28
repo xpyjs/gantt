@@ -2,32 +2,31 @@
  * @Author: JeremyJone
  * @Date: 2021-12-20 14:42:50
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-12-20 16:06:19
+ * @LastEditTime: 2021-12-28 10:05:25
  * @Description: 成功提示条
  */
 
-import { reactive } from 'vue';
 import { Row } from '@/models/data/row';
-
-const successBarList: Row[] = reactive([]);
-const timeout = 1000; // 提示条消失时间
+import { useStore } from '@/store';
 
 export default () => {
+  const store = useStore();
+
   function pushSucceessBar(row: Row | Row[]) {
     if (Array.isArray(row)) {
-      successBarList.push(...row);
+      store.successBarList.push(...row);
     } else {
-      successBarList.push(row);
+      store.successBarList.push(row);
     }
 
     setTimeout(() => {
-      successBarList.length = 0;
-    }, timeout);
+      store.successBarList.length = 0;
+    }, store.successBarTimeout);
   }
 
   return {
-    successBarTimeout: timeout,
-    successBarList,
+    successBarTimeout: store.successBarTimeout,
+    successBarList: store.successBarList,
     pushSucceessBar
   };
 };

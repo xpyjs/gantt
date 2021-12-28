@@ -1,12 +1,12 @@
-import { ref } from 'vue';
-
-const rootEmit = ref();
+import { useStore } from '@/store';
 
 export default (emit: any) => {
-  rootEmit.value = emit;
+  const store = useStore();
+  store.rootEmit.value = emit;
   return {};
 };
 
 export function useGetRootEmit() {
-  return rootEmit;
+  const store = useStore();
+  return store.rootEmit;
 }

@@ -1,11 +1,11 @@
-import { ref } from 'vue';
-
-const ganttRef = ref<HTMLDivElement>();
+import { useStore } from '@/store';
 
 export function useInitGanttRef() {
-  return { ganttRef };
+  const store = useStore();
+  return { ganttRef: store.ganttRef };
 }
 
 export default () => {
-  return { ganttRef };
+  const store = useStore();
+  return { ganttRef: store.ganttRef };
 };

@@ -1,11 +1,12 @@
-import { ref, readonly } from 'vue';
-
-const rootRef = ref<HTMLDivElement>();
+import { readonly } from 'vue';
+import { useStore } from '@/store';
 
 export function useInitRootRef() {
-  return { rootRef };
+  const store = useStore();
+  return { rootRef: store.rootRef };
 }
 
 export default () => {
-  return { rootRef: readonly(rootRef) };
+  const store = useStore();
+  return { rootRef: readonly(store.rootRef) };
 };

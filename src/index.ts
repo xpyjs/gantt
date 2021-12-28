@@ -1,7 +1,7 @@
 import { App } from 'vue';
 import JGanttColumn from 'components/column/index.vue';
 import JGanttSlider from 'components/slider/index.vue';
-import JGantt from './pages/root/index.vue';
+import JGantt from './pages/root/RootWrap.vue';
 
 import 'animate.css';
 import './styles/index.scss';

@@ -1,4 +1,4 @@
-import { PropType } from 'vue';
+import { PropType, Slots } from 'vue';
 import { Errors } from '@/constants/errors';
 import { Variables } from '@/constants/vars';
 import {
@@ -9,6 +9,9 @@ import {
 import { parseNumber } from '@/utils/common';
 
 export default {
+  // 内部使用
+  slots: { type: Object as PropType<Slots>, default: () => ({}) },
+
   /**
    * 数据列表
    */

@@ -1,15 +1,12 @@
-import { onMounted, onUpdated, readonly, ref } from 'vue';
-import { Variables } from '@/constants/vars';
+import { onMounted, onUpdated, readonly } from 'vue';
+import { useStore } from '@/store';
 import useGanttRef from './useGanttRef';
 import useTableRef from './useTableRef';
-
-const scrollTop = ref(0);
-const rootHeight = ref(0);
-const scrollBarHeight = ref(Variables.size.defaultScrollBarHeight);
 
 export default () => {
   const { ganttRef } = useGanttRef();
   const { tableRef } = useTableRef();
+  const store = useStore();
 
   function tableWheelHandle(e: WheelEvent) {
     const { deltaY } = e;
@@ -37,17 +34,17 @@ export default () => {
   function ganttWheelHandle() {
     if (tableRef.value) {
       const st = ganttRef.value?.scrollTop as number;
-      scrollTop.value = st;
+      store.scrollTop.value = st;
       tableRef.value.scrollTop = st;
     }
   }
 
   function updateScrollBarHeight() {
     if (tableRef.value && ganttRef.value)
-      scrollBarHeight.value =
+      store.scrollBarHeight.value =
         tableRef.value.offsetHeight - ganttRef.value.clientHeight;
 
-    if (tableRef.value) rootHeight.value = tableRef.value.offsetHeight;
+    if (tableRef.value) store.rootHeight.value = tableRef.value.offsetHeight;
   }
 
   // UI 加载后需要更新数据
@@ -55,9 +52,9 @@ export default () => {
   onUpdated(updateScrollBarHeight);
 
   return {
-    scrollTop: readonly(scrollTop),
-    rootHeight: readonly(rootHeight),
-    scrollBarHeight: readonly(scrollBarHeight),
+    scrollTop: readonly(store.scrollTop),
+    rootHeight: readonly(store.rootHeight),
+    scrollBarHeight: readonly(store.scrollBarHeight),
 
     tableWheelHandle,
     ganttWheelHandle

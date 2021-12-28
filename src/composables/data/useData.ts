@@ -1,21 +1,22 @@
-import { ComputedRef, reactive, Ref, computed, watch } from 'vue';
-import { GanttData } from '@/models/data/data';
+import { ComputedRef, Ref, computed, watch } from 'vue';
 import { Row } from '@/models/data/row';
 // eslint-disable-next-line import/no-cycle
 import { useSetGanttHeader } from '../useParam';
 import useRootEmit from '../event/useRootEmit';
-
-// 全局共享一个数据对象
-const GtData = reactive(new GanttData());
+import { useStore } from '@/store';
 
 export default () => {
-  return { GtData };
+  const store = useStore();
+  return { GtData: store.GtData };
 };
 
 export function useInitData(
   data: Ref<Array<any>>,
   options: ComputedRef<DataOptions>
 ) {
+  const store = useStore();
+  const { GtData } = store;
+
   const { setHeaders } = useSetGanttHeader();
   const { IFClickRow } = useRootEmit();
 

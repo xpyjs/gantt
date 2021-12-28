@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, toRefs, useSlots } from 'vue';
+import { computed, ref, toRefs } from 'vue';
 import { useInitParam } from '@/composables/useParam';
 import { useInitRootRef } from '@/composables/useRootRef';
 import { Variables } from '@/constants/vars';
@@ -72,10 +72,6 @@ import { useInitData } from '@/composables/data/useData';
 // eslint-disable-next-line import/named
 import { CustomCssProperties } from '@/typings/private/CSSProperties';
 import useSuccessBar from '@/composables/useSuccessBar';
-
-export default defineComponent({
-  name: Variables.name.root
-});
 </script>
 
 <script lang="ts" setup>
@@ -87,7 +83,6 @@ const emit = defineEmits<{
   (e: 'move-slider', data: any[], old: { start: Date; end: Date }): void;
   (e: 'no-date-error'): void;
 }>();
-const slots = useSlots();
 
 const {
   data,
@@ -105,7 +100,7 @@ const { rootRef } = useInitRootRef();
 // 初始化事件
 useInitEvent(emit);
 // 初始化参数
-useInitParam(props, slots);
+useInitParam(props, props.slots);
 // 处理数据
 const dataOptions = computed(() => {
   return {

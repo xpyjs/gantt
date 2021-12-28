@@ -31,6 +31,7 @@
         :style="weekendStyle(item)"
       />
 
+      <!-- TODO: 递归问题 -->
       <RowWrap :data="rowData" :name="Variables.name.ganttRow" />
     </div>
   </div>

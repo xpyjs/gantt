@@ -195,7 +195,7 @@
     </template>
   </div>
 
-  <!-- <div v-show="isMulti" aria-label="多页">
+  <div v-show="isMulti" aria-label="多页">
     <div style="padding-bottom: 10px">
       <div style="height: 200px; padding-bottom: 10px">
         <JGantt
@@ -385,7 +385,7 @@
         </div>
       </template>
     </div>
-  </div> -->
+  </div>
 
   <div class="tip-text">按 F12 打开控制台以查看事件输出内容。</div>
 
@@ -407,7 +407,7 @@ export default defineComponent({
 
   data() {
     return {
-      isMulti: false,
+      isMulti: true,
       changeColor: 0,
       isDark: false,
       dataList: [] as any[],
