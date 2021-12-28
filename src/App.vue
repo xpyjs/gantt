@@ -25,7 +25,11 @@
     </button>
   </div>
 
-  <div v-show="!isMulti" aria-label="单页">
+  <!-- 已知问题，不要用 v-show 进行切换。 -->
+  <!-- 原因：1、加载数据过多，对页面不友好 -->
+  <!--      2、内部不会响应变化，导致初次加载未显示的图表数据加载不全（因为组件高度为 0） -->
+  <!-- 使用 v-if 可以避免上面问题。但是如果数据量大，每次切换会有等待时间，同样值得解决 -->
+  <div v-if="!isMulti" aria-label="单页">
     <div style="height: 400px; padding-bottom: 10px">
       <JGantt
         ref="gantt"
@@ -195,7 +199,7 @@
     </template>
   </div>
 
-  <div v-show="isMulti" aria-label="多页">
+  <div v-else aria-label="多页">
     <div style="padding-bottom: 10px">
       <div style="height: 200px; padding-bottom: 10px">
         <JGantt
@@ -407,7 +411,7 @@ export default defineComponent({
 
   data() {
     return {
-      isMulti: true,
+      isMulti: false,
       changeColor: 0,
       isDark: false,
       dataList: [] as any[],
