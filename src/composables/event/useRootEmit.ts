@@ -37,6 +37,10 @@ export default () => {
     );
   }
 
+  function IFMoveProgress(data: Row, old: number) {
+    rootEmit.value('move-progress', { ...toRaw(data.data) }, old);
+  }
+
   /**
    * 如果跳转的日期不在甘特范围内，跳转时触发该异常
    */
@@ -49,6 +53,7 @@ export default () => {
     IFDblClickRow,
     IFCheckedRow,
     IFMoveSlider,
+    IFMoveProgress,
     INoDateError
   };
 };

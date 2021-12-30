@@ -54,6 +54,7 @@
         @row-dbl-click="rowDblClick"
         @row-checked="rowChecked"
         @move-slider="moveSlider"
+        @move-progress="moveProgress"
         @no-date-error="noDateError"
       >
         <!-- 无效 slot -->
@@ -76,6 +77,8 @@
           :resize-left="true"
           :resize-right="true"
           :linked-resize="true"
+          progress
+          progress-decimal
         >
           <!-- <template v-slot="data">
           <div>{{ data.name }}</div>
@@ -437,7 +440,7 @@ export default defineComponent({
       showWeekend: true,
       showToday: true,
       showExpand: true,
-      levelColor: [] as string[],
+      levelColor: ['azure', 'cornsilk'] as string[],
       headerStyle: {
         bgColor: '',
         textColor: ''
@@ -563,6 +566,7 @@ export default defineComponent({
             a: 'gs-aaa',
             b: 'gs-bbb'
           },
+          progress: Math.random(),
           children: []
         });
       });
@@ -657,8 +661,14 @@ export default defineComponent({
       console.log('check row:', state, data);
     },
 
+    // start 与 end 为旧的日期
     moveSlider: function (data: any[], old: { start: Date; end: Date }) {
       console.log('move slider:', data, old);
+    },
+
+    // old 为旧的进度
+    moveProgress: function (data: any[], old: number) {
+      console.log('move progress:', data, old);
     },
 
     noDateError: function (date: Date) {

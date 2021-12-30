@@ -1,6 +1,6 @@
 import { PropType } from 'vue';
 import { Variables } from '@/constants/vars';
-import { Alignment } from '@/typings/ParamOptions';
+import { SliderAlignment } from '@/typings/ParamOptions';
 
 export default {
   /**
@@ -40,9 +40,9 @@ export default {
    * 接收 left, center, right
    */
   alignment: {
-    type: String as PropType<Alignment>,
+    type: String as PropType<SliderAlignment>,
     default: 'left',
-    validator: (v: Alignment) => {
+    validator: (v: SliderAlignment) => {
       return ['left', 'center', 'right'].includes(v);
     }
   },
@@ -84,5 +84,27 @@ export default {
    */
   linkedResize: {
     type: Boolean
+  },
+
+  /**
+   * 启用进度条显示
+   */
+  progress: {
+    type: Boolean,
+    default: false
+  },
+
+  /**
+   * 进度条是否启用小数
+   */
+  progressDecimal: {
+    type: [Boolean, Number],
+    default: false,
+    validator: (v: boolean | number) => {
+      if (typeof v === 'number') {
+        return v >= 0 && v <= 10;
+      }
+      return true;
+    }
   }
 };

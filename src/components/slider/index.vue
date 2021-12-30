@@ -1,5 +1,5 @@
 <script lang="ts">
-import { isSymbol } from 'lodash';
+import { isNumber, isSymbol } from 'lodash';
 import {
   computed,
   defineComponent,
@@ -48,7 +48,9 @@ const {
   bgColor,
   resizeLeft,
   resizeRight,
-  linkedResize
+  linkedResize,
+  progress,
+  progressDecimal
 } = toRefs(props);
 
 const { oneDayWidth, GtParam } = useParam();
@@ -56,6 +58,22 @@ const { GtData } = useData();
 
 const startOfData = computed(() => data.start as Date);
 const startOfEnd = computed(() => data.end as Date);
+const progressValue = computed(() => {
+  let v = data.progress ?? 0;
+  if (v > 1) v = 1;
+  else if (v < 0) v = 0;
+
+  // 显示方式，默认整数
+  if (isNumber(progressDecimal.value)) {
+    let fixed = Math.floor(progressDecimal.value);
+    if (fixed < 0) fixed = 0;
+    else if (fixed > 10) fixed = 10;
+    return (v * 100).toFixed(fixed);
+  }
+
+  return progressDecimal.value ? (v * 100).toFixed(2) : Math.floor(v * 100);
+});
+
 // 滑块的宽度
 const sliderWidth = computed(
   () =>
@@ -87,7 +105,8 @@ const sliderLeft = computed(() => {
 
 // 判断用户是否提供了默认插槽
 // const customDefaultScoped = computed(() => {
-//   let slot = undefined;
+//   let slot;
+//   // eslint-disable-next-line prefer-destructuring
 //   if (slots?.default) slot = slots.default(scopeData(dateFormat?.value))[0];
 //   return slot && isSymbol(slot.type) ? undefined : slot;
 // });
@@ -112,8 +131,9 @@ const sliderSlot = computed(() => {
   let slot;
   // eslint-disable-next-line prefer-destructuring
   if (slots?.content) slot = slots.content(scopeData(dateFormat?.value))[0];
-  // eslint-disable-next-line prefer-destructuring
-  if (slots?.default) slot = slots.default(scopeData(dateFormat?.value))[0];
+  else if (slots?.default)
+    // eslint-disable-next-line prefer-destructuring
+    slot = slots.default(scopeData(dateFormat?.value))[0];
 
   return slot && isSymbol(slot.type) ? undefined : slot;
 });
@@ -148,9 +168,38 @@ const realAlignment = computed(() => {
   }
 });
 
+const backgroundColor = computed(() => {
+  return bgColor.value || 'var(--j-primary-color)';
+});
+
+const isProgress = computed(() => {
+  return !customContentScoped.value && progress.value;
+});
+
 const contentStyle = computed(() => {
   return {
-    justifyContent: realAlignment.value
+    justifyContent: realAlignment.value,
+    borderRadius: '3px',
+    padding: `0px ${
+      customContentScoped.value || realAlignment.value === 'center' ? 0 : 20
+    }px`
+  };
+});
+
+const progressStyle = computed(() => {
+  return {
+    backgroundColor: backgroundColor.value,
+    width: `${progressValue.value}%`,
+    borderRadius: '3px',
+    justifyContent: 'end'
+  };
+});
+
+const progressBackStyle = computed(() => {
+  return {
+    filter: isProgress.value ? 'sepia(1)' : 'none',
+    borderRadius: '3px',
+    backgroundColor: !customContentScoped.value ? backgroundColor.value : ''
   };
 });
 
@@ -170,10 +219,6 @@ const rightChunkClass = computed(() => {
 function getMoveChunkStyle(v: boolean) {
   return v ? { opacity: 1, height: '100%' } : { opacity: 0 };
 }
-
-const backgroundColor = computed(() => {
-  return bgColor.value || 'var(--j-primary-color)';
-});
 
 const rightChunkStyle = computed(() =>
   isCustomRightChunkScoped.value
@@ -209,16 +254,20 @@ const sliderStyle = computed(() => {
   return {
     width: `${sliderWidth.value}px`,
     left: `${sliderLeft.value}px`,
-    backgroundColor: !customContentScoped.value ? backgroundColor.value : ''
+    backgroundColor:
+      !customContentScoped.value && !progress.value ? backgroundColor.value : ''
     // cursor: canMove.value ? "ew-resize" : "not-allowed"
   };
 });
 
+const showCtrlChunk = ref(false);
+const showProgressBtn = ref(false);
+
 const { addShowDate, clearShowDateList } = useShowDate();
 
-let showCtrlChunk = ref(false);
-
 function onMouseEnter() {
+  showProgressBtn.value = true;
+
   addShowDate(data.start);
   addShowDate(data.end);
 
@@ -227,6 +276,8 @@ function onMouseEnter() {
 }
 
 function onMouseLeave() {
+  showProgressBtn.value = false;
+
   clearShowDateList();
 
   if (!canMove.value) return;
@@ -248,7 +299,7 @@ function onRightChunkMouseDown(e: MouseEvent) {
   sliderMoveHandle(e, 'right');
 }
 
-const { IFMoveSlider } = useRootEmit();
+const { IFMoveSlider, IFMoveProgress } = useRootEmit();
 const { setHeaders } = useSetGanttHeader();
 const { showToast } = useToast();
 const { pushSucceessBar } = useSuccessBar();
@@ -325,6 +376,31 @@ function setBetweenDate() {
   // 重新调整表头
   setHeaders();
 }
+
+function onProgressBtnMouseDown(e: MouseEvent) {
+  if (!canMove.value) return;
+  const srcX = e.pageX;
+  const originProgress = data.progress ?? 0;
+
+  document.onmousemove = e => {
+    let targetX = e.pageX;
+    // 如果鼠标离从左侧离开浏览器, 那么鼠标的位置停留在浏览器最左侧的位置, 也就是targetX = 0.
+    if (targetX < 0) {
+      targetX = 0;
+    }
+
+    const p = originProgress + (targetX - srcX) / sliderWidth.value;
+    data.setProgress(p);
+  };
+
+  document.onmouseup = () => {
+    document.onmousemove = null;
+    document.onmouseup = null;
+
+    // 抛出更新后的数据
+    IFMoveProgress(data, originProgress);
+  };
+}
 </script>
 
 <template>
@@ -336,6 +412,14 @@ function setBetweenDate() {
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
   >
+    <!-- 进度条 -->
+    <div v-if="isProgress" :class="contentClass" :style="progressBackStyle" />
+    <div v-if="isProgress" :class="contentClass" :style="progressStyle">
+      <span style="color: gray; margin-right: 3px; transform: scale(0.7)">
+        {{ progressValue }}%
+      </span>
+    </div>
+
     <!-- 内容 -->
     <div :class="contentClass" :style="contentStyle" @selectstart="() => false">
       <component :is="sliderSlot" v-if="sliderSlot" />
@@ -363,6 +447,14 @@ function setBetweenDate() {
     >
       <component :is="rightChunkSlot" v-if="isCustomRightChunkScoped" />
     </div>
+
+    <!-- 进度条拉块 -->
+    <div
+      v-if="isProgress && data.children.length === 0"
+      class="gt-slider-progress-btn"
+      :style="{ left: `${progressValue}%`, opacity: showProgressBtn ? 1 : 0 }"
+      @mousedown.stop="onProgressBtnMouseDown"
+    />
   </div>
 </template>
 
@@ -389,11 +481,11 @@ $default-slider-border-radius: 3px;
   top: math.div(100% - $h, 2);
 
   .gt-slider-content {
-    width: calc(100% - 40px);
+    width: 100%;
     height: 100%;
     position: absolute;
     left: 0;
-    padding: 0 20px;
+    padding: 0;
     display: flex;
     align-items: center;
   }
@@ -426,6 +518,45 @@ $default-slider-border-radius: 3px;
 
     & > * {
       height: 100%;
+    }
+  }
+
+  .gt-slider-progress-btn {
+    height: 100%;
+    width: 2px;
+    position: absolute;
+    top: 0;
+    background: darkslategray;
+    border-color: darkslategray;
+    opacity: 0;
+    z-index: 2;
+    transition: opacity 0.2s;
+
+    &:hover {
+      filter: brightness(1.2) invert(0.1);
+      cursor: w-resize;
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -3px;
+      border-style: solid;
+      border-width: 4px;
+      border-color: transparent;
+      border-top-color: inherit;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: -3px;
+      border-style: solid;
+      border-width: 4px;
+      border-color: transparent;
+      border-bottom-color: inherit;
     }
   }
 }

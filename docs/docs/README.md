@@ -179,24 +179,17 @@ import {
 **新增功能：**
 
 - add a toast ([f618194](https://github.com/jeremyjone/jz-gantt/commit/f61819473963f897f1a1f4930a43c8c2e3faa62b))
-
 - add success bar when move slider succeed ([e8c2916](https://github.com/jeremyjone/jz-gantt/commit/e8c2916ef434d2f3b753ca2c6590364a42adc434))
 
 **修复问题：**
 
 - optimize header highlight ([e83d3c9](https://github.com/jeremyjone/jz-gantt/commit/e83d3c97c49a0387804b8521490e17218c09a3ec))
 
-### v1.1.9
-
-**修复：**
-
-- 修复打包失败，导致发布版本错误的严重问题。
-
-### v1.1.8
+### v1.2.0-alpha.2
 
 **修复问题：**
 
-- added highlight header when hover slider ([0f50c24](https://github.com/jeremyjone/jz-gantt/commit/0f50c248df8f3f815335a189d23a6ddc3702e248))
+- update silder progress decimal ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
 
 ### v1.2.0-alpha.0
 
@@ -208,11 +201,9 @@ import {
 
 **新增功能：**
 
-- add column label prop depth read attr ([c9b25f1](https://github.com/jeremyjone/jz-gantt/commit/c9b25f135b52b1a16c96aecce9e72fdef23c8aa4))
+- 添加列标签深度读取属性功能 ([c9b25f1](https://github.com/jeremyjone/jz-gantt/commit/c9b25f135b52b1a16c96aecce9e72fdef23c8aa4))
 
-- add two props in column component(class & style) ([edd2bbf](https://github.com/jeremyjone/jz-gantt/commit/edd2bbf74eaffd55230c93debfafaef43fa3667e)), closes [#7](https://github.com/jeremyjone/jz-gantt/issues/7)
-
-- update typings ([05d3acf](https://github.com/jeremyjone/jz-gantt/commit/05d3acfbd0e717996c266fae934c8b64ba84a095))
+- 添加两个列属性([column-class](./column.html#column-class) 和 [column-style](./column.html#column-style)) ([edd2bbf](https://github.com/jeremyjone/jz-gantt/commit/edd2bbf74eaffd55230c93debfafaef43fa3667e)), closes [#7](https://github.com/jeremyjone/jz-gantt/issues/7)
 
 ### v1.1.6
 

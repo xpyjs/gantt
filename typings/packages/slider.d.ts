@@ -1,6 +1,5 @@
+import { SliderAlignment } from '@/typings/ParamOptions';
 import { JComponent } from '../component';
-
-export type SliderAlignment = 'left' | 'center' | 'right';
 
 declare class JGanttSliderComponent extends JComponent {
   alignment: SliderAlignment;
@@ -17,9 +16,13 @@ declare class JGanttSliderComponent extends JComponent {
 
   linkedResize: boolean;
 
-  move: (data: { data: any; level: number }) => boolean | boolean;
+  move: boolean | ((data: { data: any; level: number }) => boolean);
 
   resizeLeft: boolean;
 
   resizeRight: boolean;
+
+  progress: boolean;
+
+  progressDecimal: boolean | number;
 }

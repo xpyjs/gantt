@@ -1,6 +1,6 @@
 # 根组件 JGantt
 
-<Description author="jeremyjone" date="2021-11-04" copyright="jeremyjone" />
+<Description author="jeremyjone" date="2021-12-10" copyright="jeremyjone" />
 
 对于 `JGantt` 组件，它具有非常丰富的属性。
 
@@ -260,6 +260,12 @@
 <DataParameter f="@no-today-error -> function(date: Date)" />
 
 `跳转到` 事件触发后，如果给出的日期不在当前甘特范围内，则触发该异常，可以接收该异常并自定义后续事件。
+
+### move-progress <Badge type="tip" text="+ v1.2.0" vertical="top" />
+
+<DataParameter f="@move-progress -> function(data: any, old: number)" />
+
+移动指定甘特行中的进度条触发事件。会返回当前行的数据以及原进度数值。
 
 ### move-slider <Badge type="tip" text="update v1.1.3" vertical="top" />
 
