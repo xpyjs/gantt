@@ -474,7 +474,7 @@ export default defineComponent({
       colSize2: 'large',
       showSettingBtn2: true,
 
-      isDark3: false,
+      isDark3: true,
       dataList3: [] as any[],
       rowHeight3: 20,
       showCheckbox3: true,
