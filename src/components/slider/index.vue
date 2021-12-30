@@ -381,6 +381,7 @@ function onProgressBtnMouseDown(e: MouseEvent) {
   if (!canMove.value) return;
   const srcX = e.pageX;
   const originProgress = data.progress ?? 0;
+  let newProgreee = originProgress;
 
   document.onmousemove = e => {
     let targetX = e.pageX;
@@ -389,16 +390,20 @@ function onProgressBtnMouseDown(e: MouseEvent) {
       targetX = 0;
     }
 
-    const p = originProgress + (targetX - srcX) / sliderWidth.value;
-    data.setProgress(p);
+    newProgreee = originProgress + (targetX - srcX) / sliderWidth.value;
+    data.setProgress(newProgreee);
   };
 
   document.onmouseup = () => {
     document.onmousemove = null;
     document.onmouseup = null;
 
+    if (newProgreee === originProgress) return;
+
     // 抛出更新后的数据
     IFMoveProgress(data, originProgress);
+
+    showToast('更新成功');
   };
 }
 </script>
