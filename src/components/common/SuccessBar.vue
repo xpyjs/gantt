@@ -3,7 +3,7 @@
     class="gt-success-bar"
     :style="{
       height: `${rowHeight}px`,
-      top: `${headerHeight + rowHeight * row.__uindex}px`,
+      top: `${headerHeight + rowHeight * row.__uindex - scrollTop}px`,
       'animation-duration': `${successBarTimeout / 1000}s`
     }"
   />
@@ -14,6 +14,7 @@ import { PropType } from 'vue';
 import useResize from '@/composables/useResize';
 import { Row } from '@/models/data/row';
 import useSuccessBar from '@/composables/useSuccessBar';
+import useWheel from '@/composables/useWheel';
 
 defineProps({
   row: {
@@ -24,6 +25,7 @@ defineProps({
 
 const { headerHeight, rowHeight } = useResize();
 const { successBarTimeout } = useSuccessBar();
+const { scrollTop } = useWheel();
 </script>
 
 <style scoped lang="scss">
