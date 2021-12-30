@@ -27,6 +27,10 @@ export default defineUserConfig<DefaultThemeOptions>({
         ]
       },
       {
+        text: 'CHANGELOG',
+        link: 'https://github.com/jeremyjone/jz-gantt/blob/master/CHANGELOG.md'
+      },
+      {
         text: '我的博客站',
         link: 'https://www.jeremyjone.com',
         target: '_blank'
