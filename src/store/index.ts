@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-12-24 16:36:33
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-12-28 10:08:44
+ * @LastEditTime: 2021-12-30 10:38:12
  * @Description: 头部注释
  */
 
@@ -72,6 +72,9 @@ export const initStore = () => {
   provide(Variables.provider.gtRootHeight, rootHeight);
   const scrollBarHeight = ref(Variables.size.defaultScrollBarHeight);
   provide(Variables.provider.gtScrollBarHeight, scrollBarHeight);
+
+  const stopClickEvent = ref(false);
+  provide(Variables.provider.gtStopClickEvent, stopClickEvent);
 };
 
 export const useStore = () => {
@@ -101,7 +104,10 @@ export const useStore = () => {
     toastQueue: inject(Variables.provider.gtToastQueue) as any[],
     scrollTop: inject(Variables.provider.gtScrollTop) as Ref<number>,
     rootHeight: inject(Variables.provider.gtRootHeight) as Ref<number>,
-    scrollBarHeight: inject(Variables.provider.gtScrollBarHeight) as Ref<number>
+    scrollBarHeight: inject(
+      Variables.provider.gtScrollBarHeight
+    ) as Ref<number>,
+    stopClickEvent: inject(Variables.provider.gtStopClickEvent) as Ref<boolean>
   };
 };
 

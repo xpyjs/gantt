@@ -35,7 +35,8 @@ export const Variables = {
     gtToastQueue: 'GanttToastQueue',
     gtScrollTop: 'GanttScrollTop',
     gtRootHeight: 'GanttRootHeight',
-    gtScrollBarHeight: 'GanttScrollBarHeight'
+    gtScrollBarHeight: 'GanttScrollBarHeight',
+    gtStopClickEvent: 'GanttStopClickEvent'
   },
 
   key: {
