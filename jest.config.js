@@ -18,6 +18,11 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.{js,ts,vue}', '!**/node_modules/**']
+  collectCoverageFrom: [
+    'src/**/*.{js,ts,vue}',
+    '!**/node_modules/**',
+    '!**/typings/**',
+    '!src/*.{js,ts,vue}'
+  ]
   // coverageReporters: ["text", "text-summary", "html"],
 };
