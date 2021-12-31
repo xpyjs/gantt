@@ -152,6 +152,10 @@ import {
 
 ### v1.2.0
 
+**新增功能：**
+
+- add progress-bar in slider ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
+
 **修复问题：**
 
 - fix successbar position problem ([0655cdf](https://github.com/jeremyjone/jz-gantt/commit/0655cdf19b0ef66dca82be046689c948a07ec926)), closes [#15](https://github.com/jeremyjone/jz-gantt/issues/15)
@@ -167,15 +171,6 @@ import {
 **修复问题：**
 
 - update silder progress decimal ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
-
-## [1.2.0-alpha.1](https://github.com/jeremyjone/jz-gantt/compare/v1.1.9...v1.2.0-alpha.1) (2021-12-16)
-
-## [1.2.0-alpha.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.7...v1.2.0-alpha.0) (2021-12-13)
-
-**新增功能：**
-
-- add progress-bar in slider ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
-
 ### v1.1.12
 
 **修复问题：**
