@@ -154,7 +154,9 @@ import {
 
 **新增功能：**
 
-- add progress-bar in slider ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
+- 增加滑块的进度条显示([progress](./slider.html#progress)) ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
+
+- 新增一个进度条属性，[progress-decimal](./slider.html#progressdecimal) ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
 
 **修复问题：**
 
@@ -166,11 +168,6 @@ import {
 
 - update event propagation rule ([2f60af7](https://github.com/jeremyjone/jz-gantt/commit/2f60af7aa0c190b3f2db291b0fdab5e66b2b6791))
 
-## [1.2.0-alpha.2](https://github.com/jeremyjone/jz-gantt/compare/v1.1.10...v1.2.0-alpha.2) (2021-12-22)
-
-**修复问题：**
-
-- update silder progress decimal ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
 ### v1.1.12
 
 **修复问题：**
@@ -205,18 +202,6 @@ import {
 **修复问题：**
 
 - optimize header highlight ([e83d3c9](https://github.com/jeremyjone/jz-gantt/commit/e83d3c97c49a0387804b8521490e17218c09a3ec))
-
-### v1.2.0-alpha.2
-
-**修复问题：**
-
-- update silder progress decimal ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
-
-### v1.2.0-alpha.0
-
-**新增预览功能：**
-
-- 增加滑块的进度条显示([progress](./slider.html#progress)) ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
 
 ### v1.1.7
 
