@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/jeremyjone/jz-gantt/compare/v1.2.0...v1.3.0) (2022-01-13)
+
+
+### Features
+
+* **components:** add deep checked by right click ([261c54d](https://github.com/jeremyjone/jz-gantt/commit/261c54d4e9548a6e2b32e3f849bf5412fe049c1c)), closes [#16](https://github.com/jeremyjone/jz-gantt/issues/16)
+
 ## [1.2.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.12...v1.2.0) (2021-12-31)
 
 
