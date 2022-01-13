@@ -11,6 +11,8 @@
 基于vue3的一个简单的甘特组件。
 ![vue 3.x](https://img.shields.io/badge/vue-3.x-43B984) ![animate.css](https://img.shields.io/badge/animate.css-4.x-9E84E2)
 
+- [vue2 版本](https://github.com/jeremyjone/jz-gantt/tree/vue2)
+
 ## 截图
 
 ![截图](./public/screenshots/gantt.gif)

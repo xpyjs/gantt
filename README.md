@@ -11,6 +11,8 @@
 A high-performance vue gantt component, support vue2 & vue3.
 ![vue 3.x](https://img.shields.io/badge/vue-3.x-43B984) ![animate.css](https://img.shields.io/badge/animate.css-4.x-9E84E2)
 
+- [vue2 version](https://github.com/jeremyjone/jz-gantt/tree/vue2)
+
 ## Snipaste
 
 ![Snipaste](./public/screenshots/gantt.gif)
