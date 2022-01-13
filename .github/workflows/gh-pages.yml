@@ -1,7 +1,6 @@
 name: 部署文档和 Demo
 on:
   push:
-    branches: [master]
     tags: [v*]
     paths:
       - 'docs/**'
