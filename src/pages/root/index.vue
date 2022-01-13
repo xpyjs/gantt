@@ -51,7 +51,6 @@ import { computed, ref, toRefs } from 'vue';
 import { useInitParam } from '@/composables/useParam';
 import { useInitRootRef } from '@/composables/useRootRef';
 import { Variables } from '@/constants/vars';
-import rootProps from './rootProps';
 import JTable from '@/components/table/index.vue';
 import JGantt from '@/components/gantt/index.vue';
 import JBtn from '@/components/common/Btn.vue';
@@ -72,6 +71,7 @@ import { useInitData } from '@/composables/data/useData';
 // eslint-disable-next-line import/named
 import { CustomCssProperties } from '@/typings/private/CSSProperties';
 import useSuccessBar from '@/composables/useSuccessBar';
+import rootProps from './rootProps';
 </script>
 
 <script lang="ts" setup>
