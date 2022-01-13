@@ -11,14 +11,14 @@ import useEvent from '@/composables/event/useEvent';
 import useParam from '@/composables/useParam';
 import { Variables } from '@/constants/vars';
 import { Row } from '@/models/data/row';
-import columnProps from './props';
-import ArrowIcon from '../common/Arrow.vue';
 import useResize from '@/composables/useResize';
 import useRender from '@/composables/useRender';
 // eslint-disable-next-line import/named
 import { CustomCssProperties } from '@/typings/private/CSSProperties';
 import { isString } from '@/utils/is';
 import { addStyleStrToObject } from '@/utils/common';
+import ArrowIcon from '../common/Arrow.vue';
+import columnProps from './props';
 
 export default defineComponent({
   name: Variables.name.column

@@ -1,9 +1,9 @@
 import { ComputedRef, Ref, computed, watch } from 'vue';
 import { Row } from '@/models/data/row';
+import { useStore } from '@/store';
 // eslint-disable-next-line import/no-cycle
 import { useSetGanttHeader } from '../useParam';
 import useRootEmit from '../event/useRootEmit';
-import { useStore } from '@/store';
 
 export default () => {
   const store = useStore();

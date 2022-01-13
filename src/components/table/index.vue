@@ -28,9 +28,9 @@
 import { Row } from '@/models/data/row';
 import useResize from '@/composables/useResize';
 import RowWrap from '@/components/rowWrap/index.vue';
-import TableHeader from './Header.vue';
 import { Variables } from '@/constants/vars';
 import { useInitTableRef } from '@/composables/useTableRef';
+import TableHeader from './Header.vue';
 
 defineProps<{
   rowData: Array<Row>;

@@ -2,11 +2,11 @@ import { Slots, toRefs, watch, computed } from 'vue';
 import { Variables } from '@/constants/vars';
 import { parseNumber } from '@/utils/common';
 import { getDateInterval, getDateOffset, getMillisecond } from '@/utils/date';
-// eslint-disable-next-line import/no-cycle
-import useData from './data/useData';
 import { HeaderDateUnit } from '@/typings/ParamOptions';
 import { Errors } from '@/constants/errors';
 import { useStore } from '@/store';
+// eslint-disable-next-line import/no-cycle
+import useData from './data/useData';
 
 const useParamObject = () => {
   const store = useStore();

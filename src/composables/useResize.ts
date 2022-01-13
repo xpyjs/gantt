@@ -8,12 +8,12 @@ import {
 } from 'vue';
 import { Variables } from '@/constants/vars';
 import { TableHeader } from '@/models/param/header';
-import useParam, { useSetGanttHeader } from './useParam';
 import { isNumber } from '@/utils/is';
+import { useStore } from '@/store';
+import useParam, { useSetGanttHeader } from './useParam';
 import useGanttRef from './useGanttRef';
 import useRootRef from './useRootRef';
 import useData from './data/useData';
-import { useStore } from '@/store';
 
 export default () => {
   const { GtParam, oneDayWidth } = useParam();

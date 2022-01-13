@@ -1,7 +1,7 @@
 import { toRaw } from 'vue';
 import { Row } from '@/models/data/row';
-import { useGetRootEmit } from './useInitEvent';
 import { useStore } from '@/store';
+import { useGetRootEmit } from './useInitEvent';
 
 export default () => {
   const store = useStore();

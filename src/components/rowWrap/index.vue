@@ -16,10 +16,10 @@ import { computed, defineComponent, Ref, toRefs } from 'vue';
 import useInView from '@/composables/useInView';
 import { Row } from '@/models/data/row';
 import { camelToKebabCased } from '@/utils/common';
+import useStyle from '@/composables/useStyle';
 import JTableRow from '../table/Row.vue';
 import JGanttRow from '../gantt/Row.vue';
 import JGanttBackgroundRow from '../gantt/BackgroundRow.vue';
-import useStyle from '@/composables/useStyle';
 
 export default defineComponent({
   components: {

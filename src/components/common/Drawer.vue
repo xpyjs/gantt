@@ -84,9 +84,9 @@ import { defineComponent, toRefs, computed } from 'vue';
 import useParam from '@/composables/useParam';
 import { Variables } from '@/constants/vars';
 import { parseNumber } from '@/utils/common';
-import JSlider from './Slider.vue';
 // eslint-disable-next-line import/named
 import { GanttColumnSize, HeaderDateUnit } from '@/typings/ParamOptions';
+import JSlider from './Slider.vue';
 
 export default defineComponent({
   name: 'GanttDrawer'
