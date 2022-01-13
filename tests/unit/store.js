@@ -26,6 +26,7 @@ export const store = {
     [Variables.provider.gtRootHeight]: ref(0),
     [Variables.provider.gtScrollBarHeight]: ref(
       Variables.size.defaultScrollBarHeight
-    )
+    ),
+    [Variables.provider.gtStopClickEvent]: ref(false)
   }
 };
