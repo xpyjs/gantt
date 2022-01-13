@@ -11,6 +11,7 @@ import {
   getMillisecond
 } from '@/utils/date';
 import { isDate, isUndefined } from '@/utils/is';
+import { HeaderDateUnit } from '@/typings/ParamOptions';
 import useGanttRef from './useGanttRef';
 import useParam from './useParam';
 import useResize from './useResize';
@@ -18,7 +19,6 @@ import { useDark } from './useStyle';
 import useRootEmit from './event/useRootEmit';
 import useData from './data/useData';
 import useToast from './useToast';
-import { HeaderDateUnit } from '@/typings/ParamOptions';
 
 function _getDateInterval(
   start: Date,
