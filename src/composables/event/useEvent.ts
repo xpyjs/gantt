@@ -6,8 +6,8 @@ export default (data: Row) => {
   const { GtData } = useData();
   const { IFClickRow, IFDblClickRow, IFCheckedRow } = useRootEmit();
 
-  function onChangeCheckbox(e: Event) {
-    IFCheckedRow((e.target as any)?.checked, data);
+  function onChangeCheckbox(checked: boolean, checkedList: Row[] = []) {
+    IFCheckedRow(checked, data, [data, ...checkedList]);
   }
 
   let rowRepeatClick = false;

@@ -657,8 +657,8 @@ export default defineComponent({
       console.log('double click row data:', data);
     },
 
-    rowChecked: function (state: boolean, data: any) {
-      console.log('check row:', state, data);
+    rowChecked: function (state: boolean, data: any, list: any[]) {
+      console.log('check row:', state, data, list);
     },
 
     // start 与 end 为旧的日期

@@ -5,7 +5,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-12-30 10:19:55
+ * @LastEditTime: 2022-01-13 14:45:00
  * @Description: 一条数据类
  */
 
@@ -65,6 +65,8 @@ export class Row {
 
   private __isExpand: boolean;
 
+  private __isChecked: boolean;
+
   // private __start: Date | null;
   // private __end: Date | null;
 
@@ -76,6 +78,8 @@ export class Row {
     this.parentNode = null;
     this.level = 0;
     this.__isExpand = true;
+    this.__isChecked = false;
+
     // this.__start = null;
     // this.__end = null;
     this.children = [];
@@ -96,6 +100,13 @@ export class Row {
    */
   get isExpand() {
     return this.__isExpand;
+  }
+
+  /**
+   * 是否选中
+   */
+  get isChecked() {
+    return this.__isChecked;
   }
 
   /**
@@ -215,6 +226,22 @@ export class Row {
   }
 
   /**
+   * 设置选中状态
+   * @param checked true 为选中，false 为不选中
+   * @param deep 是否递归设置子项
+   */
+  setChecked(checked: boolean, deep: boolean = false) {
+    this.__isChecked = checked;
+    if (deep) {
+      if (this.children.length > 0) {
+        for (const child of this.children) {
+          child.setChecked(checked, deep);
+        }
+      }
+    }
+  }
+
+  /**
    * 赋值起始日期，判断是否联动。如果联动，则先判断父节点，然后递归判断子节点
    * @param date 日期
    * @param unit 日期单位
@@ -321,6 +348,25 @@ export class Row {
           modifyArr.push(c);
           this.__setChildrenDate(c, key, unit, modifyArr);
         }
+      }
+    }
+  }
+
+  /**
+   * 获取子项的展平状态
+   */
+  getFlattenChildren(): Row[] {
+    const arr: Row[] = [];
+    this.__getFlattenChildren(arr);
+    arr.shift(); // 添加的第一个是自己，所以去掉
+    return arr;
+  }
+
+  private __getFlattenChildren(arr: Row[]) {
+    arr.push(this);
+    if (this.children.length > 0) {
+      for (const child of this.children) {
+        child.__getFlattenChildren(arr);
       }
     }
   }

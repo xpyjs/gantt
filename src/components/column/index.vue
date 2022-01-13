@@ -77,7 +77,32 @@ const showExpand = computed(() => GtParam.showExpand && nodeKey === 0);
 const canshowExpand = computed(() => data.children.length > 0);
 const expandMarginLeft = computed(() => data.level * 10);
 const isExpand = computed(() => data.isExpand);
+
+const checkboxRef = ref<HTMLInputElement>();
 const { onChangeCheckbox } = useEvent(data);
+// 鼠标左键，单项切换状态
+function onChangeCheckboxState(e: Event) {
+  data.setChecked((e.target as HTMLInputElement).checked);
+  onChangeCheckbox(data.isChecked);
+}
+// 鼠标右键，深度切换状态
+function onRightClick(e: any) {
+  // 选中时，先选中再抛出事件。取消时相反
+  if (!data.isChecked) {
+    data.setChecked(true, true);
+    onChangeCheckbox(
+      true,
+      data.getFlattenChildren().filter(v => v.isChecked)
+    );
+  } else {
+    onChangeCheckbox(
+      false,
+      data.getFlattenChildren().filter(v => v.isChecked)
+    );
+    data.setChecked(false, true);
+  }
+}
+
 function onClickExpand() {
   data.setExpand(!isExpand.value);
 }
@@ -122,13 +147,16 @@ const chunkText = computed(() => {
     <input
       v-if="showCheckbox"
       id="checkbox"
+      ref="checkboxRef"
       class="gt-column__checkbox"
+      :checked="data.isChecked"
       type="checkbox"
       name="checkbox"
       :style="boxSizeStyle"
-      @change="e => onChangeCheckbox(e)"
+      @change="onChangeCheckboxState"
       @click.stop
       @dblclick.stop
+      @contextmenu.prevent="e => onRightClick(e)"
     />
 
     <div
@@ -140,6 +168,7 @@ const chunkText = computed(() => {
         marginLeft: `${expandMarginLeft}px`
       }"
       @click.stop="onClickExpand"
+      @dblclick.stop
     >
       <ArrowIcon :direction="isExpand ? 'down' : 'right'" />
     </div>

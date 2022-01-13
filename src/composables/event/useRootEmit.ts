@@ -35,10 +35,19 @@ export default () => {
   /**
    * 点击checkbox
    */
-  function IFCheckedRow(state: boolean, data: Row | undefined) {
+  function IFCheckedRow(
+    state: boolean,
+    data: Row | undefined,
+    checkedList: Row[]
+  ) {
     stopClickPropagation();
 
-    rootEmit.value('row-checked', state, { ...toRaw(data?.data) });
+    rootEmit.value(
+      'row-checked',
+      state,
+      { ...toRaw(data?.data) },
+      checkedList.map(item => ({ ...toRaw(item.data) }))
+    );
   }
 
   /**
