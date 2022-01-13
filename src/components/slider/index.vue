@@ -21,12 +21,12 @@ import {
   getMillisecond
 } from '@/utils/date';
 import { isBoolean, isFunction } from '@/utils/is';
-import sliderProps from './props';
 import useRootEmit from '@/composables/event/useRootEmit';
 import useData from '@/composables/data/useData';
 import useShowDate from '@/composables/useShowDate';
 import useToast from '@/composables/useToast';
 import useSuccessBar from '@/composables/useSuccessBar';
+import sliderProps from './props';
 
 export default defineComponent({
   name: Variables.name.slider

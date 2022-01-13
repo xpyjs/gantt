@@ -4,8 +4,8 @@
 
 <script lang="ts">
 import { defineComponent, ref, useSlots } from 'vue';
-import Root from './index.vue';
 import { initStore } from '@/store';
+import Root from './index.vue';
 
 export default defineComponent({
   name: 'RootWrap',
