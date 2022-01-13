@@ -276,14 +276,27 @@
 
 移动甘特行滑块后的事件。
 
-### row-checked
+### row-checked <Badge type="tip" text="update v1.3.0" vertical="top" />
 
-<DataParameter f="@row-checked -> function(state: Boolean, data: any)" />
+<DataParameter f="@row-checked -> function(state: Boolean, data: any, list: any[])" />
 
 - state: 选中状态，true | false
 - data: 选中的数据内容，Object
+- list: 当前事件中所影响到的数据集合，Array
 
-选择复选框时触发的事件。
+选择复选框时触发该事件。
+
+::: tip v1.3.0 更新内容
+
+现在复选框支持右键深度选取。左键选取当前项，右键选取当前项以及所有子项。
+
+`list` 参数的使用：
+
+    该参数返回此次点击事件中所影响的数据，默认第一项永远是当前项，所以在左键单击时，其值只有一项，且与 `data` 一致。而右键单击时，其值中至少包含一项并在0号位，且与 `data` 一致。
+
+    无论 **选中** 还是 **取消选中**，都会返回影响集合。用户可以通过 `state` 并结合改参数自行处理结果集。
+
+:::
 
 ### row-click
 

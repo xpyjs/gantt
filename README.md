@@ -21,6 +21,7 @@ A high-performance vue gantt component, support vue2 & vue3.
 - [x] Support for multi-layer expanding
 - [x] High-performance
 - [x] Multi-layer linkage
+- [x] Multistage selected
 - [x] Custom table column content
 - [x] Custom gantt row content
 - [x] Custom header content

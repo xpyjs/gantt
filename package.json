@@ -52,7 +52,7 @@
     "lint:create": "eslint --init",
     "test": "jest",
     "prepare": "husky install",
-    "commit": "git add -A && git-cz",
+    "commit": "git-cz",
     "push": "git push --follow-tags origin master"
   },
   "lint-staged": {
