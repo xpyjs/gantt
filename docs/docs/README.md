@@ -159,21 +159,11 @@ import {
 
 ## [1.2.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.12...v1.2.0) (2021-12-31)
 
-
-
-
-
 **新增功能：**
-
-
 
 - add progress-bar in slider ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
 
-
-
 **修复问题：**
-
-
 
 - fix successbar position problem ([0655cdf](https://github.com/jeremyjone/jz-gantt/commit/0655cdf19b0ef66dca82be046689c948a07ec926)), closes [#15](https://github.com/jeremyjone/jz-gantt/issues/15)
 
@@ -184,10 +174,6 @@ import {
 - update event propagation rule ([2f60af7](https://github.com/jeremyjone/jz-gantt/commit/2f60af7aa0c190b3f2db291b0fdab5e66b2b6791))
 
 - update silder progress decimal ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
-
-
-
-
 
 ### v1.2.0
 
