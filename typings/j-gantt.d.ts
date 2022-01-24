@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { HeaderDateUnit } from '@/typings/ParamOptions';
+import { HeaderDateUnit } from '../src/typings/ParamOptions';
 
 import { JGanttRootComponent } from './packages/root.d';
 

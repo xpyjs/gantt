@@ -1,4 +1,4 @@
-import { SliderAlignment } from '@/typings/ParamOptions';
+import { SliderAlignment } from '../../src/typings/ParamOptions';
 import { JComponent } from '../component';
 
 declare class JGanttSliderComponent extends JComponent {
