@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.3.0" date="2022-01-13" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.3.1" date="2022-03-28" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
 
@@ -150,6 +150,58 @@ import {
 ::: tip
 您可以跳过此内容以继续深入学习具体配置 JGantt。
 :::
+
+### v1.3.1
+
+**修复问题：**
+
+- 修改成功条显示时长 ([b26afd4](https://github.com/jeremyjone/jz-gantt/commit/b26afd41769d68fa7679c6ca25da0867cb0f32db))
+
+## [1.3.0](https://github.com/jeremyjone/jz-gantt/compare/v1.2.0...v1.3.0) (2022-01-13)
+
+
+
+
+
+**新增功能：**
+
+
+
+- add deep checked by right click ([261c54d](https://github.com/jeremyjone/jz-gantt/commit/261c54d4e9548a6e2b32e3f849bf5412fe049c1c)), closes [#16](https://github.com/jeremyjone/jz-gantt/issues/16)
+
+
+
+## [1.2.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.12...v1.2.0) (2021-12-31)
+
+
+
+
+
+**新增功能：**
+
+
+
+- add progress-bar in slider ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
+
+
+
+**修复问题：**
+
+
+
+- fix successbar position problem ([0655cdf](https://github.com/jeremyjone/jz-gantt/commit/0655cdf19b0ef66dca82be046689c948a07ec926)), closes [#15](https://github.com/jeremyjone/jz-gantt/issues/15)
+
+- update progress slider not move rule ([5152a8d](https://github.com/jeremyjone/jz-gantt/commit/5152a8d5cc686f443fce1444f57d454d23d58596))
+
+- update row-height linkage ([7f630ec](https://github.com/jeremyjone/jz-gantt/commit/7f630ec3ad404b015dead55131dd750429674736)), closes [#13](https://github.com/jeremyjone/jz-gantt/issues/13)
+
+- update event propagation rule ([2f60af7](https://github.com/jeremyjone/jz-gantt/commit/2f60af7aa0c190b3f2db291b0fdab5e66b2b6791))
+
+- update silder progress decimal ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
+
+
+
+
 
 ### v1.3.0
 
