@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/jeremyjone/jz-gantt/compare/v1.3.0...v1.3.1) (2022-03-28)
+
+
+### Bug Fixes
+
+* **components:** 修改成功条显示时长 ([b26afd4](https://github.com/jeremyjone/jz-gantt/commit/b26afd41769d68fa7679c6ca25da0867cb0f32db))
+
 ## [1.3.0](https://github.com/jeremyjone/jz-gantt/compare/v1.2.0...v1.3.0) (2022-01-13)
 
 
