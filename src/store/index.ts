@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-12-24 16:36:33
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-12-30 15:03:45
+ * @LastEditTime: 2022-03-28 14:36:30
  * @Description: 头部注释
  */
 
@@ -54,7 +54,7 @@ export const initStore = () => {
   const columnDefaultLeft = ref(-1);
   provide(Variables.provider.gtColumnDefaultLeft, columnDefaultLeft);
 
-  const timeout = 1000; // 提示条消失时间
+  const timeout = 500; // 提示条消失时间
   provide(Variables.provider.gtSuccessBarTimeout, timeout);
 
   // toast

@@ -18,7 +18,7 @@ export const store = {
     [Variables.provider.gtColumnSliderLineVisible]: ref(false),
     [Variables.provider.gtColumnSliderLineLeft]: ref(0),
     [Variables.provider.gtColumnDefaultLeft]: ref(-1),
-    [Variables.provider.gtSuccessBarTimeout]: 1000,
+    [Variables.provider.gtSuccessBarTimeout]: 500,
     [Variables.provider.gtIsShowToast]: ref(false),
     [Variables.provider.gtToastMessage]: ref(''),
     [Variables.provider.gtToastQueue]: [],
