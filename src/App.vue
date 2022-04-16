@@ -423,11 +423,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { JGantt, JGanttColumn, JGanttSlider } from './index';
 
 let INDEX = 1;
 
 export default defineComponent({
   name: 'App',
+
+  components: {
+    JGantt,
+    JGanttColumn,
+    JGanttSlider
+  },
 
   data() {
     return {

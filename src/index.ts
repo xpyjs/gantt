@@ -7,21 +7,18 @@ import 'animate.css';
 import './styles/index.scss';
 import { Variables } from './constants/vars';
 
-const components = [JGantt, JGanttColumn, JGanttSlider];
-
-const install = (app: App) => {
-  // if (install.installed) return;
-
+JGantt.install = (app: App) => {
   app.component(Variables.name.root, JGantt);
   app.component(Variables.name.column, JGanttColumn);
   app.component(Variables.name.slider, JGanttSlider);
 };
 
-// declare module "@vue/runtime-core" {
-//   interface ComponentCustomProperties {}
-// }
+const install = (app: App) => {
+  app.use(JGantt);
+};
 
 export default {
-  install,
-  ...components
+  install
 };
+
+export { JGantt, JGanttColumn, JGanttSlider };
