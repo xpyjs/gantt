@@ -14,7 +14,7 @@ JGantt.install = (app: App) => {
 };
 
 const install = (app: App) => {
-  app.use(JGantt);
+  app.use(JGantt as any);
 };
 
 export default {
