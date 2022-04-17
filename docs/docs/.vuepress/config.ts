@@ -4,9 +4,9 @@ import { path } from '@vuepress/utils';
 
 export default defineUserConfig<DefaultThemeOptions>({
   lang: 'zh-CN',
-  title: 'Jz Gantt Docuemnt',
-  description: 'Jz-Gantt document site',
-  base: '/jz-gantt/docs/',
+  title: 'XGantt Docuemnt',
+  description: 'XGantt document site',
+  base: '/gantt/docs/',
 
   head: [
     [
@@ -22,18 +22,17 @@ export default defineUserConfig<DefaultThemeOptions>({
       {
         text: '更多版本',
         children: [
-          { text: 'v1.x', link: '/' },
-          { text: 'v0.x', link: '/v0/' }
+          { text: 'vue3', link: '/' },
+          { text: 'vue2', link: '/vue2/' }
         ]
       },
       {
         text: 'CHANGELOG',
-        link: 'https://github.com/jeremyjone/jz-gantt/blob/master/CHANGELOG.md'
+        link: 'https://github.com/xpyjs/gantt/blob/master/CHANGELOG.md'
       },
       {
-        text: '我的博客站',
-        link: 'https://www.jeremyjone.com',
-        target: '_blank'
+        text: 'github',
+        link: 'https://github.com/xpyjs/gantt'
       },
       {
         text: '个人站',
@@ -55,12 +54,12 @@ export default defineUserConfig<DefaultThemeOptions>({
     sidebarDepth: 2,
     sidebar: {
       '/': ['/README.md', '/root.md', '/column.md', '/slider.md', 'common.md'],
-      '/v0/': [
-        '/v0/README.md',
-        '/v0/root.md',
-        '/v0/column.md',
-        '/v0/slider.md',
-        '/v0/common.md'
+      '/vue2/': [
+        '/vue2/README.md',
+        '/vue2/root.md',
+        '/vue2/column.md',
+        '/vue2/slider.md',
+        '/vue2/common.md'
       ]
     },
 
