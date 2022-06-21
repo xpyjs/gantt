@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.0.0" date="2022-06-22" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.0.1" date="2022-06-22" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 XGantt。
 
@@ -18,7 +18,7 @@
 
 **说明：**
 
-> 这个库的 `1.0.0` 相当于 `jz-gantt@1.3.1`。并且 `jz-gantt` 不再维护。
+> 这个库的 `1.0.1` 相当于 `jz-gantt@1.3.1`。并且 `jz-gantt` 不再维护。
 
 ### 如何迁移
 
