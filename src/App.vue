@@ -417,18 +417,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-// import { XGantt, XGanttColumn, XGanttSlider } from './index';
+import { XGantt, XGanttColumn, XGanttSlider } from './index';
 
 let INDEX = 1;
 
 export default defineComponent({
   name: 'App',
 
-  // components: {
-  //   XGantt,
-  //   XGanttColumn,
-  //   XGanttSlider
-  // },
+  components: {
+    XGantt,
+    XGanttColumn,
+    XGanttSlider
+  },
 
   data() {
     return {
