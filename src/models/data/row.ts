@@ -5,7 +5,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2022-04-21 11:09:29
+ * @LastEditTime: 2022-04-21 11:12:22
  * @Description: 一条数据类
  */
 
@@ -133,7 +133,6 @@ export class Row {
    * 进度
    */
   get progress() {
-    // TODO：进度计算。有子项的，需要计算子项的进度之和
     if (this.children.length > 0) {
       let progress = 0;
       for (const child of this.children) {
