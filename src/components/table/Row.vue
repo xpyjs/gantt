@@ -53,8 +53,8 @@ const { onClickRow, onDbClickRow, onMouseEnterRow, onMouseLeaveRow } = useEvent(
   display: flex;
   flex: row nowrap;
   flex-shrink: 0;
-  background-color: var(--j-content-bg-color);
-  border-bottom: 1px solid var(--j-content-border-color);
+  background-color: var(--x-content-bg-color);
+  border-bottom: 1px solid var(--x-content-border-color);
   box-sizing: border-box;
 }
 </style>

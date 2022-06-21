@@ -1,10 +1,10 @@
 {
-  "name": "jz-gantt",
+  "name": "@xpyjs/gantt",
   "description": "A high-performance vue gantt component.",
   "author": "jeremyjone",
   "license": "MIT",
   "private": false,
-  "version": "1.3.1",
+  "version": "1.0.0",
   "preview": false,
   "publishConfig": {
     "access": "public",
@@ -12,11 +12,11 @@
   },
   "homepage": "https://docs.xiaopangying.com/gantt",
   "bugs": {
-    "url": "https://github.com/jeremyjone/jz-gantt/issues"
+    "url": "https://github.com/xpyjs/gantt/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jeremyjone/jz-gantt.git"
+    "url": "https://github.com/xpyjs/gantt.git"
   },
   "keywords": [
     "vue",
@@ -27,15 +27,16 @@
     "dist",
     "typings",
     "src",
-    "public"
+    "package.json",
+    "README.md"
   ],
-  "main": "./dist/jz-gantt.umd.js",
-  "module": "./dist/jz-gantt.es.js",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
   "typings": "typings/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/jz-gantt.es.js",
-      "require": "./dist/jz-gantt.umd.js"
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
     },
     "./dist/index.css": {
       "import": "./dist/style.css",

@@ -25,8 +25,8 @@ export default defineConfig({
     // sourcemap: true,
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'jz-gantt',
-      fileName: format => `jz-gantt.${format}.js`
+      name: 'index',
+      fileName: format => `index.${format}.js`
     },
     rollupOptions: {
       external: ['vue'],

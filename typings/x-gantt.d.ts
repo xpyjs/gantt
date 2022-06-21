@@ -1,14 +1,14 @@
 import { App } from 'vue';
 import { HeaderDateUnit } from '../src/typings/ParamOptions';
 
-import { JGanttRootComponent } from './packages/root.d';
+import { XGanttRootComponent } from './packages/root';
 
 export function install(vue: App): void;
 
-export { JGanttColumnComponent } from './packages/column.d';
-export { JGanttSliderComponent } from './packages/slider.d';
+export { XGanttColumnComponent } from './packages/column';
+export { XGanttSliderComponent } from './packages/slider';
 
-export declare class JGanttComponent extends JGanttRootComponent {
+export declare class XGanttComponent extends XGanttRootComponent {
   setSelected: (data: any) => void;
 
   jumpToDate: (date?: Date) => void;

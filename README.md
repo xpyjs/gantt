@@ -1,23 +1,38 @@
-# JzGantt
+# XGantt
 
 ![](./src/assets/logo.png)
 
-![](https://shields.io/github/v/release/jeremyjone/jz-gantt?display_name=tag) ![](https://img.shields.io/npm/v/jz-gantt.svg) ![](https://shields.io/github/v/release/jeremyjone/jz-gantt?display_name=tag&include_prereleases&label=lastest)
-![](https://badgen.net/npm/dt/jz-gantt) ![](https://img.shields.io/npm/l/jz-gantt.svg) ![](https://shields.io/github/workflow/status/jeremyjone/jz-gantt/%E5%8F%91%E5%B8%83%20Release%20%E5%8C%85) ![](https://shields.io/github/workflow/status/jeremyjone/jz-gantt/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3%E5%92%8C%20Demo?label=gh-pages)
-![](https://img.shields.io/github/stars/jeremyjone/jz-gantt.svg?style=social) ![](https://shields.io/github/forks/jeremyjone/jz-gantt?label=Fork&style=social)
+![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag) ![](https://img.shields.io/npm/v/@xpyjs/gantt.svg) ![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag&include_prereleases&label=lastest)
+![](https://badgen.net/npm/dt/@xpyjs/gantt) ![](https://img.shields.io/npm/l/@xpyjs/gantt.svg) ![](https://shields.io/github/workflow/status/xpyjs/gantt/%E5%8F%91%E5%B8%83%20Release%20%E5%8C%85) ![](https://shields.io/github/workflow/status/xpyjs/gantt/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3%E5%92%8C%20Demo?label=gh-pages)
+![](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
 
 [[English](./README.md)] [[中文](./README_cn.md)]
 
-A high-performance vue gantt component, support vue2 & vue3.
+A high-performance vue gantt component for vue3.
 ![vue 3.x](https://img.shields.io/badge/vue-3.x-43B984) ![animate.css](https://img.shields.io/badge/animate.css-4.x-9E84E2)
 
-- [vue2 version](https://github.com/xpyjs/gantt-vue2)
+- vue2 version is [HERE](https://github.com/xpyjs/gantt-vue2)
+
+## Important
+
+This repo is pervious `jz-gantt`. Only vue3 version. If you have used `jz-gantt` before, you should read the following section carefully.
+
+**Specification:**
+
+> This version `1.0.0` is correspond to `jz-gantt@1.3.1`. And `jz-gantt` is archived.
+
+### How to migrate
+
+1. package name changesd `@xpyjs/gantt` replaced `jz-gantt`.
+2. All `j-` or `J` prefixes update to `x-` or `X`.
+
+Beyond that, no other action is required.
 
 ## Snipaste
 
 ![Snipaste](./public/screenshots/gantt.gif)
 
-## What is JzGantt
+## What is XGantt
 
 - [x] Automatically generate gantt charts based on dates
 - [x] Support for multi-layer expanding
@@ -35,31 +50,32 @@ A high-performance vue gantt component, support vue2 & vue3.
 
 ## Document
 
-For resource code, see [Github](http://github.com/jeremyjone/jz-gantt)
+For resource code, see [Github](http://github.com/xpyjs/gantt)
 
 For more detailed documentation, see [document web](https://docs.xiaopangying.com/gantt/)
 
 For example, see [Example web](https://docs.xiaopangying.com/gantt-demo/)
 
-If you has any problem, please [issue](https://github.com/jeremyjone/jz-gantt/issues).
+If you has any problem, please [issue](https://github.com/xpyjs/gantt/issues).
 
 ## How to use
 
 ### install
 
 ```bash
-npm install jz-gantt --save
+npm install @xpyjs/gantt --save
+
 // or
-yarn add jz-gantt  // recommend
+yarn add @xpyjs/gantt
 ```
 
 ### use
 
 ```js
-import Gantt from "jz-gantt";
-import "jz-gantt/dist/index.css";
+import XGantt from "gantt";
+import "@xpyjs/gantt/dist/index.css";
 
-createApp(App).use(Gantt).mount('#app')
+createApp(App).use(XGantt).mount('#app')
 ```
 
 ### Basic use
@@ -77,7 +93,7 @@ const dataList = [
             b: "bbb"
         },
         name: "mydata1",
-        children: []
+        children: [] // children is required. If no child, empty array is ok.
     },
     {
         index: 2,
@@ -94,7 +110,7 @@ const dataList = [
                     a: "aaa"
                 },
                 name: "child1",
-                children: []
+                children: [] // children is required. If no child, empty array is ok.
             }
         ]
     }
@@ -102,7 +118,7 @@ const dataList = [
 ```
 
 ```html
-<j-gantt
+<x-gantt
     data-index="index"
     :data="dataList"
 />
@@ -110,31 +126,33 @@ const dataList = [
 
 ### Use table column
 
-We provide a slot named `JGanttColumn`. `Label` is required, and it should match data key.
+We provide a slot named `XGanttColumn`. `Label` is required, and it should match data key.
+
+label is required, and it should match data key. label's value should correspond to the name of the field in 'data' (deep query support), which tells the component to render the column.
 
 ```html
-<j-gantt
+<x-gantt
     data-index="index"
     :data="dataList"
 >
-    <j-gantt-column label="name" />
-</j-gantt>
+    <x-gantt-column label="name" />
+</x-gantt>
 ```
 
 ### Use gantt slider
 
-We provide a slot named `JGanttSlider`.
+We provide a slot named `XGanttSlider`.
 
 Only one slider whill be rendered. If you insert more than one slider, only last slider will be display.
 
 ```html
-<j-gantt
+<x-gantt
     data-index="index"
     :data="dataList"
 >
-    <j-gantt-slider />  <!-- no render -->
-    <j-gantt-slider />  <!-- will be rendered -->
-</j-gantt>
+    <x-gantt-slider />  <!-- no render -->
+    <x-gantt-slider />  <!-- will be rendered -->
+</x-gantt>
 ```
 
 ## License

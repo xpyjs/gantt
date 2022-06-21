@@ -1,34 +1,49 @@
 # 入门
 
-<Description author="jeremyjone" version="1.3.1" date="2022-03-28" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.0.0" date="2022-06-22" copyright="jeremyjone" />
 
-通过入门的章节内容，可以快速了解、引入并使用 JzGantt。
+通过入门的章节内容，可以快速了解、引入并使用 XGantt。
 
 ::: tip 提示
-这是 vue3 版本的 Gantt 组件，如果需要使用 vue2 版本，请移步 [这里](./v0/)
+这是 vue3 版本的 Gantt 组件，如果需要使用 vue2 版本，请移步 [这里](./vue2/)
 :::
 
 ::: tip 演示
 现已提供演示页面，如需要，请移步 [演示页面](https://docs.xiaopangying.com/gantt-demo/)。
 :::
 
-## 什么是 JzGantt
+## 十分重要
 
-`JzGantt` 是一个基于 `vue` 的甘特图表插件，它包含常用的甘特图功能，如：
+这个库是 `jz-gantt` 的 vue3 版本的继承库。如果您之前已经使用了 `jz-gantt`，则需要仔细阅读如下内容。
 
-- 根据日期自动生成甘特图
-- 支持多层扩展
-- 高性能
-- 多层联动
-- 多级选取
-- 支持自定义表内容
-- 支持自定义甘特内容
-- 支持自定义表头
-- 动态更新数据
-- 定制任意风格
-- 支持黑暗模式
-- 支持多种日期显示模式切换
-- 更多持续更新
+**说明：**
+
+> 这个库的 `1.0.0` 相当于 `jz-gantt@1.3.1`。并且 `jz-gantt` 不再维护。
+
+### 如何迁移
+
+1. 包名不同， `@xpyjs/gantt` 替换了 `jz-gantt`。
+2. 所有以 `j-` 或 `J` 的前缀全都更新为 `x-` 或 `X`。
+
+除此之外，无需其他改动。
+
+## 什么是 XGantt
+
+`XGantt` 是一个基于 `vue` 的甘特图表插件，它包含常用的甘特图功能，如：
+
+- [x] 根据日期自动生成甘特图
+- [x] 支持多层扩展
+- [x] 高性能
+- [x] 多层联动
+- [x] 多级选取
+- [x] 支持自定义表内容
+- [x] 支持自定义甘特内容
+- [x] 支持自定义表头
+- [x] 动态更新数据
+- [x] 定制任意风格
+- [x] 支持黑暗模式
+- [x] 支持多种日期显示模式切换
+- [ ] 更多持续更新
 
 _动图展示_：
 
@@ -42,7 +57,7 @@ _动图展示_：
   <CodeGroupItem title="YARN">
 
 ```bash:no-line-numbers
-yarn add jz-gantt
+yarn add @xpyjs/gantt
 ```
 
   </CodeGroupItem>
@@ -50,7 +65,7 @@ yarn add jz-gantt
   <CodeGroupItem title="NPM" active>
 
 ```bash:no-line-numbers
-npm install jz-gantt --save
+npm install @xpyjs/gantt --save
 ```
 
   </CodeGroupItem>
@@ -58,18 +73,18 @@ npm install jz-gantt --save
 
 ## 引入
 
-JzGantt 会被整体引入，引入的 Gantt 就是 JzGantt 的根组件。同时需要单独引入样式表，方式如下：
+XGantt 会被整体引入，引入的 Gantt 就是 XGantt 的根组件。同时需要单独引入样式表，方式如下：
 
 ```js
-import Gantt from 'jz-gantt';
-import 'jz-gantt/dist/index.css';
+import Gantt from '@xpyjs/gantt';
+import '@xpyjs/gantt/dist/index.css';
 
 createApp(App).use(Gantt).mount('#app');
 ```
 
 ## 使用
 
-JzGantt 需要一个数组形式的数据对象。例如，您拥有如下数据：
+XGantt 需要一个数组形式的数据对象。例如，您拥有如下数据：
 
 ```js
 const dataList = reactive([
@@ -82,7 +97,7 @@ const dataList = reactive([
       b: 'bbb'
     },
     name: 'mydata1',
-    children: []
+    children: [] // children 是必须的，如果没有，给一个空数组即可
   },
   {
     index: 2,
@@ -99,17 +114,17 @@ const dataList = reactive([
           a: 'aaa'
         },
         name: 'child1',
-        children: []
+        children: [] // children 是必须的，如果没有，给一个空数组即可
       }
     ]
   }
 ]);
 ```
 
-那么只需要在 `html` 中简单的使用 JzGantt，即可创建一个甘特内容：
+那么只需要在 `html` 中简单的使用 XGantt，即可创建一个甘特内容：
 
 ```html{2}
-<j-gantt
+<x-gantt
   data-index="index" <!-- 请确保它存在 -->
   :data="dataList"
 />
@@ -125,20 +140,16 @@ const dataList = reactive([
 
 ## 支持 TypeScript
 
-JGantt 有完整的 TypeScript 类型声明文件。
-
-::: tip 更新
-与 v0 版本不同，该版本所有类型都添加了一个 `Component` 后缀以示区别。
-:::
+XGantt 有完整的 TypeScript 类型声明文件。
 
 如果您需要，只需要在使用中通过：
 
 ```js
 import {
-  JGanttComponent,
-  JGanttColumnComponent,
-  JGanttSliderComponent
-} from 'jz-gantt';
+  XGanttComponent,
+  XGanttColumnComponent,
+  XGanttSliderComponent
+} from '@xpyjs/gantt';
 ```
 
 按需导入使用即可。如：
@@ -147,191 +158,4 @@ import {
 
 ## 更新日志
 
-::: tip
-您可以跳过此内容以继续深入学习具体配置 JGantt。
-:::
-
-### v1.3.1
-
-**修复问题：**
-
-- 修改成功条显示时长 ([b26afd4](https://github.com/jeremyjone/jz-gantt/commit/b26afd41769d68fa7679c6ca25da0867cb0f32db))
-
-## [1.3.0](https://github.com/jeremyjone/jz-gantt/compare/v1.2.0...v1.3.0) (2022-01-13)
-
-
-
-
-
-**新增功能：**
-
-
-
-- add deep checked by right click ([261c54d](https://github.com/jeremyjone/jz-gantt/commit/261c54d4e9548a6e2b32e3f849bf5412fe049c1c)), closes [#16](https://github.com/jeremyjone/jz-gantt/issues/16)
-
-
-
-## [1.2.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.12...v1.2.0) (2021-12-31)
-
-
-
-
-
-**新增功能：**
-
-
-
-- add progress-bar in slider ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
-
-
-
-**修复问题：**
-
-
-
-- fix successbar position problem ([0655cdf](https://github.com/jeremyjone/jz-gantt/commit/0655cdf19b0ef66dca82be046689c948a07ec926)), closes [#15](https://github.com/jeremyjone/jz-gantt/issues/15)
-
-- update progress slider not move rule ([5152a8d](https://github.com/jeremyjone/jz-gantt/commit/5152a8d5cc686f443fce1444f57d454d23d58596))
-
-- update row-height linkage ([7f630ec](https://github.com/jeremyjone/jz-gantt/commit/7f630ec3ad404b015dead55131dd750429674736)), closes [#13](https://github.com/jeremyjone/jz-gantt/issues/13)
-
-- update event propagation rule ([2f60af7](https://github.com/jeremyjone/jz-gantt/commit/2f60af7aa0c190b3f2db291b0fdab5e66b2b6791))
-
-- update silder progress decimal ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
-
-
-
-
-
-### v1.3.0
-
-**新增功能：**
-
-- add deep checked by right click ([261c54d](https://github.com/jeremyjone/jz-gantt/commit/261c54d4e9548a6e2b32e3f849bf5412fe049c1c)), closes [#16](https://github.com/jeremyjone/jz-gantt/issues/16)
-
-### v1.2.0
-
-**新增功能：**
-
-- 增加滑块的进度条显示([progress](./slider.html#progress)) ([be0d24b](https://github.com/jeremyjone/jz-gantt/commit/be0d24b74a960437a567d0013cf741ba1c8f4c92))
-
-- 新增一个进度条属性，[progress-decimal](./slider.html#progressdecimal) ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
-
-**修复问题：**
-
-- fix successbar position problem ([0655cdf](https://github.com/jeremyjone/jz-gantt/commit/0655cdf19b0ef66dca82be046689c948a07ec926)), closes [#15](https://github.com/jeremyjone/jz-gantt/issues/15)
-
-- update progress slider not move rule ([5152a8d](https://github.com/jeremyjone/jz-gantt/commit/5152a8d5cc686f443fce1444f57d454d23d58596))
-
-- update row-height linkage ([7f630ec](https://github.com/jeremyjone/jz-gantt/commit/7f630ec3ad404b015dead55131dd750429674736)), closes [#13](https://github.com/jeremyjone/jz-gantt/issues/13)
-
-- update event propagation rule ([2f60af7](https://github.com/jeremyjone/jz-gantt/commit/2f60af7aa0c190b3f2db291b0fdab5e66b2b6791))
-
-### v1.1.12
-
-**修复问题：**
-
-- fix multi gantt component in one page problem ([8f1f9db](https://github.com/jeremyjone/jz-gantt/commit/8f1f9dba7087d8e16ac64cc1c8df89e3997fb6ce)), closes [#10](https://github.com/jeremyjone/jz-gantt/issues/10)
-
-- fix jump function error ([88c9f71](https://github.com/jeremyjone/jz-gantt/commit/88c9f719ed00d0648b42e6c54bbccac584bae5a2))
-
-- adjust setting btn position ([9f123a7](https://github.com/jeremyjone/jz-gantt/commit/9f123a705d9e65ece6ed3a83aeff3e20a99474d5))
-
-- fix icon class prefix ([cafae5b](https://github.com/jeremyjone/jz-gantt/commit/cafae5b3a4c7397b4e63c343a3d351bd988ff07d)), closes [#12](https://github.com/jeremyjone/jz-gantt/issues/12)
-
-- fix weekend line height ([21e75df](https://github.com/jeremyjone/jz-gantt/commit/21e75df0320ba519efb2ecb1251f1444570b6353))
-
-### v1.1.11
-
-**新增功能：**
-
-- add a toast when trigger no-date-error event ([efa707e](https://github.com/jeremyjone/jz-gantt/commit/efa707ed1ca8bd429758b092d77be809ce1dc776))
-
-**修复问题：**
-
-- fix start-key and end-key invalid ([a501b32](https://github.com/jeremyjone/jz-gantt/commit/a501b329f5dc21fa30249183d473e48f375fdcf6)), closes [#11](https://github.com/jeremyjone/jz-gantt/issues/11)
-
-### v1.1.10
-
-**新增功能：**
-
-- add a toast ([f618194](https://github.com/jeremyjone/jz-gantt/commit/f61819473963f897f1a1f4930a43c8c2e3faa62b))
-- add success bar when move slider succeed ([e8c2916](https://github.com/jeremyjone/jz-gantt/commit/e8c2916ef434d2f3b753ca2c6590364a42adc434))
-
-**修复问题：**
-
-- optimize header highlight ([e83d3c9](https://github.com/jeremyjone/jz-gantt/commit/e83d3c97c49a0387804b8521490e17218c09a3ec))
-
-### v1.1.7
-
-**新增功能：**
-
-- 添加列标签深度读取属性功能 ([c9b25f1](https://github.com/jeremyjone/jz-gantt/commit/c9b25f135b52b1a16c96aecce9e72fdef23c8aa4))
-
-- 添加两个列属性([column-class](./column.html#column-class) 和 [column-style](./column.html#column-style)) ([edd2bbf](https://github.com/jeremyjone/jz-gantt/commit/edd2bbf74eaffd55230c93debfafaef43fa3667e)), closes [#7](https://github.com/jeremyjone/jz-gantt/issues/7)
-
-### v1.1.6
-
-**修复问题：**
-
-- 修复背景颜色异常的问题
-- 修复导入 css 样式的问题
-
-### v1.1.5
-
-**修复问题：**
-
-- 修复重复底边 border
-- 修复列块样式
-
-### v1.1.4
-
-**修复问题：**
-
-- 修复 `JGanttColumn` 重复加载的问题。
-
-### v1.1.3
-
-**修复问题：**
-
-- 修复触发 [move-slider](./root.html#move-slider) 后数据抛出不完整的错误。
-
-### v1.1.2
-
-**修复问题：**
-
-- 修复切换视图时甘特表不重置导致过长的问题。
-- 修复今日线的位移问题。
-- 修复时间线（今日线和周末线等）在甘特条之上的问题。
-
-### v1.1.1
-
-**新增：**
-
-- 新增设置按钮的显示控制（[show-setting-btn](./root.html#show-setting-btn)），同时外置了设置内容方法（[setHeaderUnit](./root.html#setheaderunit)）。
-
-### v1.1.0
-
-**新增：**
-
-- 甘特视图的日期显示切换功能。现在可以按日、周、月进行切换甘特视图
-
-**调整：**
-
-- 删除了甘特视图的列宽属性（[gantt-column-width](./root.html#gantt-column-width)）。取而代之的是三种固定列宽，可以在选项面板中选择，也可以通过 [gantt-column-size](./root.html#gantt-column-size) 属性自定义，分别是 `小`、`中`、`大`，默认为 `中`。
-- 略调了表头样式。
-
-### v1.0.0-rc2
-
-- 更新类型接口
-
-### v1.0.0-rc1
-
-- 在 v0 版本的基础上适配 vue3。此次更新主要为了适配 vue3，没有太大的变化，所有断层更新内容列在下面。
-- 删除了 `跳转到今天` 的按钮，改为抛出一个跳转方法 `jumpToDate(date?: Date)`，可以跳转到任意日期，默认为今天。
-- 统一边框颜色。现在不再区分表头与表体的边框颜色。在根元素上有一个全新的属性 `borderColor`，接收一个颜色字符串。同时删除 `bodyStyle` 与 `headerStyle` 对象中的 `borderColor` 属性。
-- 在根元素上新增一个 `primary-color` 属性，用于修改全局的主色，包括表头、按钮，以及其他用于主色地方。
-- 更新滑块 `JGanttSlider` 上的 `move` 属性，从 `Boolean` 类型修改为 `[Function, Boolean]`。可以通过数据直接判断哪些内容可以滑动，同时所有 `resize` 连接属性将首先判断 `move` 是否可用。
-- 滑块的所有插槽属性，同时抛出数据和层级，方便使用。
-- 修改 `no-today-error` 事件名为 `no-date-error`，同时抛出异常日期参数。
-- 修正了之前一些样式问题。
+[CHANGELOG](https://github.com/xpyjs/gantt/CHANGELOG.md)

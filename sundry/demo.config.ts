@@ -21,7 +21,7 @@ export default defineConfig({
     }
   },
 
-  base: 'https://jeremyjone.github.io/jz-gantt/demo/',
+  base: 'https://xpyjs.github.io/gantt/demo/',
 
   build: {
     outDir: path.resolve(__dirname, '../gh-pages/demo')

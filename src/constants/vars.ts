@@ -3,16 +3,16 @@ export const Variables = {
   noData: '无数据 😢',
 
   name: {
-    root: 'JGantt',
-    column: 'JGanttColumn',
-    slider: 'JGanttSlider',
-    table: 'JTableContent',
-    gantt: 'JGanttContent',
-    tableHeader: 'JTableHeader',
-    ganttHeader: 'JGanttHeader',
-    tableRow: 'JTableContentRow',
-    ganttRow: 'JGanttContentRow',
-    ganttBackgroundRow: 'JGanttContentBackgroundRow'
+    root: 'XGantt',
+    column: 'XGanttColumn',
+    slider: 'XGanttSlider',
+    table: 'XTableContent',
+    gantt: 'XGanttContent',
+    tableHeader: 'XTableHeader',
+    ganttHeader: 'XGanttHeader',
+    tableRow: 'XTableContentRow',
+    ganttRow: 'XGanttContentRow',
+    ganttBackgroundRow: 'XGanttContentBackgroundRow'
   },
 
   provider: {

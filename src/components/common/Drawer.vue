@@ -34,7 +34,7 @@
 
         <div style="display: inline-block">
           <div class="gt-text-secondary-title">修改行高</div>
-          <j-slider
+          <x-slider
             v-model="rowHeight"
             style="margin: 5px 20px 10px 0px"
             :min="minRowHeight"
@@ -86,7 +86,7 @@ import { Variables } from '@/constants/vars';
 import { parseNumber } from '@/utils/common';
 // eslint-disable-next-line import/named
 import { GanttColumnSize, HeaderDateUnit } from '@/typings/ParamOptions';
-import JSlider from './Slider.vue';
+import XSlider from './Slider.vue';
 
 export default defineComponent({
   name: 'GanttDrawer'
@@ -147,20 +147,20 @@ const maxRowHeight = computed(() => Variables.size.maxContentRowHeight);
 .gt-operation-drawer {
   height: 100%;
   padding: 20px;
-  background-color: var(--j-content-bg-color);
-  color: var(--j-text-color);
+  background-color: var(--x-content-bg-color);
+  color: var(--x-text-color);
   position: absolute;
   z-index: 999;
-  box-shadow: 0 0 10px 2px var(--j-content-border-color);
+  box-shadow: 0 0 10px 2px var(--x-content-border-color);
   transition: all 0.5s;
 }
 
 .gt-drawer-reset-btn {
   display: inline-block;
-  background-color: var(--j-primary-color);
+  background-color: var(--x-primary-color);
   border-radius: 5px;
   border: none;
-  color: var(--j-text-color);
+  color: var(--x-text-color);
   padding: 0.2rem 0.5rem;
   text-align: center;
   text-decoration: none;
@@ -168,7 +168,7 @@ const maxRowHeight = computed(() => Variables.size.maxContentRowHeight);
   font-size: 16px;
 
   &:hover {
-    box-shadow: 1px 1px 5px 1px var(--j-content-border-color);
+    box-shadow: 1px 1px 5px 1px var(--x-content-border-color);
     transition: box-shadow 0.5s;
   }
 

@@ -1,8 +1,8 @@
-# 根组件 JGantt
+# 根组件 XGantt
 
 <Description author="jeremyjone" date="2021-12-10" copyright="jeremyjone" />
 
-对于 `JGantt` 组件，它具有非常丰富的属性。
+对于 `XGantt` 组件，它具有非常丰富的属性。
 
 ## 数据
 
@@ -115,7 +115,7 @@
 
 是否显示甘特表整体的边框，默认为 1，0 为不显示。
 
-### borderColor <Badge type="tip" text="+v1.0.0" vertical="top" />
+### borderColor
 
 <DataParameter t="String" d="#E5E5E5" />
 
@@ -165,17 +165,7 @@
 
 它接收任意颜色参数，包括符合 html 规范的颜色英文，16 进制颜色描述（**注意 `#` 符号不可缺少**），或者 `rgb()` 样式的内容，它只要是字符串格式即可。
 
-### ~~gantt-column-width~~ <Badge type="danger" text="-v1.1.0" vertical="top" />
-
-<DataParameter t="Number | String" d="15" />
-
-::: warning 注意
-该属性已在 `v1.1.0` 中被移除。
-:::
-
-~~设置甘特图中每一列日期的列宽，默认为 `15`，最小值 `15`，最大值 `100`，应当确保给定的数字在这个区间范围，否则会引起渲染错误。~~
-
-### gantt-column-size <Badge type="tip" text="+v1.1.0" vertical="top" />
+### gantt-column-size
 
 <DataParameter t="normal | small | large" d="normal" />
 
@@ -197,7 +187,7 @@
 当然，您也可以只传入长度为 1 的数组，那么甘特表只会渲染顶层层级数据的背景颜色，其他层级继续使用默认背景色。
 :::
 
-### primary-color <Badge type="tip" text="+v1.0.0" vertical="top" />
+### primary-color
 
 <DataParameter t="String" d="#ECA710" />
 
@@ -225,7 +215,7 @@
 通常情况下，您不用设置这两个属性，因为它们已经处于使用的状态。除非您不希望展开功能，设置 `show-expand` 为 `false` 即可。
 :::
 
-### show-setting-btn <Badge type="tip" text="+v1.1.1" vertical="top" />
+### show-setting-btn
 
 <DataParameter t="Boolean" d="true" />
 
@@ -255,19 +245,19 @@
 
 ## 事件
 
-### no-date-error <Badge type="tip" text="+v1.0.0" vertical="top" />
+### no-date-error
 
 <DataParameter f="@no-today-error -> function(date: Date)" />
 
 `跳转到` 事件触发后，如果给出的日期不在当前甘特范围内，则触发该异常，可以接收该异常并自定义后续事件。
 
-### move-progress <Badge type="tip" text="+ v1.2.0" vertical="top" />
+### move-progress
 
 <DataParameter f="@move-progress -> function(data: any, old: number)" />
 
 移动指定甘特行中的进度条触发事件。会返回当前行的数据以及原进度数值。
 
-### move-slider <Badge type="tip" text="update v1.1.3" vertical="top" />
+### move-slider
 
 <DataParameter f="@move-slider -> function(data: any[], {start: Date, end: Date})" />
 
@@ -276,7 +266,7 @@
 
 移动甘特行滑块后的事件。
 
-### row-checked <Badge type="tip" text="update v1.3.0" vertical="top" />
+### row-checked
 
 <DataParameter f="@row-checked -> function(state: Boolean, data: any, list: any[])" />
 
@@ -322,7 +312,7 @@
 
 ## 方法
 
-### jumpToDate <Badge type="tip" text="+v1.0.0" vertical="top" />
+### jumpToDate
 
 <DataParameter f="jumpToDate: (date?: Date) => void" />
 
@@ -340,7 +330,7 @@
 参数 `data` 应该是数据列表中的某一个元素。
 :::
 
-### setHeaderUnit <Badge type="tip" text="+v1.1.1" vertical="top" />
+### setHeaderUnit
 
 <DataParameter f="setSelected: (data: 'day' | 'week' | 'month') => void" />
 

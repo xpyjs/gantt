@@ -2,8 +2,9 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [1.3.1](https://github.com/jeremyjone/jz-gantt/compare/v1.3.0...v1.3.1) (2022-03-28)
+## It's old CHANGELOG for `jz-gantt` down here, maybe links is useless
 
+### [1.3.1](https://github.com/jeremyjone/jz-gantt/compare/v1.3.0...v1.3.1) (2022-03-28)
 
 ### Bug Fixes
 
@@ -11,13 +12,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [1.3.0](https://github.com/jeremyjone/jz-gantt/compare/v1.2.0...v1.3.0) (2022-01-13)
 
-
 ### Features
 
 * **components:** add deep checked by right click ([261c54d](https://github.com/jeremyjone/jz-gantt/commit/261c54d4e9548a6e2b32e3f849bf5412fe049c1c)), closes [#16](https://github.com/jeremyjone/jz-gantt/issues/16)
 
 ## [1.2.0](https://github.com/jeremyjone/jz-gantt/compare/v1.1.12...v1.2.0) (2021-12-31)
-
 
 ### Features
 
@@ -31,9 +30,7 @@ All notable changes to this project will be documented in this file. See [standa
 * **composables:** update event propagation rule ([2f60af7](https://github.com/jeremyjone/jz-gantt/commit/2f60af7aa0c190b3f2db291b0fdab5e66b2b6791))
 * **components:** update silder progress decimal ([2b34436](https://github.com/jeremyjone/jz-gantt/commit/2b344361fdf542bca7b13d8404c0c70bebfa1070))
 
-
 ### [1.1.12](https://github.com/jeremyjone/jz-gantt/compare/v1.1.11...v1.1.12) (2021-12-28)
-
 
 ### Bug Fixes
 
@@ -45,11 +42,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.1.11](https://github.com/jeremyjone/jz-gantt/compare/v1.1.10...v1.1.11) (2021-12-23)
 
-
 ### Features
 
 * **components:** add a toast when trigger no-date-error event ([efa707e](https://github.com/jeremyjone/jz-gantt/commit/efa707ed1ca8bd429758b092d77be809ce1dc776))
-
 
 ### Bug Fixes
 
@@ -57,12 +52,10 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.1.10](https://github.com/jeremyjone/jz-gantt/compare/v1.1.9...v1.1.10) (2021-12-20)
 
-
 ### Features
 
 * **components:** add a toast ([f618194](https://github.com/jeremyjone/jz-gantt/commit/f61819473963f897f1a1f4930a43c8c2e3faa62b))
 * **styles:** add success bar when move slider succeed ([e8c2916](https://github.com/jeremyjone/jz-gantt/commit/e8c2916ef434d2f3b753ca2c6590364a42adc434))
-
 
 ### Bug Fixes
 
@@ -72,13 +65,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.1.8](https://github.com/jeremyjone/jz-gantt/compare/v1.1.7...v1.1.8) (2021-12-16)
 
-
 ### Bug Fixes
 
 * **styles:** added highlight header when hover slider ([0f50c24](https://github.com/jeremyjone/jz-gantt/commit/0f50c248df8f3f815335a189d23a6ddc3702e248))
 
 ### [1.1.7](https://github.com/jeremyjone/jz-gantt/compare/v1.1.6...v1.1.7) (2021-12-07)
-
 
 ### Features
 
@@ -88,13 +79,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.1.6](https://github.com/jeremyjone/jz-gantt/compare/v1.1.5...v1.1.6) (2021-11-24)
 
-
 ### Bug Fixes
 
 * **dependencies:** fix import css bug ([56f1bda](https://github.com/jeremyjone/jz-gantt/commit/56f1bda8edfe64fbfa89faa0e35f9de3dd693b97)), closes [#8](https://github.com/jeremyjone/jz-gantt/issues/8)
 
 ### [1.1.5](https://github.com/jeremyjone/jz-gantt/compare/v1.1.4...v1.1.5) (2021-11-24)
-
 
 ### Bug Fixes
 
@@ -103,13 +92,11 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.1.4](https://github.com/jeremyjone/jz-gantt/compare/v1.1.3...v1.1.4) (2021-11-15)
 
-
 ### Bug Fixes
 
 * **components:** fix JGanttColumn repeated loading ([8f520bf](https://github.com/jeremyjone/jz-gantt/commit/8f520bfb3940504e6b7c387402ffb1f73248eda3)), closes [#5](https://github.com/jeremyjone/jz-gantt/issues/5)
 
 ### [1.1.3](https://github.com/jeremyjone/jz-gantt/compare/v1.1.2...v1.1.3) (2021-11-12)
-
 
 ### ⚠ BREAKING CHANGES
 
@@ -121,7 +108,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.1.2](https://github.com/jeremyjone/jz-gantt/compare/v1.1.1...v1.1.2) (2021-11-11)
 
-
 ### Bug Fixes
 
 * **style:** fix gantt width too long when changed unit or column size ([0542ea4](https://github.com/jeremyjone/jz-gantt/commit/0542ea4ef6bb6f41f5cce4489a40ae66380e5bcf))
@@ -129,7 +115,6 @@ All notable changes to this project will be documented in this file. See [standa
 * **styles:** fix weekend and today line are above slider ([1d6bb05](https://github.com/jeremyjone/jz-gantt/commit/1d6bb05072e22bcf40b4ca1751bd24a024423d22))
 
 ### [1.1.1](https://github.com/jeremyjone/jz-gantt/compare/v1.1.0...v1.1.1) (2021-11-04)
-
 
 ### Features
 

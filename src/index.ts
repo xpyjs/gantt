@@ -1,23 +1,23 @@
 import { App } from 'vue';
-import JGanttColumn from 'components/column/index.vue';
-import JGanttSlider from 'components/slider/index.vue';
-import JGantt from './pages/root/RootWrap.vue';
+import XGanttColumn from 'components/column/index.vue';
+import XGanttSlider from 'components/slider/index.vue';
+import XGantt from './pages/root/RootWrap.vue';
 
 import './styles/index.scss';
 import { Variables } from './constants/vars';
 
-JGantt.install = (app: App) => {
-  app.component(Variables.name.root, JGantt);
-  app.component(Variables.name.column, JGanttColumn);
-  app.component(Variables.name.slider, JGanttSlider);
+XGantt.install = (app: App) => {
+  app.component(Variables.name.root, XGantt);
+  app.component(Variables.name.column, XGanttColumn);
+  app.component(Variables.name.slider, XGanttSlider);
 };
 
 const install = (app: App) => {
-  app.use(JGantt as any);
+  app.use(XGantt as any);
 };
 
 export default {
   install
 };
 
-export { JGantt, JGanttColumn, JGanttSlider };
+export { XGantt, XGanttColumn, XGanttSlider };

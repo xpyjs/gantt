@@ -2,7 +2,7 @@ import { shallowMount, mount } from '@vue/test-utils';
 import Root from '@/pages/root/RootWrap.vue';
 import Gantt from '@/components/gantt/index.vue';
 import Table from '@/components/table/index.vue';
-import JBtn from '@/components/common/Btn.vue';
+import XBtn from '@/components/common/Btn.vue';
 import { dataList } from './data';
 
 window.ResizeObserver =
@@ -29,7 +29,7 @@ describe('Root.vue', () => {
   });
 
   it('load btn & click btn', async done => {
-    const btn = wrapper.findComponent(JBtn);
+    const btn = wrapper.findComponent(XBtn);
     expect(btn.exists()).toBe(true);
 
     expect(wrapper.find('.gt-mask-hide').exists()).toBe(true);

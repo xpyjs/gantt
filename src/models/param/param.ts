@@ -309,10 +309,10 @@ export class ParamData {
           // 接收自定义组件，不接受原生元素
           type &&
           ParamData.__isComponent(v) &&
-          // 接受 JGanttColumn 插槽，并且该插槽需要携带 label 属性
+          // 接受 XGanttColumn 插槽，并且该插槽需要携带 label 属性
           ((ParamData.__checkType(type, Variables.name.column) &&
             !!v.props?.label) ||
-            // 或者接受一个 JGanttSlider 组件。多个 JGanttSlider 保留最后一个
+            // 或者接受一个 XGanttSlider 组件。多个 XGanttSlider 保留最后一个
             ParamData.__checkType(type, Variables.name.slider))
         );
       })
@@ -324,7 +324,7 @@ export class ParamData {
           // 添加唯一 key
           // eslint-disable-next-line no-param-reassign
           v.key = colVNodeKey;
-          Object.assign(v.props, { __key: colVNodeKey });
+          Object.assign(v.props ?? {}, { __key: colVNodeKey });
 
           const label: string = v.props?.label;
           const width = parseNumber(

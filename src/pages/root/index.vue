@@ -2,7 +2,7 @@
   <div ref="rootRef" class="gt-root" :style="rootStyle">
     <!-- 悬停操作按钮，外部遮罩一层，用于定位 -->
     <div v-if="showSettingBtn" class="gt-root-btn-mask">
-      <JBtn
+      <XBtn
         icon="more"
         :size="btnSize"
         :style="opBtnStyle"
@@ -26,22 +26,22 @@
       @mousedown="onResizeTableWidth"
     />
 
-    <JTable :row-data="allData" @table-scroll="tableWheelHandle" />
+    <XTable :row-data="allData" @table-scroll="tableWheelHandle" />
 
-    <JGantt :row-data="allData" @gantt-scroll="ganttWheelHandle" />
+    <XGantt :row-data="allData" @gantt-scroll="ganttWheelHandle" />
 
     <!-- 设置抽屉 -->
-    <JDrawer :show="isShowOperationDrawer" />
+    <XDrawer :show="isShowOperationDrawer" />
 
     <!-- 遮罩层 -->
     <div :class="maskClass" @click.stop="onClickMask" />
 
     <!-- toast -->
-    <JToast />
+    <XToast />
 
     <!-- success bar -->
     <template v-for="row in successBarList" :key="row.uuid">
-      <JSuccessBar :row="row" />
+      <XSuccessBar :row="row" />
     </template>
   </div>
 </template>
@@ -51,12 +51,12 @@ import { computed, ref, toRefs } from 'vue';
 import { useInitParam } from '@/composables/useParam';
 import { useInitRootRef } from '@/composables/useRootRef';
 import { Variables } from '@/constants/vars';
-import JTable from '@/components/table/index.vue';
-import JGantt from '@/components/gantt/index.vue';
-import JBtn from '@/components/common/Btn.vue';
-import JDrawer from '@/components/common/Drawer.vue';
-import JToast from '@/components/common/Toast.vue';
-import JSuccessBar from '@/components/common/SuccessBar.vue';
+import XTable from '@/components/table/index.vue';
+import XGantt from '@/components/gantt/index.vue';
+import XBtn from '@/components/common/Btn.vue';
+import XDrawer from '@/components/common/Drawer.vue';
+import XToast from '@/components/common/Toast.vue';
+import XSuccessBar from '@/components/common/SuccessBar.vue';
 import useWheel from '@/composables/useWheel';
 import useResize, {
   useBtnPosition,
@@ -127,12 +127,12 @@ const rootStyle = computed(() => {
     '--table-width': `${tableWidth.value}px`,
     '--scrollbar-width': `${scrollBarHeight.value}px`,
     '--header-height': `${headerHeight.value}px`,
-    '--j-content-border-color':
+    '--x-content-border-color':
       borderColor.value || Variables.color.border[colorSelectStr.value],
-    '--j-primary-color':
+    '--x-primary-color':
       primaryColor.value || Variables.color.primary[colorSelectStr.value],
-    '--j-content-bg-color': Variables.color.background[colorSelectStr.value],
-    '--j-text-color': Variables.color.text[colorSelectStr.value]
+    '--x-content-bg-color': Variables.color.background[colorSelectStr.value],
+    '--x-text-color': Variables.color.text[colorSelectStr.value]
   } as CustomCssProperties;
 });
 
@@ -177,14 +177,14 @@ defineExpose({
 .gt-root {
   width: calc(100% - var(--root-border) * 2);
   height: calc(100% - var(--root-border) * 2);
-  border: var(--root-border) solid var(--j-content-border-color);
+  border: var(--root-border) solid var(--x-content-border-color);
   overflow: hidden;
   font-size: 14px;
-  color: var(--j-text-color);
+  color: var(--x-text-color);
   position: relative;
   display: flex;
   box-sizing: initial;
-  background-color: var(--j-content-bg-color);
+  background-color: var(--x-content-bg-color);
 
   .gt-root-btn-mask {
     position: absolute;
@@ -198,7 +198,7 @@ defineExpose({
   .gt-column-slider-line {
     width: 1px;
     height: 100%;
-    border-right: 1px dotted var(--j-text-color);
+    border-right: 1px dotted var(--x-text-color);
     opacity: 0.5;
     position: absolute;
     z-index: 9;
@@ -207,14 +207,14 @@ defineExpose({
   .gt-table-slider-line {
     width: 2px;
     height: 100%;
-    background-color: var(--j-content-border-color);
+    background-color: var(--x-content-border-color);
     position: absolute;
     z-index: 9;
     cursor: w-resize;
     transition: filter 0.2s;
 
     &:hover {
-      box-shadow: 0px 0px 2px var(--j-content-border-color);
+      box-shadow: 0px 0px 2px var(--x-content-border-color);
       filter: blur(1px) invert(1);
       opacity: 0.5;
     }

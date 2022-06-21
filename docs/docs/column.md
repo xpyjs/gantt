@@ -1,6 +1,6 @@
-# 列组件 JGanttColumn
+# 列组件 XGanttColumn
 
-<Description author="jeremyjone" date="2021-09-26" copyright="jeremyjone" />
+<Description author="jeremyjone" date="2022-06-22" copyright="jeremyjone" />
 
 因为我们在内部已经将其加载，所以您并不需要显示的再次导入到您的组件中就可以使用。
 
@@ -13,12 +13,12 @@
 基于入门的示例，您可以直接这样使用：
 
 ```html{5}
-<j-gantt
+<x-gantt
     data-index="index"
     :data="dataList"
 >
-    <j-gantt-column label="index" />
-</j-gantt>
+    <x-gantt-column label="index" />
+</x-gantt>
 ```
 
 它将显示成如下内容：
@@ -33,13 +33,13 @@
 
 可以控制当前列的内容居中，默认居左。
 
-### column-class <Badge type="tip" text="+v1.1.7" vertical="top" />
+### column-class
 
 <DataParameter t="Object | String" d="{}" />
 
 允许向列块内注入类名，与原生使用方法一样。
 
-### column-style <Badge type="tip" text="+v1.1.7" vertical="top" />
+### column-style
 
 <DataParameter t="Object | String" d="{}" />
 
@@ -63,7 +63,7 @@
 
 设置空数据时显示的内容。如果数据内容为空，则会显示空数据内容。
 
-### label\* <Badge text="required" type="danger"/> <Badge type="tip" text="update v1.1.7" vertical="top" />
+### label\* <Badge text="required" type="danger"/>
 
 <DataParameter r t="String" />
 
@@ -137,11 +137,11 @@ mergeFunc: function(data) {
 一个简单的示例：
 
 ```html
-<j-gantt-column label="name">
+<x-gantt-column label="name">
   <template v-slot="data">
     <div>{{ data }}</div>
   </template>
-</j-gantt-column>
+</x-gantt-column>
 ```
 
 接下来，您将继续学习滑块组件的内容。

@@ -1,6 +1,6 @@
 <template>
   <div style="height: 400px; padding-bottom: 10px">
-    <JGantt
+    <XGantt
       ref="gantt"
       header-height="48"
       row-height="30"
@@ -29,7 +29,7 @@
 
       <div>b</div>
 
-      <JGanttSlider
+      <XGanttSlider
         flat
         label="startDate"
         date-format="MM-dd H:mm:s"
@@ -52,31 +52,31 @@
         <template #right>
           <div style="background-color: #123456; width: 5px; height: 10px" />
         </template> -->
-      </JGanttSlider>
+      </XGanttSlider>
 
-      <JGanttColumn label="index" :merge="merge3">
+      <XGanttColumn label="index" :merge="merge3">
         <template #default="{ data }">
           <div style="background-color: #ccc; width: 100%">
             {{ data.name }}
           </div>
         </template>
-      </JGanttColumn>
+      </XGanttColumn>
 
-      <JGanttColumn label="name" width="150" :merge="merge3">
+      <XGanttColumn label="name" width="150" :merge="merge3">
         <template #default="{ data }">
           <div>2 - {{ data }}</div>
         </template>
-      </JGanttColumn>
+      </XGanttColumn>
 
-      <JGanttColumn label="aaa" date-format :merge="merge5">
+      <XGanttColumn label="aaa" date-format :merge="merge5">
         <template #default>
           <div v-for="i in 100" :key="i">
             {{ i }}
           </div>
         </template>
-      </JGanttColumn>
+      </XGanttColumn>
 
-      <JGanttColumn
+      <XGanttColumn
         label="startDate"
         width="180"
         center
@@ -84,7 +84,7 @@
         :merge="merge4"
       />
 
-      <j-gantt-column
+      <x-gantt-column
         label="endDate"
         name="自定义标签"
         width="200"
@@ -99,13 +99,13 @@
             abc - {{ data.endDate }}
           </span>
         </template>
-      </j-gantt-column>
+      </x-gantt-column>
 
-      <JGanttColumn label="picture12345" :merge="merge5">
+      <XGanttColumn label="picture12345" :merge="merge5">
         <template #default="{ data }">
           👀😃✨✔🐱‍🚀🐱‍👓 {{ data.ttt.b }}
         </template>
-      </JGanttColumn>
+      </XGanttColumn>
 
       <template #settings>
         <div>
@@ -113,16 +113,16 @@
           <input />
         </div>
       </template>
-    </JGantt>
+    </XGantt>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import { dataList } from './data';
-import JGantt from '@/pages/root/index.vue';
-import JGanttColumn from '@/components/column/index.vue';
-import JGanttSlider from '@/components/slider/index.vue';
+import XGantt from '@/pages/root/index.vue';
+import XGanttColumn from '@/components/column/index.vue';
+import XGanttSlider from '@/components/slider/index.vue';
 
 const isDark = ref(false);
 const showCheckbox = ref(false);

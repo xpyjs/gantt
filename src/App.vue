@@ -31,7 +31,7 @@
   <!-- 使用 v-if 可以避免上面问题。但是如果数据量大，每次切换会有等待时间，同样值得解决 -->
   <div v-if="!isMulti" aria-label="单页">
     <div style="height: 400px; padding-bottom: 10px">
-      <JGantt
+      <XGantt
         ref="gantt"
         header-height="48"
         :row-height="rowHeight1"
@@ -68,7 +68,7 @@
         <!-- 无效 slot -->
         <div>b</div>
 
-        <JGanttSlider
+        <XGanttSlider
           flat
           label="startTime"
           date-format="MM-dd H:mm:s"
@@ -93,46 +93,40 @@
         <template #right>
           <div style="background-color: #123456; width: 5px; height: 10px" />
         </template> -->
-        </JGanttSlider>
+        </XGanttSlider>
 
-        <JGanttColumn label="id" :merge="merge3">
+        <XGanttColumn label="id" :merge="merge3">
           <template #default="{ data }">
             <div style="background-color: #ccc; width: 100%">
               {{ data.name }}
             </div>
           </template>
-        </JGanttColumn>
+        </XGanttColumn>
 
-        <JGanttColumn label="name" width="150" :merge="merge3">
+        <XGanttColumn label="name" width="150" :merge="merge3">
           <template #default="{ data }">
             <div>2 - {{ data }}</div>
           </template>
-        </JGanttColumn>
+        </XGanttColumn>
 
-        <JGanttColumn
+        <XGanttColumn
           label="ttt.a"
           :merge="merge5"
           column-style="backgroundColor: #cde; padding-left: 10px"
           column-class="test-class"
         />
 
-        <JGanttColumn label="bbb" date-format :merge="merge5">
+        <XGanttColumn label="bbb" :merge="merge5">
           <template #default>
             <div v-for="i in 100" :key="i">
               {{ i }}
             </div>
           </template>
-        </JGanttColumn>
+        </XGanttColumn>
 
-        <JGanttColumn
-          label="startTime"
-          width="180"
-          center
-          date-format
-          :merge="merge4"
-        />
+        <XGanttColumn label="startTime" width="180" center :merge="merge4" />
 
-        <j-gantt-column
+        <x-gantt-column
           label="endTime"
           name="自定义标签"
           width="200"
@@ -147,13 +141,13 @@
               abc - {{ data.endTime }}
             </span>
           </template>
-        </j-gantt-column>
+        </x-gantt-column>
 
-        <JGanttColumn label="picture12345" :merge="merge5">
+        <XGanttColumn label="picture12345" :merge="merge5">
           <template #default="{ data }">
             👀😃✨✔🐱‍🚀🐱‍👓 {{ data.ttt.b }}
           </template>
-        </JGanttColumn>
+        </XGanttColumn>
 
         <template #settings>
           <div>
@@ -161,7 +155,7 @@
             <input />
           </div>
         </template>
-      </JGantt>
+      </XGantt>
     </div>
 
     <div>total: {{ dataList.length }}</div>
@@ -206,7 +200,7 @@
   <div v-else aria-label="多页">
     <div style="padding-bottom: 10px">
       <div style="height: 200px; padding-bottom: 10px">
-        <JGantt
+        <XGantt
           ref="gantt2"
           header-height="60"
           :row-height="rowHeight2"
@@ -229,22 +223,22 @@
           @move-slider="moveSlider"
           @no-date-error="noDateError"
         >
-          <JGanttSlider
+          <XGanttSlider
             flat
             label="name"
             date-format="MM-dd H:mm:ss"
             empty-data=""
           />
 
-          <JGanttColumn label="index" :merge="merge3">
+          <XGanttColumn label="index" :merge="merge3">
             <template #default="{ data }">
               <div style="background-color: #ccc; width: 100%">
                 {{ data.name }}
               </div>
             </template>
-          </JGanttColumn>
+          </XGanttColumn>
 
-          <j-gantt-column
+          <x-gantt-column
             label="endDate"
             name="自定义标签"
             width="200"
@@ -259,8 +253,8 @@
                 abc - {{ data.endDate }}
               </span>
             </template>
-          </j-gantt-column>
-        </JGantt>
+          </x-gantt-column>
+        </XGantt>
       </div>
 
       <div>total: {{ dataList2.length }}</div>
@@ -313,7 +307,7 @@
 
     <div style="padding-bottom: 10px">
       <div style="height: 300px; padding-bottom: 10px">
-        <JGantt
+        <XGantt
           ref="gantt3"
           header-height="30"
           :row-height="rowHeight3"
@@ -336,7 +330,7 @@
           @move-slider="moveSlider"
           @no-date-error="noDateError"
         >
-          <JGanttSlider
+          <XGanttSlider
             flat
             label="uid"
             date-format="MM-dd H:mm:ss"
@@ -348,18 +342,18 @@
             bg-color="lightgreen"
           />
 
-          <JGanttColumn label="name" width="150">
+          <XGanttColumn label="name" width="150">
             <template #default="{ data }">
               <div>{{ data.uid }} - {{ data.name }}</div>
             </template>
-          </JGanttColumn>
+          </XGanttColumn>
 
-          <JGanttColumn
+          <XGanttColumn
             label="ttt.a"
             column-style="backgroundColor: #cde; padding-left: 10px"
             column-class="test-class"
           />
-        </JGantt>
+        </XGantt>
       </div>
 
       <div>total: {{ dataList3.length }}</div>
@@ -423,18 +417,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { JGantt, JGanttColumn, JGanttSlider } from './index';
+// import { XGantt, XGanttColumn, XGanttSlider } from './index';
 
 let INDEX = 1;
 
 export default defineComponent({
   name: 'App',
 
-  components: {
-    JGantt,
-    JGanttColumn,
-    JGanttSlider
-  },
+  // components: {
+  //   XGantt,
+  //   XGanttColumn,
+  //   XGanttSlider
+  // },
 
   data() {
     return {

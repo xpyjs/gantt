@@ -52,8 +52,8 @@ const { onResizeColumnWidth } = useResizeTableColumn();
   white-space: nowrap;
   top: 0;
   z-index: 5;
-  background-color: var(--j-primary-color);
-  border-bottom: 1px solid var(--j-content-border-color);
+  background-color: var(--x-primary-color);
+  border-bottom: 1px solid var(--x-content-border-color);
 
   .gt-table-header-chunk {
     position: relative;
@@ -87,7 +87,7 @@ const { onResizeColumnWidth } = useResizeTableColumn();
       height: 100%;
       padding: 0px;
       margin: 0px;
-      background-color: var(--j-content-border-color);
+      background-color: var(--x-content-border-color);
       cursor: w-resize !important;
       transition: filter 0.2s;
 

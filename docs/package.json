@@ -1,7 +1,7 @@
 {
     "name": "gantt-doc",
-    "version": "1.3.1",
-    "description": "jz-gantt document",
+    "version": "1.0.0",
+    "description": "xpyjs gantt document",
     "main": "index.js",
     "author": "jeremyjone <jeremyjone@qq.com>",
     "license": "MIT",

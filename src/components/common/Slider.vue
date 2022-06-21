@@ -65,7 +65,7 @@ export default defineComponent({
     transform: translateY(0px);
     background: transparent;
     border-radius: 50%;
-    border: 7px solid var(--j-primary-color);
+    border: 7px solid var(--x-primary-color);
   }
 
   .show-val {

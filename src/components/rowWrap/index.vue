@@ -17,15 +17,15 @@ import useInView from '@/composables/useInView';
 import { Row } from '@/models/data/row';
 import { camelToKebabCased } from '@/utils/common';
 import useStyle from '@/composables/useStyle';
-import JTableRow from '../table/Row.vue';
-import JGanttRow from '../gantt/Row.vue';
-import JGanttBackgroundRow from '../gantt/BackgroundRow.vue';
+import XTableRow from '../table/Row.vue';
+import XGanttRow from '../gantt/Row.vue';
+import XGanttBackgroundRow from '../gantt/BackgroundRow.vue';
 
 export default defineComponent({
   components: {
-    [JTableRow.name]: JTableRow,
-    [JGanttRow.name]: JGanttRow,
-    [JGanttBackgroundRow.name]: JGanttBackgroundRow
+    [XTableRow.name]: XTableRow,
+    [XGanttRow.name]: XGanttRow,
+    [XGanttBackgroundRow.name]: XGanttBackgroundRow
   }
 });
 </script>
@@ -41,7 +41,7 @@ const { inView } = useInView(data as Ref<Array<Row>>);
 const { rowWrapStyle } = useStyle();
 
 const isTransparent = computed(() => {
-  return props.name !== JGanttBackgroundRow.name;
+  return props.name !== XGanttBackgroundRow.name;
 });
 </script>
 

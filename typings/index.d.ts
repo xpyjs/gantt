@@ -1,9 +1,9 @@
-import * as JGantt from './j-gantt.d';
+import * as XGantt from './x-gantt';
 
 export {
-  JGanttComponent,
-  JGanttColumnComponent,
-  JGanttSliderComponent
-} from './j-gantt.d';
+  XGanttComponent,
+  XGanttColumnComponent,
+  XGanttSliderComponent
+} from './x-gantt';
 
-export default JGantt;
+export default XGantt;

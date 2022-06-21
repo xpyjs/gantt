@@ -1,11 +1,11 @@
-import { JComponent } from '../component';
+import { XComponent } from '../component';
 import {
   GanttColumnSize,
   ParamBodyOptions,
   ParamHeaderOptions
 } from '../../src/typings/ParamOptions';
 
-declare class JGanttRootComponent extends JComponent {
+declare class XGanttRootComponent extends XComponent {
   bodyStyle: ParamBodyOptions;
 
   border: number;

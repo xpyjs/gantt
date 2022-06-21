@@ -1,4 +1,4 @@
-# 滑块组件 JGanttSlider
+# 滑块组件 XGanttSlider
 
 <Description author="jeremyjone" date="2021-12-10" copyright="jeremyjone" />
 
@@ -19,13 +19,13 @@
 基于入门的示例，您现在应该拥有一个列，那么您可以继续这样使用：
 
 ```html{6}
-<j-gantt
+<x-gantt
     data-index="index"
     :data="dataList"
 >
-    <j-gantt-column label="index" />
-    <j-gantt-slider bg-color="orange" />
-</j-gantt>
+    <x-gantt-column label="index" />
+    <x-gantt-slider bg-color="orange" />
+</x-gantt>
 ```
 
 为了与原始内容进行区分，我在属性中添加了背景颜色，请注意，它并不是必须的。
@@ -94,7 +94,7 @@
 在数据量很大的情况下，启用该属性可能会消耗大量资源。
 :::
 
-### move <Badge type="tip" text="update v1.0.0" vertical="top" />
+### move
 
 <DataParameter t="[Boolean, Function]" d="false" />
 
@@ -104,7 +104,7 @@
 
 如果设置了 `true`，则意味着滑块可以被任意拖动。当拖动结束时，修改数据，同时会抛出 [`move-slider`](./root.html#move-slider) 事件。
 
-### progress <Badge type="tip" text="+ v1.2.0" vertical="top" />
+### progress
 
 <DataParameter t="Boolean" d="false" />
 
@@ -116,7 +116,7 @@
 
 同时，如果您自定义了滑块插槽，那么无论您是否开启了进度条，都不会显示这个功能。
 
-### progressDecimal <Badge type="tip" text="+ v1.2.0" vertical="top" />
+### progressDecimal
 
 <DataParameter t="[Boolean, Number]" d="false" />
 
@@ -144,7 +144,7 @@
 
 该属性单独设置右侧是否可以被拖动，这意味着滑块可以单独修改结束时间。当拖动结束时，修改数据，同时会抛出 [`move-slider`](./root.html#move-slider) 事件。
 
-## 插槽 <Badge type="tip" text="update v1.0.0" vertical="top" />
+## 插槽
 
 ::: tip 更新提示
 所有插槽抛出的内容变更，在抛出当前数据的同时，也抛出层级，方便按层级自定义内容。
@@ -159,11 +159,11 @@
 一个简单的示例：
 
 ```html
-<j-gantt-slider flat bg-color="orange" :move="true" :linked-resize="true">
+<x-gantt-slider flat bg-color="orange" :move="true" :linked-resize="true">
   <template v-slot="{data, level}">
     <div>{{ data.name }}</div>
   </template>
-</j-gantt-slider>
+</x-gantt-slider>
 ```
 
 ::: tip 提示
@@ -179,7 +179,7 @@
 一个简单的示例：
 
 ```html
-<JGanttSlider flat label="startDate" bg-color="orange">
+<XGanttSlider flat label="startDate" bg-color="orange">
   <template v-slot:content="{data, level}">
     <div
       style="background-color: #123456;display: flex;justify-content: center;height:5px"
@@ -187,7 +187,7 @@
       {{ data.name }} - {{ data.index }}
     </div>
   </template>
-</JGanttSlider>
+</XGanttSlider>
 ```
 
 ### left
@@ -199,7 +199,7 @@
 一个简单的示例：
 
 ```html
-<JGanttSlider
+<XGanttSlider
   flat
   label="startDate"
   bg-color="orange"
@@ -223,7 +223,7 @@
   <template v-slot:right>
     <div style="background-color:#123456;width:5px;height:10px" />
   </template>
-</JGanttSlider>
+</XGanttSlider>
 ```
 
 ### right

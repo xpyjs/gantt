@@ -26,7 +26,7 @@ export default () => {
   const rowBgColor = computed(() => {
     return (level?: number) => {
       const color =
-        GtParam.ganttOptions.body?.bgColor || 'var(--j-content-bg-color)';
+        GtParam.ganttOptions.body?.bgColor || 'var(--x-content-bg-color)';
 
       return level !== undefined
         ? {
@@ -40,7 +40,7 @@ export default () => {
     return (level?: number) => {
       return {
         height: `${rowHeight.value}px`,
-        borderColor: 'var(--j-content-border-color)',
+        borderColor: 'var(--x-content-border-color)',
         color: GtParam.ganttOptions.body?.textColor,
         ...rowBgColor.value(level)
       };
@@ -51,7 +51,7 @@ export default () => {
     return (level?: number) => {
       return {
         height: `${rowHeight.value}px`,
-        borderColor: 'var(--j-content-border-color)',
+        borderColor: 'var(--x-content-border-color)',
         color: GtParam.ganttOptions.body?.textColor,
 
         backgroundSize: `${
@@ -59,7 +59,7 @@ export default () => {
         }px`,
         backgroundImage:
           GtParam.headerUnit === 'day'
-            ? 'linear-gradient(270deg, var(--j-content-border-color) 1px, transparent 0)'
+            ? 'linear-gradient(270deg, var(--x-content-border-color) 1px, transparent 0)'
             : '',
         ...rowBgColor.value(level)
       };
@@ -106,7 +106,7 @@ export default () => {
   const headerStyle = computed(() => {
     return {
       backgroundColor: `${GtParam.ganttOptions.header?.bgColor}`,
-      borderColor: 'var(--j-content-border-color)',
+      borderColor: 'var(--x-content-border-color)',
       color: `${GtParam.ganttOptions.header?.textColor}`
     };
   });

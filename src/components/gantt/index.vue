@@ -99,7 +99,7 @@ const { ganttRef } = useInitGanttRef();
     z-index: 3;
     width: 1px;
     height: 100%;
-    background-color: var(--j-content-border-color);
+    background-color: var(--x-content-border-color);
   }
 }
 </style>

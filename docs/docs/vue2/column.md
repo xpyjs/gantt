@@ -1,6 +1,6 @@
 # 列组件 XGanttColumn
 
-<Description author="jeremyjone" date="2020-10-12" copyright="jeremyjone" />
+<Description author="jeremyjone" date="2022-06-22" copyright="jeremyjone" />
 
 因为我们在内部已经将其加载，所以您并不需要显示的再次导入到您的组件中就可以使用。
 
@@ -12,10 +12,11 @@
 
 基于入门的示例，您可以直接这样使用：
 
-```html{4}
+```html{5}
 <x-gantt
     data-index="index"
-    :data="dataList" />
+    :data="dataList"
+>
     <x-gantt-column label="index" />
 </x-gantt>
 ```
@@ -26,11 +27,23 @@
 
 ## 属性
 
-### center <Badge type="tip" text="+v0.0.8" vertical="top" />
+### center
 
 <DataParameter t="Boolean" d="false" />
 
 可以控制当前列的内容居中，默认居左。
+
+### column-class
+
+<DataParameter t="Object | String" d="{}" />
+
+允许向列块内注入类名，与原生使用方法一样。
+
+### column-style
+
+<DataParameter t="Object | String" d="{}" />
+
+允许向列块内注入样式，与原生使用方法一样。
 
 ### date-format
 
@@ -50,13 +63,31 @@
 
 设置空数据时显示的内容。如果数据内容为空，则会显示空数据内容。
 
-### label* <Badge text="required" type="danger"/>
+### label\* <Badge text="required" type="danger"/>
 
 <DataParameter r t="String" />
 
 `label` 是一个必填属性，它应当对应您给出数据的某一个键名。
 
 它将加载该字段数据的内容显示在列内容中，同时表头的名称默认也会显示为该 `label` 名称。当然，您可以通过设置 [`name`](#name) 来自定义。
+
+::: tip 更新
+从 `v1.1.7` 开始，它支持通过 `.` 深度读取对象内部属性。
+
+比如原始对象为：
+
+```js
+const data = {
+  a: {
+    b: {
+      c: '1'
+    }
+  }
+};
+```
+
+那么，`label` 可以通过 `a.b.c` 直接读取到值，而不用像之前那样需要通过模板导出数据再读取内部属性。
+:::
 
 ### merge
 
@@ -96,6 +127,10 @@ mergeFunc: function(data) {
 设置该列的列宽。默认宽度 80，请保持宽度大于 30，否则会引起渲染异常。
 
 ## 插槽
+
+### default
+
+<DataParameter f="scope = data:any" />
 
 列组件内部允许您插入任何内容，同时它会抛出当前行的数据以供您使用。
 

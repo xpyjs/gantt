@@ -8,10 +8,10 @@ declare interface CustomCssProperties extends CSSProperties {
   '--row-height': string;
   '--scrollbar-width': string;
   '--header-height': string;
-  '--j-content-border-color': string;
-  '--j-text-color': string;
-  '--j-primary-color': string;
-  '--j-content-bg-color': string;
+  '--x-content-border-color': string;
+  '--x-text-color': string;
+  '--x-primary-color': string;
+  '--x-content-bg-color': string;
 
   [key: string]: any;
 }

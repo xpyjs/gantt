@@ -1,7 +1,7 @@
 import { SliderAlignment } from '../../src/typings/ParamOptions';
-import { JComponent } from '../component';
+import { XComponent } from '../component';
 
-declare class JGanttSliderComponent extends JComponent {
+declare class XGanttSliderComponent extends XComponent {
   alignment: SliderAlignment;
 
   bgColor: string;

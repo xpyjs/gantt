@@ -1,5 +1,5 @@
 import { VueElement } from 'vue';
 
-declare class JComponent extends VueElement {
+declare class XComponent extends VueElement {
   static install(vue: typeof VueElement): void;
 }

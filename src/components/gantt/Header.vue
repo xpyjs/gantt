@@ -23,7 +23,7 @@ const chunkStyle = computed(() => {
   return (len: number, isBgColor = false) => {
     return {
       width: `${oneDayWidth.value * len}px`,
-      borderColor: 'var(--j-content-border-color)',
+      borderColor: 'var(--x-content-border-color)',
       backdropFilter: isBgColor ? 'brightness(1.2)' : ''
     };
   };
@@ -108,8 +108,8 @@ const { showTodayLine, todayArrowStyle } = useToday();
   top: 0;
   z-index: 5;
   overflow: hidden;
-  background-color: var(--j-primary-color);
-  border-bottom: 1px solid var(--j-content-border-color);
+  background-color: var(--x-primary-color);
+  border-bottom: 1px solid var(--x-content-border-color);
 
   .gt-gantt-header-chunk {
     display: inline-block;
@@ -117,13 +117,13 @@ const { showTodayLine, todayArrowStyle } = useToday();
     height: 100%;
     font-size: 1rem;
     font-weight: bold;
-    border-right: 1px solid var(--j-content-border-color);
+    border-right: 1px solid var(--x-content-border-color);
     box-sizing: border-box;
 
     &-unit {
       padding: 4px 0 0 4px;
       height: 50%;
-      border-bottom: 1px solid var(--j-content-border-color);
+      border-bottom: 1px solid var(--x-content-border-color);
       box-sizing: border-box;
       overflow: hidden;
     }
@@ -135,7 +135,7 @@ const { showTodayLine, todayArrowStyle } = useToday();
 
       & > div {
         display: inline-flex;
-        border-right: 1px solid var(--j-content-border-color);
+        border-right: 1px solid var(--x-content-border-color);
         box-sizing: border-box;
         height: 100%;
         justify-content: center;

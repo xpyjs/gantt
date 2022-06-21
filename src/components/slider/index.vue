@@ -169,7 +169,7 @@ const realAlignment = computed(() => {
 });
 
 const backgroundColor = computed(() => {
-  return bgColor.value || 'var(--j-primary-color)';
+  return bgColor.value || 'var(--x-primary-color)';
 });
 
 const isProgress = computed(() => {

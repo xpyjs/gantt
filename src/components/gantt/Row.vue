@@ -5,7 +5,7 @@ import useParam from '@/composables/useParam';
 import { Variables } from '@/constants/vars';
 import { Row } from '@/models/data/row';
 import { uuid } from '@/utils/common';
-import JGanttSlider from '../slider/index.vue';
+import XGanttSlider from '../slider/index.vue';
 
 export default defineComponent({
   name: Variables.name.ganttRow
@@ -36,7 +36,7 @@ const { onClickRow, onDbClickRow, onMouseEnterRow, onMouseLeaveRow } = useEvent(
   >
     <template v-if="!!data">
       <component :is="sliderNode" v-if="sliderNode" :data="data" />
-      <JGanttSlider v-else :data="data" />
+      <XGanttSlider v-else :data="data" />
     </template>
   </div>
 </template>

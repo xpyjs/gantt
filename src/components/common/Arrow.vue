@@ -8,7 +8,7 @@
     data-darkreader-inline-fill=""
     :width="size"
     :height="size"
-    :style="{ fill: 'var(--j-primary-color)' }"
+    :style="{ fill: 'var(--x-primary-color)' }"
     :class="{
       'gt-animation': true,
       up: up,

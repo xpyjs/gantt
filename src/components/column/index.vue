@@ -63,7 +63,7 @@ const colWidth = computed(() => {
 const rootStyle = computed(() => {
   return {
     '--column-width': `${colWidth.value - 1}px`,
-    borderColor: 'var(--j-content-border-color)'
+    borderColor: 'var(--x-content-border-color)'
   } as CustomCssProperties;
 });
 
@@ -190,7 +190,7 @@ const chunkText = computed(() => {
   padding: 2px;
   display: flex;
   flex-shrink: 0;
-  border-right: 1px solid var(--j-content-border-color);
+  border-right: 1px solid var(--x-content-border-color);
 
   .gt-column__checkbox {
     width: var(--box-size);

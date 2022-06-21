@@ -1,26 +1,47 @@
 # 入门
 
-<Description author="jeremyjone" version="1.0.0" date="2022-04-18" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.0.1" date="2022-06-22" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 XGantt。
+
+## 十分重要
+
+这个库是 `jz-gantt` 的 vue2 版本的继承库。如果您之前已经使用了 `jz-gantt`，则需要仔细阅读如下内容。
+
+**说明：**
+
+> - `jz-gantt` vue2 版本（v0.0.17）已经被弃用。
+> - 本项目完全重写。基于 `vue3` 代码，支持内容到 `1.3.1`，但不再更新内容，只做基本维护。如需更新内容，请使用 vue3 版本，或者自行更新。
+> - 另外，如果您 fork 并提交了代码，我检测后会合并到主分支，并更新版本内容。
+
+### 如何迁移
+
+1. 包名不同， `@xpyjs/gantt-vue2` 替换了 `jz-gantt`。
+2. 所有以 `j-` 或 `J` 的前缀全都更新为 `x-` 或 `X`。
+
+除此之外，无需其他改动。
 
 ## 什么是 XGantt
 
 `XGantt` 是一个基于 `vue` 的甘特图表插件，它包含常用的甘特图功能，如：
 
-- 树形数据结构展示，支持动态增减
-- 展开、收起子项
-- 自定义左侧表格的列内容
-- 自定义左侧表格的合并项
-- 自定义右侧甘特条的内容
-- 任意拖动甘特条以修改时间
-- 完整的响应事件
-- 快速查找 `今天`
-- 显示周末
+- [x] 根据日期自动生成甘特图
+- [x] 支持多层扩展
+- [x] 高性能
+- [x] 多层联动
+- [x] 多级选取
+- [x] 支持自定义表内容
+- [x] 支持自定义甘特内容
+- [x] 支持自定义表头
+- [x] 动态更新数据
+- [x] 定制任意风格
+- [x] 支持黑暗模式
+- [x] 支持多种日期显示模式切换
+- [ ] 更多持续更新
 
 *动图展示*：
 
-<img :src="$withBase('/assets/gantt_v0.gif')" alt="gif">
+<img :src="$withBase('/assets/gantt_v1.gif')" alt="gif">
 
 ## 安装
 
@@ -44,10 +65,6 @@ npm install @xpyjs/gantt-vue2 --save
   </CodeGroupItem>
 </CodeGroup>
 
-::: tip 提示
-当前内容完全继承自 `jz-gantt`。
-:::
-
 ## 引入
 
 XGantt 会被整体引入，同时需要单独引入样式表，方式如下：
@@ -55,7 +72,7 @@ XGantt 会被整体引入，同时需要单独引入样式表，方式如下：
 ```js
 import Vue from "vue";
 import XGantt from "@xpyjs/gantt-vue2";
-import "@xpyjs/gantt-vue2/lib/gantt-vue2.css";
+import '@xpyjs/gantt-vue2/lib/index.css';
 
 Vue.use(XGantt);
 ```
@@ -75,7 +92,7 @@ const dataList = [
       b: "bbb"
     },
     name: "mydata1",
-    children: []
+    children: [] // children 是必须的，如果没有，给一个空数组即可
   },
   {
     index: 2,
@@ -92,7 +109,7 @@ const dataList = [
           a: "aaa"
         },
         name: "child1",
-        children: []
+        children: [] // children 是必须的，如果没有，给一个空数组即可
       }
     ]
   }
@@ -124,29 +141,3 @@ import { XGantt, XGanttColumn, XGanttSlider } from "@xpyjs/gantt-vue2";
 ```
 
 按需导入即可。
-
-## 更新日志
-
-::: tip
-您可以跳过此内容以继续深入学习具体配置 XGantt。
-:::
-
-### Release 1.0.0
-
-- 更新包名
-- 更新组件名
-
-### Release 0.0.17
-
-- 调整滑块移动的接口，现在它抛出了原数据。
-
-### Release 0.0.16
-
-- 添加了一个方法 `setSelected`，用于设置一条选中的项。
-- 修正了一些样式问题。
-
-### Release 0.0.15
-
-- 添加了一个 `settings` 的具名插槽，可以向设置抽屉插入自定义内容。
-- 添加了一个 `dark` 属性，适配黑暗模式。
-- 调整了表头的格式。

@@ -3,9 +3,11 @@
  * @Author: JeremyJone
  * @Date: 2021-11-25 15:10:18
  * @LastEditors: JeremyJone
- * @LastEditTime: 2021-12-21 10:48:19
+ * @LastEditTime: 2022-06-21 18:26:38
  * @Description: 自动更新文档更新内容。在每次版本发布时使用
  */
+
+// 不再更新文档的内容，直接一个连接导航到 CHANGELOG 文件
 
 const fs = require('fs');
 const path = require('path');
@@ -24,7 +26,7 @@ const version = process.argv[2];
 const regex = new RegExp('#+ \\[?(' + version + '\\]?[\\s\\S]*)');
 const changelog = '### [' + getContent(changelogPath, regex);
 
-const currentDate = changelog.match(/.*/)[0].match(/\d{4}-\d{2}-\d{2}/)[0];
+const currentDate = changelog.match(/.*/)?.[0].match(/\d{4}-\d{2}-\d{2}/)?.[0];
 
 const currentLog = changelog
   .replace(/### \[{1-2}\d/g, '### [')
@@ -72,17 +74,16 @@ if (isCi) {
     );
   }
 
-  writeCurrentLog();
+  //   writeCurrentLog();
 } else {
   function setDocs() {
     const doc = getContent(docPath, /([\s\S]*)/);
-    const updateTitle = doc.match(/(## 更新日志[\s\S]*:::\s+)/)[1];
-    const newDoc = doc
-      .replace(
-        /<Description[\s\S]+copyright="jeremyjone" \/>/,
-        `<Description author="jeremyjone" version="${version}" date="${currentDate}" copyright="jeremyjone" />`
-      )
-      .replace(updateTitle, `${updateTitle}${currentLog}\n\n`);
+    // const updateTitle = doc.match(/(## 更新日志[\s\S]*:::\s+)/)[1];
+    const newDoc = doc.replace(
+      /<Description[\s\S]+copyright="jeremyjone" \/>/,
+      `<Description author="jeremyjone" version="${version}" date="${currentDate}" copyright="jeremyjone" />`
+    );
+    //   .replace(updateTitle, `${updateTitle}${currentLog}\n\n`);
 
     fs.writeFileSync(docPath, newDoc);
   }

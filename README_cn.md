@@ -1,23 +1,38 @@
-# JzGantt
+# XGantt
 
 ![](./src/assets/logo.png)
 
-![](https://shields.io/github/v/release/jeremyjone/jz-gantt?display_name=tag) ![](https://img.shields.io/npm/v/jz-gantt.svg) ![](https://shields.io/github/v/release/jeremyjone/jz-gantt?display_name=tag&include_prereleases&label=lastest)
-![](https://badgen.net/npm/dt/jz-gantt) ![](https://img.shields.io/npm/l/jz-gantt.svg) ![](https://shields.io/github/workflow/status/jeremyjone/jz-gantt/%E5%8F%91%E5%B8%83%20Release%20%E5%8C%85) ![](https://shields.io/github/workflow/status/jeremyjone/jz-gantt/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3%E5%92%8C%20Demo?label=gh-pages)
-![](https://img.shields.io/github/stars/jeremyjone/jz-gantt.svg?style=social) ![](https://shields.io/github/forks/jeremyjone/jz-gantt?label=Fork&style=social)
+![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag) ![](https://img.shields.io/npm/v/@xpyjs/gantt.svg) ![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag&include_prereleases&label=lastest)
+![](https://badgen.net/npm/dt/@xpyjs/gantt) ![](https://img.shields.io/npm/l/@xpyjs/gantt.svg) ![](https://shields.io/github/workflow/status/xpyjs/gantt/%E5%8F%91%E5%B8%83%20Release%20%E5%8C%85) ![](https://shields.io/github/workflow/status/xpyjs/gantt/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3%E5%92%8C%20Demo?label=gh-pages)
+![](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
 
 [[English](./README.md)] [[中文](./README_cn.md)]
 
 基于vue3的一个简单的甘特组件。
 ![vue 3.x](https://img.shields.io/badge/vue-3.x-43B984) ![animate.css](https://img.shields.io/badge/animate.css-4.x-9E84E2)
 
-- [vue2 版本](https://github.com/xpyjs/gantt-vue2)
+- vue2 版本请移步 [这里](https://github.com/xpyjs/gantt-vue2)
+
+## 十分重要
+
+这个库是 `jz-gantt` 的 vue3 版本的继承库。如果您之前已经使用了 `jz-gantt`，则需要仔细阅读如下内容。
+
+**说明：**
+
+> 这个库的 `1.0.0` 相当于 `jz-gantt@1.3.1`。并且 `jz-gantt` 不再维护。
+
+### 如何迁移
+
+1. 包名不同， `@xpyjs/gantt` 替换了 `jz-gantt`。
+2. 所有以 `j-` 或 `J` 的前缀全都更新为 `x-` 或 `X`。
+
+除此之外，无需其他改动。
 
 ## 截图
 
 ![截图](./public/screenshots/gantt.gif)
 
-## 什么是 JzGantt
+## 什么是 XGantt
 
 - [x] 根据日期自动生成甘特图
 - [x] 支持多层扩展
@@ -35,29 +50,29 @@
 
 ## 文档
 
-要查看源码，参见 [Github](http://github.com/jeremyjone/jz-gantt)
+要查看源码，参见 [Github](http://github.com/xpyjs/gantt)
 
 有关更详细的文档，参见 [document web](https://docs.xiaopangying.com/gantt/)
 
 要看示例，参见 [example web](https://docs.xiaopangying.com/gantt-demo/)
 
-如果遇到任何问题，请提 [issue](https://github.com/jeremyjone/jz-gantt/issues).
+如果遇到任何问题，请提 [issue](https://github.com/xpyjs/gantt/issues).
 
 ## 如何使用
 
 ### 安装
 
 ```bash
-npm install jz-gantt --save
+npm install @xpyjs/gantt --save
 // or
-yarn add jz-gantt  // 推荐
+yarn add @xpyjs/gantt  // 推荐
 ```
 
 ### 使用
 
 ```js
-import Gantt from "jz-gantt";
-import "jz-gantt/dist/index.css";
+import Gantt from "@xpyjs/gantt";
+import "@xpyjs/gantt/dist/index.css";
 
 createApp(App).use(Gantt).mount("#app");
 ```
@@ -77,7 +92,7 @@ const dataList = [
       b: "bbb"
     },
     name: "mydata1",
-    children: []
+    children: [] // children 是必须的，如果没有，给一个空数组即可
   },
   {
     index: 2,
@@ -94,7 +109,7 @@ const dataList = [
           a: "aaa"
         },
         name: "child1",
-        children: []
+        children: [] // children 是必须的，如果没有，给一个空数组即可
       }
     ]
   }
@@ -102,28 +117,28 @@ const dataList = [
 ```
 
 ```html
-<j-gantt data-index="index" :data="dataList" />
+<x-gantt data-index="index" :data="dataList" />
 ```
 
 ### 使用列插槽组件
 
-我们提供了一个名为 `JGanttColumn` 的插槽。 `Label` 是必需的，它应该匹配数据的属性键名。
+我们提供了一个名为 `XGanttColumn` 的插槽。 `Label` 是必需的，它的值应当对应 `data` 中的字段名（支持深度查询），这会告诉组件渲染那一列内容。
 
 ```html
-<j-gantt data-index="index" :data="dataList">
-  <j-gantt-column label="name" />
-</j-gantt>
+<x-gantt data-index="index" :data="dataList">
+  <x-gantt-column label="name" />
+</x-gantt>
 ```
 
 ### 使用滑块插槽组件
 
-我们提供一个名为 `JGanttSlider` 的插槽。如果传入多个滑块，有且只有最后一个滑块将被渲染。
+我们提供一个名为 `XGanttSlider` 的插槽。如果传入多个滑块，有且只有最后一个滑块将被渲染。
 
 ```html
-<j-gantt data-index="index" :data="dataList">
-  <j-gantt-slider />   <!-- no render -->
-  <j-gantt-slider />   <!-- will be rendered -->
-</j-gantt>
+<x-gantt data-index="index" :data="dataList">
+  <x-gantt-slider />   <!-- no render -->
+  <x-gantt-slider />   <!-- will be rendered -->
+</x-gantt>
 ```
 
 ## 许可证

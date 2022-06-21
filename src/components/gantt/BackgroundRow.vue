@@ -27,8 +27,8 @@ const key = ref(data.value?.uuid ?? uuid(12));
 .gt-gantt-row {
   width: 100%;
   position: relative;
-  background-color: var(--j-content-bg-color);
-  border-bottom: 1px solid var(--j-content-border-color);
+  background-color: var(--x-content-bg-color);
+  border-bottom: 1px solid var(--x-content-border-color);
   box-sizing: border-box;
 }
 </style>
