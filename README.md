@@ -19,7 +19,7 @@ This repo is pervious `jz-gantt`. Only vue3 version. If you have used `jz-gantt`
 
 **Specification:**
 
-> This version `1.0.0` is correspond to `jz-gantt@1.3.1`. And `jz-gantt` is archived.
+> This version `1.0.1` is correspond to `jz-gantt@1.3.1`. And `jz-gantt` is archived.
 
 ### How to migrate
 
