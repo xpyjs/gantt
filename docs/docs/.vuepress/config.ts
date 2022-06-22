@@ -1,8 +1,9 @@
-import { defineUserConfig } from 'vuepress';
-import type { DefaultThemeOptions } from 'vuepress';
+import { defaultTheme, defineUserConfig } from 'vuepress';
+// import type { DefaultThemeOptions } from 'vuepress';
+import { registerComponentsPlugin } from '@vuepress/plugin-register-components';
 import { path } from '@vuepress/utils';
 
-export default defineUserConfig<DefaultThemeOptions>({
+export default defineUserConfig({
   lang: 'zh-CN',
   title: 'XGantt Docuemnt',
   description: 'XGantt document site',
@@ -15,7 +16,7 @@ export default defineUserConfig<DefaultThemeOptions>({
     ]
   ],
 
-  themeConfig: {
+  theme: defaultTheme({
     logo: 'https://www.xiaopangying.com/my-logo/jz-gantt.png',
 
     navbar: [
@@ -32,7 +33,10 @@ export default defineUserConfig<DefaultThemeOptions>({
       },
       {
         text: 'github',
-        link: 'https://github.com/xpyjs/gantt'
+        children: [
+          { text: 'vue3', link: 'https://github.com/xpyjs/gantt' },
+          { text: 'vue2', link: 'https://github.com/xpyjs/gantt-vue2' }
+        ]
       },
       {
         text: '个人站',
@@ -61,17 +65,20 @@ export default defineUserConfig<DefaultThemeOptions>({
         '/vue2/slider.md',
         '/vue2/common.md'
       ]
-    },
-
-    themePlugins: {
-      activeHeaderLinks: true
     }
-  },
+
+    // themePlugins: {
+    //   activeHeaderLinks: true
+    // }
+  }),
 
   plugins: [
-    [
-      '@vuepress/register-components',
-      { componentsDir: path.resolve(__dirname, './components') }
-    ]
+    registerComponentsPlugin({
+      componentsDir: path.resolve(__dirname, './components')
+    })
+    // [
+    //   '@vuepress/register-components',
+    //   { componentsDir: path.resolve(__dirname, './components') }
+    // ]
   ]
 });
