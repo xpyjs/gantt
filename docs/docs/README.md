@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.0.1" date="2022-06-22" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.0.2" date="2022-06-29" copyright="jeremyjone" />
 
 通过入门的章节内容，可以快速了解、引入并使用 XGantt。
 
