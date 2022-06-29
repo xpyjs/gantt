@@ -16,11 +16,9 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.0.2](https://github.com/xpyjs/gantt/compare/v1.0.1...v1.0.2) (2022-06-29)
 
-
 ### Features
 
 * **components:** add a silder hover switch about highlight date ([9ab0ebf](https://github.com/xpyjs/gantt/commit/9ab0ebf2329601050210b7142e74baab8b0b16c5)), closes [#29](https://github.com/xpyjs/gantt/issues/29)
-
 
 ### Bug Fixes
 
