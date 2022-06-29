@@ -3,7 +3,7 @@
  * @Author: JeremyJone
  * @Date: 2021-11-25 15:10:18
  * @LastEditors: JeremyJone
- * @LastEditTime: 2022-06-21 18:26:38
+ * @LastEditTime: 2022-06-29 14:30:12
  * @Description: 自动更新文档更新内容。在每次版本发布时使用
  */
 
@@ -74,7 +74,7 @@ if (isCi) {
     );
   }
 
-  //   writeCurrentLog();
+  writeCurrentLog();
 } else {
   function setDocs() {
     const doc = getContent(docPath, /([\s\S]*)/);
