@@ -2,7 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## It's old CHANGELOG for `jz-gantt` down here, maybe links is useless
+### [1.0.2](https://github.com/xpyjs/gantt/compare/v1.0.1...v1.0.2) (2022-06-29)
+
+
+### Features
+
+* **components:** add a silder hover switch about highlight date ([9ab0ebf](https://github.com/xpyjs/gantt/commit/9ab0ebf2329601050210b7142e74baab8b0b16c5)), closes [#29](https://github.com/xpyjs/gantt/issues/29)
+
+
+### Bug Fixes
+
+* **other:** fix main ([c09427c](https://github.com/xpyjs/gantt/commit/c09427c5775d8714e9bc5486bfc46c819c0013e0))
 
 ### [1.3.1](https://github.com/jeremyjone/jz-gantt/compare/v1.3.0...v1.3.1) (2022-03-28)
 
