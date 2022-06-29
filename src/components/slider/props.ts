@@ -106,5 +106,13 @@ export default {
       }
       return true;
     }
+  },
+
+  /**
+   * 允许鼠标悬停高亮表头对应日期
+   */
+  highlightDate: {
+    type: Boolean,
+    default: false
   }
 };

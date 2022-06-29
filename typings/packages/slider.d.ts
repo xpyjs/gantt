@@ -12,6 +12,8 @@ declare class XGanttSliderComponent extends XComponent {
 
   flat: boolean;
 
+  highlightDate: boolean;
+
   label: string;
 
   linkedResize: boolean;

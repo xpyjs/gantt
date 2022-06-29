@@ -50,7 +50,8 @@ const {
   resizeRight,
   linkedResize,
   progress,
-  progressDecimal
+  progressDecimal,
+  highlightDate
 } = toRefs(props);
 
 const { oneDayWidth, GtParam } = useParam();
@@ -268,8 +269,10 @@ const { addShowDate, clearShowDateList } = useShowDate();
 function onMouseEnter() {
   showProgressBtn.value = true;
 
-  addShowDate(data.start);
-  addShowDate(data.end);
+  if (highlightDate.value) {
+    addShowDate(data.start);
+    addShowDate(data.end);
+  }
 
   if (!canMove.value) return;
   showCtrlChunk.value = true;

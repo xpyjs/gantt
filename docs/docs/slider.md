@@ -74,6 +74,12 @@
 
 设置滑块样式是否扁平化。
 
+### highlightDate <Badge text="+v1.0.2" type="tip" />
+
+<DataParameter t="Boolean" d="false" />
+
+允许鼠标悬停高亮表头对应日期
+
 ### label
 
 <DataParameter t="String" />

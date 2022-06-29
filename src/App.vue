@@ -79,6 +79,7 @@
           :linked-resize="true"
           progress
           progress-decimal
+          highlight-date
         >
           <!-- <template v-slot="data">
           <div>{{ data.name }}</div>
