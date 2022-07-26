@@ -2,6 +2,10 @@
 
 <Description author="jeremyjone" version="1.0.2" date="2022-06-29" copyright="jeremyjone" />
 
+[![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small) ![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag) ![](https://img.shields.io/npm/v/@xpyjs/gantt.svg) ![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag&include_prereleases&label=lastest)
+![](https://badgen.net/npm/dt/@xpyjs/gantt) ![](https://img.shields.io/npm/l/@xpyjs/gantt.svg) ![](https://shields.io/github/workflow/status/xpyjs/gantt/%E5%8F%91%E5%B8%83%20Release%20%E5%8C%85) ![](https://shields.io/github/workflow/status/xpyjs/gantt/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3%E5%92%8C%20Demo?label=gh-pages)
+![](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
+
 通过入门的章节内容，可以快速了解、引入并使用 XGantt。
 
 ::: tip 提示
