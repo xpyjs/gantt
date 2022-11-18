@@ -1,8 +1,27 @@
 # 入门
 
-<Description author="jeremyjone" version="1.0.1" date="2022-06-22" copyright="jeremyjone" />
+<Description author="jeremyjone" version="1.0.3" date="2022-06-22" copyright="jeremyjone" />
+
+![](https://img.shields.io/npm/v/@xpyjs/gantt-vue2.svg)
 
 通过入门的章节内容，可以快速了解、引入并使用 XGantt。
+
+## vue2 使用问题，使用前阅读，特别重要
+
+********************************
+
+`vue2.6.x` 与 `vue2.7.x` 版本不兼容，本项目使用 `vue2.6.14` 开发，请勿在 `vue2.7.x` 下使用。
+
+同时，由于 npm 升级机制原因，请修改依赖版本为固定：
+
+```json
+"vue": "2.6.14",
+"vue-template-compiler": "2.6.14"
+```
+
+以上，能够解决初始化报错问题，详见 [ISSUE](https://github.com/xpyjs/gantt-vue2/issues/5)
+
+********************************
 
 ## 十分重要
 
@@ -119,8 +138,9 @@ const dataList = [
 那么只需要在 `html` 中简单的使用 XGantt，即可创建一个甘特内容：
 
 ```html{2}
-<x-gantt data-index="index" <!-- 请确保它存在 -->
-  :data="dataList" />
+<x-gantt
+  data-index="index" <!-- 请确保它存在 -->
+  :data="dataList">
 </x-gantt>
 ```
 
