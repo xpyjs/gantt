@@ -15,6 +15,7 @@
           v-for="(c, i) in r"
           :key="i"
           class="xg-table-header-cell"
+          :style="{ ...$styleBox.getBorderColor() }"
           :colspan="c.colSpan"
           :rowspan="c.rowSpan"
         >
@@ -27,9 +28,12 @@
 
 <script lang="ts" setup>
 import useSlotsBox from '@/composables/useSlotsBox';
+import useStyle from '@/composables/useStyle';
 import Variables from '@/constants/vars';
 import { getColumnWidth } from '../column/util';
 const { $slotsBox } = useSlotsBox();
+
+const { $styleBox } = useStyle();
 </script>
 
 <style lang="scss" scoped>
@@ -42,6 +46,7 @@ const { $slotsBox } = useSlotsBox();
   top: 0;
   position: sticky;
   z-index: 10;
+  overflow: hidden;
 
   .xg-table-header-cell {
     overflow: hidden;
@@ -50,6 +55,9 @@ const { $slotsBox } = useSlotsBox();
     text-align: left;
     position: relative;
     box-sizing: border-box;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+    padding: 0 20px;
   }
 }
 </style>

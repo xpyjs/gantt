@@ -118,7 +118,7 @@ export default {
    */
   borderColor: {
     type: String,
-    default: ''
+    default: '#e5e5e5'
   },
 
   /**
@@ -214,7 +214,7 @@ export default {
    */
   primaryColor: {
     type: String,
-    default: ''
+    default: '#eca710'
   },
 
   /**

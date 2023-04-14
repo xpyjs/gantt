@@ -1,5 +1,8 @@
 <template>
-  <div class="xg-root">
+  <div
+    class="xg-root"
+    :style="{ ...$styleBox.getBorder(), ...$styleBox.getBorderColor() }"
+  >
     <!-- 左侧表格 -->
     <sync-scroll-container
       ref="tableRef"
@@ -55,6 +58,7 @@ import { uuid } from '@/utils/common';
 import { onMounted, onUpdated, ref, toRefs, watch } from 'vue';
 import rootProps from './rootProps';
 import useData from '@/composables/useData';
+import useStyle from '@/composables/useStyle';
 
 const containerId = uuid(10);
 const props = defineProps(rootProps);
@@ -76,6 +80,11 @@ function getScrollGapSize() {
 }
 onMounted(getScrollGapSize);
 onUpdated(getScrollGapSize);
+// #endregion
+
+// #region 处理样式参数
+const { setStyles, $styleBox } = useStyle();
+setStyles(props);
 // #endregion
 
 // #region 处理插槽内容
