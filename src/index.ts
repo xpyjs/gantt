@@ -1,23 +1,27 @@
-import { App } from 'vue';
-import XGanttColumn from 'components/column/index.vue';
-import XGanttSlider from 'components/slider/index.vue';
-import XGantt from './pages/root/RootWrap.vue';
-
-import './styles/index.scss';
+import type { App, Plugin } from 'vue';
+import Column from 'components/column/index.vue';
+import Slider from 'components/slider/index.vue';
+import Root from 'components/root/RootWrap.vue';
 import { Variables } from './constants/vars';
+import { withInstall } from './utils/install';
 
-XGantt.install = (app: App) => {
-  app.component(Variables.name.root, XGantt);
-  app.component(Variables.name.column, XGanttColumn);
-  app.component(Variables.name.slider, XGanttSlider);
+const XGantt = withInstall(Variables.name.root, Root);
+const XGanttColumn = withInstall(Variables.name.column, Column);
+const XGanttSlider = withInstall(Variables.name.slider, Slider);
+
+const components: Record<string, Plugin> = {
+  XGantt,
+  XGanttColumn,
+  XGanttSlider
 };
 
-const install = (app: App) => {
-  app.use(XGantt as any);
+const install = (app: App, options?: Record<string, unknown>) => {
+  for (const key of Object.keys(components)) {
+    app.use(components[key], options);
+  }
 };
 
 export default {
-  install
+  install,
+  ...components
 };
-
-export { XGantt, XGanttColumn, XGanttSlider };

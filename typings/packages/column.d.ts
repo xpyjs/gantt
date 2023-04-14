@@ -17,7 +17,7 @@ declare class XGanttColumnComponent extends XComponent {
 
   width: number | string;
 
-  columnStyle: Object | String;
+  columnStyle: Record<string, string> | string;
 
-  columnClass: Object | String;
+  columnClass: Record<string, string> | string;
 }

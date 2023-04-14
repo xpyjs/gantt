@@ -4,7 +4,10 @@ coverage
 scripts
 sundry
 
-src/App.vue
+demo/App.vue
 .eslintrc.js
+*.js
 tests
 *.config.js
+
+src/_v1

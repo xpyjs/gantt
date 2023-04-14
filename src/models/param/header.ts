@@ -1,57 +1,117 @@
-/* eslint-disable no-underscore-dangle */
-import { Variables } from '@/constants/vars';
-import { TableHeaderDataOptions } from '@/typings/ParamOptions';
+import { isArray } from 'lodash';
+import { type VNode } from 'vue';
 
-export class TableHeader {
-  /**
-   * 表头 key
-   */
-  key: number;
-
-  /**
-   * 表头对应 label 名
-   */
-  label: string;
+class Column {
+  node: VNode;
+  children?: Column[];
+  parent?: Column;
+  level: number;
+  colSpan: number;
+  rowSpan: number;
 
   /**
-   * 表头显示文字
+   *
    */
-  text: string;
-
-  private __w: number;
-
-  constructor() {
-    this.key = -1;
-    this.label = '';
-    this.text = '';
-    this.__w = Variables.size.defaultTableColumnWidth;
-
-    return this;
-  }
-
-  initData(data: TableHeaderDataOptions) {
-    this.key = data.key;
-    this.label = data.label;
-    this.text = data.text;
-    this.__w = data.width;
-
-    return this;
-  }
-
-  /**
-   * 获取表头宽度
-   */
-  get width() {
-    return this.__w;
-  }
-
-  /**
-   * 设置表头宽度
-   * @param v
-   */
-  setWidth(v: number) {
-    this.__w = v;
+  constructor(node: VNode, parent?: Column) {
+    this.node = node;
+    this.parent = parent;
+    this.level = 1;
+    this.colSpan = 1;
+    this.rowSpan = 1;
   }
 }
 
-export default TableHeader;
+export default class Header {
+  columns: Column[] = [];
+  leafs: Column[] = [];
+
+  /**
+   * 表头渲染使用
+   */
+  headers: Column[][] = [];
+
+  setColumns(v: VNode) {
+    // 如果是 column，需要放进 headers 中。并且需要判断是不是有子项（多级表头使用）
+    this.columns.push(new Column(v));
+  }
+
+  setSubColumns(node: VNode, column: Column): Column {
+    const newItem = new Column(node, column);
+    if (isArray(column.children)) {
+      column.children?.push(newItem);
+    } else {
+      column.children = [newItem];
+    }
+
+    return newItem;
+  }
+
+  /**
+   * 当注入完数据，需要生成所需的内容
+   */
+  generate() {
+    this.headers = this.convertToRows(this.columns);
+  }
+
+  /**
+   * 将 columns 内容转换为行的内容，这样才能循环渲染多级表头
+   */
+  private convertToRows(originColumns: Column[]) {
+    let maxLevel = 1;
+    const traverse = (column: Column, parent?: Column) => {
+      if (parent) {
+        column.level = parent.level + 1;
+        if (maxLevel < column.level) {
+          maxLevel = column.level;
+        }
+      }
+      if (column.children) {
+        let colSpan = 0;
+        column.children.forEach(subColumn => {
+          traverse(subColumn, column);
+          colSpan += subColumn.colSpan;
+        });
+        column.colSpan = colSpan;
+      } else {
+        column.colSpan = 1;
+      }
+    };
+
+    originColumns.forEach(column => {
+      column.level = 1;
+      traverse(column);
+    });
+
+    const rows: Column[][] = [];
+    for (let i = 0; i < maxLevel; i++) {
+      rows.push([]);
+    }
+
+    const allColumns = this.getAllColumns(originColumns);
+
+    allColumns.forEach(column => {
+      if (!column.children) {
+        column.rowSpan = maxLevel - column.level + 1;
+      } else {
+        column.rowSpan = 1;
+      }
+      rows[column.level - 1].push(column);
+    });
+
+    return rows;
+  }
+
+  private getAllColumns(columns: Column[]) {
+    const result: Column[] = [];
+    columns.forEach(column => {
+      if (column.children) {
+        result.push(column);
+        result.push.apply(result, this.getAllColumns(column.children));
+      } else {
+        result.push(column);
+        this.leafs.push(column);
+      }
+    });
+    return result;
+  }
+}

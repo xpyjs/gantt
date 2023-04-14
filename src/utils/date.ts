@@ -1,11 +1,11 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable guard-for-in */
-/* eslint-disable no-param-reassign */
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import IsoWeek from 'dayjs/plugin/isoWeek';
 import { Variables } from '@/constants/vars';
-import { HeaderDateOptions, HeaderDateUnit } from '@/typings/ParamOptions';
+import {
+  type HeaderDateOptions,
+  type HeaderDateUnit
+} from '@/typings/ParamOptions';
 
 /** ********************************** */
 /** *** 下面方法全部使用 dayjs 实现 **** */
@@ -54,7 +54,7 @@ export function dateList(
   endDate: string | number | Date,
   unit: HeaderDateUnit
 ): HeaderDateOptions[] {
-  const r = {} as { [key: string]: { len: number; text: string }[] };
+  const r: Record<string, Array<{ len: number; text: string }>> = {};
   const startTime = createDate(startDate).getTime();
   const endTime = createDate(endDate).getTime();
 
@@ -63,7 +63,7 @@ export function dateList(
     const month = `${dayjs(i).month() + 1}`.padStart(2, '0');
     switch (unit) {
       case 'week':
-        if (r[`${year}-${month}`]) {
+        if (Object.hasOwn(r, `${year}-${month}`)) {
           r[`${year}-${month}`].push({
             text: getWeekStr(i),
             len: 7
@@ -83,7 +83,7 @@ export function dateList(
             : Variables.time.millisecondOfWeek;
         break;
       case 'month':
-        if (r[`${year}`]) {
+        if (Object.hasOwn(r, `${year}`)) {
           r[`${year}`].push({
             text: getMonthStr(i),
             len: dayjs(i).daysInMonth()
@@ -108,7 +108,7 @@ export function dateList(
         break;
       case 'day':
       default:
-        if (r[`${year}-${month}`]) {
+        if (Object.hasOwn(r, `${year}-${month}`)) {
           r[`${year}-${month}`].push({
             text: getDayStr(i),
             len: 1
@@ -235,7 +235,7 @@ export function formatDate(
     ]
   };
 
-  if (['zh', 'en'].indexOf(lang) === -1) lang = 'zh';
+  if (!['zh', 'en'].includes(lang)) lang = 'zh';
 
   date = createDate(date);
 

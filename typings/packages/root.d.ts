@@ -1,8 +1,8 @@
 import { XComponent } from '../component';
 import {
-  GanttColumnSize,
-  ParamBodyOptions,
-  ParamHeaderOptions
+  type GanttColumnSize,
+  type ParamBodyOptions,
+  type ParamHeaderOptions
 } from '../../src/typings/ParamOptions';
 
 declare class XGanttRootComponent extends XComponent {

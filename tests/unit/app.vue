@@ -120,7 +120,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue';
 import { dataList } from './data';
-import XGantt from '@/pages/root/index.vue';
+import XGantt from '@/components/root/index.vue';
 import XGanttColumn from '@/components/column/index.vue';
 import XGanttSlider from '@/components/slider/index.vue';
 

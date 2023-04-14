@@ -1,7 +1,6 @@
 node_modules
 .DS_Store
 dist
-demo
 dist-ssr
 *.local
 .vscode
@@ -12,3 +11,4 @@ yarn.lock
 coverage
 
 .cz-config.js
+_v1

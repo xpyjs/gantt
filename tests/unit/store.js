@@ -24,9 +24,6 @@ export const store = {
     [Variables.provider.gtToastQueue]: [],
     [Variables.provider.gtScrollTop]: ref(0),
     [Variables.provider.gtRootHeight]: ref(0),
-    [Variables.provider.gtScrollBarHeight]: ref(
-      Variables.size.defaultScrollBarHeight
-    ),
     [Variables.provider.gtStopClickEvent]: ref(false)
   }
 };

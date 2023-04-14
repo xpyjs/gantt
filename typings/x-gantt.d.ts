@@ -1,5 +1,5 @@
-import { App } from 'vue';
-import { HeaderDateUnit } from '../src/typings/ParamOptions';
+import { type App } from 'vue';
+import { type HeaderDateUnit } from '../src/typings/ParamOptions';
 
 import { XGanttRootComponent } from './packages/root';
 

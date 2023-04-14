@@ -1,47 +1,25 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
+    node: true
   },
   extends: [
     'plugin:vue/vue3-essential',
-    'plugin:jest/recommended',
-    'airbnb-base',
-    'airbnb-typescript/base',
+    'standard-with-typescript',
     'plugin:vue/vue3-recommended',
     'plugin:prettier/recommended'
   ],
+  overrides: [],
   parserOptions: {
-    ecmaVersion: 13,
+    ecmaVersion: 'latest',
     parser: '@typescript-eslint/parser',
     sourceType: 'module',
     project: ['./tsconfig.json'],
     extraFileExtensions: ['.vue']
   },
-  ignorePatterns: ['vite.config.ts'],
-  globals: {
-    defineProps: 'readonly',
-    defineEmits: 'readonly',
-    defineExpose: 'readonly',
-    withDefaults: 'readonly'
-  },
-  plugins: ['vue', '@typescript-eslint'],
-  parser: 'vue-eslint-parser',
-  settings: {
-    'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx']
-    },
-    'import/resolver': {
-      alias: {
-        map: [['@', './src']],
-        extensions: ['.js', '.jsx']
-      },
-      typescript: {
-        alwaysTryTypes: true,
-        project: './tsconfig.json'
-      }
-    }
-  },
+  ignorePatterns: ['vite.config.ts', 'vitest.config.ts'],
+  plugins: ['vue'],
   rules: {
     'no-console':
       process.env.NODE_ENV === 'production'
@@ -52,24 +30,10 @@ module.exports = {
     // 解决 prettier 行尾报错
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
 
-    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
+    'no-plusplus': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off',
 
-    'vue/max-attributes-per-line': 'off',
-    'vue/require-default-prop': 'off',
-    'vue/require-explicit-emits': 'off',
-    'vue/script-setup-uses-vars': 'error',
-    'vue/no-multiple-template-root': 'off',
-    'vue/html-self-closing': [
-      'error',
-      {
-        html: {
-          void: 'always',
-          normal: 'always',
-          component: 'always'
-        },
-        svg: 'always',
-        math: 'always'
-      }
-    ]
+    'vue/multi-word-component-names': 'off'
   }
 };

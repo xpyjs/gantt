@@ -1,4 +1,4 @@
-import { SliderAlignment } from '../../src/typings/ParamOptions';
+import { type SliderAlignment } from '../../src/typings/ParamOptions';
 import { XComponent } from '../component';
 
 declare class XGanttSliderComponent extends XComponent {

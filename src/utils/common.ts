@@ -1,5 +1,5 @@
-/* eslint-disable no-bitwise */
-/* eslint-disable no-param-reassign */
+import _ from 'lodash';
+
 /**
  * 从任意对象中获取一个数字，如果无法获取，返回默认值（如果没有提供，返回0）
  * @param v 任何需要转成数字的内容
@@ -23,14 +23,13 @@ export function parseNumber(v: any, defaultNumber = 0, radix = 10): number {
  * @param len 指定uuid的长度
  * @param radix 进制，默认16进制
  */
-export function uuid(len: number, radix = 16): string {
+export function uuid(len?: number, radix = 16): string {
   const chars =
     '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
   const res = [];
   let i;
-  radix = radix || chars.length;
 
-  if (len) {
+  if (_.isNumber(len)) {
     // Compact form
     for (i = 0; i < len; i++) res[i] = chars[0 | (Math.random() * radix)];
   } else {
@@ -95,7 +94,7 @@ export function camelToKebabCased(str: string): string {
  * 查找一个数组是否存在该元素，如果不存在，则将其添加
  */
 export function addIfNotExist<T>(arr: T[], item: T): T[] {
-  if (arr.indexOf(item) === -1) {
+  if (!arr.includes(item)) {
     arr.push(item);
   }
   return arr;
@@ -105,7 +104,7 @@ export function addIfNotExist<T>(arr: T[], item: T): T[] {
  * 将一个具有样式格式的字符串按照对象格式添加到对象中
  */
 export function addStyleStrToObject(
-  obj: { [key: string]: string },
+  obj: Record<string, string>,
   styleStr: string
 ): void {
   styleStr.split(';').forEach(item => {

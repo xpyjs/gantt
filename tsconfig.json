@@ -9,23 +9,46 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "baseUrl": ".",
-    "types": ["node"],
-    "typeRoots": ["./typings", "./node_moudles/@types/", "./src/typings"],
+    "allowJs": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "./typings",
+      "./node_moudles/@types/",
+      "./src/typings"
+    ],
     "paths": {
-      "@/*": ["./src/*"],
-      "components/*": ["./src/components/*"],
-      "styles/*": ["./src/styles/*"],
-      "utils/*": ["./src/utils/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "components/*": [
+        "./src/components/*"
+      ],
+      "styles/*": [
+        "./src/styles/*"
+      ],
+      "utils/*": [
+        "./src/utils/*"
+      ]
     }
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue",
-    "typings/*"
+    "src/components/**/*.vue",
+    "src/pages/**/*.vue",
+    "typings/*",
+    "demo/*.vue",
+    "demo/*.ts",
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

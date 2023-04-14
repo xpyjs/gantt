@@ -1,4 +1,4 @@
-import { CSSProperties } from 'vue';
+import { type CSSProperties } from 'vue';
 
 declare interface CustomCssProperties extends CSSProperties {
   '--table-width': string;

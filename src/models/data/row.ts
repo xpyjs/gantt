@@ -1,92 +1,65 @@
-/* eslint-disable guard-for-in */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-underscore-dangle */
 /*
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2022-04-21 11:12:22
+ * @LastEditTime: 2023-04-13 15:56:11
  * @Description: 一条数据类
  */
 
 import { Variables } from '@/constants/vars';
-import { HeaderDateUnit } from '@/typings/ParamOptions';
-import { addIfNotExist, uuid } from '@/utils/common';
+import { type HeaderDateUnit } from '@/typings/ParamOptions';
+import { uuid } from '@/utils/common';
 import {
   compareDate,
   createDate,
   getDateOffset,
   getMillisecond
 } from '@/utils/date';
-import { isArray, isDeepEqual, isObject } from '@/utils/is';
+import { cloneDeep, isEqual } from 'lodash';
 
-export class Row {
+export default class RowItem {
   /**
-   * 当前数据唯一 ID
+   * 当前数据唯一 ID。如果当前 item 内容发生了变化，更新它。
    */
-  readonly uuid: string;
+  readonly uuid: string = uuid(12);
 
   /**
-   * 该数据索引位置
+   * 该数据在当前层级下的索引位置
    */
-  index: number;
+  index: number = 0;
 
   /**
    * 当前数据的父级路径集合
    */
-  parentId: number[];
+  parentPath: number[] = [];
 
   /**
    * 父级节点
    */
-  parentNode: Row | null;
+  parentNode: RowItem | null = null;
 
   /**
    * 层级
    */
-  level: number;
+  level: number = 0;
 
   /**
    * 子节点
    */
-  children: Row[];
+  children: RowItem[] = [];
 
   /**
    * 数据属性
    */
-  options: DataOptions & { sl?: string; el?: string };
-
-  /**
-   * 该数据在展开状态下的索引位置，仅用于渲染
-   */
-  __uindex: number;
+  options: Required<DataOptions> = {
+    isExpand: true,
+    startLabel: Variables.default.startKey,
+    endLabel: Variables.default.endKey
+  };
 
   private __data: any;
-
-  private __isExpand: boolean;
-
-  private __isChecked: boolean;
-
-  // private __start: Date | null;
-  // private __end: Date | null;
-
-  constructor() {
-    this.uuid = uuid(12);
-    this.__data = null;
-    this.index = 0;
-    this.parentId = [];
-    this.parentNode = null;
-    this.level = 0;
-    this.__isExpand = true;
-    this.__isChecked = false;
-
-    // this.__start = null;
-    // this.__end = null;
-    this.children = [];
-    this.options = {};
-
-    this.__uindex = 0;
-  }
+  private __isExpand: boolean = true;
+  private __isChecked: boolean = false;
 
   /**
    * 原始数据
@@ -113,41 +86,14 @@ export class Row {
    * 起始时间
    */
   get start() {
-    // console.log(
-    //   this.__data,
-    //   this.options.sl,
-    //   this.__data[this.options.sl as string]
-    // );
-
-    return createDate(this.__data[this.options.sl as string]);
+    return createDate(this.__data[this.options.startLabel]);
   }
 
   /**
    * 截止时间
    */
   get end() {
-    return createDate(this.__data[this.options.el as string]);
-  }
-
-  /**
-   * 进度
-   */
-  get progress() {
-    if (this.children.length > 0) {
-      let progress = 0;
-      for (const child of this.children) {
-        progress += child.progress ?? 0;
-      }
-      return progress / this.children.length;
-    }
-
-    return this.__data.progress ?? 0;
-  }
-
-  setProgress(v: number) {
-    if (v < 0) this.__data.progress = 0;
-    else if (v > 1) this.__data.progress = 1;
-    else this.__data.progress = v;
+    return createDate(this.__data[this.options.endLabel]);
   }
 
   /**
@@ -155,38 +101,23 @@ export class Row {
    * @param data 源数据
    * @param options 数据属性参数
    */
-  initData(data: any, options: DataOptions) {
-    const sl = options.startLabel || Variables.key.start;
-    const el = options.endLabel || Variables.key.end;
+  init(
+    data: any,
+    options: DataOptions,
+    index: number,
+    level: number,
+    parentPath: number[],
+    parentNode: RowItem | null
+  ) {
+    this.options = Object.assign(this.options, options);
+    this.index = index;
+    this.level = level;
+    this.parentNode = parentNode;
+    this.parentPath = [...parentPath];
 
-    Object.assign(this.options, { sl, el });
-    this.__isExpand = this.options.isExpand || true;
-
-    // const that = this;
-    // this.__data = new Proxy(data, {
-    //   get: function (obj, prop) {
-    //     that.proxy(obj);
-    //     return obj[prop];
-    //   },
-    //   set: function (obj, prop, value, receiver) {
-    //     if (obj[prop] != value) {
-    //       obj[prop] = value;
-    //     }
-    //     return Reflect.set(obj, prop, value, receiver);
-    //   }
-    // });
-
-    // this.proxy(this.data);
-
-    // vue3 数据使用 toRefs 解析，自带 Proxy，不再需要上面的代理设置
+    this.__isExpand = this.options.isExpand;
     this.__data = data;
   }
-
-  // 代理响应起止日期
-  // proxy(obj: any) {
-  //   this.__start = createDate(obj[this.options["sl"] as string]);
-  //   this.__end = createDate(obj[this.options["el"] as string]);
-  // }
 
   /**
    * 判断一个数据对象是否与当前数据对象相等
@@ -194,7 +125,7 @@ export class Row {
    * @returns 返回 true 表示相等，否则不等
    */
   isSame(obj: any) {
-    return isDeepEqual(obj, this.data);
+    return isEqual(obj, this.data);
   }
 
   /**
@@ -202,18 +133,7 @@ export class Row {
    * @returns 返回全新的数据
    */
   cloneData() {
-    return this._clone(this.data);
-  }
-
-  _clone(data: any) {
-    if (!isObject(data)) {
-      return data;
-    }
-    const d = isArray(data) ? [] : ({} as any);
-    for (const i in data) {
-      d[i] = isObject(data[i]) ? this._clone(data[i]) : data[i];
-    }
-    return d;
+    return cloneDeep(this.data);
   }
 
   /**
@@ -244,82 +164,76 @@ export class Row {
    * 赋值起始日期，判断是否联动。如果联动，则先判断父节点，然后递归判断子节点
    * @param date 日期
    * @param unit 日期单位
-   * @param linkage 联动
+   * @param linkage 是否联动
    */
   setStart(
     date: Date,
     unit: HeaderDateUnit,
     linkage = false,
-    modifyArr: Row[] = []
+    modifyArr: RowItem[] = []
   ) {
-    this.data[this.options.sl as string] = date;
+    this.__data[this.options.startLabel] = date;
 
     // 首先判断起始日期不能大于结束日期
     if (
-      compareDate(
-        date,
-        getDateOffset(this.end as Date, -getMillisecond(unit))
-      ) === 'r'
+      compareDate(date, getDateOffset(this.end, -getMillisecond(unit))) === 'r'
     )
-      this.data[this.options.el as string] = getDateOffset(
+      this.data[this.options.endLabel] = getDateOffset(
         date,
         getMillisecond(unit)
       );
 
-    if (!linkage) return;
+    // if (!linkage) return;
 
-    // 查看父节点
-    let pNode = this.parentNode;
-    while (pNode !== null) {
-      if (compareDate(this.start as Date, pNode.start as Date) === 'l') {
-        // 赋值应该给data的日期数据赋值
-        pNode.setStart(this.start as Date, unit);
-        addIfNotExist<Row>(modifyArr, pNode);
-      } else {
-        break;
-      }
-      pNode = pNode.parentNode;
-    }
+    // // 查看父节点
+    // let pNode = this.parentNode;
+    // while (pNode !== null) {
+    //   if (compareDate(this.start, pNode.start) === 'l') {
+    //     // 赋值应该给data的日期数据赋值
+    //     pNode.setStart(this.start, unit);
+    //     addIfNotExist<RowItem>(modifyArr, pNode);
+    //   } else {
+    //     break;
+    //   }
+    //   pNode = pNode.parentNode;
+    // }
 
-    // 查看子节点
-    this.__setChildrenDate(this, 'start', unit, modifyArr);
+    // // 查看子节点
+    // this.__setChildrenDate(this, 'start', unit, modifyArr);
   }
 
   setEnd(
     date: Date,
     unit: HeaderDateUnit,
     linkage = false,
-    modifyArr: Row[] = []
+    modifyArr: RowItem[] = []
   ) {
-    this.data[this.options.el as string] = date;
+    this.data[this.options.endLabel] = date;
 
     // 首先判断起始日期不能大于结束日期
     if (
-      compareDate(
-        date,
-        getDateOffset(this.start as Date, getMillisecond(unit))
-      ) === 'l'
+      compareDate(date, getDateOffset(this.start, getMillisecond(unit))) === 'l'
     )
-      this.data[this.options.sl as string] = getDateOffset(
+      this.data[this.options.startLabel] = getDateOffset(
         date,
         -getMillisecond(unit)
       );
 
-    if (!linkage) return;
+    // if (!linkage) return;
 
-    let pNode = this.parentNode;
-    while (pNode !== null) {
-      if (compareDate(this.end as Date, pNode.end as Date) === 'r') {
-        pNode.setEnd(this.end as Date, unit);
-        addIfNotExist<Row>(modifyArr, pNode);
-      } else {
-        break;
-      }
-      pNode = pNode.parentNode;
-    }
+    // let pNode = this.parentNode;
+    // while (pNode !== null) {
+    //   if (compareDate(this.end, pNode.end) === 'r') {
+    //     pNode.setEnd(this.end, unit);
+    //     addIfNotExist<RowItem>(modifyArr, pNode);
+    //   } else {
+    //     break;
+    //   }
+    //   pNode = pNode.parentNode;
+    // }
 
-    // 查看子节点
-    this.__setChildrenDate(this, 'end', unit, modifyArr);
+    // // 查看子节点
+    // this.__setChildrenDate(this, 'end', unit, modifyArr);
   }
 
   /**
@@ -328,22 +242,22 @@ export class Row {
    * 并且，如果是分页，或者其他情况下数据不全，联动就没有意义。
    */
   private __setChildrenDate(
-    node: Row,
+    node: RowItem,
     key: 'start' | 'end',
     unit: HeaderDateUnit,
-    modifyArr: Row[]
+    modifyArr: RowItem[]
   ) {
     for (let i = 0; i < node.children.length; i++) {
       const c = node.children[i];
       if (key === 'start') {
-        if (compareDate(c.start as Date, node.start as Date) === 'l') {
-          c.setStart(node.start as Date, unit);
+        if (compareDate(c.start, node.start) === 'l') {
+          c.setStart(node.start, unit);
           modifyArr.push(c);
           this.__setChildrenDate(c, key, unit, modifyArr);
         }
       } else if (key === 'end') {
-        if (compareDate(c.end as Date, node.end as Date) === 'r') {
-          c.setEnd(node.end as Date, unit);
+        if (compareDate(c.end, node.end) === 'r') {
+          c.setEnd(node.end, unit);
           modifyArr.push(c);
           this.__setChildrenDate(c, key, unit, modifyArr);
         }
@@ -354,14 +268,14 @@ export class Row {
   /**
    * 获取子项的展平状态
    */
-  getFlattenChildren(): Row[] {
-    const arr: Row[] = [];
+  getFlattenChildren(): RowItem[] {
+    const arr: RowItem[] = [];
     this.__getFlattenChildren(arr);
     arr.shift(); // 添加的第一个是自己，所以去掉
     return arr;
   }
 
-  private __getFlattenChildren(arr: Row[]) {
+  private __getFlattenChildren(arr: RowItem[]) {
     arr.push(this);
     if (this.children.length > 0) {
       for (const child of this.children) {
@@ -370,5 +284,3 @@ export class Row {
     }
   }
 }
-
-export default Row;

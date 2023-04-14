@@ -1,4 +1,4 @@
-import { VNode } from 'vue';
+import { type VNode } from 'vue';
 
 declare interface ParamHeaderOptions {
   bgColor?: string;
@@ -53,7 +53,7 @@ declare interface HeaderDateOptions {
   /**
    * 每一格显示的内容
    */
-  one: {
+  one: Array<{
     /**
      * 每一格所包含的天数
      */
@@ -62,7 +62,7 @@ declare interface HeaderDateOptions {
      * 每一格的显示内容
      */
     text: string;
-  }[];
+  }>;
 }
 
 declare type HeaderDateUnit = 'day' | 'week' | 'month';

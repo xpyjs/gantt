@@ -1,5 +1,3 @@
-/* eslint-disable no-bitwise */
-/* eslint-disable no-param-reassign */
 const reRGBA = /^rgb(a)?\((\d{1,3}),(\d{1,3}),(\d{1,3}),?([01]?\.?\d*?)?\)$/;
 
 interface Rgba {
@@ -55,7 +53,7 @@ export function textToRgb(str: string) {
 
   if (m[1]) {
     const alpha = parseFloat(m[5]);
-    rgb.a = Math.min(1, Number.isNaN(alpha) === true ? 1 : alpha) * 100;
+    rgb.a = Math.min(1, Number.isNaN(alpha) ? 1 : alpha) * 100;
   }
 
   return rgb;
@@ -68,14 +66,14 @@ function rgbToHex({ r, g, b, a }: Rgba) {
   g = Math.round(g);
   b = Math.round(b);
 
-  if (r > 255 || g > 255 || b > 255 || (alpha && (a as number) > 100)) {
+  if (r > 255 || g > 255 || b > 255 || (alpha && a > 100)) {
     throw new TypeError(
       'Expected 3 numbers below 256 (and optionally one below 100)'
     );
   }
 
   const newAlpha = alpha
-    ? (Math.round((255 * (a as number)) / 100) | (1 << 8)).toString(16).slice(1)
+    ? (Math.round((255 * a) / 100) | (1 << 8)).toString(16).slice(1)
     : '';
 
   return `#${(b | (g << 8) | (r << 16) | (1 << 24))
