@@ -17,5 +17,10 @@ export default () => {
     );
   }
 
-  return { $data: store.$data, initData };
+  function getDateList() {
+    store.ganttHeader.setDate(store.$data.start, store.$data.end);
+    return store.ganttHeader.headers;
+  }
+
+  return { $data: store.$data, initData, getDateList };
 };

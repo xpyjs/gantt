@@ -1,33 +1,21 @@
 <template>
   <table class="xg-gantt-header" cellpadding="0" cellspacing="0" border="0">
     <colgroup>
-      <template v-for="i in 100" :key="i">
+      <template v-for="i in dateList[1].length" :key="i">
         <col width="30px" />
       </template>
     </colgroup>
     <thead>
-      <tr>
+      <tr v-for="(r, trIndex) in dateList" :key="trIndex">
         <th
-          v-for="i in 10"
+          v-for="(c, i) in r"
           :key="i"
           class="xg-gantt-header-cell"
           :style="{ ...$styleBox.getBorderColor() }"
-          colspan="10"
-          rowspan="1"
+          :colspan="c.colSpan"
+          :rowspan="c.rowSpan"
         >
-          {{ i }}
-        </th>
-      </tr>
-      <tr>
-        <th
-          v-for="i in 100"
-          :key="i"
-          class="xg-gantt-header-cell"
-          :style="{ ...$styleBox.getBorderColor() }"
-          colspan="1"
-          rowspan="1"
-        >
-          {{ i }}
+          {{ c.date }}
         </th>
       </tr>
     </thead>
@@ -37,13 +25,12 @@
 <script lang="ts" setup>
 import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
-import { dateList } from '@/utils/date';
 
 const { $styleBox } = useStyle();
 
-const { $data } = useData();
-const l = dateList($data.start, $data.end, 'day');
-console.log('lll', l);
+const { getDateList } = useData();
+const dateList = getDateList();
+console.log('getDateList', dateList);
 </script>
 
 <style lang="scss" scoped>

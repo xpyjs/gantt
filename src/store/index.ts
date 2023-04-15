@@ -9,7 +9,7 @@
 import { inject, provide, reactive, type Ref, ref } from 'vue';
 import EventBus from '@/utils/bus';
 import { AllData } from '@/models/data';
-import { SlotsBox, StyleBox } from '@/models/param';
+import { GanttHeader, SlotsBox, StyleBox } from '@/models/param';
 
 export const initStore = () => {
   const Bus = reactive(new EventBus());
@@ -26,6 +26,9 @@ export const initStore = () => {
 
   const styleBox = reactive(new StyleBox());
   provide('$styleBox', styleBox);
+
+  const ganttHeader = reactive(new GanttHeader());
+  provide('ganttHeader', ganttHeader);
 };
 
 export const useStore = () => {
@@ -53,7 +56,12 @@ export const useStore = () => {
     /**
      * 样式盒子，所有样式都保存在这里来管理样式
      */
-    $styleBox: inject('$styleBox') as StyleBox
+    $styleBox: inject('$styleBox') as StyleBox,
+
+    /**
+     * 甘特图的表头类
+     */
+    ganttHeader: inject('ganttHeader') as GanttHeader
   };
 };
 
