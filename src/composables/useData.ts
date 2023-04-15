@@ -1,15 +1,21 @@
 import { useStore } from '@/store';
+import { watch, type Ref } from 'vue';
 
 export default () => {
   const store = useStore();
 
-  function initData(data: any[]) {
-    store.$data.init(data);
+  function initData(data: Ref<any[]>) {
+    store.$data.init(data.value);
+
+    watch(
+      () => data,
+      val => {
+        // 更新数据
+        store.$data.update(val.value);
+      },
+      { deep: true }
+    );
   }
 
-  function updateData(data: any[]) {
-    store.$data.update(data);
-  }
-
-  return { $data: store.$data, initData, updateData };
+  return { $data: store.$data, initData };
 };

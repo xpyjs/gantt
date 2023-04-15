@@ -55,7 +55,7 @@ import GanttBody from '@/components/common/GanttBody.vue';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useTableWidth from '@/composables/useTableWidth';
 import { uuid } from '@/utils/common';
-import { onMounted, onUpdated, ref, toRefs, watch } from 'vue';
+import { onMounted, onUpdated, ref, toRefs } from 'vue';
 import rootProps from './rootProps';
 import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
@@ -96,17 +96,8 @@ setSlots(props.slots);
 // #region 处理数据
 const { data } = toRefs(props);
 
-const { initData, updateData } = useData();
-initData(data.value);
-
-watch(
-  () => data,
-  val => {
-    // 更新数据
-    updateData(val.value);
-  },
-  { deep: true }
-);
+const { initData } = useData();
+initData(data);
 // #endregion
 
 // #region 获取表格宽度
