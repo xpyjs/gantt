@@ -1,14 +1,14 @@
 import { isArray } from 'lodash';
 import { type VNode } from 'vue';
 
-class Column {
+class TableColumn {
   node: VNode;
   /**
    * 非叶子结点只接收 label 参数作为标题
    */
   label: string;
-  children?: Column[];
-  parent?: Column;
+  children?: TableColumn[];
+  parent?: TableColumn;
   level: number;
   colSpan: number;
   rowSpan: number;
@@ -16,7 +16,7 @@ class Column {
   /**
    *
    */
-  constructor(node: VNode, parent?: Column) {
+  constructor(node: VNode, parent?: TableColumn) {
     this.node = node;
     this.label = node.props?.label ?? '';
     this.parent = parent;
@@ -26,28 +26,28 @@ class Column {
   }
 }
 
-export default class Header {
-  columns: Column[] = [];
-  leafs: Column[] = [];
+class TableHeader {
+  columns: TableColumn[] = [];
+  leafs: TableColumn[] = [];
 
   /**
    * 表头渲染使用
    */
-  headers: Column[][] = [];
+  headers: TableColumn[][] = [];
 
   /**
    * 添加表头
    */
   setColumn(v: VNode) {
     // 如果是 column，需要放进 headers 中。并且需要判断是不是有子项（多级表头使用）
-    this.columns.push(new Column(v));
+    this.columns.push(new TableColumn(v));
   }
 
   /**
    * 添加子表头
    */
-  setSubColumn(node: VNode, parent: Column): Column {
-    const newItem = new Column(node, parent);
+  setSubColumn(node: VNode, parent: TableColumn): TableColumn {
+    const newItem = new TableColumn(node, parent);
     if (isArray(parent.children)) {
       parent.children?.push(newItem);
     } else {
@@ -68,10 +68,10 @@ export default class Header {
    * This function idea from https://github.com/elemefe/element
    * 将 columns 内容转换为行的内容，这样才能循环渲染多级表头
    */
-  private convertToRows(columns: Column[]) {
+  private convertToRows(columns: TableColumn[]) {
     let maxLevel = 1;
 
-    const traverse = (column: Column, parent?: Column) => {
+    const traverse = (column: TableColumn, parent?: TableColumn) => {
       if (parent) {
         column.level = parent.level + 1;
         if (maxLevel < column.level) {
@@ -95,7 +95,7 @@ export default class Header {
       traverse(column);
     });
 
-    const rows: Column[][] = [];
+    const rows: TableColumn[][] = [];
     for (let i = 0; i < maxLevel; i++) {
       rows.push([]);
     }
@@ -117,8 +117,8 @@ export default class Header {
   /**
    * This function idea from https://github.com/elemefe/element
    */
-  private getAllColumns(columns: Column[]) {
-    const result: Column[] = [];
+  private getAllColumns(columns: TableColumn[]) {
+    const result: TableColumn[] = [];
     columns.forEach(column => {
       if (column.children) {
         result.push(column);
@@ -134,3 +134,5 @@ export default class Header {
     return result;
   }
 }
+
+export { TableHeader };

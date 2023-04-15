@@ -1,10 +1,10 @@
 import Variables from '@/constants/vars';
 import SliderVue from '@/components/slider/index.vue';
 import { type Component, type VNode, h, type Slots } from 'vue';
-import Header from './header';
+import { TableHeader } from './header';
 
 export default class SlotsBox {
-  headers!: Header;
+  tableHeaders!: TableHeader;
   cols!: VNode[];
   slider!: VNode;
 
@@ -13,7 +13,7 @@ export default class SlotsBox {
   }
 
   private init() {
-    this.headers = new Header();
+    this.tableHeaders = new TableHeader();
     this.cols = [];
     this.slider = h(SliderVue);
   }
@@ -28,7 +28,7 @@ export default class SlotsBox {
     return !!v.type?.name && !!v.type?.setup;
   }
 
-  private setMultiColumn(col: VNode, column: Header['columns'][0]) {
+  private setMultiColumn(col: VNode, column: TableHeader['columns'][0]) {
     const s: () => any[] = (col.children as any)?.default;
 
     if (s) {
@@ -43,7 +43,7 @@ export default class SlotsBox {
             );
           })
           .forEach(v => {
-            const c = this.headers.setSubColumn(v, column);
+            const c = this.tableHeaders.setSubColumn(v, column);
 
             this.setMultiColumn(v, c);
           });
@@ -57,7 +57,7 @@ export default class SlotsBox {
    * 将 columns 的叶子结点平铺
    */
   private setLeafCols() {
-    this.cols = this.headers.leafs.map(v => v.node);
+    this.cols = this.tableHeaders.leafs.map(v => v.node);
   }
 
   setSlots(slots: Slots) {
@@ -87,15 +87,15 @@ export default class SlotsBox {
             this.slider = v;
           } else if (SlotsBox.__checkType(type, Variables.name.column)) {
             // column，则要放到 header 中去，然后还要有叶子结点的渲染
-            this.headers.setColumn(v);
+            this.tableHeaders.setColumn(v);
 
             // 看一下有没有嵌套 x-gantt-column，如果有，表示需要嵌套表头
-            this.setMultiColumn(v, this.headers.columns[index]);
+            this.setMultiColumn(v, this.tableHeaders.columns[index]);
           }
         });
 
       // 生成表头需要的内容
-      this.headers.generate();
+      this.tableHeaders.generate();
 
       // 生成完表头，就可以获取用于渲染内容的叶子节点的 column
       this.setLeafCols();

@@ -10,7 +10,7 @@
       </template>
     </colgroup>
     <thead>
-      <tr v-for="(r, trIndex) in $slotsBox.headers.headers" :key="trIndex">
+      <tr v-for="(r, trIndex) in $slotsBox.tableHeaders.headers" :key="trIndex">
         <th
           v-for="(c, i) in r"
           :key="i"
