@@ -19,7 +19,7 @@
           :colspan="c.colSpan"
           :rowspan="c.rowSpan"
         >
-          {{ c.node.props?.label || c.node.props?.prop }}
+          {{ c.label }}
         </th>
       </tr>
     </thead>

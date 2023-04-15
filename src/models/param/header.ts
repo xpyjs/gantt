@@ -3,6 +3,10 @@ import { type VNode } from 'vue';
 
 class Column {
   node: VNode;
+  /**
+   * 非叶子结点只接收 label 参数作为标题
+   */
+  label: string;
   children?: Column[];
   parent?: Column;
   level: number;
@@ -14,6 +18,7 @@ class Column {
    */
   constructor(node: VNode, parent?: Column) {
     this.node = node;
+    this.label = node.props?.label ?? '';
     this.parent = parent;
     this.level = 1;
     this.colSpan = 1;
@@ -30,17 +35,23 @@ export default class Header {
    */
   headers: Column[][] = [];
 
-  setColumns(v: VNode) {
+  /**
+   * 添加表头
+   */
+  setColumn(v: VNode) {
     // 如果是 column，需要放进 headers 中。并且需要判断是不是有子项（多级表头使用）
     this.columns.push(new Column(v));
   }
 
-  setSubColumns(node: VNode, column: Column): Column {
-    const newItem = new Column(node, column);
-    if (isArray(column.children)) {
-      column.children?.push(newItem);
+  /**
+   * 添加子表头
+   */
+  setSubColumn(node: VNode, parent: Column): Column {
+    const newItem = new Column(node, parent);
+    if (isArray(parent.children)) {
+      parent.children?.push(newItem);
     } else {
-      column.children = [newItem];
+      parent.children = [newItem];
     }
 
     return newItem;
@@ -54,10 +65,12 @@ export default class Header {
   }
 
   /**
+   * This function idea from https://github.com/elemefe/element
    * 将 columns 内容转换为行的内容，这样才能循环渲染多级表头
    */
-  private convertToRows(originColumns: Column[]) {
+  private convertToRows(columns: Column[]) {
     let maxLevel = 1;
+
     const traverse = (column: Column, parent?: Column) => {
       if (parent) {
         column.level = parent.level + 1;
@@ -77,7 +90,7 @@ export default class Header {
       }
     };
 
-    originColumns.forEach(column => {
+    columns.forEach(column => {
       column.level = 1;
       traverse(column);
     });
@@ -87,7 +100,7 @@ export default class Header {
       rows.push([]);
     }
 
-    const allColumns = this.getAllColumns(originColumns);
+    const allColumns = this.getAllColumns(columns);
 
     allColumns.forEach(column => {
       if (!column.children) {
@@ -101,6 +114,9 @@ export default class Header {
     return rows;
   }
 
+  /**
+   * This function idea from https://github.com/elemefe/element
+   */
   private getAllColumns(columns: Column[]) {
     const result: Column[] = [];
     columns.forEach(column => {
@@ -108,6 +124,9 @@ export default class Header {
         result.push(column);
         result.push.apply(result, this.getAllColumns(column.children));
       } else {
+        // 非叶子结点只接收 label 参数作为展示。叶子结点还可以展示 prop 参数值
+        if (!column.label) column.label = column.node.props?.prop ?? '';
+
         result.push(column);
         this.leafs.push(column);
       }

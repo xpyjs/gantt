@@ -28,20 +28,24 @@ export default class SlotsBox {
     return !!v.type?.name && !!v.type?.setup;
   }
 
-  private setMultiColumns(col: VNode, column: Header['columns'][0]) {
-    const s: any = (col.children as any)?.default;
+  private setMultiColumn(col: VNode, column: Header['columns'][0]) {
+    const s: () => any[] = (col.children as any)?.default;
 
     if (s) {
       try {
         s()
-          .filter((v: any) => {
+          .filter(v => {
             const type = (v.type as Component)?.name;
-            return type && SlotsBox.__checkType(type, Variables.name.column);
+            return (
+              type &&
+              SlotsBox.__isCustomComponent(v) &&
+              SlotsBox.__checkType(type, Variables.name.column)
+            );
           })
-          .forEach((v: any) => {
-            const c = this.headers.setSubColumns(v, column);
+          .forEach(v => {
+            const c = this.headers.setSubColumn(v, column);
 
-            this.setMultiColumns(v, c);
+            this.setMultiColumn(v, c);
           });
       } catch (err) {
         // pass
@@ -87,10 +91,10 @@ export default class SlotsBox {
             this.slider = v;
           } else if (SlotsBox.__checkType(type, Variables.name.column)) {
             // column，则要放到 header 中去，然后还要有叶子结点的渲染
-            this.headers.setColumns(v);
+            this.headers.setColumn(v);
 
             // 看一下有没有嵌套 x-gantt-column，如果有，表示需要嵌套表头
-            this.setMultiColumns(v, this.headers.columns[index]);
+            this.setMultiColumn(v, this.headers.columns[index]);
           }
         });
 
