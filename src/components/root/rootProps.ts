@@ -186,7 +186,7 @@ export default {
    */
   headerStyle: {
     type: Object as PropType<ParamHeaderOptions>,
-    defalut: () => {
+    default: () => {
       return {};
     }
   },
