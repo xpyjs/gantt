@@ -33,6 +33,7 @@ module.exports = {
     'no-plusplus': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
 
     'vue/multi-word-component-names': 'off'
   }

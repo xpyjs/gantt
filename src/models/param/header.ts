@@ -1,3 +1,5 @@
+import { type HeaderDateUnit } from '@/typings/ParamOptions';
+import { type XDate } from '@/utils/date';
 import { isArray } from 'lodash';
 import { type VNode } from 'vue';
 
@@ -167,22 +169,24 @@ class GanttHeader extends Header {
    */
   headers: GanttColumn[][] = [];
 
-  start: Date | null = null;
-  end: Date | null = null;
+  start?: XDate;
+  end?: XDate;
+  unit: HeaderDateUnit = 'day';
 
   /**
    * 设置日期
    */
-  setDate(start: Date | null, end: Date | null) {
+  setDate(start?: XDate, end?: XDate, unit: HeaderDateUnit = 'day') {
     this.start = start;
     this.end = end;
+    this.unit = unit;
 
     this.generate();
   }
 
   generate() {
-    // TODO:根据日期生成一个树形日期结构
-    // 结构大体：[{date: 2020-1, children: [{date: 1}, {date: 2}, {date: 3}]}, {date: 2020-2, children: [{date: 1}, {date: 2}]}]
+    // TODO:根据日期和单位生成一个树形日期结构
+
     const columns: GanttColumn[] = [
       {
         date: '2020-1',

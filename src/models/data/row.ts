@@ -2,19 +2,14 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-04-13 15:56:11
+ * @LastEditTime: 2023-04-15 23:23:12
  * @Description: 一条数据类
  */
 
 import { Variables } from '@/constants/vars';
 import { type HeaderDateUnit } from '@/typings/ParamOptions';
 import { uuid } from '@/utils/common';
-import {
-  compareDate,
-  createDate,
-  getDateOffset,
-  getMillisecond
-} from '@/utils/date';
+import { XDate } from '@/utils/date';
 import { cloneDeep, isEqual } from 'lodash';
 
 export default class RowItem {
@@ -86,14 +81,14 @@ export default class RowItem {
    * 起始时间
    */
   get start() {
-    return createDate(this.__data[this.options.startLabel]);
+    return new XDate(this.__data[this.options.startLabel]);
   }
 
   /**
    * 截止时间
    */
   get end() {
-    return createDate(this.__data[this.options.endLabel]);
+    return new XDate(this.__data[this.options.endLabel]);
   }
 
   /**
@@ -167,21 +162,21 @@ export default class RowItem {
    * @param linkage 是否联动
    */
   setStart(
-    date: Date,
+    date: XDate,
     unit: HeaderDateUnit,
     linkage = false,
     modifyArr: RowItem[] = []
   ) {
-    this.__data[this.options.startLabel] = date;
+    this.__data[this.options.startLabel] = date.date;
 
     // 首先判断起始日期不能大于结束日期
     if (
-      compareDate(date, getDateOffset(this.end, -getMillisecond(unit))) === 'r'
+      date.compareTo(this.end.getOffset(Variables.time.millisecondOfDay)) ===
+      'r'
     )
-      this.data[this.options.endLabel] = getDateOffset(
-        date,
-        getMillisecond(unit)
-      );
+      this.data[this.options.endLabel] = date.getOffset(
+        Variables.time.millisecondOfDay
+      ).date;
 
     // if (!linkage) return;
 
@@ -203,21 +198,22 @@ export default class RowItem {
   }
 
   setEnd(
-    date: Date,
+    date: XDate,
     unit: HeaderDateUnit,
     linkage = false,
     modifyArr: RowItem[] = []
   ) {
-    this.data[this.options.endLabel] = date;
+    this.data[this.options.endLabel] = date.date;
 
     // 首先判断起始日期不能大于结束日期
+
     if (
-      compareDate(date, getDateOffset(this.start, getMillisecond(unit))) === 'l'
+      date.compareTo(this.start.getOffset(Variables.time.millisecondOfDay)) ===
+      'l'
     )
-      this.data[this.options.startLabel] = getDateOffset(
-        date,
-        -getMillisecond(unit)
-      );
+      this.data[this.options.startLabel] = date.getOffset(
+        Variables.time.millisecondOfDay
+      ).date;
 
     // if (!linkage) return;
 
@@ -250,13 +246,13 @@ export default class RowItem {
     for (let i = 0; i < node.children.length; i++) {
       const c = node.children[i];
       if (key === 'start') {
-        if (compareDate(c.start, node.start) === 'l') {
+        if (c.start.compareTo(node.start) === 'l') {
           c.setStart(node.start, unit);
           modifyArr.push(c);
           this.__setChildrenDate(c, key, unit, modifyArr);
         }
       } else if (key === 'end') {
-        if (compareDate(c.end, node.end) === 'r') {
+        if (c.end.compareTo(node.end) === 'r') {
           c.setEnd(node.end, unit);
           modifyArr.push(c);
           this.__setChildrenDate(c, key, unit, modifyArr);

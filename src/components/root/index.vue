@@ -55,7 +55,7 @@ import GanttBody from '@/components/common/GanttBody.vue';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useTableWidth from '@/composables/useTableWidth';
 import { uuid } from '@/utils/common';
-import { onMounted, onUpdated, ref, toRefs } from 'vue';
+import { getCurrentInstance, onMounted, onUpdated, ref, toRefs } from 'vue';
 import rootProps from './rootProps';
 import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
@@ -103,6 +103,8 @@ initData(data);
 // #region 获取表格宽度
 const { tableWidth } = useTableWidth();
 // #endregion
+
+console.log('.....root', getCurrentInstance());
 </script>
 
 <style scoped lang="scss">

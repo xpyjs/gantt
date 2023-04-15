@@ -1,4 +1,4 @@
-import { compareDate } from '@/utils/date';
+import { type XDate } from '@/utils/date';
 import { isArray } from 'lodash';
 import RowItem from './row';
 
@@ -26,12 +26,12 @@ export default class AllData {
   /**
    * 整体最开始的日期
    */
-  start: Date | null = null;
+  start?: XDate;
 
   /**
    * 整体最末尾的日期
    */
-  end: Date | null = null;
+  end?: XDate;
 
   /**
    * 整体数据结构的层级数量
@@ -207,11 +207,11 @@ export default class AllData {
    * 更新起止时间
    */
   private __updateDate(row: RowItem) {
-    if (!this.start || compareDate(row.start, this.start) === 'l') {
+    if (!this.start || row.start.compareTo(this.start) === 'l') {
       this.start = row.start;
     }
 
-    if (!this.end || compareDate(row.end, this.end) === 'r') {
+    if (!this.end || row.end.compareTo(this.end) === 'r') {
       this.end = row.end;
     }
   }
