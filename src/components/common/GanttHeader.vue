@@ -35,9 +35,15 @@
 </template>
 
 <script lang="ts" setup>
+import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
+import { dateList } from '@/utils/date';
 
 const { $styleBox } = useStyle();
+
+const { $data } = useData();
+const l = dateList($data.start, $data.end, 'day');
+console.log('lll', l);
 </script>
 
 <style lang="scss" scoped>

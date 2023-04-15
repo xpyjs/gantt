@@ -63,8 +63,6 @@ export default class SlotsBox {
   setSlots(slots: Slots) {
     this.init();
 
-    // let colVNodeKey = 0;
-
     // 1、slots.default 应该只包含 x-gantt-column 和 x-gantt-slider
     if (slots.default) {
       slots
@@ -82,8 +80,6 @@ export default class SlotsBox {
           );
         })
         .forEach((v, index) => {
-          console.log('vvvv', v);
-
           const type = (v.type as Component).name as string;
 
           if (SlotsBox.__checkType(type, Variables.name.slider)) {
@@ -103,9 +99,6 @@ export default class SlotsBox {
 
       // 生成完表头，就可以获取用于渲染内容的叶子节点的 column
       this.setLeafCols();
-
-      console.log('cols', this.cols);
-      console.log('headers', this.headers);
     }
 
     // 2、如果有预定义的命名插槽，单独处理

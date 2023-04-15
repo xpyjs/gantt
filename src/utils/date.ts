@@ -50,8 +50,8 @@ export function getDayStr(date: Date | number) {
  * @param format
  */
 export function dateList(
-  startDate: string | number | Date,
-  endDate: string | number | Date,
+  startDate: string | number | Date | null,
+  endDate: string | number | Date | null,
   unit: HeaderDateUnit
 ): HeaderDateOptions[] {
   const r: Record<string, Array<{ len: number; text: string }>> = {};
