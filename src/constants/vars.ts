@@ -29,8 +29,21 @@ export const Variables = {
   },
 
   time: {
-    millisecondOfDay: 86400000,
-    millisecondOfWeek: 604800000
+    millisecondOf: {
+      millisecond: 1,
+      second: 1000,
+      minute: 60000,
+      hour: 3600000,
+      day: 86400000,
+      week: 604800000
+    },
+    aggregation: {
+      week: 'year',
+      day: 'month',
+      hour: 'day',
+      minute: 'hour',
+      second: 'minute'
+    }
   }
 };
 

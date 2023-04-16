@@ -15,7 +15,7 @@
           :colspan="c.colSpan"
           :rowspan="c.rowSpan"
         >
-          {{ c.date }}
+          {{ c.label }}
         </th>
       </tr>
     </thead>

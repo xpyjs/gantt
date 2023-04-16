@@ -1,5 +1,5 @@
-import { type XDate } from '@/utils/date';
 import { isArray } from 'lodash';
+import { type XDate } from '../param/date';
 import RowItem from './row';
 
 export default class AllData {

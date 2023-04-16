@@ -9,8 +9,8 @@
 import { Variables } from '@/constants/vars';
 import { type HeaderDateUnit } from '@/typings/ParamOptions';
 import { uuid } from '@/utils/common';
-import { XDate } from '@/utils/date';
 import { cloneDeep, isEqual } from 'lodash';
+import { XDate } from '../param/date';
 
 export default class RowItem {
   /**

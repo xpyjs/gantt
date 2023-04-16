@@ -1,7 +1,7 @@
-import { type HeaderDateUnit } from '@/typings/ParamOptions';
-import { type XDate } from '@/utils/date';
+import { XDate } from './date';
 import { isArray } from 'lodash';
 import { type VNode } from 'vue';
+import Variables from '@/constants/vars';
 
 class Column {
   children?: Column[];
@@ -42,12 +42,14 @@ class TableColumn extends Column {
 
 class GanttColumn extends Column {
   declare children?: GanttColumn[];
-  date: string;
+  date: XDate;
+  label: string;
 
-  constructor() {
+  constructor(date: XDate, unit: DateUnit) {
     super();
 
-    this.date = '';
+    this.date = date;
+    this.label = this.date.getBy(unit).toString();
   }
 }
 
@@ -169,6 +171,11 @@ class GanttHeader extends Header {
    */
   headers: GanttColumn[][] = [];
 
+  /**
+   * 整体的日期列表
+   */
+  dates: XDate[] = [];
+
   start?: XDate;
   end?: XDate;
   unit: HeaderDateUnit = 'day';
@@ -185,31 +192,43 @@ class GanttHeader extends Header {
   }
 
   generate() {
-    // TODO:根据日期和单位生成一个树形日期结构
+    // 通过 start 和 end 以及 unit 来生成 columns
+    const columns: GanttColumn[] = [];
 
-    const columns: GanttColumn[] = [
-      {
-        date: '2020-1',
-        rowSpan: 1,
-        colSpan: 1,
-        level: 1,
-        children: [
-          { date: '1', rowSpan: 1, colSpan: 1, level: 1 },
-          { date: '2', rowSpan: 1, colSpan: 1, level: 1 },
-          { date: '3', rowSpan: 1, colSpan: 1, level: 1 }
-        ]
-      },
-      {
-        date: '2020-2',
-        rowSpan: 1,
-        colSpan: 1,
-        level: 1,
-        children: [
-          { date: '1', rowSpan: 1, colSpan: 1, level: 1 },
-          { date: '2', rowSpan: 1, colSpan: 1, level: 1 }
-        ]
+    const start = this.start!.date.getTime();
+    const end = this.end!.date.getTime();
+
+    // TODO 这里可以优化一下，直接一次循环就可以组成 headers。因为是固定格式
+    for (
+      let i = start;
+      i <= end;
+      i += Variables.time.millisecondOf[this.unit]
+    ) {
+      this.dates.push(new XDate(i));
+    }
+
+    let last: number;
+    let i = -1;
+    this.dates.forEach(date => {
+      const cur = date.getBy(Variables.time.aggregation[this.unit] as DateUnit);
+
+      if (cur !== last) {
+        last = cur;
+        columns.push(
+          new GanttColumn(
+            date,
+            Variables.time.aggregation[this.unit] as DateUnit
+          )
+        );
+        i++;
+      } else {
+        if (!columns[i].children) {
+          columns[i].children = [];
+        }
+
+        columns[i].children?.push(new GanttColumn(date, this.unit));
       }
-    ];
+    });
 
     this.headers = this.convertToRows(columns, this.getAllColumns(columns));
   }
