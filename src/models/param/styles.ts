@@ -1,3 +1,5 @@
+import Variables from '@/constants/vars';
+
 type Style = Record<string, string>;
 
 export default class StyleBox {
@@ -35,5 +37,18 @@ export default class StyleBox {
 
   public set unit(v: HeaderDateUnit) {
     this.__unit = v;
+  }
+
+  private _rowHeight: number = Variables.default.rowHeight;
+  public get rowHeight(): number {
+    return this._rowHeight;
+  }
+
+  public set rowHeight(v: number | string) {
+    if (typeof v === 'string') {
+      this._rowHeight = parseInt(v);
+    } else {
+      this._rowHeight = v;
+    }
   }
 }

@@ -17,13 +17,7 @@
       <TableHeader />
 
       <!-- 表内容 -->
-      <TableBody />
-
-      <div
-        :style="{
-          height: `${scrollGapSize}px`
-        }"
-      />
+      <TableBody :gap="scrollGapSize" />
     </sync-scroll-container>
 
     <div class="mid-separate-line" />
@@ -59,6 +53,7 @@ import { getCurrentInstance, onMounted, onUpdated, ref, toRefs } from 'vue';
 import rootProps from './rootProps';
 import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
+import useInView from '@/composables/useInView';
 import { useResizeObserver } from '@vueuse/core';
 
 const containerId = uuid(10);
@@ -81,6 +76,15 @@ function getScrollGapSize() {
 }
 onMounted(getScrollGapSize);
 onUpdated(getScrollGapSize);
+// #endregion
+
+// #region 得到组件高度，并保存
+const { setRootHeight } = useInView();
+onMounted(() => {
+  setRootHeight(
+    Math.max(ganttRef.value.$el.offsetHeight, ganttRef.value.$el.clientHeight)
+  );
+});
 // #endregion
 
 // #region 处理样式参数
@@ -124,6 +128,7 @@ console.log('.....root', getCurrentInstance());
 .table-container {
   height: 100%;
   display: inline-block;
+  position: relative;
 }
 
 .mid-separate-line {

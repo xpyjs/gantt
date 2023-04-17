@@ -33,7 +33,7 @@ let id = 0;
 
 const ganttData = reactive<any>([]);
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 500; i++) {
   onAdd();
 }
 

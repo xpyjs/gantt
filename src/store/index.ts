@@ -9,7 +9,7 @@
 import { inject, provide, reactive, type Ref, ref } from 'vue';
 import EventBus from '@/utils/bus';
 import { AllData } from '@/models/data';
-import { GanttHeader, SlotsBox, StyleBox } from '@/models/param';
+import { GanttHeader, Param, SlotsBox, StyleBox } from '@/models/param';
 
 export const initStore = () => {
   const Bus = reactive(new EventBus());
@@ -29,6 +29,9 @@ export const initStore = () => {
 
   const ganttHeader = reactive(new GanttHeader());
   provide('ganttHeader', ganttHeader);
+
+  const param = reactive(new Param());
+  provide('$param', param);
 };
 
 export const useStore = () => {
@@ -61,7 +64,12 @@ export const useStore = () => {
     /**
      * 甘特图的表头类
      */
-    ganttHeader: inject('ganttHeader') as GanttHeader
+    ganttHeader: inject('ganttHeader') as GanttHeader,
+
+    /**
+     * 获取各种参数
+     */
+    $param: inject('$param') as Param
   };
 };
 

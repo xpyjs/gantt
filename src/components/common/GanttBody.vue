@@ -3,36 +3,44 @@
     class="xg-gantt-body"
     :style="{ height: bodyHeight, width: `${ganttWidth}px` }"
   >
-    <div v-for="d in $data.flatData" :key="d.uuid" class="xg-gantt-row">
+    <div
+      v-for="d in inView"
+      :key="d.uuid"
+      class="xg-gantt-row"
+      :style="{
+        top: `${d.flatIndex * rowHeight}px`,
+        height: `${rowHeight}px`,
+        ...$styleBox.getBorderColor()
+      }"
+    >
       <component :is="$slotsBox.slider" :data="d" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import useData from '@/composables/useData';
 import useGanttWidth from '@/composables/useGanttWidth';
+import useInView from '@/composables/useInView';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useStyle from '@/composables/useStyle';
+
 const { $slotsBox } = useSlotsBox();
-
-const { $data } = useData();
-
-const { bodyHeight } = useStyle();
-
+const { bodyHeight, $styleBox, rowHeight } = useStyle();
 const { ganttWidth } = useGanttWidth();
+const { inView } = useInView();
 </script>
 
 <style lang="scss" scoped>
 .xg-gantt-body {
-  background-color: darksalmon;
+  position: relative;
 
   .xg-gantt-row {
     width: 100%;
-    height: 20px;
     background-color: darkkhaki;
-    position: relative;
+    position: absolute;
     overflow: hidden;
+    border-bottom: 1px solid;
+    box-sizing: border-box;
   }
 }
 </style>

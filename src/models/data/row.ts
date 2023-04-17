@@ -2,12 +2,11 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-04-15 23:23:12
+ * @LastEditTime: 2023-04-17 15:04:42
  * @Description: 一条数据类
  */
 
 import { Variables } from '@/constants/vars';
-import { type HeaderDateUnit } from '@/typings/ParamOptions';
 import { uuid } from '@/utils/common';
 import { cloneDeep, isEqual } from 'lodash';
 import { XDate } from '../param/date';
@@ -22,6 +21,11 @@ export default class RowItem {
    * 该数据在当前层级下的索引位置
    */
   index: number = 0;
+
+  /**
+   * 该数据在所有可展示的列表中的索引位置（渲染用）
+   */
+  flatIndex: number = 0;
 
   /**
    * 当前数据的父级路径集合
@@ -171,11 +175,11 @@ export default class RowItem {
 
     // 首先判断起始日期不能大于结束日期
     if (
-      date.compareTo(this.end.getOffset(Variables.time.millisecondOfDay)) ===
+      date.compareTo(this.end.getOffset(Variables.time.millisecondOf.day)) ===
       'r'
     )
       this.data[this.options.endLabel] = date.getOffset(
-        Variables.time.millisecondOfDay
+        Variables.time.millisecondOf.day
       ).date;
 
     // if (!linkage) return;
@@ -208,11 +212,11 @@ export default class RowItem {
     // 首先判断起始日期不能大于结束日期
 
     if (
-      date.compareTo(this.start.getOffset(Variables.time.millisecondOfDay)) ===
+      date.compareTo(this.start.getOffset(Variables.time.millisecondOf.day)) ===
       'l'
     )
       this.data[this.options.startLabel] = date.getOffset(
-        Variables.time.millisecondOfDay
+        Variables.time.millisecondOf.day
       ).date;
 
     // if (!linkage) return;

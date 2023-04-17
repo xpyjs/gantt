@@ -218,9 +218,11 @@ export default class AllData {
 
   private __flatten() {
     this.flatData = [];
+    let index = 0;
 
     const fn = (data: RowItem[]) => {
       for (let i = 0; i < data.length; i++) {
+        data[i].flatIndex = index++;
         this.flatData.push(data[i]);
 
         if (data[i].isExpand && isArray(data[i].children)) {
