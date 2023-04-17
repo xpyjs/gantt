@@ -28,9 +28,8 @@ import useStyle from '@/composables/useStyle';
 
 const { $styleBox } = useStyle();
 
-const { getDateList } = useData();
-const dateList = getDateList();
-console.log('getDateList', dateList);
+const { dateList } = useData();
+console.log('getDateList', dateList.value);
 </script>
 
 <style lang="scss" scoped>

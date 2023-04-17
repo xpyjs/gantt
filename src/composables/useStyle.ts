@@ -10,6 +10,9 @@ export default () => {
   const setStyles = (props: ExtractPropTypes<typeof rootProps>) => {
     store.$styleBox.setBorder(props.border);
     store.$styleBox.setBorderColor(props.borderColor);
+
+    store.$styleBox.ganttColumnSize = props.ganttColumnSize;
+    store.$styleBox.unit = props.unit;
   };
 
   return { bodyHeight, setStyles, $styleBox: store.$styleBox };

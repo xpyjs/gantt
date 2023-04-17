@@ -1,11 +1,6 @@
 import { type PropType, type Slots } from 'vue';
 import { Errors } from '@/constants/errors';
 import { Variables } from '@/constants/vars';
-import {
-  type GanttColumnSize,
-  type ParamBodyOptions,
-  type ParamHeaderOptions
-} from '@/typings/ParamOptions';
 import { parseNumber } from '@/utils/common';
 
 export default {
@@ -185,7 +180,7 @@ export default {
    * 头部样式，一个对象
    */
   headerStyle: {
-    type: Object as PropType<ParamHeaderOptions>,
+    type: Object as PropType<HeaderOptions>,
     default: () => {
       return {};
     }
@@ -195,7 +190,7 @@ export default {
    * 内容样式，一个对象
    */
   bodyStyle: {
-    type: Object as PropType<ParamBodyOptions>,
+    type: Object as PropType<BodyOptions>,
     default: () => {
       return {};
     }
@@ -223,5 +218,13 @@ export default {
   showSettingBtn: {
     type: Boolean,
     default: true
+  },
+
+  /**
+   * 日期单位
+   */
+  unit: {
+    type: String as PropType<HeaderDateUnit>,
+    default: 'day'
   }
 };

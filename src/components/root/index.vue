@@ -55,7 +55,14 @@ import GanttBody from '@/components/common/GanttBody.vue';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useTableWidth from '@/composables/useTableWidth';
 import { uuid } from '@/utils/common';
-import { getCurrentInstance, onMounted, onUpdated, ref, toRefs } from 'vue';
+import {
+  getCurrentInstance,
+  onMounted,
+  onUnmounted,
+  onUpdated,
+  ref,
+  toRefs
+} from 'vue';
 import rootProps from './rootProps';
 import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
@@ -93,6 +100,10 @@ const { setSlots } = useSlotsBox();
 setSlots(props.slots);
 // #endregion
 
+// #region 获取表格宽度
+const { tableWidth } = useTableWidth();
+// #endregion
+
 // #region 处理数据
 const { data } = toRefs(props);
 
@@ -100,8 +111,18 @@ const { initData } = useData();
 initData(data);
 // #endregion
 
-// #region 获取表格宽度
-const { tableWidth } = useTableWidth();
+// #region 监听 gantt 尺寸变化，表头和宽度需要重新渲染
+const ganttResizeObserver = ref<ResizeObserver>();
+const { setGanttHeaders } = useData();
+
+onMounted(() => {
+  ganttResizeObserver.value = new ResizeObserver(setGanttHeaders);
+  ganttRef?.value && ganttResizeObserver.value?.observe(ganttRef.value.$el);
+});
+
+onUnmounted(() => {
+  ganttResizeObserver.value = undefined;
+});
 // #endregion
 
 console.log('.....root', getCurrentInstance());

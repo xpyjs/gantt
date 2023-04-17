@@ -48,7 +48,7 @@ ganttData[0].children = [
     id: ++id,
     name: 'sub-t' + id,
     startDate: new Date(2020, 0, 1),
-    endDate: new Date(2020, 5, 5),
+    endDate: new Date(2020, 0, 5),
     children: [
       {
         id: ++id,

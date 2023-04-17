@@ -49,7 +49,18 @@ class GanttColumn extends Column {
     super();
 
     this.date = date;
-    this.label = this.date.getBy(unit).toString();
+
+    // this.label = this.date.getBy(unit).toString();
+    switch (unit) {
+      case 'month':
+        this.label = this.date.toMonth();
+        break;
+      case 'week':
+        this.label = this.date.toWeek();
+        break;
+      default:
+        this.label = this.date.getBy(unit).toString();
+    }
   }
 }
 
@@ -179,19 +190,28 @@ class GanttHeader extends Header {
   start?: XDate;
   end?: XDate;
   unit: HeaderDateUnit = 'day';
+  minLength: number = 0;
 
   /**
    * 设置日期
    */
-  setDate(start?: XDate, end?: XDate, unit: HeaderDateUnit = 'day') {
+  setDate(
+    minLen: number,
+    start?: XDate,
+    end?: XDate,
+    unit: HeaderDateUnit = 'day'
+  ) {
     this.start = start;
     this.end = end;
     this.unit = unit;
+    this.minLength = minLen;
 
     this.generate();
   }
 
   generate() {
+    this.dates = [];
+
     // 通过 start 和 end 以及 unit 来生成 columns
     const columns: GanttColumn[] = [];
 
@@ -199,12 +219,16 @@ class GanttHeader extends Header {
     const end = this.end!.date.getTime();
 
     // TODO 这里可以优化一下，直接一次循环就可以组成 headers。因为是固定格式
-    for (
-      let i = start;
-      i <= end;
-      i += Variables.time.millisecondOf[this.unit]
-    ) {
-      this.dates.push(new XDate(i));
+    let s: number;
+    const step = Variables.time.millisecondOf[this.unit];
+    for (s = start; s <= end; s += step) {
+      this.dates.push(new XDate(s));
+    }
+
+    // 保证要占满所有宽度
+    while (this.dates.length < this.minLength) {
+      this.dates.push(new XDate(s));
+      s += step;
     }
 
     let last: number;
