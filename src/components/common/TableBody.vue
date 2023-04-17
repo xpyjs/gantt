@@ -47,20 +47,17 @@
         <component :is="c" :data="d" />
       </template>
     </div>
-
-    <div
-      :style="{
-        height: `${props.gap}px`,
-        width: '100%',
-        position: 'absolute',
-        top: `${rowHeight * $data.flatData.length}px`
-      }"
-    />
   </div>
+
+  <div
+    :style="{
+      height: `${props.gap}px`,
+      width: '100%'
+    }"
+  />
 </template>
 
 <script lang="ts" setup>
-import useData from '@/composables/useData';
 import useInView from '@/composables/useInView';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useStyle from '@/composables/useStyle';
@@ -70,7 +67,6 @@ const props = defineProps<{ gap: number }>();
 const { $slotsBox } = useSlotsBox();
 const { bodyHeight, rowHeight, $styleBox } = useStyle();
 const { inView } = useInView();
-const { $data } = useData();
 </script>
 
 <style lang="scss" scoped>
