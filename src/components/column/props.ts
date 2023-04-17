@@ -1,5 +1,6 @@
 import Variables from '@/constants/vars';
 import RowItem from '@/models/data/row';
+import { type PropType } from 'vue';
 
 export default {
   /**
@@ -20,6 +21,15 @@ export default {
    */
   label: String,
 
+  /**
+   * 是否合并，一个函数，抛出当前数据，接收true / false，true为合并当前行，与前置列合并
+   */
+  merge: {
+    type: [Function, Boolean] as PropType<boolean | ((data: any) => boolean)>,
+    default: () => false
+  },
+
   // ********* 内部参数 ********* //
-  data: RowItem
+  data: RowItem,
+  __index: Number
 };

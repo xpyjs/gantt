@@ -43,8 +43,13 @@
         ...$styleBox.getBorderColor()
       }"
     >
-      <template v-for="(c, i) in $slotsBox.cols" :key="i">
-        <component :is="c" :data="d" />
+      <template
+        v-for="(c, i) in $slotsBox.cols.filter(
+          v => !isMerge(v.props?.merge, d as any)
+        )"
+        :key="i"
+      >
+        <component :is="c" :data="d" :__index="i" />
       </template>
     </div>
   </div>
@@ -64,7 +69,7 @@ import useStyle from '@/composables/useStyle';
 
 const props = defineProps<{ gap: number }>();
 
-const { $slotsBox } = useSlotsBox();
+const { $slotsBox, isMerge } = useSlotsBox();
 const { bodyHeight, rowHeight, $styleBox } = useStyle();
 const { inView } = useInView();
 </script>

@@ -4,7 +4,9 @@
       <template v-for="(c, i) in $slotsBox.cols" :key="i">
         <col
           :width="
-            getColumnWidth(c.props?.width ?? Variables.default.tableColumnWidth)
+            getColumnWidth(
+              c.props?.width ?? Variables.default.tableColumnWidth
+            ) + 'px'
           "
         />
       </template>

@@ -1,3 +1,4 @@
+import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
 import { computed, watch, type Ref } from 'vue';
 import useGanttWidth from './useGanttWidth';
@@ -36,10 +37,18 @@ export default () => {
     );
   }
 
+  function toRowData(data: RowItem) {
+    return {
+      row: data.data,
+      $index: data.flatIndex
+    };
+  }
+
   return {
     $data: store.$data,
     initData,
     dateList: computed(() => store.ganttHeader.headers),
-    setGanttHeaders
+    setGanttHeaders,
+    toRowData
   };
 };

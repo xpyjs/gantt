@@ -1,5 +1,7 @@
+import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
 import { type Slots } from 'vue';
+import useData from './useData';
 import useTableWidth from './useTableWidth';
 
 export default () => {
@@ -14,5 +16,14 @@ export default () => {
     setTableWidth(store.$slotsBox.cols);
   }
 
-  return { $slotsBox: store.$slotsBox, setSlots };
+  const { toRowData } = useData();
+
+  function isMerge(
+    m: boolean | undefined | ((data: any) => boolean),
+    data: RowItem
+  ) {
+    return typeof m === 'function' ? m(toRowData(data)) : !!m;
+  }
+
+  return { $slotsBox: store.$slotsBox, setSlots, isMerge };
 };
