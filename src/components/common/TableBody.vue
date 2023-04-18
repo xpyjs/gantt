@@ -1,37 +1,4 @@
 <template>
-  <!-- <table
-    class="xg-table-body"
-    :style="{ height: bodyHeight }"
-    cellspacing="0"
-    cellpadding="0"
-    border="0"
-  >
-    <colgroup>
-      <template v-for="(c, i) in $slotsBox.cols" :key="i">
-        <col
-          :width="
-            getColumnWidth(c.props?.width ?? Variables.default.tableColumnWidth)
-          "
-        />
-      </template>
-    </colgroup>
-    <tbody>
-      <tr
-        v-for="d in inView"
-        :key="d.uuid"
-        class="xg-table-row"
-        :style="{
-          top: `${d.flatIndex * rowHeight}px`,
-          height: `${rowHeight}px`
-        }"
-      >
-        <template v-for="(c, i) in $slotsBox.cols" :key="i">
-          <component :is="c" :data="d" />
-        </template>
-      </tr>
-    </tbody>
-  </table> -->
-
   <div class="xg-table-body" :style="{ height: bodyHeight }">
     <div
       v-for="d in inView"

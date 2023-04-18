@@ -1,14 +1,4 @@
 <template>
-  <!-- <td v-if="colspan > 0" class="xg-table-cell" :colspan="colspan">
-    <div class="cell">
-      <slot v-if="slots.default" v-bind="props.data?.data" />
-
-      <template v-else-if="props.prop">{{
-        props.data?.data?.[props.prop]
-      }}</template>
-    </div>
-  </td> -->
-
   <div
     class="xg-table-cell"
     :style="{
