@@ -95,6 +95,10 @@ useDraggable(sliderRef, {
 }
 
 .xg-slider.xg-slider-drag {
-  cursor: move;
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
 }
 </style>
