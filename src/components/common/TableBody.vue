@@ -49,7 +49,7 @@
         )"
         :key="i"
       >
-        <component :is="c" :data="d" :__index="i" />
+        <component :is="c" :data="d" />
       </template>
     </div>
   </div>

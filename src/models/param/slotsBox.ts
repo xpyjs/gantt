@@ -57,7 +57,10 @@ export default class SlotsBox {
    * 将 columns 的叶子结点平铺
    */
   private setLeafCols() {
-    this.cols = this.tableHeaders.leafs.map(v => v.node);
+    this.cols = this.tableHeaders.leafs.map((v, i) => {
+      v.node.props = Object.assign({}, v.node.props, { __index: i });
+      return v.node;
+    });
   }
 
   setSlots(slots: Slots) {
