@@ -12,8 +12,8 @@
 // This component idea from https://github.com/metawin-m/vue-scroll-sync
 import useBus from '@/composables/useBus';
 import { uuid } from '@/utils/common';
-import useInView from '@/composables/useInView';
 import { onMounted, reactive, ref } from 'vue';
+import useParam from '@/composables/useParam';
 
 const props = defineProps({
   // 按比例滚动
@@ -60,7 +60,7 @@ function scrollFunc(e: any) {
   scrollAction.y = e.target.scrollTop;
 }
 
-const { setTop } = useInView();
+const { $param } = useParam();
 
 function handleScroll(e: any) {
   // 禁用条件
@@ -131,7 +131,7 @@ onMounted(() => {
         ? (paneHeight * data.scrollTop) / scrollTopOffset
         : data.scrollTop;
 
-      setTop(container!.scrollTop);
+      $param.currentTop = container!.scrollTop;
     }
     if (
       !data.disableHorizontal &&

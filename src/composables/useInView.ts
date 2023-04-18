@@ -7,14 +7,6 @@ export default () => {
   const store = useStore();
 
   const currentTop = computed(() => store.$param.currentTop);
-  function setTop(t: number) {
-    store.$param.currentTop = t;
-  }
-
-  const rootHeight = computed(() => store.$param.rootHeight);
-  function setRootHeight(h: number) {
-    store.$param.rootHeight = h;
-  }
 
   const { rowHeight } = useStyle();
 
@@ -29,7 +21,7 @@ export default () => {
 
   // 数据展示最下面的 index
   const bottom = computed(() => {
-    const count = Math.ceil(rootHeight.value / rowHeight.value);
+    const count = Math.ceil(store.$param.rootHeight / rowHeight.value);
     const t = Math.ceil(currentTop.value / rowHeight.value) + count + preload;
     return Math.min(t, store.$data.length);
   });
@@ -57,8 +49,6 @@ export default () => {
   );
 
   return {
-    inView,
-    setRootHeight,
-    setTop
+    inView: inView as RowItem[]
   };
 };

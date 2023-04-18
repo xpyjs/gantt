@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-04-17 15:04:42
+ * @LastEditTime: 2023-04-18 10:35:13
  * @Description: 一条数据类
  */
 
@@ -13,7 +13,7 @@ import { XDate } from '../param/date';
 
 export default class RowItem {
   /**
-   * 当前数据唯一 ID。如果当前 item 内容发生了变化，更新它。
+   * 当前数据唯一 ID
    */
   readonly uuid: string = uuid(12);
 

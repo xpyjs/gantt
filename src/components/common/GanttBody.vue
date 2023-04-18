@@ -3,18 +3,11 @@
     class="xg-gantt-body"
     :style="{ height: bodyHeight, width: `${ganttWidth}px` }"
   >
-    <div
-      v-for="d in inView"
-      :key="d.uuid"
-      class="xg-gantt-row"
-      :style="{
-        top: `${d.flatIndex * rowHeight}px`,
-        height: `${rowHeight}px`,
-        ...$styleBox.getBorderColor()
-      }"
-    >
-      <component :is="$slotsBox.slider" :data="d" />
-    </div>
+    <template v-for="d in inView" :key="d.uuid">
+      <RowVue :data="d" class="xg-gantt-row">
+        <component :is="$slotsBox.slider" :data="d" />
+      </RowVue>
+    </template>
   </div>
 </template>
 
@@ -23,9 +16,10 @@ import useGanttWidth from '@/composables/useGanttWidth';
 import useInView from '@/composables/useInView';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useStyle from '@/composables/useStyle';
+import RowVue from './Row.vue';
 
 const { $slotsBox } = useSlotsBox();
-const { bodyHeight, $styleBox, rowHeight } = useStyle();
+const { bodyHeight } = useStyle();
 const { ganttWidth } = useGanttWidth();
 const { inView } = useInView();
 </script>
@@ -35,12 +29,12 @@ const { inView } = useInView();
   position: relative;
 
   .xg-gantt-row {
-    width: 100%;
-    background-color: darkkhaki;
-    position: absolute;
-    overflow: hidden;
-    border-bottom: 1px solid;
-    box-sizing: border-box;
+    // width: 100%;
+    // background-color: darkkhaki;
+    // position: absolute;
+    // overflow: hidden;
+    // border-bottom: 1px solid;
+    // box-sizing: border-box;
   }
 }
 </style>

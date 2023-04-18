@@ -53,8 +53,8 @@ import { getCurrentInstance, onMounted, onUpdated, ref, toRefs } from 'vue';
 import rootProps from './rootProps';
 import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
-import useInView from '@/composables/useInView';
 import { useResizeObserver } from '@vueuse/core';
+import useParam from '@/composables/useParam';
 
 const containerId = uuid(10);
 const props = defineProps(rootProps);
@@ -79,10 +79,11 @@ onUpdated(getScrollGapSize);
 // #endregion
 
 // #region 得到组件高度，并保存
-const { setRootHeight } = useInView();
+const { $param } = useParam();
 onMounted(() => {
-  setRootHeight(
-    Math.max(ganttRef.value.$el.offsetHeight, ganttRef.value.$el.clientHeight)
+  $param.rootHeight = Math.max(
+    ganttRef.value.$el.offsetHeight,
+    ganttRef.value.$el.clientHeight
   );
 });
 // #endregion

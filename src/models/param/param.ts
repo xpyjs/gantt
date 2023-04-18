@@ -16,4 +16,22 @@ export default class Param {
   public set rootHeight(v: number) {
     this._rootHeight = v;
   }
+
+  private _hoverId: string = '';
+  public get hoverId(): string {
+    return this._hoverId;
+  }
+
+  public set hoverId(v: string) {
+    this._hoverId = v;
+  }
+
+  private _selectId: string = '';
+  public get selectId(): string {
+    return this._selectId;
+  }
+
+  public set selectId(v: string) {
+    this._selectId = v;
+  }
 }
