@@ -41,8 +41,7 @@ export const Variables = {
       week: 'year',
       day: 'month',
       hour: 'day',
-      minute: 'hour',
-      second: 'minute'
+      minute: 'hour'
     }
   }
 };

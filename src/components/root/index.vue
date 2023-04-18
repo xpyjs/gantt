@@ -55,6 +55,7 @@ import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
 import { useResizeObserver } from '@vueuse/core';
 import useParam from '@/composables/useParam';
+import useGanttHeader from '@/composables/useGanttHeader';
 
 const containerId = uuid(10);
 const props = defineProps(rootProps);
@@ -111,7 +112,7 @@ initData(data);
 // #endregion
 
 // #region 监听 gantt 尺寸变化，表头和宽度需要重新渲染
-const { setGanttHeaders } = useData();
+const { setGanttHeaders } = useGanttHeader();
 onMounted(() => useResizeObserver(ganttRef.value?.$el, setGanttHeaders));
 // #endregion
 

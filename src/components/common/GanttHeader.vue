@@ -2,7 +2,7 @@
   <table class="xg-gantt-header" cellpadding="0" cellspacing="0" border="0">
     <colgroup>
       <template v-for="i in dateList[1].length" :key="i">
-        <col width="30px" />
+        <col :width="`${ganttColumnWidth}px`" />
       </template>
     </colgroup>
     <thead>
@@ -24,12 +24,12 @@
 
 <script lang="ts" setup>
 import useData from '@/composables/useData';
+import useGanttWidth from '@/composables/useGanttWidth';
 import useStyle from '@/composables/useStyle';
 
 const { $styleBox } = useStyle();
-
 const { dateList } = useData();
-console.log('getDateList', dateList.value);
+const { ganttColumnWidth } = useGanttWidth();
 </script>
 
 <style lang="scss" scoped>

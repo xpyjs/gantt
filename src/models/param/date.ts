@@ -51,8 +51,8 @@ export class XDate {
   /**
    * 获取两个时间的间隔时间戳
    */
-  intervalTo(date: XDate) {
-    return this.date.getTime() - date.date.getTime();
+  intervalTo(date?: XDate) {
+    return this.date.getTime() - (date?.date.getTime() ?? 0);
   }
 
   /**
@@ -106,5 +106,12 @@ export class XDate {
    */
   toString(format: string = 'YYYY-MM-DD') {
     return day(this.date).format(format);
+  }
+
+  /**
+   * 返回一个全新的日期对象
+   */
+  clone() {
+    return new XDate(this.date);
   }
 }

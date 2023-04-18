@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-04-18 10:35:13
+ * @LastEditTime: 2023-04-18 19:30:08
  * @Description: 一条数据类
  */
 
@@ -175,11 +175,11 @@ export default class RowItem {
 
     // 首先判断起始日期不能大于结束日期
     if (
-      date.compareTo(this.end.getOffset(Variables.time.millisecondOf.day)) ===
+      date.compareTo(this.end.getOffset(Variables.time.millisecondOf[unit])) ===
       'r'
     )
-      this.data[this.options.endLabel] = date.getOffset(
-        Variables.time.millisecondOf.day
+      this.__data[this.options.endLabel] = date.getOffset(
+        Variables.time.millisecondOf[unit]
       ).date;
 
     // if (!linkage) return;
@@ -207,16 +207,17 @@ export default class RowItem {
     linkage = false,
     modifyArr: RowItem[] = []
   ) {
-    this.data[this.options.endLabel] = date.date;
+    this.__data[this.options.endLabel] = date.date;
 
     // 首先判断起始日期不能大于结束日期
 
     if (
-      date.compareTo(this.start.getOffset(Variables.time.millisecondOf.day)) ===
-      'l'
+      date.compareTo(
+        this.start.getOffset(Variables.time.millisecondOf[unit])
+      ) === 'l'
     )
-      this.data[this.options.startLabel] = date.getOffset(
-        Variables.time.millisecondOf.day
+      this.__data[this.options.startLabel] = date.getOffset(
+        Variables.time.millisecondOf[unit]
       ).date;
 
     // if (!linkage) return;

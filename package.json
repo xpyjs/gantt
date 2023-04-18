@@ -68,7 +68,7 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.192",
-    "@vueuse/core": "^9.13.0",
+    "@vueuse/core": "^10.0.0",
     "dayjs": "^1.11.7",
     "lodash": "^4.17.21",
     "vue": "^3.2.47"

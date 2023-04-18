@@ -71,8 +71,8 @@ function onAdd() {
   ganttData.push({
     id: ++id,
     name: 't' + id,
-    startDate: new Date(2020, 0, 1),
-    endDate: new Date(2020, 0, 5)
+    startDate: new Date(2020, 0, id),
+    endDate: new Date(2020, 0, id + 5)
   });
 }
 
