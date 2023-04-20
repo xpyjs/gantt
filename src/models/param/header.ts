@@ -27,6 +27,7 @@ class TableColumn extends Column {
   label: string;
   declare children?: TableColumn[];
   parent?: TableColumn;
+  width: number = Variables.default.tableColumnWidth;
 
   /**
    *

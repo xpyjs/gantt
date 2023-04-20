@@ -1,6 +1,6 @@
 <template>
   <div style="top: 20vh; width: 100%; height: 500px">
-    <x-gantt :data="ganttData">
+    <x-gantt :data="ganttData" style="padding-left: 20vh">
       <x-gantt-column label="group1">
         <x-gantt-column prop="id" width="200px"></x-gantt-column>
         <x-gantt-column label="group2">
@@ -40,7 +40,7 @@ let id = 0;
 
 const ganttData = reactive<any>([]);
 
-for (let i = 0; i < 500; i++) {
+for (let i = 0; i < 50; i++) {
   onAdd();
 }
 

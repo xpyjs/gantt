@@ -23,7 +23,6 @@
 import Variables from '@/constants/vars';
 import columnProps from './props';
 import { defineComponent, useSlots, computed } from 'vue';
-import { getColumnWidth } from './util';
 import useStyle from '@/composables/useStyle';
 import useSlotsBox from '@/composables/useSlotsBox';
 
@@ -41,17 +40,13 @@ const { $styleBox, rowHeight } = useStyle();
 const { $slotsBox, isMerge } = useSlotsBox();
 
 const realWidth = computed(() => {
-  let curWidth = getColumnWidth(
-    props?.width ?? Variables.default.tableColumnWidth
-  );
+  let curWidth = $slotsBox.tableHeaders.leafs[props!.__index ?? 1].width;
 
   for (let i = (props.__index ?? 1) + 1; i < $slotsBox.cols.length; i++) {
     const col = $slotsBox.cols[i];
 
     if (isMerge(col.props?.merge, props.data!)) {
-      curWidth += getColumnWidth(
-        col.props?.width ?? Variables.default.tableColumnWidth
-      );
+      curWidth += $slotsBox.tableHeaders.leafs[i].width;
     } else {
       break;
     }

@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="rootRef"
     class="xg-root"
     :style="{ ...$styleBox.getBorder(), ...$styleBox.getBorderColor() }"
   >
@@ -7,7 +8,7 @@
     <sync-scroll-container
       ref="tableRef"
       vertical
-      class="table-container"
+      class="xg-table-container"
       :style="{ width: tableWidth + 'px' }"
       hide-scroll
       disable-horizontal
@@ -20,14 +21,25 @@
       <TableBody :gap="scrollGapSize" />
     </sync-scroll-container>
 
-    <div class="mid-separate-line" />
+    <!-- 中分线 -->
+    <div
+      ref="midLineRef"
+      class="xg-mid-separate-line"
+      @pointerdown="onDownMidLine"
+    />
+    <!-- 移动示意线 -->
+    <div
+      v-show="showLine"
+      class="xg-move-line"
+      :style="{ left: lineLeft + 'px' }"
+    />
 
     <!-- 右侧甘特 -->
     <sync-scroll-container
       ref="ganttRef"
       vertical
       horizontal
-      class="gantt-container"
+      class="xg-gantt-container"
       :group="containerId"
       :style="{ width: `calc(100% - ${tableWidth}px - 3px)` }"
     >
@@ -49,20 +61,33 @@ import GanttBody from '@/components/common/GanttBody.vue';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useTableWidth from '@/composables/useTableWidth';
 import { uuid } from '@/utils/common';
-import { getCurrentInstance, onMounted, onUpdated, ref, toRefs } from 'vue';
+import {
+  DefineComponent,
+  getCurrentInstance,
+  onMounted,
+  onUpdated,
+  ref,
+  toRefs
+} from 'vue';
 import rootProps from './rootProps';
 import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
 import { useResizeObserver } from '@vueuse/core';
 import useParam from '@/composables/useParam';
 import useGanttHeader from '@/composables/useGanttHeader';
+import useDrag from '@/composables/useDrag';
+import useElement from '@/composables/useElement';
 
 const containerId = uuid(10);
 const props = defineProps(rootProps);
 
+// #region 挂载实例
+const { rootRef } = useElement();
+// #endregion
+
 // #region 获取表格下方的滚动条 gap
-const tableRef = ref<any>(null);
-const ganttRef = ref<any>(null);
+const tableRef = ref<DefineComponent | null>(null);
+const ganttRef = ref<DefineComponent | null>(null);
 const scrollGapSize = ref(0);
 
 function getScrollGapSize() {
@@ -83,8 +108,8 @@ onUpdated(getScrollGapSize);
 const { $param } = useParam();
 onMounted(() => {
   $param.rootHeight = Math.max(
-    ganttRef.value.$el.offsetHeight,
-    ganttRef.value.$el.clientHeight
+    ganttRef.value!.$el.offsetHeight,
+    ganttRef.value!.$el.clientHeight
   );
 });
 // #endregion
@@ -95,7 +120,7 @@ setStyles(props);
 // #endregion
 
 // #region 处理插槽内容
-const { setSlots } = useSlotsBox();
+const { setSlots, $slotsBox } = useSlotsBox();
 
 setSlots(props.slots);
 // #endregion
@@ -116,6 +141,46 @@ const { setGanttHeaders } = useGanttHeader();
 onMounted(() => useResizeObserver(ganttRef.value?.$el, setGanttHeaders));
 // #endregion
 
+// #region 加载示意线
+const { showLine, onDrag, lineLeft } = useDrag();
+
+function onDownMidLine(e: PointerEvent) {
+  const rootRect = rootRef.value?.getBoundingClientRect();
+  lineLeft.value = e.clientX - (rootRect?.left ?? 0);
+  $param.showMoveLine = true;
+}
+
+const midLineRef = ref<HTMLElement | null>(null);
+onMounted(() => {
+  onDrag(midLineRef, {
+    reset: true,
+
+    onMove: (x, e) => {
+      const tableRect = tableRef.value?.$el.getBoundingClientRect();
+      const ganttRect = ganttRef.value?.$el.getBoundingClientRect();
+
+      if (e.clientX < tableRect.left) {
+        return;
+      }
+
+      if (e.clientX > ganttRect.right - 100) {
+        return;
+      }
+
+      lineLeft.value = e.clientX;
+    },
+
+    onEnd: x => {
+      $param.showMoveLine = false;
+
+      $slotsBox.tableHeaders.leafs[
+        $slotsBox.tableHeaders.leafs.length - 1
+      ].width += x;
+    }
+  });
+});
+// #endregion
+
 console.log('.....root', getCurrentInstance());
 </script>
 
@@ -123,24 +188,42 @@ console.log('.....root', getCurrentInstance());
 .xg-root {
   box-sizing: border-box;
   overflow: hidden;
+  position: relative;
   width: 100%;
   height: 100%;
 }
 
-.table-container {
+.xg-table-container {
   height: 100%;
   display: inline-block;
   position: relative;
 }
 
-.mid-separate-line {
+.xg-mid-separate-line {
   width: 3px;
   height: 100%;
   display: inline-block;
-  background-color: black;
+  position: relative;
+  background-color: #e5e5e5;
+  transition: background-color 0.1s;
+
+  &:hover {
+    background-color: #d5d5d5;
+    box-shadow: 0 0 10px #d5d5d5;
+    cursor: col-resize;
+  }
 }
 
-.gantt-container {
+.xg-move-line {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 0px;
+  z-index: 100;
+  border-left: 1px dashed #d5d5d5;
+}
+
+.xg-gantt-container {
   height: 100%;
   display: inline-block;
 }

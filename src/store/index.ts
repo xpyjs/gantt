@@ -6,7 +6,7 @@
  * @Description: 头部注释
  */
 
-import { inject, provide, reactive, type Ref, ref } from 'vue';
+import { inject, provide, reactive } from 'vue';
 import EventBus from '@/utils/bus';
 import { AllData } from '@/models/data';
 import { GanttHeader, Param, SlotsBox, StyleBox } from '@/models/param';
@@ -14,9 +14,6 @@ import { GanttHeader, Param, SlotsBox, StyleBox } from '@/models/param';
 export const initStore = () => {
   const Bus = reactive(new EventBus());
   provide('$bus', Bus);
-
-  const tableWidth = ref(0);
-  provide('TABLE_WIDTH', tableWidth);
 
   const slotsBox = reactive(new SlotsBox());
   provide('$slotsBox', slotsBox);
@@ -40,11 +37,6 @@ export const useStore = () => {
      * 事件总线
      */
     $bus: inject('$bus') as EventBus,
-
-    /**
-     * table 宽度
-     */
-    tableWidth: inject('TABLE_WIDTH') as Ref<number>,
 
     /**
      * 插槽盒子，所有插槽都保存在这里

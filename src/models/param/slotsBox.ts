@@ -58,7 +58,11 @@ export default class SlotsBox {
    */
   private setLeafCols() {
     this.cols = this.tableHeaders.leafs.map((v, i) => {
+      const w = v.node.props?.width ?? Variables.default.tableColumnWidth;
+      v.width = typeof w === 'number' ? w : Number.parseInt(w);
+
       v.node.props = Object.assign({}, v.node.props, { __index: i });
+
       return v.node;
     });
   }

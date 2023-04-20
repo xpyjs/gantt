@@ -34,4 +34,13 @@ export default class Param {
   public set selectId(v: string) {
     this._selectId = v;
   }
+
+  private _showMoveLine: boolean = false;
+  public get showMoveLine(): boolean {
+    return this._showMoveLine;
+  }
+
+  public set showMoveLine(v: boolean) {
+    this._showMoveLine = v;
+  }
 }

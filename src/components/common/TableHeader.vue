@@ -1,22 +1,17 @@
 <template>
   <table class="xg-table-header" cellpadding="0" cellspacing="0" border="0">
     <colgroup>
-      <template v-for="(c, i) in $slotsBox.cols" :key="i">
-        <col
-          :width="
-            getColumnWidth(
-              c.props?.width ?? Variables.default.tableColumnWidth
-            ) + 'px'
-          "
-        />
+      <template v-for="(c, i) in $slotsBox.tableHeaders.leafs" :key="i">
+        <col :width="`${c.width}px`" />
       </template>
     </colgroup>
     <thead>
       <tr v-for="(r, trIndex) in $slotsBox.tableHeaders.headers" :key="trIndex">
         <th
           v-for="(c, i) in r"
+          ref="headerRef"
           :key="i"
-          class="xg-table-header-cell"
+          :class="['xg-table-header-cell', 'cell-resizable']"
           :style="{ ...$styleBox.getBorderColor() }"
           :colspan="c.colSpan"
           :rowspan="c.rowSpan"
@@ -31,11 +26,19 @@
 <script lang="ts" setup>
 import useSlotsBox from '@/composables/useSlotsBox';
 import useStyle from '@/composables/useStyle';
-import Variables from '@/constants/vars';
-import { getColumnWidth } from '../column/util';
+import { onMounted, ref } from 'vue';
 const { $slotsBox } = useSlotsBox();
 
 const { $styleBox } = useStyle();
+
+const headerRef = ref<HTMLElement[]>([]);
+onMounted(() => {
+  headerRef.value.forEach(item => {
+    item.addEventListener('pointerdown', e => {
+      console.log(e);
+    });
+  });
+});
 </script>
 
 <style lang="scss" scoped>
@@ -60,6 +63,21 @@ const { $styleBox } = useStyle();
     border-bottom: 1px solid;
     border-right: 1px solid;
     padding: 0 20px;
+  }
+
+  .xg-table-header-cell.cell-resizable {
+    pointer-events: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: -5px;
+      top: 0;
+      bottom: 0;
+      width: 10px;
+      cursor: col-resize;
+      pointer-events: auto;
+    }
   }
 }
 </style>

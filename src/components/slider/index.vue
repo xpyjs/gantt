@@ -14,10 +14,10 @@
 import { defineComponent, useSlots, ref, computed } from 'vue';
 import Variables from '@/constants/vars';
 import sliderProps from './props';
-import { useDraggable } from '@vueuse/core';
 import useData from '@/composables/useData';
 import useGanttHeader from '@/composables/useGanttHeader';
 import useGanttWidth from '@/composables/useGanttWidth';
+import useDrag from '@/composables/useDrag';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -27,56 +27,55 @@ export default defineComponent({
 <script setup lang="ts">
 const props = defineProps(sliderProps);
 const slots = useSlots();
-
-// left 取决于 data 的 start 日期值
-
-// 滑块的初始偏移量
 const { $data } = useData();
 const { ganttHeader } = useGanttHeader();
 const { ganttColumnWidth } = useGanttWidth();
+
+const currentMillisecond = computed(
+  () => Variables.time.millisecondOf[ganttHeader.unit]
+);
+
 const sliderLeft = computed(
   () =>
-    ((props.data?.start.intervalTo($data.start) ?? 0) /
-      Variables.time.millisecondOf[ganttHeader.unit]) *
+    (props.data!.start.intervalTo($data.start) / currentMillisecond.value) *
     ganttColumnWidth.value
 );
 
 const sliderWidth = computed(
   () =>
-    (props.data!.start.intervalTo(props.data?.end) /
-      Variables.time.millisecondOf[ganttHeader.unit]) *
+    (props.data!.start.intervalTo(props.data?.end) / currentMillisecond.value) *
     ganttColumnWidth.value
 );
 
-const left = ref(0);
-const sliderRef = ref<HTMLElement | null>(null);
-const delta = ref(0);
-const startDate = props.data?.start.clone();
-const endDate = props.data?.end.clone();
-useDraggable(sliderRef, {
-  onStart: (pos, e) => {
-    const rect = sliderRef.value!.getBoundingClientRect();
-    delta.value = Math.abs(left.value - rect.left) + e.offsetX;
-  },
-
-  onMove: (pos, e) => {
-    left.value = e.clientX - delta.value;
-
+const setStart = (() => {
+  const startDate = props.data?.start.clone();
+  return (x: number) => {
     props.data?.setStart(
       startDate!.getOffset(
-        (left.value / ganttColumnWidth.value) *
-          Variables.time.millisecondOf[ganttHeader.unit]
+        (x / ganttColumnWidth.value) * currentMillisecond.value
       ),
       ganttHeader.unit
     );
+  };
+})();
 
+const setEnd = (() => {
+  const endDate = props.data?.end.clone();
+  return (x: number) =>
     props.data?.setEnd(
       endDate!.getOffset(
-        (left.value / ganttColumnWidth.value) *
-          Variables.time.millisecondOf[ganttHeader.unit]
+        (x / ganttColumnWidth.value) * currentMillisecond.value
       ),
       ganttHeader.unit
     );
+})();
+
+const sliderRef = ref<HTMLElement | null>(null);
+const { onDrag } = useDrag();
+onDrag(sliderRef, {
+  onMove: x => {
+    setStart(x);
+    setEnd(x);
   }
 });
 </script>
@@ -95,10 +94,6 @@ useDraggable(sliderRef, {
 }
 
 .xg-slider.xg-slider-drag {
-  cursor: grab;
-
-  &:active {
-    cursor: grabbing;
-  }
+  cursor: ew-resize;
 }
 </style>

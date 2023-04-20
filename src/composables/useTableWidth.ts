@@ -1,18 +1,15 @@
-import Variables from '@/constants/vars';
 import { useStore } from '@/store';
-import { type VNode } from 'vue';
+import { computed } from 'vue';
 
 export default () => {
   const store = useStore();
 
-  function setTableWidth(columns: VNode[]) {
-    store.tableWidth.value = columns.reduce(
-      (p, c) =>
-        p +
-        (Number.parseInt(c.props?.width) || Variables.default.tableColumnWidth),
+  const tableWidth = computed(() => {
+    return store.$slotsBox.cols.reduce(
+      (p, c) => p + store.$slotsBox.tableHeaders.leafs[c.props!.__index].width,
       0
     );
-  }
+  });
 
-  return { tableWidth: store.tableWidth, setTableWidth };
+  return { tableWidth };
 };
