@@ -28,6 +28,7 @@ class TableColumn extends Column {
   declare children?: TableColumn[];
   parent?: TableColumn;
   width: number = Variables.default.tableColumnWidth;
+  isLast: boolean = false;
 
   /**
    *
@@ -80,6 +81,7 @@ class Header {
           maxLevel = column.level;
         }
       }
+
       if (column.children) {
         let colSpan = 0;
         column.children.forEach(subColumn => {
@@ -159,12 +161,21 @@ class TableHeader extends Header {
   /**
    * This function idea from https://github.com/elemefe/element
    */
-  private getAllColumns(columns: TableColumn[]) {
+  private getAllColumns(columns: TableColumn[], isLast?: boolean) {
     const result: TableColumn[] = [];
-    columns.forEach(column => {
+    columns.forEach((column, index) => {
+      if (index === columns.length - 1) {
+        if (isLast === undefined || isLast) {
+          column.isLast = true;
+        }
+      }
+
       if (column.children) {
         result.push(column);
-        result.push.apply(result, this.getAllColumns(column.children));
+        result.push.apply(
+          result,
+          this.getAllColumns(column.children, !!column.isLast)
+        );
       } else {
         // 非叶子结点只接收 label 参数作为展示。叶子结点还可以展示 prop 参数值
         if (!column.label) column.label = column.node.props?.prop ?? '';

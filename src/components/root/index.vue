@@ -22,11 +22,7 @@
     </sync-scroll-container>
 
     <!-- 中分线 -->
-    <div
-      ref="midLineRef"
-      class="xg-mid-separate-line"
-      @pointerdown="onDownMidLine"
-    />
+    <div ref="midLineRef" class="xg-mid-separate-line" />
     <!-- 移动示意线 -->
     <div
       v-show="showLine"
@@ -142,44 +138,43 @@ onMounted(() => useResizeObserver(ganttRef.value?.$el, setGanttHeaders));
 // #endregion
 
 // #region 加载示意线
-const { showLine, onDrag, lineLeft } = useDrag();
-
-function onDownMidLine(e: PointerEvent) {
-  const rootRect = rootRef.value?.getBoundingClientRect();
-  lineLeft.value = e.clientX - (rootRect?.left ?? 0);
-  $param.showMoveLine = true;
-}
+const { showLine, lineLeft, onResizeTableColumn } = useDrag();
 
 const midLineRef = ref<HTMLElement | null>(null);
-onMounted(() => {
-  onDrag(midLineRef, {
-    reset: true,
+onResizeTableColumn(midLineRef, {
+  onEnd: x => {
+    $slotsBox.tableHeaders.leafs[
+      $slotsBox.tableHeaders.leafs.length - 1
+    ].width = Math.max(
+      $slotsBox.tableHeaders.leafs[$slotsBox.tableHeaders.leafs.length - 1]
+        .width + x,
+      20
+    );
+  },
 
-    onMove: (x, e) => {
-      const tableRect = tableRef.value?.$el.getBoundingClientRect();
-      const ganttRect = ganttRef.value?.$el.getBoundingClientRect();
+  preMove: (x, clientX) => {
+    const tableRect = tableRef.value?.$el.getBoundingClientRect();
+    const ganttRect = ganttRef.value?.$el.getBoundingClientRect();
 
-      if (e.clientX < tableRect.left) {
-        return;
-      }
+    if (
+      $slotsBox.tableHeaders.leafs[$slotsBox.tableHeaders.leafs.length - 1]
+        .width +
+        x <
+      20
+    )
+      return false;
 
-      if (e.clientX > ganttRect.right - 100) {
-        return;
-      }
-
-      lineLeft.value = e.clientX;
-    },
-
-    onEnd: x => {
-      $param.showMoveLine = false;
-
-      $slotsBox.tableHeaders.leafs[
-        $slotsBox.tableHeaders.leafs.length - 1
-      ].width += x;
+    if (clientX < tableRect.left) {
+      return false;
     }
-  });
+
+    if (clientX > ganttRect.right - 100) {
+      return false;
+    }
+
+    return true;
+  }
 });
-// #endregion
 
 console.log('.....root', getCurrentInstance());
 </script>

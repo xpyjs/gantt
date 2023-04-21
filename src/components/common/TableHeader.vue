@@ -7,38 +7,17 @@
     </colgroup>
     <thead>
       <tr v-for="(r, trIndex) in $slotsBox.tableHeaders.headers" :key="trIndex">
-        <th
-          v-for="(c, i) in r"
-          ref="headerRef"
-          :key="i"
-          :class="['xg-table-header-cell', 'cell-resizable']"
-          :style="{ ...$styleBox.getBorderColor() }"
-          :colspan="c.colSpan"
-          :rowspan="c.rowSpan"
-        >
-          {{ c.label }}
-        </th>
+        <TableHeaderTh v-for="(c, i) in r" :key="i" :column="c" />
       </tr>
     </thead>
   </table>
 </template>
 
 <script lang="ts" setup>
+import TableHeaderTh from './TableHeaderTh.vue';
 import useSlotsBox from '@/composables/useSlotsBox';
-import useStyle from '@/composables/useStyle';
-import { onMounted, ref } from 'vue';
+
 const { $slotsBox } = useSlotsBox();
-
-const { $styleBox } = useStyle();
-
-const headerRef = ref<HTMLElement[]>([]);
-onMounted(() => {
-  headerRef.value.forEach(item => {
-    item.addEventListener('pointerdown', e => {
-      console.log(e);
-    });
-  });
-});
 </script>
 
 <style lang="scss" scoped>
@@ -63,11 +42,10 @@ onMounted(() => {
     border-bottom: 1px solid;
     border-right: 1px solid;
     padding: 0 20px;
+    pointer-events: none;
   }
 
-  .xg-table-header-cell.cell-resizable {
-    pointer-events: none;
-
+  .cell-resizable {
     &::after {
       content: '';
       position: absolute;
