@@ -10,6 +10,8 @@
       class="cell"
       :style="{ lineHeight: `${rowHeight}px`, height: `${rowHeight}px` }"
     >
+      <div class="level-block" :style="{ width: `${data!.level * 20}px` }" />
+
       <div
         v-if="props.__index === 0 && !!data?.children?.length"
         :class="['expand-icon', { 'expand-icon__expanded': data?.isExpand }]"
@@ -37,6 +39,12 @@
           ></path>
         </svg>
       </div>
+
+      <div
+        v-else
+        class="expand-icon"
+        :style="{ width: `${rowHeight / 2}px` }"
+      />
 
       <slot v-if="slots.default" v-bind="props.data?.data" />
 
@@ -116,6 +124,10 @@ const realWidth = computed(() => {
 
     .expand-icon__expanded {
       transform: rotate(90deg);
+    }
+
+    .level-block {
+      display: inline-block;
     }
   }
 }
