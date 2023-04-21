@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-04-22 01:17:28
+ * @LastEditTime: 2023-04-22 02:26:23
  * @Description: 一条数据类
  */
 
@@ -85,7 +85,13 @@ export default class RowItem {
    * 获取当前数据是否应该隐藏
    */
   get hide() {
-    return !this.isExpand && this.level > 0;
+    if (!this.isExpand) return true;
+    let parent = this.parentNode;
+    while (parent) {
+      if (!parent.isExpand) return true;
+      parent = parent.parentNode;
+    }
+    return false;
   }
 
   /**
