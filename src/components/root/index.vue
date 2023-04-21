@@ -1,7 +1,7 @@
 <template>
   <div
     ref="rootRef"
-    class="xg-root"
+    :class="['xg-root', { 'xg-root-dragging': mousedown }]"
     :style="{ ...$styleBox.getBorder(), ...$styleBox.getBorderColor() }"
   >
     <!-- 左侧表格 -->
@@ -138,7 +138,7 @@ onMounted(() => useResizeObserver(ganttRef.value?.$el, setGanttHeaders));
 // #endregion
 
 // #region 加载示意线
-const { showLine, lineLeft, onResizeTableColumn } = useDrag();
+const { showLine, lineLeft, onResizeTableColumn, mousedown } = useDrag();
 
 const midLineRef = ref<HTMLElement | null>(null);
 onResizeTableColumn(midLineRef, {
@@ -186,6 +186,10 @@ console.log('.....root', getCurrentInstance());
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.xg-root-dragging {
+  user-select: none;
 }
 
 .xg-table-container {

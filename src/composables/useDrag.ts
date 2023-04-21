@@ -4,6 +4,7 @@ import useElement from './useElement';
 import useParam from './useParam';
 
 const lineLeft = ref(0);
+const mousedown = ref(false);
 
 interface DragOptions {
   onMove?: (x: number, e: MouseEvent) => void;
@@ -24,6 +25,7 @@ export default () => {
 
     useDraggable(el, {
       onStart: (pos, e) => {
+        mousedown.value = true;
         isMove.value = false;
 
         if (options.reset) {
@@ -43,6 +45,7 @@ export default () => {
       },
 
       onEnd: (pos, e) => {
+        mousedown.value = false;
         if (isMove.value) options?.onEnd?.(left.value, e);
 
         options?.onFinally?.();
@@ -95,6 +98,7 @@ export default () => {
     onDrag,
     showLine,
     lineLeft,
-    onResizeTableColumn
+    onResizeTableColumn,
+    mousedown
   };
 };
