@@ -29,10 +29,11 @@ export default () => {
   // 切出要展示的数据
   const inView = reactive<RowItem[]>([]);
   watch(
-    () => [top.value, bottom.value],
+    () => [top.value, bottom.value, store.$data.flatData],
     () => {
       for (let i = inView.length - 1; i >= 0; i--) {
         if (
+          inView[i].hide ||
           inView[i].flatIndex < top.value ||
           inView[i].flatIndex > bottom.value
         ) {

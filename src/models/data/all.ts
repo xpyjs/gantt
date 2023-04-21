@@ -125,6 +125,13 @@ export default class AllData {
   }
 
   /**
+   * 更新平铺数据
+   */
+  updateFlatData() {
+    this.__flatten();
+  }
+
+  /**
    * 更新数据
    * @param data 新数据（原始）
    * @param options 属性

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-04-18 19:30:08
+ * @LastEditTime: 2023-04-22 01:17:28
  * @Description: 一条数据类
  */
 
@@ -51,13 +51,13 @@ export default class RowItem {
    * 数据属性
    */
   options: Required<DataOptions> = {
-    isExpand: true,
+    isExpand: false,
     startLabel: Variables.default.startKey,
     endLabel: Variables.default.endKey
   };
 
   private __data: any;
-  private __isExpand: boolean = true;
+  private __isExpand: boolean = false;
   private __isChecked: boolean = false;
 
   /**
@@ -79,6 +79,13 @@ export default class RowItem {
    */
   get isChecked() {
     return this.__isChecked;
+  }
+
+  /**
+   * 获取当前数据是否应该隐藏
+   */
+  get hide() {
+    return !this.isExpand && this.level > 0;
   }
 
   /**
