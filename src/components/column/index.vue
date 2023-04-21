@@ -11,7 +11,7 @@
       :style="{ lineHeight: `${rowHeight}px`, height: `${rowHeight}px` }"
     >
       <div
-        v-if="props.__index === 0"
+        v-if="props.__index === 0 && !!data?.children?.length"
         :class="['expand-icon', { 'expand-icon__expanded': data?.isExpand }]"
         @click="
           () => {
