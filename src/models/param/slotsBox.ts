@@ -67,39 +67,45 @@ export default class SlotsBox {
     });
   }
 
-  setSlots(slots: Slots) {
+  setSlots(slots: Slots | VNode[]) {
     this.init();
 
+    let s: VNode[];
+    if (!Array.isArray(slots)) {
+      s = slots.default ? slots.default() : [];
+    } else {
+      s = slots;
+    }
+
     // 1、slots.default 应该只包含 x-gantt-column 和 x-gantt-slider
-    if (slots.default) {
-      slots
-        .default()
-        .filter(v => {
-          const type = (v.type as Component)?.name;
+    if (s.length > 0) {
+      let index = 0;
 
-          // 只接收自定义的两个组件
-          return (
-            type &&
-            SlotsBox.__isCustomComponent(v) &&
-            [Variables.name.column, Variables.name.slider]
-              .map(n => SlotsBox.__checkType(type, n))
-              .includes(true)
-          );
-        })
-        .forEach((v, index) => {
-          const type = (v.type as Component).name as string;
+      s.filter(v => {
+        const type = (v.type as Component)?.name;
 
-          if (SlotsBox.__checkType(type, Variables.name.slider)) {
-            // 如果是 slider，直接赋值。多个 XGanttSlider 保留最后一个
-            this.slider = v;
-          } else if (SlotsBox.__checkType(type, Variables.name.column)) {
-            // column，则要放到 header 中去，然后还要有叶子结点的渲染
-            this.tableHeaders.setColumn(v);
+        // 只接收自定义的两个组件
+        return (
+          type &&
+          SlotsBox.__isCustomComponent(v) &&
+          [Variables.name.column, Variables.name.slider]
+            .map(n => SlotsBox.__checkType(type, n))
+            .includes(true)
+        );
+      }).forEach(v => {
+        const type = (v.type as Component).name as string;
 
-            // 看一下有没有嵌套 x-gantt-column，如果有，表示需要嵌套表头
-            this.setMultiColumn(v, this.tableHeaders.columns[index]);
-          }
-        });
+        if (SlotsBox.__checkType(type, Variables.name.slider)) {
+          // 如果是 slider，直接赋值。多个 XGanttSlider 保留最后一个
+          this.slider = v;
+        } else if (SlotsBox.__checkType(type, Variables.name.column)) {
+          // column，则要放到 header 中去，然后还要有叶子结点的渲染
+          this.tableHeaders.setColumn(v);
+
+          // 看一下有没有嵌套 x-gantt-column，如果有，表示需要嵌套表头
+          this.setMultiColumn(v, this.tableHeaders.columns[index++]);
+        }
+      });
 
       // 生成表头需要的内容
       this.tableHeaders.generate();

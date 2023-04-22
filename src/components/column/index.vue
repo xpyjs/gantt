@@ -96,39 +96,5 @@ const realWidth = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.xg-table-cell {
-  height: 100%;
-  display: inline-block;
-  position: relative;
-  box-sizing: border-box;
-  border-right: 1px solid;
-
-  .cell {
-    width: calc(100% - 12px);
-    overflow: hidden;
-    white-space: nowrap;
-    font-size: 14px;
-    vertical-align: middle;
-    text-overflow: ellipsis;
-    padding: 0 6px;
-
-    .expand-icon {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 4px;
-      cursor: pointer;
-      transition: transform 0.2s ease-in-out;
-      position: relative;
-      transform-origin: center 45%;
-    }
-
-    .expand-icon__expanded {
-      transform: rotate(90deg);
-    }
-
-    .level-block {
-      display: inline-block;
-    }
-  }
-}
+@import './style.scss';
 </style>

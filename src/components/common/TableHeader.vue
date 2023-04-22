@@ -2,7 +2,7 @@
   <table class="xg-table-header" cellpadding="0" cellspacing="0" border="0">
     <colgroup>
       <template v-for="(c, i) in $slotsBox.tableHeaders.leafs" :key="i">
-        <col :width="`${c.width}px`" />
+        <col :width="c.width" />
       </template>
     </colgroup>
     <thead>

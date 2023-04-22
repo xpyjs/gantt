@@ -18,6 +18,7 @@ export default () => {
     store.$styleBox.ganttColumnSize = props.ganttColumnSize;
     store.$styleBox.unit = props.unit;
     store.$styleBox.rowHeight = props.rowHeight;
+    store.$styleBox.showCheckbox = props.showCheckbox;
   };
 
   return { rowHeight, bodyHeight, setStyles, $styleBox: store.$styleBox };

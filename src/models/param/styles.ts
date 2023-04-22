@@ -51,4 +51,13 @@ export default class StyleBox {
       this._rowHeight = v;
     }
   }
+
+  private _showCheckbox: boolean = false;
+  public get showCheckbox(): boolean {
+    return this._showCheckbox;
+  }
+
+  public set showCheckbox(v: boolean) {
+    this._showCheckbox = v;
+  }
 }
