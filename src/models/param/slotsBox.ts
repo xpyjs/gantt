@@ -1,5 +1,6 @@
 import Variables from '@/constants/vars';
 import SliderVue from '@/components/slider/index.vue';
+// import ColumnVue from '@/components/column/index.vue';
 import { type Component, type VNode, h, type Slots } from 'vue';
 import { TableHeader } from './header';
 
@@ -76,6 +77,8 @@ export default class SlotsBox {
     } else {
       s = slots;
     }
+
+    // s.unshift(h(ColumnVue, { width: 0 }));
 
     // 1、slots.default 应该只包含 x-gantt-column 和 x-gantt-slider
     if (s.length > 0) {

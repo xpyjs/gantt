@@ -4,7 +4,7 @@
     :class="[
       'xg-table-header-cell',
       {
-        'cell-resizable': !props.column.isLast
+        'cell-resizable': !props.column.isLast && index !== 0
       }
     ]"
     :style="{ ...$styleBox.getBorderColor() }"
