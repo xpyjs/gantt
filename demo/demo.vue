@@ -19,7 +19,7 @@
       <div>div</div>
 
       <x-gantt-column v-slot="scope" prop="标签3">{{
-        scope.startDate
+        scope.row.startDate
       }}</x-gantt-column>
 
       <x-gantt-slider prop="name"></x-gantt-slider>

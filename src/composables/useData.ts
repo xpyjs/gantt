@@ -24,10 +24,10 @@ export default () => {
     );
   }
 
-  function toRowData(data: RowItem) {
+  function toRowData(data?: RowItem) {
     return {
-      row: data.data,
-      $index: data.flatIndex
+      row: data?.data,
+      $index: data?.flatIndex
     };
   }
 
