@@ -257,13 +257,13 @@ class GanttHeader extends Header {
           )
         );
         i++;
-      } else {
-        if (!columns[i].children) {
-          columns[i].children = [];
-        }
-
-        columns[i].children?.push(new GanttColumn(date, this.unit));
       }
+
+      if (!columns[i].children) {
+        columns[i].children = [];
+      }
+
+      columns[i].children?.push(new GanttColumn(date, this.unit));
     });
 
     this.headers = this.convertToRows(columns, this.getAllColumns(columns));
