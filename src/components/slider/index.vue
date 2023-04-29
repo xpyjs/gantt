@@ -43,7 +43,7 @@ const sliderLeft = computed(
 
 const sliderWidth = computed(
   () =>
-    (props.data!.start.intervalTo(props.data?.end) / currentMillisecond.value) *
+    (props.data!.end.intervalTo(props.data?.start) / currentMillisecond.value) *
     ganttColumnWidth.value
 );
 

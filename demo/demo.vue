@@ -2,7 +2,7 @@
   <div style="top: 20vh; width: 100%; height: 500px">
     <x-gantt :data="ganttData" style="padding-left: 20vh">
       <x-gantt-column label="group1">
-        <x-gantt-column prop="id" width="200px"></x-gantt-column>
+        <x-gantt-column prop="id" width="150px"></x-gantt-column>
         <x-gantt-column label="group2">
           <x-gantt-column
             prop="name"
@@ -18,9 +18,21 @@
 
       <div>div</div>
 
-      <x-gantt-column v-slot="scope" prop="标签3">{{
-        scope.row.startDate
-      }}</x-gantt-column>
+      <x-gantt-column v-slot="scope" prop="起始日期">
+        {{ scope.row.startDate.getMonth() + 1 }}-{{
+          scope.row.startDate.getDate()
+        }}
+        {{ scope.row.startDate.getHours() }}:{{
+          scope.row.startDate.getMinutes()
+        }}
+      </x-gantt-column>
+
+      <x-gantt-column v-slot="scope" prop="结束日期">
+        {{ scope.row.endDate.getMonth() + 1 }}-{{
+          scope.row.endDate.getDate()
+        }}
+        {{ scope.row.endDate.getHours() }}:{{ scope.row.endDate.getMinutes() }}
+      </x-gantt-column>
 
       <x-gantt-slider prop="name"></x-gantt-slider>
     </x-gantt>
