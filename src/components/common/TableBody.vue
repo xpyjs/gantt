@@ -4,7 +4,7 @@
       <RowVue class="xg-table-row" :data="d">
         <template
           v-for="(c, i) in $slotsBox.cols.filter(
-          v => !isMerge(v.props?.merge, d as any)
+            v => !isMerge(v.props?.merge, d)
           )"
           :key="i"
         >

@@ -18,15 +18,11 @@
         :show-checkbox="$styleBox.showCheckbox"
       />
 
-      <!-- <template v-else> -->
-      <!-- <div class="expand-icon" :style="{ width: `${rowHeight / 2}px` }" /> -->
-
       <slot v-if="slots.default" v-bind="toRowData(props.data)" />
 
       <template v-else-if="props.prop">{{
         props.data?.data?.[props.prop]
       }}</template>
-      <!-- </template> -->
     </div>
   </div>
 </template>
@@ -34,7 +30,7 @@
 <script lang="ts">
 import Variables from '@/constants/vars';
 import columnProps from './props';
-import { defineComponent, useSlots, computed } from 'vue';
+import { defineComponent, useSlots, computed, watch } from 'vue';
 import useStyle from '@/composables/useStyle';
 import useSlotsBox from '@/composables/useSlotsBox';
 import SelectionVue from './selection.vue';
@@ -49,6 +45,13 @@ export default defineComponent({
 <script lang="ts" setup>
 const props = defineProps(columnProps);
 const slots = useSlots();
+watch(
+  () => slots,
+  (o, n) => {
+    console.log(o, n);
+  }
+);
+
 const { $styleBox, rowHeight } = useStyle();
 const { $slotsBox, isMerge } = useSlotsBox();
 const { toRowData } = useData();
@@ -68,12 +71,6 @@ const realWidth = computed(() => {
 
   return curWidth;
 });
-
-// 计算第一列的宽度。选择框 + 层级递进
-// const { $data } = useData();
-// const firstColumnWidth = computed(() => {
-//   return ($styleBox.showCheckbox ? 30 : 0) + $data.level * 20;
-// });
 </script>
 
 <style lang="scss" scoped>

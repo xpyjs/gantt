@@ -18,7 +18,7 @@
 
       <div>div</div>
 
-      <x-gantt-column v-slot="scope" prop="起始日期">
+      <x-gantt-column v-slot="scope" label="起始日期">
         {{ scope.row.startDate.getMonth() + 1 }}-{{
           scope.row.startDate.getDate()
         }}
@@ -27,7 +27,7 @@
         }}
       </x-gantt-column>
 
-      <x-gantt-column v-slot="scope" prop="结束日期">
+      <x-gantt-column v-slot="scope" label="结束日期">
         {{ scope.row.endDate.getMonth() + 1 }}-{{
           scope.row.endDate.getDate()
         }}
