@@ -1,5 +1,11 @@
 <template>
-  <table class="xg-gantt-header" cellpadding="0" cellspacing="0" border="0">
+  <table
+    class="xg-gantt-header"
+    :style="{ height: `${$param.headerHeight}px` }"
+    cellpadding="0"
+    cellspacing="0"
+    border="0"
+  >
     <colgroup>
       <template v-for="i in dateList[1].length" :key="i">
         <col :width="`${ganttColumnWidth}px`" />
@@ -26,7 +32,9 @@
 import useData from '@/composables/useData';
 import useGanttWidth from '@/composables/useGanttWidth';
 import useStyle from '@/composables/useStyle';
+import useParam from '@/composables/useParam';
 
+const { $param } = useParam();
 const { $styleBox } = useStyle();
 const { dateList } = useData();
 const { ganttColumnWidth } = useGanttWidth();
@@ -35,7 +43,6 @@ const { ganttColumnWidth } = useGanttWidth();
 <style lang="scss" scoped>
 .xg-gantt-header {
   width: 100%;
-  height: 80px;
   background-color: blueviolet;
   table-layout: fixed;
   border-collapse: separate;

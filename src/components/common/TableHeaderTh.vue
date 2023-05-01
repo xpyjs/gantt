@@ -28,6 +28,8 @@ const props = defineProps({
   }
 });
 
+const emit = defineEmits(['resize']);
+
 const { $slotsBox } = useSlotsBox();
 
 const { $styleBox } = useStyle();
@@ -46,12 +48,14 @@ onResizeTableColumn(headerRef, {
   onEnd: x => {
     $slotsBox.tableHeaders.leafs[index].width = Math.max(
       $slotsBox.tableHeaders.leafs[index].width + x,
-      20
+      40
     );
+
+    emit('resize');
   },
 
   preMove: (x, clientX) => {
-    if ($slotsBox.tableHeaders.leafs[index].width + x < 20) return false;
+    if ($slotsBox.tableHeaders.leafs[index].width + x < 40) return false;
     return true;
   }
 });

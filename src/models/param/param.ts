@@ -43,4 +43,13 @@ export default class Param {
   public set showMoveLine(v: boolean) {
     this._showMoveLine = v;
   }
+
+  private _headerHeight: number = 80;
+  public get headerHeight(): number {
+    return this._headerHeight;
+  }
+
+  public set headerHeight(v: number) {
+    this._headerHeight = v;
+  }
 }
