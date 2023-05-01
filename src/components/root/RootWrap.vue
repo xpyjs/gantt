@@ -1,10 +1,11 @@
 <template>
-  <Root ref="rootRef" v-bind="$attrs" :slots="slots" />
+  <Root ref="rootWrapRef" v-bind="$attrs" :slots="slots" />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, useSlots } from 'vue';
+import { defineComponent, useSlots } from 'vue';
 import { initStore } from '@/store';
+import useElement from '@/composables/useElement';
 import Root from './index.vue';
 
 export default defineComponent({
@@ -21,16 +22,17 @@ const slots = useSlots();
 // 初始全局数据
 initStore();
 
-const rootRef = ref();
+const { rootWrapRef } = useElement();
+
 const setSelected = (args: any) => {
-  rootRef.value.setSelected(args);
+  (rootWrapRef.value as any)?.setSelected(args);
 };
 const jumpToDate = (args: any) => {
-  rootRef.value.jumpToDate(args);
+  (rootWrapRef.value as any)?.jumpToDate(args);
 };
 
 const setHeaderUnit = (args: any) => {
-  rootRef.value.setHeaderUnit(args);
+  (rootWrapRef.value as any)?.setHeaderUnit(args);
 };
 
 // ***** 对外方法 ***** //
