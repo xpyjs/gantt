@@ -1,6 +1,10 @@
 <template>
   <div style="top: 20vh; width: 100%; height: 500px">
-    <x-gantt :data="ganttData" style="padding-left: 20vh">
+    <x-gantt
+      :data="ganttData"
+      style="padding-left: 20vh"
+      @click-row="onClickRow"
+    >
       <x-gantt-column label="group1">
         <x-gantt-column prop="id" width="150px"></x-gantt-column>
         <x-gantt-column label="group2">
@@ -91,6 +95,10 @@ function onAdd() {
 function onReduce() {
   ganttData.splice(ganttData.length - 1, 1);
 }
+
+const onClickRow = (data: any) => {
+  console.log('click row', data);
+};
 </script>
 
 <style scoped></style>

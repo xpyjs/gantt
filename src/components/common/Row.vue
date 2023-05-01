@@ -20,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import useEvent from '@/composables/useEvent';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
 import RowItem from '@/models/data/row';
@@ -37,8 +38,10 @@ function onLeave() {
   $param.hoverId = '';
 }
 
+const { EmitClickRow } = useEvent();
 function onClick() {
   $param.selectId = props.data.uuid;
+  EmitClickRow(props.data.data);
 }
 
 function onDblClick() {
@@ -50,17 +53,17 @@ function onDblClick() {
 .xg-row {
   width: 100%;
   position: absolute;
-  background-color: #fafafa;
+  // background-color: #fafafa;
   overflow: hidden;
   border-bottom: 1px solid;
   box-sizing: border-box;
 }
 
 .xg-row.xg-row__hover {
-  background-color: #f0f0f0;
+  background-color: #f0f0f0aa;
 }
 
 .xg-row__select {
-  background-color: #e0e0e0;
+  background-color: #e0e0e0aa;
 }
 </style>
