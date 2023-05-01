@@ -56,7 +56,7 @@ let id = 0;
 
 const ganttData = reactive<any>([]);
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 100; i++) {
   onAdd();
 }
 
@@ -64,20 +64,20 @@ ganttData[0].children = [
   {
     id: ++id,
     name: 'sub-t' + id,
-    startDate: new Date(2020, 0, 1),
-    endDate: new Date(2020, 0, 5)
+    startDate: new Date(2023, 3, 1),
+    endDate: new Date(2023, 3, 5)
   },
   {
     id: ++id,
     name: 'sub-t' + id,
-    startDate: new Date(2020, 0, 1),
-    endDate: new Date(2020, 0, 5),
+    startDate: new Date(2023, 3, 1),
+    endDate: new Date(2023, 3, 5),
     children: [
       {
         id: ++id,
         name: 'sub-sub-t' + id,
-        startDate: new Date(2020, 0, 1),
-        endDate: new Date(2020, 0, 5)
+        startDate: new Date(2023, 3, 1),
+        endDate: new Date(2023, 3, 5)
       }
     ]
   }
@@ -87,8 +87,8 @@ function onAdd() {
   ganttData.push({
     id: ++id,
     name: 't' + id,
-    startDate: new Date(2020, 0, id),
-    endDate: new Date(2020, 0, id + 5)
+    startDate: new Date(2023, 3, id),
+    endDate: new Date(2023, 3, id + 5)
   });
 }
 

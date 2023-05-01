@@ -1,3 +1,4 @@
+import Variables from '@/constants/vars';
 import { useStore } from '@/store';
 import { computed } from 'vue';
 
@@ -25,5 +26,9 @@ export default () => {
     return store.ganttHeader.headers[1].length * ganttColumnWidth.value;
   });
 
-  return { ganttWidth, ganttColumnWidth };
+  const currentMillisecond = computed(
+    () => Variables.time.millisecondOf[store.ganttHeader.unit]
+  );
+
+  return { ganttWidth, ganttColumnWidth, currentMillisecond };
 };

@@ -29,11 +29,7 @@ const props = defineProps(sliderProps);
 const slots = useSlots();
 const { $data } = useData();
 const { ganttHeader } = useGanttHeader();
-const { ganttColumnWidth } = useGanttWidth();
-
-const currentMillisecond = computed(
-  () => Variables.time.millisecondOf[ganttHeader.unit]
-);
+const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
 
 const sliderLeft = computed(
   () =>
