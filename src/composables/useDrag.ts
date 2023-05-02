@@ -13,6 +13,7 @@ interface DragOptions {
   onFinally?: () => void;
   target?: El;
   reset?: boolean;
+  disabled?: () => boolean;
 }
 
 type El = HTMLElement | SVGElement | null | undefined;
@@ -26,6 +27,8 @@ export default () => {
 
     useDraggable(el, {
       onStart: (pos, e) => {
+        if (options.disabled?.()) return;
+
         mousedown.value = true;
         isMove.value = false;
 
@@ -39,6 +42,8 @@ export default () => {
       },
 
       onMove: (pos, e) => {
+        if (options.disabled?.()) return;
+
         isMove.value = true;
 
         left.value = e.clientX - delta.value;
@@ -46,6 +51,8 @@ export default () => {
       },
 
       onEnd: (pos, e) => {
+        if (options.disabled?.()) return;
+
         mousedown.value = false;
         if (isMove.value) void options?.onEnd?.(left.value, e);
 
