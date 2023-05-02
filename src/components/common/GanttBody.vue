@@ -9,16 +9,18 @@
       </RowVue>
     </template>
 
-    <div
-      v-for="(l, i) in [5, 6, 10, 11]"
-      :key="i"
-      class="xg-gantt-body-date-line weekend"
-      :style="{
-        width: `${ganttColumnWidth}px`,
-        left: `${ganttColumnWidth * l}px`,
-        backgroundColor: '#ccc'
-      }"
-    ></div>
+    <template v-for="(date, i) in ganttHeader.dates">
+      <div
+        v-if="date.isWeekend()"
+        :key="i"
+        class="xg-gantt-body-date-line weekend"
+        :style="{
+          width: `${ganttColumnWidth}px`,
+          left: `${ganttColumnWidth * i}px`,
+          backgroundColor: '#ccc'
+        }"
+      ></div>
+    </template>
 
     <div
       v-if="showToday"
@@ -35,6 +37,7 @@
 </template>
 
 <script lang="ts" setup>
+import useGanttHeader from '@/composables/useGanttHeader';
 import useGanttWidth from '@/composables/useGanttWidth';
 import useInView from '@/composables/useInView';
 import useSlotsBox from '@/composables/useSlotsBox';
@@ -47,6 +50,7 @@ const { bodyHeight } = useStyle();
 const { ganttWidth, ganttColumnWidth } = useGanttWidth();
 const { inView } = useInView();
 const { todayLeft, showToday } = useToday();
+const { ganttHeader } = useGanttHeader();
 </script>
 
 <style lang="scss" scoped>

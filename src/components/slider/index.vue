@@ -87,6 +87,12 @@ onDrag(sliderRef, {
   border-radius: 4px;
   font-size: 12px;
   top: math.div(100% - $h, 2);
+
+  &:hover {
+    filter: brightness(1.2);
+    border: 2px solid #aaa;
+    top: calc(math.div(100% - $h, 2) - 2px);
+  }
 }
 
 .xg-slider.xg-slider-drag {

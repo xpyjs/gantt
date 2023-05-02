@@ -114,4 +114,13 @@ export class XDate {
   clone() {
     return new XDate(this.date);
   }
+
+  /**
+   * 该日期是否为周末
+   * @returns
+   */
+  isWeekend() {
+    const d = day(this.date).day();
+    return d === 6 || d === 0;
+  }
 }
