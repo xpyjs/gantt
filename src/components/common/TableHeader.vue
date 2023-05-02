@@ -1,6 +1,6 @@
 <template>
   <table
-    ref="tableRef"
+    ref="tableHeaderRef"
     class="xg-table-header"
     :style="{ height: `${$param.headerHeight}px` }"
     cellpadding="0"
@@ -14,34 +14,22 @@
     </colgroup>
     <thead>
       <tr v-for="(r, trIndex) in $slotsBox.tableHeaders.headers" :key="trIndex">
-        <TableHeaderTh
-          v-for="(c, i) in r"
-          :key="i"
-          :column="c"
-          @resize="onResize"
-        />
+        <TableHeaderTh v-for="(c, i) in r" :key="i" :column="c" />
       </tr>
     </thead>
   </table>
 </template>
 
 <script lang="ts" setup>
-import { nextTick, ref } from 'vue';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useParams from '@/composables/useParam';
 import TableHeaderTh from './TableHeaderTh.vue';
-import Variables from '@/constants/vars';
+import useElement from '@/composables/useElement';
 
 const { $slotsBox } = useSlotsBox();
 
 const { $param } = useParams();
-const tableRef = ref<HTMLElement | null>(null);
-const onResize = () => {
-  nextTick(() => {
-    const table = tableRef.value;
-    $param.headerHeight = table?.clientHeight ?? Variables.default.headerHeight;
-  });
-};
+const { tableHeaderRef } = useElement();
 </script>
 
 <style lang="scss" scoped>

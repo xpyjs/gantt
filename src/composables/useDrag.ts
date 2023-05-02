@@ -1,5 +1,6 @@
+import Variables from '@/constants/vars';
 import { useDraggable } from '@vueuse/core';
-import { type Ref, ref, computed, onMounted } from 'vue';
+import { type Ref, ref, computed, onMounted, nextTick } from 'vue';
 import useElement from './useElement';
 import useParam from './useParam';
 
@@ -8,7 +9,7 @@ const mousedown = ref(false);
 
 interface DragOptions {
   onMove?: (x: number, e: MouseEvent) => void;
-  onEnd?: (x: number, e: MouseEvent) => void;
+  onEnd?: (x: number, e: MouseEvent) => Promise<void> | void;
   onFinally?: () => void;
   target?: El;
   reset?: boolean;
@@ -46,7 +47,7 @@ export default () => {
 
       onEnd: (pos, e) => {
         mousedown.value = false;
-        if (isMove.value) options?.onEnd?.(left.value, e);
+        if (isMove.value) void options?.onEnd?.(left.value, e);
 
         options?.onFinally?.();
       }
@@ -66,6 +67,8 @@ export default () => {
     onMounted(() => {
       const rootRect = rootRef.value?.getBoundingClientRect();
 
+      const { tableHeaderRef } = useElement();
+
       (el.value as HTMLElement)?.addEventListener('pointerdown', e => {
         lineLeft.value = e.clientX - (rootRect?.left ?? 0);
         $param.showMoveLine = true;
@@ -81,8 +84,14 @@ export default () => {
           lineLeft.value = clientX;
         },
 
-        onEnd: x => {
+        onEnd: async x => {
           options?.onEnd?.(x);
+
+          await nextTick();
+
+          $param.headerHeight =
+            tableHeaderRef.value?.clientHeight ??
+            Variables.default.headerHeight;
         },
 
         onFinally: () => {

@@ -28,8 +28,6 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['resize']);
-
 const { $slotsBox } = useSlotsBox();
 
 const { $styleBox } = useStyle();
@@ -50,8 +48,6 @@ onResizeTableColumn(headerRef, {
       $slotsBox.tableHeaders.leafs[index].width + x,
       40
     );
-
-    emit('resize');
   },
 
   preMove: (x, clientX) => {
