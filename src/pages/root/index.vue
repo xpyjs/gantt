@@ -31,7 +31,20 @@
     <XGantt :row-data="allData" @gantt-scroll="ganttWheelHandle" />
 
     <!-- 设置抽屉 -->
-    <XDrawer :show="isShowOperationDrawer" />
+    <XDrawer
+      :show="isShowOperationDrawer"
+      :title="settingTitle"
+      :secondary-title="settingSecondaryTitle"
+      :small-title="settingSmallTitle"
+      :normal-title="settingNormalTitle"
+      :large-title="settingLargeTitle"
+      :gantt-display-text="settingGanttDisplayText"
+      :day="settingDay"
+      :week="settingWeek"
+      :month="settingMonth"
+      :row-height-title="settingRowHeightTitle"
+      :reset-title="settingResetTitle"
+    />
 
     <!-- 遮罩层 -->
     <div :class="maskClass" @click.stop="onClickMask" />
@@ -94,7 +107,18 @@ const {
   endKey,
   borderColor,
   primaryColor,
-  showSettingBtn
+  showSettingBtn,
+  settingTitle,
+  settingSecondaryTitle,
+  settingSmallTitle,
+  settingNormalTitle,
+  settingLargeTitle,
+  settingGanttDisplayText,
+  settingDay,
+  settingWeek,
+  settingMonth,
+  settingRowHeightTitle,
+  settingResetTitle
 } = toRefs(props);
 // 绑定根元素
 const { rootRef } = useInitRootRef();
@@ -169,6 +193,7 @@ defineExpose({
   jumpToDate,
   setHeaderUnit
 });
+console.log(XDrawer);
 </script>
 
 <style scoped lang="scss">

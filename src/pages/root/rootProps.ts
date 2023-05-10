@@ -234,5 +234,49 @@ export default {
   showSettingBtn: {
     type: Boolean,
     default: true
+  },
+  settingTitle: {
+    type: String,
+    default: 'System Settings'
+  },
+  settingSecondaryTitle: {
+    type: String,
+    default: 'Change column width'
+  },
+  settingSmallTitle: {
+    type: String,
+    default: 'small'
+  },
+  settingNormalTitle: {
+    type: String,
+    default: 'normal'
+  },
+  settingLargeTitle: {
+    type: String,
+    default: 'large'
+  },
+  settingGanttDisplayText: {
+    type: String,
+    default: 'Gantt display unit'
+  },
+  settingDay: {
+    type: String,
+    default: 'day'
+  },
+  settingWeek: {
+    type: String,
+    default: 'week'
+  },
+  settingMonth: {
+    type: String,
+    default: 'month'
+  },
+  settingRowHeightTitle: {
+    type: String,
+    default: 'Row height'
+  },
+  settingResetTitle: {
+    type: String,
+    default: 'Reset'
   }
 };

@@ -2,38 +2,44 @@
   <div class="gt-operation-drawer" :style="drawerStyle">
     <!-- 系统设置 -->
     <div>
-      <div class="gt-text-title" style="margin-bottom: 1rem">系统设置</div>
+      <div class="gt-text-title" style="margin-bottom: 1rem">
+        {{ title }}
+      </div>
 
       <div style="display: inline-flex; gap: 1rem">
         <div style="display: inline-block">
-          <div class="gt-text-secondary-title">修改甘特图列宽</div>
+          <div class="gt-text-secondary-title">
+            {{ secondaryTitle }}
+          </div>
           <div style="display: flex; gap: 0.5rem">
             <button
               class="gt-drawer-reset-btn"
               style="font-size: 10px"
               @click="() => changeColWidth('small')"
             >
-              小
+              {{ smallTitle }}
             </button>
             <button
               class="gt-drawer-reset-btn"
               style="font-size: 10px"
               @click="() => changeColWidth('normal')"
             >
-              中
+              {{ normalTitle }}
             </button>
             <button
               class="gt-drawer-reset-btn"
               style="font-size: 10px"
               @click="() => changeColWidth('large')"
             >
-              大
+              {{ largeTitle }}
             </button>
           </div>
         </div>
 
         <div style="display: inline-block">
-          <div class="gt-text-secondary-title">修改行高</div>
+          <div class="gt-text-secondary-title">
+            {{ rowHeightTitle }}
+          </div>
           <x-slider
             v-model="rowHeight"
             style="margin: 5px 20px 10px 0px"
@@ -43,31 +49,35 @@
         </div>
 
         <div style="margin: auto 0">
-          <button class="gt-drawer-reset-btn" @click="reset">重置</button>
+          <button class="gt-drawer-reset-btn" @click="reset">
+            {{ resetTitle }}
+          </button>
         </div>
       </div>
     </div>
 
     <div style="margin-top: 1rem">
-      <div class="gt-text-title" style="margin-bottom: 1rem">甘特显示</div>
+      <div class="gt-text-title" style="margin-bottom: 1rem">
+        {{ ganttDisplayText }}
+      </div>
       <div style="display: flex; gap: 1rem">
         <button
           class="gt-drawer-reset-btn"
           @click="() => updateGanttHeaderUnit('day')"
         >
-          日
+          {{ day }}
         </button>
         <button
           class="gt-drawer-reset-btn"
           @click="() => updateGanttHeaderUnit('week')"
         >
-          周
+          {{ week }}
         </button>
         <button
           class="gt-drawer-reset-btn"
           @click="() => updateGanttHeaderUnit('month')"
         >
-          月
+          {{ month }}
         </button>
       </div>
     </div>
@@ -97,6 +107,50 @@ export default defineComponent({
 const props = defineProps({
   show: {
     type: Boolean
+  },
+  title: {
+    type: String,
+    default: 'System Settings'
+  },
+  secondaryTitle: {
+    type: String,
+    default: 'Change column width'
+  },
+  smallTitle: {
+    type: String,
+    default: 'small'
+  },
+  normalTitle: {
+    type: String,
+    default: 'normal'
+  },
+  largeTitle: {
+    type: String,
+    default: 'large'
+  },
+  ganttDisplayText: {
+    type: String,
+    default: 'Gantt display unit'
+  },
+  day: {
+    type: String,
+    default: 'day'
+  },
+  week: {
+    type: String,
+    default: 'week'
+  },
+  month: {
+    type: String,
+    default: 'month'
+  },
+  rowHeightTitle: {
+    type: String,
+    default: 'Row height'
+  },
+  resetTitle: {
+    type: String,
+    default: 'Reset'
   }
 });
 
@@ -175,5 +229,13 @@ const maxRowHeight = computed(() => Variables.size.maxContentRowHeight);
   &:active {
     filter: brightness(0.9);
   }
+}
+.refresh-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url('refresh-icon.png');
+  background-size: cover;
+  cursor: pointer;
 }
 </style>

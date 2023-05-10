@@ -227,7 +227,7 @@ export function useBtnPosition() {
       position: ' absolute',
       right: `${right.value}px`,
       top: `${top.value}px`,
-      zIndex: 99
+      zIndex: 1000
     };
   });
 
