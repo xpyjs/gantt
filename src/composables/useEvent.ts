@@ -8,7 +8,7 @@ export default () => {
   }
 
   function EmitClickRow(row: any) {
-    rootEmit.value?.('click-row', toRaw(row));
+    rootEmit.value?.('row-click', toRaw(row));
   }
 
   return {
