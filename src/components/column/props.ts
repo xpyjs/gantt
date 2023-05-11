@@ -29,6 +29,53 @@ export default {
     default: () => false
   },
 
+  /**
+   * 居中显示
+   */
+  center: {
+    type: Boolean,
+    default: false
+  },
+
+  /**
+   * 自定义格式化显示日期。如果列内需要显示日期时间，提供一个格式化字符串
+   * * 只有提供了该字段才会生效。哪怕只给了key，会使用 yyyy-MM-dd 进行解析
+   * * 注意，这里不能提供默认值，否则所有数据都会被作为日期解析
+   */
+  dateFormat: String,
+
+  /**
+   * 设置空数据显示内容。默认 "无数据 😢"
+   */
+  emptyData: {
+    type: String,
+    default: Variables.noData
+  },
+
+  /**
+   * 是否可以选择文本
+   */
+  selectable: {
+    type: Boolean,
+    default: false
+  },
+
+  /**
+   * 内容样式
+   */
+  columnStyle: {
+    type: [Object, String],
+    default: () => ({})
+  },
+
+  /**
+   * 内容类名
+   */
+  columnClass: {
+    type: [Object, String],
+    default: () => ({})
+  },
+
   // ********* 内部参数 ********* //
   data: RowItem,
   __index: Number

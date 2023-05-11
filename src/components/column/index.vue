@@ -21,7 +21,9 @@
       <slot v-if="slots.default" v-bind="toRowData(props.data)" />
 
       <template v-else-if="props.prop">{{
-        props.data?.data?.[props.prop]
+        props.dateFormat
+          ? formatDate(props.data?.data?.[props.prop], props.dateFormat)
+          : props.data?.data?.[props.prop]
       }}</template>
     </div>
   </div>
@@ -36,6 +38,7 @@ import useSlotsBox from '@/composables/useSlotsBox';
 import SelectionVue from './selection.vue';
 import useData from '@/composables/useData';
 // import useData from '@/composables/useData';
+import { formatDate } from '@/utils/date';
 
 export default defineComponent({
   name: Variables.name.column
@@ -53,8 +56,10 @@ watch(
 );
 
 const { $styleBox, rowHeight } = useStyle();
-const { $slotsBox, isMerge } = useSlotsBox();
 const { toRowData } = useData();
+
+// #region 计算宽度
+const { $slotsBox, isMerge } = useSlotsBox();
 
 const realWidth = computed(() => {
   let curWidth = $slotsBox.tableHeaders.leafs[props!.__index ?? 1].width;
@@ -71,6 +76,7 @@ const realWidth = computed(() => {
 
   return curWidth;
 });
+// #endregion
 </script>
 
 <style lang="scss" scoped>

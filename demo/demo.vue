@@ -39,7 +39,11 @@
         {{ scope.row.endDate.getHours() }}:{{ scope.row.endDate.getMinutes() }}
       </x-gantt-column> -->
 
-      <x-gantt-column label="结束日期" format="MM-dd HH:mm:ss" />
+      <x-gantt-column
+        label="结束日期"
+        prop="endDate"
+        date-format="MM-dd HH:mm:ss"
+      />
 
       <x-gantt-slider prop="name"></x-gantt-slider>
     </x-gantt>
