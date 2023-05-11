@@ -123,4 +123,14 @@ export class XDate {
     const d = day(this.date).day();
     return d === 6 || d === 0;
   }
+
+  /**
+   * 将日期置为当日最开始（0点0分0秒）
+   */
+  startOf() {
+    this.date.setHours(0);
+    this.date.setMinutes(0);
+    this.date.setSeconds(0);
+    this.date.setMilliseconds(0);
+  }
 }

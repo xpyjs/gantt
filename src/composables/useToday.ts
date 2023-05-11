@@ -10,15 +10,16 @@ export default () => {
   const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
 
   const today = new XDate();
-  today.date.setHours(0);
-  today.date.setMinutes(0);
-  today.date.setSeconds(0);
+  today.startOf();
 
-  const todayLeft = computed(
-    () =>
-      (today.intervalTo($data.start) / currentMillisecond.value) *
+  const todayLeft = computed(() => {
+    const start = $data.start?.clone();
+    start?.startOf();
+    return (
+      (today.intervalTo(start) / currentMillisecond.value) *
       ganttColumnWidth.value
-  );
+    );
+  });
 
   const showToday = computed(() => {
     function isInArea(date: XDate) {
