@@ -15,11 +15,17 @@ export default {
     default: () => []
   },
 
+  links: {
+    type: Array as PropType<any[]>,
+    default: () => []
+  },
+
   /**
-   * 数据索引的label，默认 index。应当确保它是唯一的，如果不是，则会引起渲染错误。
+   * 数据索引的label，默认 id。应当确保它是唯一的，如果不是，则会引起渲染错误。
    */
-  dataIndex: {
-    type: String
+  dataId: {
+    type: String,
+    default: Variables.default.idKey
   },
 
   /**

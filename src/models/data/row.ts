@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-04-22 02:26:23
+ * @LastEditTime: 2023-05-11 14:18:14
  * @Description: 一条数据类
  */
 
@@ -53,7 +53,8 @@ export default class RowItem {
   options: Required<DataOptions> = {
     isExpand: false,
     startLabel: Variables.default.startKey,
-    endLabel: Variables.default.endKey
+    endLabel: Variables.default.endKey,
+    dataId: Variables.default.idKey
   };
 
   private __data: any;
@@ -106,6 +107,13 @@ export default class RowItem {
    */
   get end() {
     return new XDate(this.__data[this.options.endLabel]);
+  }
+
+  /**
+   * 数据 id（用户提供）
+   */
+  get id() {
+    return this.__data[this.options.dataId];
   }
 
   /**

@@ -19,7 +19,7 @@
 import useDrag from '@/composables/useDrag';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useStyle from '@/composables/useStyle';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 
 const props = defineProps({
   column: {
@@ -41,7 +41,7 @@ while (column.value.children?.length > 0) {
 
 const index = column.value.node.props.__index;
 
-const headerRef = ref<HTMLElement | null>(null);
+const headerRef = ref(null) as Ref<HTMLElement | null>;
 onResizeTableColumn(headerRef, {
   onEnd: x => {
     $slotsBox.tableHeaders.leafs[index].width = Math.max(

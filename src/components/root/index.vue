@@ -62,6 +62,7 @@ import {
   getCurrentInstance,
   onMounted,
   onUpdated,
+  Ref,
   ref,
   toRefs
 } from 'vue';
@@ -73,6 +74,7 @@ import useParam from '@/composables/useParam';
 import useGanttHeader from '@/composables/useGanttHeader';
 import useDrag from '@/composables/useDrag';
 import useElement from '@/composables/useElement';
+import useLinks from '@/composables/useLinks';
 
 const containerId = uuid(10);
 const props = defineProps(rootProps);
@@ -125,11 +127,14 @@ setSlots(props.slots);
 const { tableWidth } = useTableWidth();
 // #endregion
 
-// #region 处理数据
-const { data } = toRefs(props);
+// #region 初始化各种数据
+const { data, links } = toRefs(props);
 
 const { initData } = useData();
 initData(data);
+
+const { initLinks } = useLinks();
+initLinks(links);
 // #endregion
 
 // #region 监听 gantt 尺寸变化，表头和宽度需要重新渲染
@@ -140,7 +145,7 @@ onMounted(() => useResizeObserver(ganttRef.value?.$el, setGanttHeaders));
 // #region 加载示意线
 const { showLine, lineLeft, onResizeTableColumn, mousedown } = useDrag();
 
-const midLineRef = ref<HTMLElement | null>(null);
+const midLineRef = ref(null) as Ref<HTMLElement | null>;
 onResizeTableColumn(midLineRef, {
   onEnd: x => {
     $slotsBox.tableHeaders.leafs[
@@ -175,6 +180,7 @@ onResizeTableColumn(midLineRef, {
     return true;
   }
 });
+// #endregion
 
 console.log('.....root', getCurrentInstance());
 </script>

@@ -7,6 +7,7 @@ export default () => {
   const store = useStore();
   const { setGanttHeaders } = useGanttHeader();
 
+  // TODO 这里还需要加 options 的监听
   function initData(data: Ref<any[]>) {
     store.$data.init(data.value);
 
@@ -31,10 +32,16 @@ export default () => {
     };
   }
 
+  function flattenData() {
+    store.$data.updateFlatData();
+    store.$links.update(store.$data.flatData);
+  }
+
   return {
     $data: store.$data,
     initData,
     dateList: computed(() => store.ganttHeader.headers),
-    toRowData
+    toRowData,
+    flattenData
   };
 };

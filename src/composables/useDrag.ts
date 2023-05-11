@@ -16,8 +16,6 @@ interface DragOptions {
   disabled?: () => boolean;
 }
 
-type El = HTMLElement | SVGElement | null | undefined;
-
 export default () => {
   function onDrag(el: Ref<El>, options: DragOptions = {}) {
     const left = ref(0);

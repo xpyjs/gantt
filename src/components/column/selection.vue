@@ -7,7 +7,7 @@
     @click="
       () => {
         data?.setExpand(!data.isExpand);
-        $data.updateFlatData();
+        flattenData();
       }
     "
   >
@@ -54,7 +54,8 @@ defineProps({
     default: false
   }
 });
-const { $data } = useData();
+
+const { flattenData } = useData();
 </script>
 
 <style lang="scss" scoped>

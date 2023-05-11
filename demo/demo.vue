@@ -1,13 +1,9 @@
 <template>
   <div style="top: 20vh; width: 100%; height: 500px">
-    <x-gantt
-      :data="ganttData"
-      style="padding-left: 20vh"
-      @click-row="onClickRow"
-    >
+    <x-gantt :data="ganttData" :links="ganttLinks" @row-click="onClickRow">
       <x-gantt-column label="group1">
         <x-gantt-column prop="id" width="150px"></x-gantt-column>
-        <x-gantt-column label="group2">
+        <!-- <x-gantt-column label="group2">
           <x-gantt-column
             prop="name"
             :merge="(scope: any) => scope.$index % 3 === 0"
@@ -17,7 +13,7 @@
             :merge="(scope: any) => scope.$index % 2 === 0"
             >n1</x-gantt-column
           >
-        </x-gantt-column>
+        </x-gantt-column> -->
       </x-gantt-column>
 
       <div>div</div>
@@ -31,12 +27,14 @@
         }}
       </x-gantt-column>
 
-      <x-gantt-column v-slot="scope" label="结束日期">
+      <!-- <x-gantt-column v-slot="scope" label="结束日期">
         {{ scope.row.endDate.getMonth() + 1 }}-{{
           scope.row.endDate.getDate()
         }}
         {{ scope.row.endDate.getHours() }}:{{ scope.row.endDate.getMinutes() }}
-      </x-gantt-column>
+      </x-gantt-column> -->
+
+      <x-gantt-column label="结束日期" format="MM-dd HH:mm:ss" />
 
       <x-gantt-slider prop="name"></x-gantt-slider>
     </x-gantt>
@@ -56,7 +54,7 @@ let id = 0;
 
 const ganttData = reactive<any>([]);
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 50; i++) {
   onAdd();
 }
 
@@ -80,6 +78,19 @@ ganttData[0].children = [
         endDate: new Date(2023, 3, 5)
       }
     ]
+  }
+];
+
+const ganttLinks = [
+  {
+    id: 1,
+    from: 1,
+    to: 2
+  },
+  {
+    id: 2,
+    from: 2,
+    to: 3
   }
 ];
 

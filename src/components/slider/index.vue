@@ -4,7 +4,14 @@
     :class="['xg-slider', 'xg-slider-drag']"
     :style="{ left: `${sliderLeft}px`, width: `${sliderWidth}px` }"
   >
-    <div class="xg-slider-anchor left-anchor" @pointerdown="onAnchorDown"></div>
+    <div
+      :class="[
+        'xg-slider-anchor',
+        'in-anchor',
+        { 'xg-slider-anchor__show': $param.hoverId === props.data?.uuid }
+      ]"
+      @pointerdown="onInAnchorDown"
+    ></div>
 
     <slot v-if="slots.default" v-bind="props.data?.data" />
 
@@ -13,20 +20,25 @@
     }}</span>
 
     <div
-      class="xg-slider-anchor right-anchor"
-      @pointerdown="onAnchorDown"
+      :class="[
+        'xg-slider-anchor',
+        'out-anchor',
+        { 'xg-slider-anchor__show': $param.hoverId === props.data?.uuid }
+      ]"
+      @pointerdown="onOutAnchorDown"
     ></div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, useSlots, ref, computed, onMounted } from 'vue';
+import { defineComponent, useSlots, ref, computed, onMounted, Ref } from 'vue';
 import Variables from '@/constants/vars';
 import sliderProps from './props';
 import useData from '@/composables/useData';
 import useGanttHeader from '@/composables/useGanttHeader';
 import useGanttWidth from '@/composables/useGanttWidth';
 import useDrag from '@/composables/useDrag';
+import useParam from '@/composables/useParam';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -37,9 +49,11 @@ export default defineComponent({
 const props = defineProps(sliderProps);
 const slots = useSlots();
 const { $data } = useData();
+const { $param } = useParam();
 const { ganttHeader } = useGanttHeader();
 const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
 
+// #region 计算滑块位置
 const sliderLeft = computed(
   () =>
     (props.data!.start.intervalTo($data.start) / currentMillisecond.value) *
@@ -51,11 +65,19 @@ const sliderWidth = computed(
     (props.data!.end.intervalTo(props.data?.start) / currentMillisecond.value) *
     ganttColumnWidth.value
 );
+// #endregion
 
+// #region 移动滑块
 const disableMove = ref(false);
-function onAnchorDown() {
+function handleDisableMove() {
   disableMove.value = true;
 }
+
+onMounted(() => {
+  document.addEventListener('pointerup', () => {
+    disableMove.value = false;
+  });
+});
 
 const setStart = (() => {
   const startDate = props.data?.start.clone();
@@ -80,13 +102,7 @@ const setEnd = (() => {
     );
 })();
 
-const sliderRef = ref<HTMLElement | null>(null);
-onMounted(() => {
-  document.addEventListener('pointerup', () => {
-    disableMove.value = false;
-  });
-});
-
+const sliderRef = ref(null) as Ref<HTMLElement | null>;
 const { onDrag } = useDrag();
 onDrag(sliderRef, {
   disabled: () => disableMove.value,
@@ -96,6 +112,21 @@ onDrag(sliderRef, {
     setEnd(x);
   }
 });
+// #endregion
+
+// #region inAnchor
+function onInAnchorDown() {
+  handleDisableMove();
+}
+// #endregion
+
+// #region outAnchor
+function onOutAnchorDown() {
+  handleDisableMove();
+
+  console.log('outAnchorDown', props.data);
+}
+// #endregion
 </script>
 
 <style lang="scss" scoped>
@@ -134,13 +165,23 @@ onDrag(sliderRef, {
   position: absolute;
   top: calc(50% - 3px);
   cursor: pointer;
+  opacity: 0;
+  transition: transform 0.2s, opacity 0.2s;
+
+  &:hover {
+    transform: scale(1.5);
+  }
 }
 
-.left-anchor {
+.xg-slider-anchor__show {
+  opacity: 1;
+}
+
+.in-anchor {
   left: -12px;
 }
 
-.right-anchor {
+.out-anchor {
   right: -12px;
 }
 </style>

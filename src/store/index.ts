@@ -8,7 +8,7 @@
 
 import { inject, provide, reactive } from 'vue';
 import EventBus from '@/utils/bus';
-import { AllData } from '@/models/data';
+import { AllData, AllLinks } from '@/models/data';
 import { GanttHeader, Param, SlotsBox, StyleBox } from '@/models/param';
 
 export const initStore = () => {
@@ -20,6 +20,9 @@ export const initStore = () => {
 
   const data = reactive(new AllData());
   provide('$data', data);
+
+  const links = reactive(new AllLinks());
+  provide('$links', links);
 
   const styleBox = reactive(new StyleBox());
   provide('$styleBox', styleBox);
@@ -47,6 +50,11 @@ export const useStore = () => {
      * 展示的数据
      */
     $data: inject('$data') as AllData,
+
+    /**
+     * 连线数据
+     */
+    $links: inject('$links') as AllLinks,
 
     /**
      * 样式盒子，所有样式都保存在这里来管理样式

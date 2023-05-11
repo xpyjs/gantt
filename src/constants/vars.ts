@@ -25,7 +25,8 @@ export const Variables = {
     ganttColumnWidth: 30,
     tableColumnWidth: 80,
     startKey: 'startDate',
-    endKey: 'endDate'
+    endKey: 'endDate',
+    idKey: 'id'
   },
 
   time: {
