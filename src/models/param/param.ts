@@ -1,3 +1,4 @@
+import Variables from '@/constants/vars';
 import type RowItem from '../data/row';
 
 export default class Param {
@@ -46,7 +47,7 @@ export default class Param {
     this._showMoveLine = v;
   }
 
-  private _headerHeight: number = 80;
+  private _headerHeight: number = Variables.default.headerHeight;
   public get headerHeight(): number {
     return this._headerHeight;
   }

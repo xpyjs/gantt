@@ -73,7 +73,7 @@ import { useResizeObserver } from '@vueuse/core';
 import useParam from '@/composables/useParam';
 import useGanttHeader from '@/composables/useGanttHeader';
 import useDrag from '@/composables/useDrag';
-import useElement from '@/composables/useElement';
+import useRoot from '@/composables/useRoot';
 import useLinks from '@/composables/useLinks';
 import Variables from '@/constants/vars';
 
@@ -81,7 +81,7 @@ const containerId = uuid(10);
 const props = defineProps(rootProps);
 
 // #region 挂载实例
-const { rootRef } = useElement();
+const { rootRef } = useRoot();
 // #endregion
 
 // #region 获取表格下方的滚动条 gap

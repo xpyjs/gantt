@@ -1,5 +1,6 @@
 <template>
   <table
+    ref="ganttHeaderRef"
     class="xg-gantt-header"
     :style="{ height: `${$param.headerHeight}px` }"
     cellpadding="0"
@@ -41,11 +42,15 @@ import useData from '@/composables/useData';
 import useGanttWidth from '@/composables/useGanttWidth';
 import useStyle from '@/composables/useStyle';
 import useParam from '@/composables/useParam';
+import useElement from '@/composables/useElement';
+import { onMounted } from 'vue';
 
 const { $param } = useParam();
 const { $styleBox } = useStyle();
 const { dateList } = useData();
 const { ganttColumnWidth } = useGanttWidth();
+const { ganttHeaderRef, updateHeaderHeight } = useElement();
+onMounted(updateHeaderHeight);
 </script>
 
 <style lang="scss" scoped>

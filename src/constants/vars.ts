@@ -20,7 +20,7 @@ export const Variables = {
   },
 
   default: {
-    headerHeight: 100,
+    headerHeight: 50,
     rowHeight: 30,
     ganttColumnWidth: 30,
     tableColumnWidth: 80,

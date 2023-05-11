@@ -1,8 +1,8 @@
-import Variables from '@/constants/vars';
 import { useDraggable } from '@vueuse/core';
 import { type Ref, ref, computed, onMounted, nextTick } from 'vue';
 import useElement from './useElement';
 import useParam from './useParam';
+import useRoot from './useRoot';
 
 const lineLeft = ref(0);
 const mousedown = ref(false);
@@ -60,7 +60,7 @@ export default () => {
   }
 
   const { $param } = useParam();
-  const { rootRef } = useElement();
+  const { rootRef } = useRoot();
 
   function onResizeTableColumn(
     el: Ref<El>,
@@ -72,7 +72,7 @@ export default () => {
     onMounted(() => {
       const rootRect = rootRef.value?.getBoundingClientRect();
 
-      const { tableHeaderRef } = useElement();
+      const { getMaxHeader } = useElement();
 
       (el.value as HTMLElement)?.addEventListener('pointerdown', e => {
         lineLeft.value = e.clientX - (rootRect?.left ?? 0);
@@ -94,9 +94,7 @@ export default () => {
 
           await nextTick();
 
-          $param.headerHeight =
-            tableHeaderRef.value?.clientHeight ??
-            Variables.default.headerHeight;
+          $param.headerHeight = getMaxHeader();
         },
 
         onFinally: () => {

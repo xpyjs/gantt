@@ -5,7 +5,7 @@
 <script lang="ts">
 import { defineComponent, useSlots } from 'vue';
 import { initStore } from '@/store';
-import useElement from '@/composables/useElement';
+import useRoot from '@/composables/useRoot';
 import Root from './index.vue';
 import useEvent from '@/composables/useEvent';
 
@@ -35,7 +35,7 @@ initStore();
 const { setRootEmit } = useEvent();
 setRootEmit(emit);
 
-const { rootRef } = useElement();
+const { rootRef } = useRoot();
 
 const setSelected = (args: any) => {
   (rootRef.value as any)?.setSelected(args);
