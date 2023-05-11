@@ -7,9 +7,15 @@ export default () => {
   const store = useStore();
   const { setGanttHeaders } = useGanttHeader();
 
-  // TODO 这里还需要加 options 的监听
-  function initData(data: Ref<any[]>) {
-    store.$data.init(data.value);
+  function initData(data: Ref<any[]>, props: any) {
+    const options: DataOptions = {
+      dataId: props.dataId,
+      isExpand: !props.showExpand || props.expandAll,
+      startLabel: props.startKey,
+      endLabel: props.endKey
+    };
+
+    store.$data.init(data.value, options);
 
     setGanttHeaders();
 
@@ -17,7 +23,7 @@ export default () => {
       () => data,
       val => {
         // 更新数据
-        store.$data.update(val.value);
+        store.$data.update(val.value, options);
 
         setGanttHeaders();
       },

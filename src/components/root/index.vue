@@ -131,7 +131,7 @@ const { tableWidth } = useTableWidth();
 const { data, links } = toRefs(props);
 
 const { initData } = useData();
-initData(data);
+initData(data, props);
 
 const { initLinks } = useLinks();
 initLinks(links);

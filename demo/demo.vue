@@ -1,8 +1,13 @@
 <template>
   <div style="top: 20vh; width: 100%; height: 500px">
-    <x-gantt :data="ganttData" :links="ganttLinks" @row-click="onClickRow">
+    <x-gantt
+      data-id="index"
+      :data="ganttData"
+      :links="ganttLinks"
+      @row-click="onClickRow"
+    >
       <x-gantt-column label="group1">
-        <x-gantt-column prop="id" width="150px"></x-gantt-column>
+        <x-gantt-column prop="index" width="120px"></x-gantt-column>
         <!-- <x-gantt-column label="group2">
           <x-gantt-column
             prop="name"
@@ -60,19 +65,19 @@ for (let i = 0; i < 50; i++) {
 
 ganttData[0].children = [
   {
-    id: ++id,
+    index: ++id,
     name: 'sub-t' + id,
     startDate: new Date(2023, 3, 1),
     endDate: new Date(2023, 3, 5)
   },
   {
-    id: ++id,
+    index: ++id,
     name: 'sub-t' + id,
     startDate: new Date(2023, 3, 1),
     endDate: new Date(2023, 3, 5),
     children: [
       {
-        id: ++id,
+        index: ++id,
         name: 'sub-sub-t' + id,
         startDate: new Date(2023, 3, 1),
         endDate: new Date(2023, 3, 5)
@@ -83,20 +88,20 @@ ganttData[0].children = [
 
 const ganttLinks = [
   {
-    id: 1,
+    index: 1,
     from: 1,
     to: 2
   },
   {
-    id: 2,
+    index: 2,
     from: 2,
-    to: 3
+    to: 5
   }
 ];
 
 function onAdd() {
   ganttData.push({
-    id: ++id,
+    index: ++id,
     name: 't' + id,
     startDate: new Date(2023, 3, id),
     endDate: new Date(2023, 3, id + 5)
