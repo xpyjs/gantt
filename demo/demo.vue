@@ -46,7 +46,7 @@
         ellipsis
       />
 
-      <x-gantt-slider prop="name"></x-gantt-slider>
+      <x-gantt-slider prop="name" :move="onMove"></x-gantt-slider>
     </x-gantt>
   </div>
 
@@ -120,6 +120,11 @@ function onReduce() {
 const onClickRow = (data: any) => {
   console.log('click row', data);
 };
+
+function onMove(data: any) {
+  console.log('move', data);
+  return true;
+}
 </script>
 
 <style scoped></style>

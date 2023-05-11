@@ -31,7 +31,7 @@ export default () => {
     );
   }
 
-  function toRowData(data?: RowItem) {
+  function toRowData(data?: RowItem): RowData {
     return {
       row: data?.data,
       $index: data?.flatIndex

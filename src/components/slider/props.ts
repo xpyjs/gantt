@@ -64,7 +64,9 @@ export default {
    * 允许移动
    */
   move: {
-    type: [Function, Boolean],
+    type: [Function, Boolean] as PropType<
+      boolean | ((data: RowData) => boolean)
+    >,
     default: () => false
   },
 
