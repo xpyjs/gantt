@@ -70,7 +70,6 @@ export class XDate {
    * 比较日期大小。
    * @param date 要比较的日期
    * @param precision 精度，可以通过不同单位来调整判断精度
-   * @returns 返回字符，l 左小，r 右小，e 相等或比较类似的字符串或等等。
    */
   isSame(date: XDate, precision: DateUnit) {
     if (precision === 'week') {

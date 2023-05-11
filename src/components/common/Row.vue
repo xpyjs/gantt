@@ -2,7 +2,7 @@
   <div
     :class="[
       'xg-row',
-      { 'xg-row__hover': $param.hoverId === props.data.uuid },
+      { 'xg-row__hover': $param.hoverItem?.uuid === props.data.uuid },
       { 'xg-row__select': $param.selectId === props.data.uuid }
     ]"
     :style="{
@@ -31,11 +31,11 @@ const { rowHeight, $styleBox } = useStyle();
 
 const { $param } = useParam();
 function onEnter() {
-  $param.hoverId = props.data.uuid;
+  $param.hoverItem = props.data;
 }
 
 function onLeave() {
-  $param.hoverId = '';
+  $param.hoverItem = null;
 }
 
 const { EmitClickRow } = useEvent();

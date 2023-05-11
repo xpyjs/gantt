@@ -232,5 +232,13 @@ export default {
   unit: {
     type: String as PropType<HeaderDateUnit>,
     default: 'day'
+  },
+
+  /**
+   * 允许鼠标悬停高亮表头对应日期
+   */
+  highlightDate: {
+    type: Boolean,
+    default: false
   }
 };

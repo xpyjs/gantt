@@ -1,29 +1,50 @@
 <template>
   <div
     ref="sliderRef"
-    :class="['xg-slider', 'xg-slider-drag']"
-    :style="{ left: `${sliderLeft}px`, width: `${sliderWidth}px` }"
+    :class="['xg-slider', { 'xg-slider-drag': canMove }]"
+    :style="{
+      left: `${sliderLeft}px`,
+      width: `${sliderWidth}px`,
+      maxHeight: `${$styleBox.rowHeight}px`,
+      backgroundColor: props.bgColor,
+      height: height,
+      top:
+        height === '100%' ||
+        (!/%$/.test(height) && parseFloat(height) >= $styleBox.rowHeight)
+          ? 0
+          : `calc(calc(100% - ${height}) / 2)`
+    }"
   >
     <div
       :class="[
         'xg-slider-anchor',
         'in-anchor',
-        { 'xg-slider-anchor__show': $param.hoverId === props.data?.uuid }
+        {
+          'xg-slider-anchor__show': $param.hoverItem?.uuid === props.data?.uuid
+        }
       ]"
       @pointerdown="onInAnchorDown"
     ></div>
 
-    <slot v-if="slots.default" v-bind="props.data?.data" />
+    <div class="xg-slider-block" :style="{ 'text-align': props.alignment }">
+      <slot v-if="slots.default" v-bind="props.data?.data" />
 
-    <span v-else-if="props.prop" class="xg-slider-text">{{
-      props.data?.data?.[props.prop]
-    }}</span>
+      <span v-else-if="props.prop" class="slider-text">
+        {{
+          props.dateFormat
+            ? formatDate(originData, props.dateFormat)
+            : originData
+        }}
+      </span>
+    </div>
 
     <div
       :class="[
         'xg-slider-anchor',
         'out-anchor',
-        { 'xg-slider-anchor__show': $param.hoverId === props.data?.uuid }
+        {
+          'xg-slider-anchor__show': $param.hoverItem?.uuid === props.data?.uuid
+        }
       ]"
       @pointerdown="onOutAnchorDown"
     ></div>
@@ -39,6 +60,9 @@ import useGanttHeader from '@/composables/useGanttHeader';
 import useGanttWidth from '@/composables/useGanttWidth';
 import useDrag from '@/composables/useDrag';
 import useParam from '@/composables/useParam';
+import useStyle from '@/composables/useStyle';
+import { formatDate } from '@/utils/date';
+import { isBoolean, isFunction } from 'lodash';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -48,12 +72,28 @@ export default defineComponent({
 <script setup lang="ts">
 const props = defineProps(sliderProps);
 const slots = useSlots();
-const { $data } = useData();
 const { $param } = useParam();
-const { ganttHeader } = useGanttHeader();
-const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
+const { $styleBox } = useStyle();
+
+const height = computed(() => {
+  if (typeof props.height === 'number') {
+    return `${props.height}px`;
+  }
+
+  if (!/[^0-9.]+/.test(props.height)) {
+    return `${parseFloat(props.height)}px`;
+  }
+
+  return props.height;
+});
+
+const originData = computed(
+  () => props.label || (props.data?.data?.[props.prop ?? ''] ?? props.emptyData)
+);
 
 // #region 计算滑块位置
+const { $data, toRowData } = useData();
+const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
 const sliderLeft = computed(
   () =>
     (props.data!.start.intervalTo($data.start) / currentMillisecond.value) *
@@ -68,6 +108,15 @@ const sliderWidth = computed(
 // #endregion
 
 // #region 移动滑块
+const { ganttHeader } = useGanttHeader();
+const canMove = computed(() => {
+  if (isBoolean(props.move)) return props.move;
+  if (isFunction(props.move)) {
+    return props.move(toRowData(props.data!));
+  }
+
+  return false;
+});
 const disableMove = ref(false);
 function handleDisableMove() {
   disableMove.value = true;
@@ -105,7 +154,7 @@ const setEnd = (() => {
 const sliderRef = ref(null) as Ref<HTMLElement | null>;
 const { onDrag } = useDrag();
 onDrag(sliderRef, {
-  disabled: () => disableMove.value,
+  disabled: () => !canMove.value || disableMove.value,
 
   onMove: x => {
     setStart(x);
@@ -130,21 +179,21 @@ function onOutAnchorDown() {
 </script>
 
 <style lang="scss" scoped>
-@use 'sass:math';
-
 .xg-slider {
   background-color: goldenrod;
   position: absolute;
-  $h: 70%;
-  height: $h;
   border-radius: 4px;
   font-size: 10px;
-  top: math.div(100% - $h, 2);
   padding: 0 12px;
   transition: filter 0.2s;
 
-  .xg-slider-text {
-    vertical-align: middle;
+  .xg-slider-block {
+    height: 100%;
+
+    .slider-text {
+      vertical-align: middle;
+      vertical-align: -webkit-baseline-middle;
+    }
   }
 
   &:hover {

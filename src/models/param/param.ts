@@ -1,3 +1,5 @@
+import type RowItem from '../data/row';
+
 export default class Param {
   private _currentTop: number = 0;
   public get currentTop(): number {
@@ -17,13 +19,13 @@ export default class Param {
     this._rootHeight = v;
   }
 
-  private _hoverId: string = '';
-  public get hoverId(): string {
-    return this._hoverId;
+  private _hoverItem: RowItem | null = null;
+  public get hoverItem(): RowItem | null {
+    return this._hoverItem;
   }
 
-  public set hoverId(v: string) {
-    this._hoverId = v;
+  public set hoverItem(v: RowItem | null) {
+    this._hoverItem = v;
   }
 
   private _selectId: string = '';

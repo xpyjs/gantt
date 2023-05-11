@@ -60,4 +60,13 @@ export default class StyleBox {
   public set showCheckbox(v: boolean) {
     this._showCheckbox = v;
   }
+
+  private _highlightDate: boolean = false;
+  public get highlightDate(): boolean {
+    return this._highlightDate;
+  }
+
+  public set highlightDate(v: boolean) {
+    this._highlightDate = v;
+  }
 }

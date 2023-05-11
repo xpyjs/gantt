@@ -16,7 +16,15 @@
         <th
           v-for="(c, i) in r"
           :key="i"
-          class="xg-gantt-header-cell"
+          :class="[
+            'xg-gantt-header-cell',
+            {
+              highlight:
+                trIndex === dateList.length - 1 &&
+                ($param.hoverItem?.start.compareTo(c.date) === 'e' ||
+                  $param.hoverItem?.end.compareTo(c.date) === 'e')
+            }
+          ]"
           :style="{ ...$styleBox.getBorderColor() }"
           :colspan="c.colSpan"
           :rowspan="c.rowSpan"
@@ -43,7 +51,6 @@ const { ganttColumnWidth } = useGanttWidth();
 <style lang="scss" scoped>
 .xg-gantt-header {
   width: 100%;
-  background-color: blueviolet;
   table-layout: fixed;
   border-collapse: separate;
   top: 0;
@@ -61,6 +68,11 @@ const { ganttColumnWidth } = useGanttWidth();
     box-sizing: border-box;
     border-bottom: 1px solid;
     border-right: 1px solid;
+    background-color: blueviolet;
+  }
+
+  .highlight {
+    filter: brightness(1.2);
   }
 }
 </style>

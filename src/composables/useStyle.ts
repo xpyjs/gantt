@@ -19,6 +19,7 @@ export default () => {
     store.$styleBox.unit = props.unit;
     store.$styleBox.rowHeight = props.rowHeight;
     store.$styleBox.showCheckbox = props.showCheckbox;
+    store.$styleBox.highlightDate = props.highlightDate;
   };
 
   return { rowHeight, bodyHeight, setStyles, $styleBox: store.$styleBox };
