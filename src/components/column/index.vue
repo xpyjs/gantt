@@ -7,10 +7,7 @@
       ...$styleBox.getBorderColor()
     }"
   >
-    <div
-      class="cell"
-      :style="{ lineHeight: `${rowHeight}px`, height: `${rowHeight}px` }"
-    >
+    <div :style="{ lineHeight: `${rowHeight}px`, height: `${rowHeight}px` }">
       <SelectionVue
         v-if="props.__index === 0"
         :data="data"
@@ -18,13 +15,18 @@
         :show-checkbox="$styleBox.showCheckbox"
       />
 
-      <slot v-if="slots.default" v-bind="toRowData(props.data)" />
+      <div
+        :class="['cell', { 'cell-center': props.center }, props.columnClass]"
+        :style="props.columnStyle"
+      >
+        <slot v-if="slots.default" v-bind="toRowData(props.data)" />
 
-      <template v-else-if="props.prop">{{
-        props.dateFormat
-          ? formatDate(props.data?.data?.[props.prop], props.dateFormat)
-          : props.data?.data?.[props.prop]
-      }}</template>
+        <template v-else-if="props.prop">{{
+          props.dateFormat
+            ? formatDate(originData, props.dateFormat)
+            : originData
+        }}</template>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +55,10 @@ watch(
   (o, n) => {
     console.log(o, n);
   }
+);
+
+const originData = computed(
+  () => props.data?.data?.[props.prop ?? ''] ?? props.emptyData
 );
 
 const { $styleBox, rowHeight } = useStyle();

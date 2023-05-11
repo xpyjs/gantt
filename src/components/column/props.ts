@@ -53,14 +53,6 @@ export default {
   },
 
   /**
-   * 是否可以选择文本
-   */
-  selectable: {
-    type: Boolean,
-    default: false
-  },
-
-  /**
    * 内容样式
    */
   columnStyle: {

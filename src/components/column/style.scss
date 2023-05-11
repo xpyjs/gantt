@@ -5,23 +5,21 @@
   box-sizing: border-box;
   border-right: 1px solid;
 
-  .cell {
+  & > div {
     width: calc(100% - 12px);
     overflow: hidden;
     white-space: nowrap;
-    font-size: 14px;
-    vertical-align: middle;
+    font-size: 13px;
     text-overflow: ellipsis;
     padding: 0 6px;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
 
     .expand-icon {
-      display: inline-block;
-      vertical-align: middle;
       margin-right: 4px;
       cursor: pointer;
       transition: transform 0.2s ease-in-out;
-      position: relative;
-      transform-origin: center 45%;
     }
 
     .expand-icon__expanded {
@@ -30,6 +28,14 @@
 
     .level-block {
       display: inline-block;
+    }
+
+    .cell {
+      flex: 1;
+    }
+
+    .cell-center {
+      text-align: center;
     }
   }
 }
