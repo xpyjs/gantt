@@ -16,7 +16,14 @@
       />
 
       <div
-        :class="['cell', { 'cell-center': props.center }, props.columnClass]"
+        :class="[
+          'cell',
+          {
+            'cell-center': props.center,
+            'cell-ellipsis': props.ellipsis
+          },
+          props.columnClass
+        ]"
         :style="props.columnStyle"
       >
         <slot v-if="slots.default" v-bind="toRowData(props.data)" />

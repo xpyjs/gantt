@@ -43,6 +43,7 @@
         label="结束日期"
         prop="endDate"
         date-format="MM-dd HH:mm:ss"
+        ellipsis
       />
 
       <x-gantt-slider prop="name"></x-gantt-slider>
