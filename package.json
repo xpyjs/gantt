@@ -1,10 +1,10 @@
 {
-  "name": "@xpyjs/gantt",
+  "name": "@nurymadil/xpyjs-gantt",
   "description": "A high-performance vue gantt component.",
   "author": "jeremyjone",
   "license": "MIT",
   "private": false,
-  "version": "1.0.2",
+  "version": "2.0.0",
   "preview": false,
   "publishConfig": {
     "access": "public",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xpyjs/gantt.git"
+    "url": "git+https://github.com/xpyjs/gantt.git"
   },
   "keywords": [
     "vue",
@@ -121,5 +121,9 @@
     "scripts": {
       "pretag": "bash ./scripts/update-doc.sh"
     }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
   }
 }
