@@ -75,6 +75,7 @@ import useGanttHeader from '@/composables/useGanttHeader';
 import useDrag from '@/composables/useDrag';
 import useElement from '@/composables/useElement';
 import useLinks from '@/composables/useLinks';
+import Variables from '@/constants/vars';
 
 const containerId = uuid(10);
 const props = defineProps(rootProps);
@@ -153,7 +154,7 @@ onResizeTableColumn(midLineRef, {
     ].width = Math.max(
       $slotsBox.tableHeaders.leafs[$slotsBox.tableHeaders.leafs.length - 1]
         .width + x,
-      20
+      Variables.size.minTableColumnWidth
     );
   },
 
@@ -165,7 +166,7 @@ onResizeTableColumn(midLineRef, {
       $slotsBox.tableHeaders.leafs[$slotsBox.tableHeaders.leafs.length - 1]
         .width +
         x <
-      20
+      Variables.size.minTableColumnWidth
     )
       return false;
 

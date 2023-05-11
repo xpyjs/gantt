@@ -19,6 +19,7 @@
 import useDrag from '@/composables/useDrag';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useStyle from '@/composables/useStyle';
+import Variables from '@/constants/vars';
 import { Ref, ref } from 'vue';
 
 const props = defineProps({
@@ -46,12 +47,16 @@ onResizeTableColumn(headerRef, {
   onEnd: x => {
     $slotsBox.tableHeaders.leafs[index].width = Math.max(
       $slotsBox.tableHeaders.leafs[index].width + x,
-      40
+      Variables.size.minTableColumnWidth
     );
   },
 
   preMove: (x, clientX) => {
-    if ($slotsBox.tableHeaders.leafs[index].width + x < 40) return false;
+    if (
+      $slotsBox.tableHeaders.leafs[index].width + x <
+      Variables.size.minTableColumnWidth
+    )
+      return false;
     return true;
   }
 });
@@ -79,6 +84,7 @@ onResizeTableColumn(headerRef, {
     border-bottom: 1px solid;
     border-right: 1px solid;
     padding: 0 20px;
+    font-size: 14px;
     pointer-events: none;
   }
 

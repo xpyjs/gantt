@@ -16,7 +16,7 @@ export const Variables = {
     minContentRowHeight: 20,
     maxContentRowHeight: 70,
     minHeaderHeight: 30,
-    minTableColumnWidth: 30
+    minTableColumnWidth: 40
   },
 
   default: {

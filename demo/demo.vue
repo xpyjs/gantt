@@ -8,7 +8,7 @@
     >
       <x-gantt-column label="group1">
         <x-gantt-column prop="index" width="120px"></x-gantt-column>
-        <!-- <x-gantt-column label="group2">
+        <x-gantt-column label="group2">
           <x-gantt-column
             prop="name"
             :merge="(scope: any) => scope.$index % 3 === 0"
@@ -18,7 +18,7 @@
             :merge="(scope: any) => scope.$index % 2 === 0"
             >n1</x-gantt-column
           >
-        </x-gantt-column> -->
+        </x-gantt-column>
       </x-gantt-column>
 
       <div>div</div>

@@ -42,31 +42,5 @@ const { tableHeaderRef } = useElement();
   position: sticky;
   z-index: 10;
   overflow: hidden;
-
-  .xg-table-header-cell {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    text-align: left;
-    position: relative;
-    box-sizing: border-box;
-    border-bottom: 1px solid;
-    border-right: 1px solid;
-    padding: 0 20px;
-    pointer-events: none;
-  }
-
-  .cell-resizable {
-    &::after {
-      content: '';
-      position: absolute;
-      right: -5px;
-      top: 0;
-      bottom: 0;
-      width: 10px;
-      cursor: col-resize;
-      pointer-events: auto;
-    }
-  }
 }
 </style>

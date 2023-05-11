@@ -68,6 +68,7 @@ const { ganttColumnWidth } = useGanttWidth();
     box-sizing: border-box;
     border-bottom: 1px solid;
     border-right: 1px solid;
+    font-size: 14px;
     background-color: blueviolet;
   }
 
