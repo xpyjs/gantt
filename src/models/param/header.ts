@@ -213,9 +213,9 @@ class GanttHeader extends Header {
     end?: XDate,
     unit: HeaderDateUnit = 'day'
   ) {
-    this.start = start;
-    this.end = end;
     this.unit = unit;
+    this.start = start?.getOffset(-Variables.time.millisecondOf[this.unit]);
+    this.end = end;
     this.minLength = minLen;
 
     this.generate();

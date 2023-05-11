@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts" setup>
-import useData from '@/composables/useData';
+import useGanttHeader from '@/composables/useGanttHeader';
 import useGanttWidth from '@/composables/useGanttWidth';
 import useStyle from '@/composables/useStyle';
 import { LinkItem } from '@/models/data/links';
@@ -16,13 +16,13 @@ const props = defineProps({
   }
 });
 
-const { $data } = useData();
+const { ganttHeader } = useGanttHeader();
 const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
 const { rowHeight } = useStyle();
 
 const x = computed(
   () =>
-    (props.link.fromRow.end.intervalTo($data.start) /
+    (props.link.fromRow.end.intervalTo(ganttHeader.start) /
       currentMillisecond.value) *
     ganttColumnWidth.value
 );
@@ -33,7 +33,7 @@ const y = computed(
 
 const x2 = computed(
   () =>
-    (props.link.toRow.start.intervalTo($data.start) /
+    (props.link.toRow.start.intervalTo(ganttHeader.start) /
       currentMillisecond.value) *
     ganttColumnWidth.value
 );

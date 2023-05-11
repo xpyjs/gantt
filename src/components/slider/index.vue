@@ -92,11 +92,13 @@ const originData = computed(
 );
 
 // #region 计算滑块位置
-const { $data, toRowData } = useData();
+const { toRowData } = useData();
+const { ganttHeader } = useGanttHeader();
 const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
 const sliderLeft = computed(
   () =>
-    (props.data!.start.intervalTo($data.start) / currentMillisecond.value) *
+    (props.data!.start.intervalTo(ganttHeader.start) /
+      currentMillisecond.value) *
     ganttColumnWidth.value
 );
 
@@ -108,7 +110,6 @@ const sliderWidth = computed(
 // #endregion
 
 // #region 移动滑块
-const { ganttHeader } = useGanttHeader();
 const canMove = computed(() => {
   if (isBoolean(props.move)) return props.move;
   if (isFunction(props.move)) {

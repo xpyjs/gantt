@@ -1,19 +1,17 @@
 import { XDate } from '@/models/param/date';
 import { computed } from 'vue';
-import useData from './useData';
 import useGanttHeader from './useGanttHeader';
 import useGanttWidth from './useGanttWidth';
 
 export default () => {
   const { ganttHeader } = useGanttHeader();
-  const { $data } = useData();
   const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
 
   const today = new XDate();
   today.startOf();
 
   const todayLeft = computed(() => {
-    const start = $data.start?.clone();
+    const start = ganttHeader.start?.clone();
     start?.startOf();
     return (
       (today.intervalTo(start) / currentMillisecond.value) *
