@@ -1,4 +1,4 @@
-import { day } from '@/utils/date';
+import { day, formatDate } from '@/utils/date';
 
 export enum DateEnum {
   'year',
@@ -38,7 +38,7 @@ export class XDate {
    * 获取日期的月份文本
    */
   toMonth() {
-    return `${day(this.date).month() + 1} 月`;
+    return formatDate(this.date, 'yyyy-MM');
   }
 
   /**
