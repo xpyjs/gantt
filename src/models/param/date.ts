@@ -3,10 +3,12 @@ import { day, formatDate } from '@/utils/date';
 enum DateEnum {
   'year',
   'month',
+  'week',
   'day',
   'hour',
   'minute',
-  'second'
+  'second',
+  'millisecond'
 }
 
 /**
@@ -71,17 +73,17 @@ export class XDate {
    * @param precision 精度，可以通过不同单位来调整判断精度
    */
   isSame(date: XDate, precision: DateUnit) {
-    if (precision === 'week') {
-      return day(this.date).week() === day(date.date).week();
-    }
+    const t = this.date.toLocaleString().split(/\s|\/|:/);
+    t.splice(2, 0, day(this.date).week().toString());
+    t.push(this.date.getMilliseconds().toString());
 
-    if (precision === 'millisecond') {
-      return this.date.getMilliseconds() === date.date.getMilliseconds();
-    }
+    const d = date.date.toLocaleString().split(/\s|\/|:/);
+    d.splice(2, 0, day(date.date).week().toString());
+    d.push(date.date.getMilliseconds().toString());
 
     return (
-      this.date.toLocaleString().split(/\s|\/|:/)[DateEnum[precision]] ===
-      date.date.toLocaleString().split(/\s|\/|:/)[DateEnum[precision]]
+      t.slice(0, DateEnum[precision] + 1).join('') ===
+      d.slice(0, DateEnum[precision] + 1).join('')
     );
   }
 
@@ -96,12 +98,11 @@ export class XDate {
    * 通过不同单位获取当前时间的不同精度值
    */
   getBy(unit: DateUnit) {
-    if (unit === 'week') return day(this.date).week();
-    if (unit === 'millisecond') return this.date.getMilliseconds();
+    const t = this.date.toLocaleString().split(/\s|\/|:/);
+    t.splice(2, 0, day(this.date).week().toString());
+    t.push(this.date.getMilliseconds().toString());
 
-    return parseInt(
-      this.date.toLocaleString().split(/\s|\/|:/)[DateEnum[unit]]
-    );
+    return parseInt(t[DateEnum[unit]]);
   }
 
   /**
