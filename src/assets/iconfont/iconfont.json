@@ -1,0 +1,16 @@
+{
+  "id": "4065195",
+  "name": "gantt",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "430540",
+      "name": "右箭头",
+      "font_class": "arrow-right",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    }
+  ]
+}
