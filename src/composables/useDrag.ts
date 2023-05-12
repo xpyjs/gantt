@@ -8,6 +8,7 @@ const lineLeft = ref(0);
 const mousedown = ref(false);
 
 interface DragOptions {
+  onStart?: (pos: { x: number; y: number }, e: MouseEvent) => void;
   onMove?: (x: number, e: MouseEvent) => void;
   onEnd?: (x: number, e: MouseEvent) => Promise<void> | void;
   onFinally?: () => void;
@@ -37,6 +38,8 @@ export default () => {
 
         const rect = (options?.target ?? el.value)?.getBoundingClientRect();
         delta.value = Math.abs(left.value - (rect?.left ?? 0)) + e.offsetX;
+
+        options?.onStart?.(pos, e);
       },
 
       onMove: (pos, e) => {

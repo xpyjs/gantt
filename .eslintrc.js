@@ -10,7 +10,14 @@ module.exports = {
     'plugin:vue/vue3-recommended',
     'plugin:prettier/recommended'
   ],
-  overrides: [],
+  overrides: [
+    {
+      files: ['*.vue'],
+      rules: {
+        'no-undef': 'off'
+      }
+    }
+  ],
   parserOptions: {
     ecmaVersion: 'latest',
     parser: '@typescript-eslint/parser',

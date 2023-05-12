@@ -99,3 +99,35 @@ export function changeAlpha(color: string, alpha: number) {
     a: Math.round(Math.min(1, Math.max(0, alpha)) * 100)
   });
 }
+
+export function blend(fgColor: string | Rgba, bgColor: string | Rgba) {
+  if (typeof fgColor !== 'string' && (!fgColor || fgColor.r === undefined)) {
+    throw new TypeError(
+      'Expected a string or a {r, g, b[, a]} object as fgColor'
+    );
+  }
+
+  if (typeof bgColor !== 'string' && (!bgColor || bgColor.r === undefined)) {
+    throw new TypeError(
+      'Expected a string or a {r, g, b[, a]} object as bgColor'
+    );
+  }
+
+  const rgb1 = typeof fgColor === 'string' ? textToRgb(fgColor) : fgColor;
+  const r1 = rgb1.r / 255;
+  const g1 = rgb1.g / 255;
+  const b1 = rgb1.b / 255;
+  const a1 = rgb1.a !== undefined ? rgb1.a / 100 : 1;
+  const rgb2 = typeof bgColor === 'string' ? textToRgb(bgColor) : bgColor;
+  const r2 = rgb2.r / 255;
+  const g2 = rgb2.g / 255;
+  const b2 = rgb2.b / 255;
+  const a2 = rgb2.a !== undefined ? rgb2.a / 100 : 1;
+  const a = a1 + a2 * (1 - a1);
+  const r = Math.round(((r1 * a1 + r2 * a2 * (1 - a1)) / a) * 255);
+  const g = Math.round(((g1 * a1 + g2 * a2 * (1 - a1)) / a) * 255);
+  const b = Math.round(((b1 * a1 + b2 * a2 * (1 - a1)) / a) * 255);
+
+  const ret = { r, g, b, a: Math.round(a * 100) };
+  return rgbToHex(ret);
+}

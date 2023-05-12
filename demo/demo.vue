@@ -52,7 +52,12 @@
         ellipsis
       />
 
-      <x-gantt-slider prop="name" :move="onMove"></x-gantt-slider>
+      <x-gantt-slider
+        prop="name"
+        :move="onMove"
+        resize-left
+        resize-right
+      ></x-gantt-slider>
     </x-gantt>
   </div>
 

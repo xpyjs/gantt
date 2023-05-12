@@ -44,8 +44,7 @@ export default {
    * 背景颜色
    */
   bgColor: {
-    type: String,
-    default: ''
+    type: String
   },
 
   /**
@@ -74,16 +73,20 @@ export default {
    * 允许左侧移动
    */
   resizeLeft: {
-    type: Boolean,
-    default: false
+    type: [Function, Boolean] as PropType<
+      boolean | ((data: RowData) => boolean)
+    >,
+    default: () => false
   },
 
   /**
    * 允许右侧移动
    */
   resizeRight: {
-    type: Boolean,
-    default: false
+    type: [Function, Boolean] as PropType<
+      boolean | ((data: RowData) => boolean)
+    >,
+    default: () => false
   },
 
   /**

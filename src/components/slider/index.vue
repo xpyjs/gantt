@@ -6,7 +6,7 @@
       left: `${sliderLeft}px`,
       width: `${sliderWidth}px`,
       maxHeight: `${$styleBox.rowHeight}px`,
-      backgroundColor: props.bgColor,
+      backgroundColor: props?.bgColor,
       height: height,
       top:
         height === '100%' ||
@@ -26,7 +26,17 @@
       @pointerdown="onInAnchorDown"
     ></div>
 
+    <!-- 滑块主体 -->
     <div class="xg-slider-content">
+      <!-- 左滑块 -->
+      <div
+        v-if="props.resizeLeft"
+        ref="resizeLeftRef"
+        class="xg-slider-resize left"
+        :style="{ backgroundColor: resizeColor }"
+        @pointerdown.stop="onResizeLeftDown"
+      />
+
       <slot v-if="slots.default" v-bind="props.data?.data" />
 
       <div
@@ -40,6 +50,15 @@
             : originData
         }}
       </div>
+
+      <!-- 右滑块 -->
+      <div
+        v-if="props.resizeRight"
+        ref="resizeRightRef"
+        class="xg-slider-resize right"
+        :style="{ backgroundColor: resizeColor }"
+        @pointerdown.stop="onResizeRightDown"
+      />
     </div>
 
     <div
@@ -66,6 +85,7 @@ import useDrag from '@/composables/useDrag';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
 import { formatDate } from '@/utils/date';
+import { blend } from '@/utils/colors';
 import { isBoolean, isFunction } from 'lodash';
 
 export default defineComponent({
@@ -95,6 +115,10 @@ const originData = computed(
   () => props.label || (props.data?.data?.[props.prop ?? ''] ?? props.emptyData)
 );
 
+const resizeColor = computed(() =>
+  blend({ r: 93, g: 68, b: 15, a: 40 }, props?.bgColor || '#eca710')
+);
+
 // #region 计算滑块位置
 const { toRowData } = useData();
 const { ganttHeader } = useGanttHeader();
@@ -114,13 +138,17 @@ const sliderWidth = computed(
 // #endregion
 
 // #region 移动滑块
-const canMove = computed(() => {
-  if (isBoolean(props.move)) return props.move;
-  if (isFunction(props.move)) {
-    return props.move(toRowData(props.data!));
+const calcMove = (p: boolean | ((data: RowData) => boolean)) => {
+  if (isBoolean(p)) return p;
+  if (isFunction(p)) {
+    return p(toRowData(props.data!));
   }
 
   return false;
+};
+
+const canMove = computed(() => {
+  return calcMove(props.move);
 });
 const disableMove = ref(false);
 function handleDisableMove() {
@@ -133,36 +161,72 @@ onMounted(() => {
   });
 });
 
-const setStart = (() => {
-  const startDate = props.data?.start.clone();
-  return (x: number) => {
-    props.data?.setStart(
-      startDate!.getOffset(
-        (x / ganttColumnWidth.value) * currentMillisecond.value
-      ),
-      ganttHeader.unit
-    );
-  };
-})();
+let startDate = props.data?.start.clone();
+const setStart = (x: number) => {
+  props.data?.setStart(
+    startDate!.getOffset(
+      (x / ganttColumnWidth.value) * currentMillisecond.value
+    ),
+    ganttHeader.unit
+  );
+};
 
-const setEnd = (() => {
-  const endDate = props.data?.end.clone();
-  return (x: number) =>
-    props.data?.setEnd(
-      endDate!.getOffset(
-        (x / ganttColumnWidth.value) * currentMillisecond.value
-      ),
-      ganttHeader.unit
-    );
-})();
+let endDate = props.data?.end.clone();
+const setEnd = (x: number) =>
+  props.data?.setEnd(
+    endDate!.getOffset((x / ganttColumnWidth.value) * currentMillisecond.value),
+    ganttHeader.unit
+  );
 
 const sliderRef = ref(null) as Ref<HTMLElement | null>;
 const { onDrag } = useDrag();
 onDrag(sliderRef, {
   disabled: () => !canMove.value || disableMove.value,
+  reset: true,
+
+  onStart: () => {
+    startDate = props.data?.start.clone();
+    endDate = props.data?.end.clone();
+  },
 
   onMove: x => {
     setStart(x);
+    setEnd(x);
+  }
+});
+// #endregion
+
+// #region 左滑块移动
+function onResizeLeftDown() {
+  handleDisableMove();
+}
+const resizeLeftRef = ref(null) as Ref<HTMLElement | null>;
+onDrag(resizeLeftRef, {
+  reset: true,
+
+  onStart: () => {
+    startDate = props.data?.start.clone();
+  },
+
+  onMove: x => {
+    setStart(x);
+  }
+});
+// #endregion
+
+// #region 右滑块移动
+function onResizeRightDown() {
+  handleDisableMove();
+}
+const resizeRightRef = ref(null) as Ref<HTMLElement | null>;
+onDrag(resizeRightRef, {
+  reset: true,
+
+  onStart: () => {
+    endDate = props.data?.end.clone();
+  },
+
+  onMove: x => {
     setEnd(x);
   }
 });
@@ -185,21 +249,43 @@ function onOutAnchorDown() {
 
 <style lang="scss" scoped>
 .xg-slider {
-  background-color: goldenrod;
   position: absolute;
-  border-radius: 4px;
-  font-size: 10px;
-  padding: 0 12px;
   transition: filter 0.2s;
 
   .xg-slider-content {
+    background-color: goldenrod;
+    border-radius: 4px;
+    font-size: 10px;
     height: 100%;
+    padding: 0 12px;
     overflow: hidden;
+    position: relative;
 
     .slider-text {
       height: 100%;
       display: flex;
       align-items: center;
+    }
+
+    .xg-slider-resize {
+      width: 12px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      z-index: 1;
+      cursor: ew-resize;
+
+      &:hover {
+        filter: darkness(0.8);
+      }
+    }
+
+    .xg-slider-resize.left {
+      left: 0;
+    }
+
+    .xg-slider-resize.right {
+      right: 0;
     }
   }
 
