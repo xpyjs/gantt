@@ -3,9 +3,13 @@
     :class="[
       'xg-row',
       {
-        'xg-row__hover': $param.hoverItem?.uuid === props.data?.uuid
+        'xg-row__hover':
+          props.renderStyle && $param.hoverItem?.uuid === props.data?.uuid
       },
-      { 'xg-row__select': $param.selectItem?.uuid === props.data?.uuid }
+      {
+        'xg-row__select':
+          props.renderStyle && $param.selectItem?.uuid === props.data?.uuid
+      }
     ]"
     :style="{
       top: `${(props.data?.flatIndex ?? 0) * rowHeight}px`,
