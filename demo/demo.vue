@@ -52,12 +52,24 @@
         ellipsis
       />
 
-      <x-gantt-slider
-        prop="name"
-        :move="onMove"
-        resize-left
-        resize-right
-      ></x-gantt-slider>
+      <x-gantt-slider prop="name" :move="onMove" resize-left resize-right>
+        <template #content="scope">
+          <div
+            style="
+              width: 100%;
+              height: 100%;
+              background-color: blueviolet;
+              text-align: center;
+            "
+          >
+            {{ scope.level }}
+          </div>
+        </template>
+
+        <template #left>
+          <div style="width: 4px; height: 100%; background-color: aqua"></div>
+        </template>
+      </x-gantt-slider>
     </x-gantt>
   </div>
 

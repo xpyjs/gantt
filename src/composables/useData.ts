@@ -54,7 +54,8 @@ export default () => {
   function toRowData(data?: RowItem): RowData {
     return {
       row: toRaw(data?.data),
-      $index: data?.flatIndex
+      $index: data?.flatIndex,
+      level: data?.level
     };
   }
 

@@ -4,4 +4,5 @@
 declare interface RowData {
   row?: any;
   $index?: number;
+  level?: number;
 }

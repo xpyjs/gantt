@@ -26,29 +26,38 @@
       @pointerdown="onInAnchorDown"
     ></div>
 
-    <!-- 滑块主体 -->
-    <div class="xg-slider-content">
+    <div class="xg-slider-block">
+      <!-- 滑块主体 -->
+      <slot
+        v-if="slots.content"
+        name="content"
+        v-bind="toRowData(props.data)"
+      />
+      <div v-else class="xg-slider-content">
+        <slot v-if="slots.default" v-bind="toRowData(props.data)" />
+
+        <div
+          v-else-if="props.prop"
+          class="slider-text"
+          :style="{ 'justify-content': props.alignment }"
+        >
+          {{
+            props.dateFormat
+              ? formatDate(originData, props.dateFormat)
+              : originData
+          }}
+        </div>
+      </div>
+
       <!-- 左滑块 -->
       <div
         v-if="props.resizeLeft"
         ref="resizeLeftRef"
         class="xg-slider-resize left"
-        :style="{ backgroundColor: resizeColor }"
         @pointerdown.stop="onResizeLeftDown"
-      />
-
-      <slot v-if="slots.default" v-bind="props.data?.data" />
-
-      <div
-        v-else-if="props.prop"
-        class="slider-text"
-        :style="{ 'justify-content': props.alignment }"
       >
-        {{
-          props.dateFormat
-            ? formatDate(originData, props.dateFormat)
-            : originData
-        }}
+        <slot v-if="slots.left" name="left" v-bind="toRowData(props.data)" />
+        <div v-else class="resize-chunk" />
       </div>
 
       <!-- 右滑块 -->
@@ -56,9 +65,11 @@
         v-if="props.resizeRight"
         ref="resizeRightRef"
         class="xg-slider-resize right"
-        :style="{ backgroundColor: resizeColor }"
         @pointerdown.stop="onResizeRightDown"
-      />
+      >
+        <slot v-if="slots.right" name="right" v-bind="toRowData(props.data)" />
+        <div v-else class="resize-chunk" />
+      </div>
     </div>
 
     <div
@@ -85,7 +96,6 @@ import useDrag from '@/composables/useDrag';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
 import { formatDate } from '@/utils/date';
-import { blend } from '@/utils/colors';
 import { isBoolean, isFunction } from 'lodash';
 
 export default defineComponent({
@@ -113,10 +123,6 @@ const height = computed(() => {
 
 const originData = computed(
   () => props.label || (props.data?.data?.[props.prop ?? ''] ?? props.emptyData)
-);
-
-const resizeColor = computed(() =>
-  blend({ r: 93, g: 68, b: 15, a: 40 }, props?.bgColor || '#eca710')
 );
 
 // #region 计算滑块位置
@@ -252,31 +258,37 @@ function onOutAnchorDown() {
   position: absolute;
   transition: filter 0.2s;
 
-  .xg-slider-content {
-    background-color: goldenrod;
-    border-radius: 4px;
-    font-size: 10px;
-    height: 100%;
-    padding: 0 12px;
+  .xg-slider-block {
     overflow: hidden;
     position: relative;
+    font-size: 12px;
+    height: 100%;
 
-    .slider-text {
+    .xg-slider-content {
+      background-color: goldenrod;
+      border-radius: 4px;
       height: 100%;
-      display: flex;
-      align-items: center;
+      padding: 0 12px;
+
+      .slider-text {
+        height: 100%;
+        display: flex;
+        align-items: center;
+      }
     }
 
     .xg-slider-resize {
-      width: 12px;
       height: 100%;
       position: absolute;
       top: 0;
       z-index: 1;
       cursor: ew-resize;
 
-      &:hover {
-        filter: darkness(0.8);
+      .resize-chunk {
+        background-color: #b18424;
+        width: 12px;
+        height: 100%;
+        opacity: 0;
       }
     }
 
@@ -291,6 +303,12 @@ function onOutAnchorDown() {
 
   &:hover {
     filter: brightness(1.2);
+
+    .xg-slider-resize {
+      .resize-chunk {
+        opacity: 1;
+      }
+    }
   }
 }
 
