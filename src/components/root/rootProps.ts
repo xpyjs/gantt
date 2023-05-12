@@ -53,10 +53,8 @@ export default {
     validator: (v: number | string) => {
       const r = parseNumber(v) >= Variables.size.minHeaderHeight;
       if (!r) {
-        throw new Error(
-          `${
-            Errors.header + Errors.invalidProps
-          }"headerHeight" should be at least ${Variables.size.minHeaderHeight}.`
+        throw Errors.propsError(
+          `"headerHeight" should be at least ${Variables.size.minHeaderHeight}.`
         );
       }
       return r;
@@ -72,23 +70,15 @@ export default {
     validator: (v: number | string) => {
       const minR = parseNumber(v) >= Variables.size.minContentRowHeight;
       if (!minR) {
-        throw new Error(
-          `${
-            Errors.header + Errors.invalidProps
-          }"rowHeight" should be at least ${
-            Variables.size.minContentRowHeight
-          }.`
+        throw Errors.propsError(
+          `"rowHeight" should be at least ${Variables.size.minContentRowHeight}.`
         );
       }
 
       const maxR = parseNumber(v) <= Variables.size.maxContentRowHeight;
       if (!maxR) {
-        throw new Error(
-          `${
-            Errors.header + Errors.invalidProps
-          }"rowHeight" should be no more than ${
-            Variables.size.maxContentRowHeight
-          }.`
+        throw Errors.propsError(
+          `"rowHeight" should be no more than ${Variables.size.maxContentRowHeight}.`
         );
       }
       return minR && maxR;
@@ -104,11 +94,7 @@ export default {
     validator: (v: number) => {
       const r = parseNumber(v) >= 0;
       if (!r) {
-        throw new Error(
-          `${
-            Errors.header + Errors.invalidProps
-          }"border" should be a nonnegative integer.`
-        );
+        throw Errors.propsError(`"border" should be a nonnegative integer.`);
       }
       return r;
     }
