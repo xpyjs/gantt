@@ -26,7 +26,12 @@
                   $param.hoverItem?.end.isSame(c.date, ganttHeader.unit))
             }
           ]"
-          :style="{ ...$styleBox.getBorderColor() }"
+          :style="{
+            ...$styleBox.getBorderColor(),
+            color: $styleBox.headerStyle?.textColor,
+            backgroundColor:
+              $styleBox.headerStyle?.bgColor || $styleBox.primaryColor
+          }"
           :colspan="c.colSpan"
           :rowspan="c.rowSpan"
         >
@@ -76,7 +81,7 @@ onMounted(updateHeaderHeight);
     border-bottom: 1px solid;
     border-right: 1px solid;
     font-size: 14px;
-    background-color: blueviolet;
+    background-color: #eca710;
   }
 
   .highlight {

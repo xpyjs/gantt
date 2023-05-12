@@ -24,7 +24,7 @@
     <!-- 周末 -->
     <template v-for="(date, i) in ganttHeader.dates">
       <div
-        v-if="date.isWeekend()"
+        v-if="$styleBox.showWeekend && date.isWeekend()"
         :key="i"
         class="xg-gantt-body-date-line weekend"
         :style="{
@@ -60,7 +60,7 @@ import LinkPath from './LinkPath.vue';
 import useLinks from '@/composables/useLinks';
 
 const { $slotsBox } = useSlotsBox();
-const { bodyHeight } = useStyle();
+const { bodyHeight, $styleBox } = useStyle();
 const { ganttWidth, ganttColumnWidth } = useGanttWidth();
 const { inView } = useInView();
 const { todayLeft, showToday } = useToday();

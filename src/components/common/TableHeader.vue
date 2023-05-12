@@ -2,7 +2,11 @@
   <table
     ref="tableHeaderRef"
     class="xg-table-header"
-    :style="{ height: `${$param.headerHeight}px` }"
+    :style="{
+      height: `${$param.headerHeight}px`,
+      color: $styleBox.headerStyle?.textColor,
+      backgroundColor: $styleBox.headerStyle?.bgColor || $styleBox.primaryColor
+    }"
     cellpadding="0"
     cellspacing="0"
     border="0"
@@ -26,8 +30,10 @@ import useParams from '@/composables/useParam';
 import TableHeaderTh from './TableHeaderTh.vue';
 import useElement from '@/composables/useElement';
 import { onMounted } from 'vue';
+import useStyle from '@/composables/useStyle';
 
 const { $slotsBox } = useSlotsBox();
+const { $styleBox } = useStyle();
 
 const { $param } = useParams();
 const { tableHeaderRef, updateHeaderHeight } = useElement();
@@ -37,7 +43,7 @@ onMounted(updateHeaderHeight);
 <style lang="scss" scoped>
 .xg-table-header {
   width: 100%;
-  background-color: blueviolet;
+  background-color: #eca710;
   table-layout: fixed;
   border-collapse: separate;
   top: 0;

@@ -2,7 +2,7 @@
   <div class="level-block" :style="{ width: `${data!.level * indent}px` }" />
 
   <div
-    v-if="!!data?.children?.length"
+    v-if="$styleBox.showExpand && !!data?.children?.length"
     :class="['expand-icon', { 'expand-icon__expanded': data?.isExpand }]"
     @click="
       () => {
@@ -38,7 +38,7 @@ import { PropType, ref } from 'vue';
 import useStyle from '@/composables/useStyle';
 import useData from '@/composables/useData';
 import RowItem from '@/models/data/row';
-const { rowHeight } = useStyle();
+const { rowHeight, $styleBox } = useStyle();
 const checked = ref(false);
 
 defineProps({

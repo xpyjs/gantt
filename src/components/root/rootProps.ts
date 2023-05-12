@@ -45,7 +45,7 @@ export default {
   },
 
   /**
-   * 接收一个表头高度，应该保证大于30，默认值为60
+   * 接收一个表头高度，默认值为80。如果高度过小，且表头过于复杂，可能会引起高度异常
    */
   headerHeight: {
     type: [Number, String],
@@ -107,7 +107,7 @@ export default {
         throw new Error(
           `${
             Errors.header + Errors.invalidProps
-          }"border" should be a positive integer.`
+          }"border" should be a nonnegative integer.`
         );
       }
       return r;
@@ -216,14 +216,6 @@ export default {
   primaryColor: {
     type: String,
     default: '#eca710'
-  },
-
-  /**
-   * 显示设置按钮
-   */
-  showSettingBtn: {
-    type: Boolean,
-    default: true
   },
 
   /**

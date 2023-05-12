@@ -4,6 +4,12 @@
       data-id="index"
       :data="ganttData"
       :links="ganttLinks"
+      :border-color="borderColor"
+      show-checkbox
+      :show-expand="showExpand"
+      :expand-all="expandAll"
+      :show-today="true"
+      :show-weekend="true"
       @row-click="onClickRow"
     >
       <x-gantt-column label="group1">
@@ -54,11 +60,16 @@
     共{{ ganttData.length }}条
     <button @click="onAdd">增加</button>
     <button @click="onReduce">减少</button>
+    <button @click="onExpand">{{ showExpand ? '隐藏' : '展示' }}</button>
+    <button @click="expandAll = !expandAll">
+      {{ expandAll ? '闭合' : '展开' }}
+    </button>
+    <button @click="onChangeBorderColor">border颜色</button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 
 let id = 0;
 
@@ -103,6 +114,18 @@ const ganttLinks = [
     to: 5
   }
 ];
+
+const showExpand = ref(true);
+function onExpand() {
+  showExpand.value = !showExpand.value;
+}
+const expandAll = ref(false);
+
+const colors = ['red', 'blue', 'green', 'yellow', 'pink', 'orange'];
+const borderColor = ref('black');
+function onChangeBorderColor() {
+  borderColor.value = colors[Math.floor(Math.random() * colors.length)];
+}
 
 function onAdd() {
   ganttData.push({

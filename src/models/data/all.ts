@@ -132,6 +132,25 @@ export default class AllData {
   }
 
   /**
+   * 数据全部展开/闭合
+   */
+  updateExpand(expand: boolean) {
+    const fn = (data: RowItem[]) => {
+      data.forEach(row => {
+        row.setExpand(expand);
+
+        if (row.children?.length > 0) {
+          fn(row.children);
+        }
+      });
+    };
+
+    fn(this.data);
+
+    this.__flatten();
+  }
+
+  /**
    * 更新数据
    * @param data 新数据（原始）
    * @param options 属性

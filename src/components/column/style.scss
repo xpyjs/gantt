@@ -5,6 +5,10 @@
   box-sizing: border-box;
   border-right: 1px solid;
 
+  &:nth-last-child(1) {
+    border-right: 0px;
+  }
+
   & > div {
     width: calc(100% - 12px);
     overflow: hidden;

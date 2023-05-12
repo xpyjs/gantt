@@ -69,4 +69,67 @@ export default class StyleBox {
   public set highlightDate(v: boolean) {
     this._highlightDate = v;
   }
+
+  private _showExpand: boolean = true;
+  public get showExpand(): boolean {
+    return this._showExpand;
+  }
+
+  public set showExpand(v: boolean) {
+    this._showExpand = v;
+  }
+
+  private _showToday: boolean = true;
+  public get showToday(): boolean {
+    return this._showToday;
+  }
+
+  public set showToday(v: boolean) {
+    this._showToday = v;
+  }
+
+  private _showWeekend: boolean = true;
+  public get showWeekend(): boolean {
+    return this._showWeekend;
+  }
+
+  public set showWeekend(v: boolean) {
+    this._showWeekend = v;
+  }
+
+  private _levelColor: string[] = [];
+  public get levelColor(): string[] {
+    return this._levelColor;
+  }
+
+  public set levelColor(v: string[]) {
+    this._levelColor = v;
+  }
+
+  private _primaryColor: string = '#eca710';
+  public get primaryColor(): string {
+    return this._primaryColor;
+  }
+
+  public set primaryColor(v: string) {
+    this._primaryColor = v;
+  }
+
+  private _headerStyle: HeaderOptions = {};
+  public get headerStyle(): HeaderOptions {
+    return this._headerStyle;
+  }
+
+  public set headerStyle(v: HeaderOptions) {
+    this._headerStyle = v;
+  }
+
+  private _bodyStyle: BodyOptions = {};
+  public get bodyStyle(): BodyOptions {
+    return this._bodyStyle;
+  }
+
+  public set bodyStyle(v: BodyOptions) {
+    this._bodyStyle = v;
+  }
 }

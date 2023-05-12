@@ -2,10 +2,12 @@ import { XDate } from '@/models/param/date';
 import { computed } from 'vue';
 import useGanttHeader from './useGanttHeader';
 import useGanttWidth from './useGanttWidth';
+import useStyle from './useStyle';
 
 export default () => {
   const { ganttHeader } = useGanttHeader();
   const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
+  const { $styleBox } = useStyle();
 
   const today = new XDate();
   today.startOf();
@@ -29,7 +31,7 @@ export default () => {
       return sd?.compareTo(date) === 'l' && ed?.compareTo(date) === 'r';
     }
 
-    return isInArea(today);
+    return $styleBox.showToday && isInArea(today);
   });
 
   return {

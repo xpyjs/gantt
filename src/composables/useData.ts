@@ -1,13 +1,17 @@
+import type rootProps from '@/components/root/rootProps';
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
-import { computed, toRaw, watch, type Ref } from 'vue';
+import { computed, type ExtractPropTypes, toRaw, watch, type Ref } from 'vue';
 import useGanttHeader from './useGanttHeader';
 
 export default () => {
   const store = useStore();
   const { setGanttHeaders } = useGanttHeader();
 
-  function initData(data: Ref<any[]>, props: any) {
+  function initData(
+    data: Ref<any[]>,
+    props: ExtractPropTypes<typeof rootProps>
+  ) {
     const options: DataOptions = {
       dataId: props.dataId,
       isExpand: !props.showExpand || props.expandAll,
@@ -28,6 +32,22 @@ export default () => {
         setGanttHeaders();
       },
       { deep: true }
+    );
+
+    watch(
+      () => props.showExpand,
+      () => {
+        store.$data.updateExpand(true);
+        store.$links.update(store.$data.flatData);
+      }
+    );
+
+    watch(
+      () => props.expandAll,
+      val => {
+        store.$data.updateExpand(!props.showExpand || val);
+        store.$links.update(store.$data.flatData);
+      }
     );
   }
 

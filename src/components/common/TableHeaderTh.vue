@@ -63,42 +63,30 @@ onResizeTableColumn(headerRef, {
 </script>
 
 <style lang="scss" scoped>
-.xg-table-header {
-  width: 100%;
-  height: 80px;
-  background-color: blueviolet;
-  table-layout: fixed;
-  border-collapse: separate;
-  top: 0;
-  position: sticky;
-  z-index: 10;
+.xg-table-header-cell {
   overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  text-align: center;
+  position: relative;
+  box-sizing: border-box;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+  padding: 0 12px;
+  font-size: 14px;
+  pointer-events: none;
+}
 
-  .xg-table-header-cell {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-    text-align: left;
-    position: relative;
-    box-sizing: border-box;
-    border-bottom: 1px solid;
-    border-right: 1px solid;
-    padding: 0 20px;
-    font-size: 14px;
-    pointer-events: none;
-  }
-
-  .cell-resizable {
-    &::after {
-      content: '';
-      position: absolute;
-      right: -5px;
-      top: 0;
-      bottom: 0;
-      width: 10px;
-      cursor: col-resize;
-      pointer-events: auto;
-    }
+.cell-resizable {
+  &::after {
+    content: '';
+    position: absolute;
+    right: -5px;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    cursor: col-resize;
+    pointer-events: auto;
   }
 }
 </style>

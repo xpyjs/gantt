@@ -15,6 +15,7 @@
       top: `${(props.data?.flatIndex ?? 0) * rowHeight}px`,
       height: `${rowHeight}px`,
       borderWidth: props.renderStyle ? '1px' : 0,
+      backgroundColor: props.renderStyle ? ($styleBox.levelColor[props.data!.level] ?? undefined) : undefined,
       ...$styleBox.getBorderColor()
     }"
     @mouseenter="onEnter"
@@ -69,10 +70,10 @@ function onDblClick() {
 }
 
 .xg-row.xg-row__hover {
-  background-color: #f0f0f0aa;
+  background-color: #f0f0f0aa !important;
 }
 
 .xg-row__select {
-  background-color: #e0e0e0aa;
+  background-color: #e0e0e0aa !important;
 }
 </style>
