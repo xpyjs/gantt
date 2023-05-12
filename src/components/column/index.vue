@@ -64,12 +64,12 @@ watch(
   }
 );
 
-const originData = computed(
-  () => props.data?.data?.[props.prop ?? ''] ?? props.emptyData
-);
-
 const { $styleBox, rowHeight } = useStyle();
-const { toRowData } = useData();
+const { toRowData, getProp } = useData();
+
+const originData = computed(() =>
+  getProp(props.data!, props.prop, props.emptyData)
+);
 
 // #region 计算宽度
 const { $slotsBox, isMerge } = useSlotsBox();

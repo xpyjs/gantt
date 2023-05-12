@@ -121,12 +121,12 @@ const height = computed(() => {
   return props.height;
 });
 
+const { toRowData, getProp } = useData();
 const originData = computed(
-  () => props.label || (props.data?.data?.[props.prop ?? ''] ?? props.emptyData)
+  () => props.label || getProp(props.data!, props.prop, props.emptyData)
 );
 
 // #region 计算滑块位置
-const { toRowData } = useData();
 const { ganttHeader } = useGanttHeader();
 const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
 const sliderLeft = computed(
@@ -302,10 +302,20 @@ function onOutAnchorDown() {
 
     .xg-slider-resize.left {
       left: 0;
+
+      .resize-chunk {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+      }
     }
 
     .xg-slider-resize.right {
       right: 0;
+
+      .resize-chunk {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+      }
     }
   }
 

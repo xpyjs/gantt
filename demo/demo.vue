@@ -52,8 +52,8 @@
         ellipsis
       />
 
-      <x-gantt-slider prop="name" :move="onMove" resize-left resize-right>
-        <template #content="scope">
+      <x-gantt-slider prop="o.t1" :move="onMove" resize-left resize-right>
+        <!-- <template #content="scope">
           <div
             style="
               width: 100%;
@@ -64,7 +64,7 @@
           >
             {{ scope.level }}
           </div>
-        </template>
+        </template> -->
 
         <template #left>
           <div style="width: 4px; height: 100%; background-color: aqua"></div>
@@ -101,19 +101,22 @@ ganttData[0].children = [
     index: ++id,
     name: 'sub-t' + id,
     startDate: new Date(2023, 3, 1),
-    endDate: new Date(2023, 3, 5)
+    endDate: new Date(2023, 3, 5),
+    o: { t1: 'a', t2: 'b' }
   },
   {
     index: ++id,
     name: 'sub-t' + id,
     startDate: new Date(2023, 3, 1),
     endDate: new Date(2023, 3, 5),
+    o: { t1: 'a', t2: 'b' },
     children: [
       {
         index: ++id,
         name: 'sub-sub-t' + id,
         startDate: new Date(2023, 3, 1),
-        endDate: new Date(2023, 3, 5)
+        endDate: new Date(2023, 3, 5),
+        o: { t1: 'a', t2: 'b' }
       }
     ]
   }
@@ -149,7 +152,8 @@ function onAdd() {
     index: ++id,
     name: 't' + id,
     startDate: new Date(2023, 3, id),
-    endDate: new Date(2023, 3, id + 5)
+    endDate: new Date(2023, 3, id + 5),
+    o: { t1: 'a', t2: 'b' }
   });
 }
 
