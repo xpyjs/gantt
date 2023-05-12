@@ -1,6 +1,6 @@
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
-import { computed, watch, type Ref } from 'vue';
+import { computed, toRaw, watch, type Ref } from 'vue';
 import useGanttHeader from './useGanttHeader';
 
 export default () => {
@@ -33,7 +33,7 @@ export default () => {
 
   function toRowData(data?: RowItem): RowData {
     return {
-      row: data?.data,
+      row: toRaw(data?.data),
       $index: data?.flatIndex
     };
   }

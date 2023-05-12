@@ -122,7 +122,6 @@ const onClickRow = (data: any) => {
 };
 
 function onMove(data: any) {
-  console.log('move', data);
   return true;
 }
 </script>
