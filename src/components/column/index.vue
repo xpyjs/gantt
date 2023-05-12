@@ -1,8 +1,9 @@
 <template>
   <div
+    v-if="props.__index === 0 || !isMerge($slotsBox.cols[props.__index ?? 1].props?.merge, props.data!)"
+    :key="`${props.data!.uuid}_${props.__index}`"
     class="xg-table-cell"
     :style="{
-      // width: `${props.__index === 0 ? firstColumnWidth : realWidth}px`,
       width: `${realWidth}px`,
       ...$styleBox.getBorderColor()
     }"
@@ -36,12 +37,11 @@
 <script lang="ts">
 import Variables from '@/constants/vars';
 import columnProps from './props';
-import { defineComponent, useSlots, computed, watch } from 'vue';
+import { defineComponent, useSlots, computed } from 'vue';
 import useStyle from '@/composables/useStyle';
 import useSlotsBox from '@/composables/useSlotsBox';
 import SelectionVue from './selection.vue';
 import useData from '@/composables/useData';
-// import useData from '@/composables/useData';
 import { formatDate } from '@/utils/date';
 
 export default defineComponent({
@@ -52,12 +52,6 @@ export default defineComponent({
 <script lang="ts" setup>
 const props = defineProps(columnProps);
 const slots = useSlots();
-watch(
-  () => slots,
-  (o, n) => {
-    console.log(o, n);
-  }
-);
 
 const { $styleBox, rowHeight } = useStyle();
 const { toRowData, getProp } = useData();

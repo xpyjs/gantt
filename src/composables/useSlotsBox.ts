@@ -1,6 +1,6 @@
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
-import { watch, type Slots } from 'vue';
+import { type Slots } from 'vue';
 import useData from './useData';
 
 export default () => {
@@ -19,12 +19,12 @@ export default () => {
     return typeof m === 'function' ? m(toRowData(data)) : !!m;
   }
 
-  watch(
-    () => [store.$styleBox.showCheckbox],
-    () => {
-      store.$slotsBox.setSlots(store.$slotsBox.cols);
-    }
-  );
+  // watch(
+  //   () => [store.$styleBox.showCheckbox],
+  //   () => {
+  //     store.$slotsBox.setSlots(store.$slotsBox.cols);
+  //   }
+  // );
 
   return { $slotsBox: store.$slotsBox, setSlots, isMerge };
 };

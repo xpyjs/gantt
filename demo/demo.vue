@@ -78,7 +78,7 @@
     <button @click="onAdd">增加</button>
     <button @click="onReduce">减少</button>
     <button @click="onExpand">{{ showExpand ? '隐藏' : '展示' }}</button>
-    <button @click="expandAll = !expandAll">
+    <button @click="onExpandAll">
       {{ expandAll ? '闭合' : '展开' }}
     </button>
     <button @click="onChangeBorderColor">border颜色</button>
@@ -92,7 +92,7 @@ let id = 0;
 
 const ganttData = reactive<any>([]);
 
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 5; i++) {
   onAdd();
 }
 
@@ -140,6 +140,9 @@ function onExpand() {
   showExpand.value = !showExpand.value;
 }
 const expandAll = ref(false);
+function onExpandAll() {
+  expandAll.value = !expandAll.value;
+}
 
 const colors = ['red', 'blue', 'green', 'yellow', 'pink', 'orange'];
 const borderColor = ref('');
