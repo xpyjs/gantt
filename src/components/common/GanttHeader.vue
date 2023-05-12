@@ -78,8 +78,8 @@ onMounted(updateHeaderHeight);
     text-align: center;
     position: relative;
     box-sizing: border-box;
-    border-bottom: 1px solid;
-    border-right: 1px solid;
+    border-bottom: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
     font-size: 14px;
     background-color: #eca710;
   }

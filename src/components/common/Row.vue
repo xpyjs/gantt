@@ -65,7 +65,7 @@ function onDblClick() {
   width: 100%;
   position: absolute;
   overflow: hidden;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid #e5e5e5;
   box-sizing: border-box;
 }
 

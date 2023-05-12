@@ -122,7 +122,7 @@ function onExpand() {
 const expandAll = ref(false);
 
 const colors = ['red', 'blue', 'green', 'yellow', 'pink', 'orange'];
-const borderColor = ref('black');
+const borderColor = ref('');
 function onChangeBorderColor() {
   borderColor.value = colors[Math.floor(Math.random() * colors.length)];
 }

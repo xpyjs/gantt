@@ -70,8 +70,8 @@ onResizeTableColumn(headerRef, {
   text-align: center;
   position: relative;
   box-sizing: border-box;
-  border-bottom: 1px solid;
-  border-right: 1px solid;
+  border-bottom: 1px solid #e5e5e5;
+  border-right: 1px solid #e5e5e5;
   padding: 0 12px;
   font-size: 14px;
   pointer-events: none;
