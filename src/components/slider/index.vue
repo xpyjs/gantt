@@ -26,16 +26,20 @@
       @pointerdown="onInAnchorDown"
     ></div>
 
-    <div class="xg-slider-block" :style="{ 'text-align': props.alignment }">
+    <div class="xg-slider-content">
       <slot v-if="slots.default" v-bind="props.data?.data" />
 
-      <span v-else-if="props.prop" class="slider-text">
+      <div
+        v-else-if="props.prop"
+        class="slider-text"
+        :style="{ 'justify-content': props.alignment }"
+      >
         {{
           props.dateFormat
             ? formatDate(originData, props.dateFormat)
             : originData
         }}
-      </span>
+      </div>
     </div>
 
     <div
@@ -188,12 +192,14 @@ function onOutAnchorDown() {
   padding: 0 12px;
   transition: filter 0.2s;
 
-  .xg-slider-block {
+  .xg-slider-content {
     height: 100%;
+    overflow: hidden;
 
     .slider-text {
-      vertical-align: middle;
-      vertical-align: -webkit-baseline-middle;
+      height: 100%;
+      display: flex;
+      align-items: center;
     }
   }
 

@@ -29,7 +29,7 @@ export default {
    */
   height: {
     type: [Number, String],
-    default: '90%'
+    default: '50%'
   },
 
   /**
