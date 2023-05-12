@@ -14,7 +14,7 @@
     "
   />
 
-  <input v-if="showCheckbox" v-model="checked" type="checkbox" />
+  <input v-if="$styleBox.showCheckbox" v-model="checked" type="checkbox" />
 </template>
 
 <script lang="ts" setup>
@@ -35,10 +35,6 @@ defineProps({
   indent: {
     type: Number,
     default: 20
-  },
-  showCheckbox: {
-    type: Boolean,
-    default: false
   }
 });
 

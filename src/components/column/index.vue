@@ -8,12 +8,7 @@
     }"
   >
     <div :style="{ lineHeight: `${rowHeight}px`, height: `${rowHeight}px` }">
-      <SelectionVue
-        v-if="props.__index === 0"
-        :data="data"
-        :indent="20"
-        :show-checkbox="$styleBox.showCheckbox"
-      />
+      <SelectionVue v-if="props.__index === 0" :data="data" :indent="20" />
 
       <div
         :class="[

@@ -16,9 +16,6 @@
     font-size: 13px;
     text-overflow: ellipsis;
     padding: 0 6px;
-    display: flex;
-    align-items: baseline;
-    justify-content: flex-start;
 
     .expand-icon {
       margin-right: 4px;
@@ -35,7 +32,7 @@
     }
 
     .cell {
-      flex: 1;
+      display: inline-block;
     }
 
     .cell-center {
