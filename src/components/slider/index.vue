@@ -51,7 +51,7 @@
 
       <!-- 左滑块 -->
       <div
-        v-if="props.resizeLeft"
+        v-if="canResizeLeft"
         ref="resizeLeftRef"
         class="xg-slider-resize left"
         @pointerdown.stop="onResizeLeftDown"
@@ -62,7 +62,7 @@
 
       <!-- 右滑块 -->
       <div
-        v-if="props.resizeRight"
+        v-if="canResizeRight"
         ref="resizeRightRef"
         class="xg-slider-resize right"
         @pointerdown.stop="onResizeRightDown"
@@ -173,7 +173,8 @@ const setStart = (x: number) => {
     startDate!.getOffset(
       (x / ganttColumnWidth.value) * currentMillisecond.value
     ),
-    ganttHeader.unit
+    ganttHeader.unit,
+    props.linkedResize
   );
 };
 
@@ -181,7 +182,8 @@ let endDate = props.data?.end.clone();
 const setEnd = (x: number) =>
   props.data?.setEnd(
     endDate!.getOffset((x / ganttColumnWidth.value) * currentMillisecond.value),
-    ganttHeader.unit
+    ganttHeader.unit,
+    props.linkedResize
   );
 
 const sliderRef = ref(null) as Ref<HTMLElement | null>;
@@ -203,6 +205,9 @@ onDrag(sliderRef, {
 // #endregion
 
 // #region 左滑块移动
+const canResizeLeft = computed(() => {
+  return calcMove(props.resizeLeft);
+});
 function onResizeLeftDown() {
   handleDisableMove();
 }
@@ -221,6 +226,9 @@ onDrag(resizeLeftRef, {
 // #endregion
 
 // #region 右滑块移动
+const canResizeRight = computed(() => {
+  return calcMove(props.resizeRight);
+});
 function onResizeRightDown() {
   handleDisableMove();
 }

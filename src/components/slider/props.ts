@@ -33,14 +33,6 @@ export default {
   },
 
   /**
-   * 扁平风格
-   */
-  flat: {
-    type: Boolean,
-    default: false
-  },
-
-  /**
    * 背景颜色
    */
   bgColor: {
