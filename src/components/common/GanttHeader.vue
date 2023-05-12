@@ -22,8 +22,8 @@
             {
               highlight:
                 trIndex === dateList.length - 1 &&
-                ($param.hoverItem?.start.compareTo(c.date) === 'e' ||
-                  $param.hoverItem?.end.compareTo(c.date) === 'e')
+                ($param.hoverItem?.start.isSame(c.date, ganttHeader.unit) ||
+                  $param.hoverItem?.end.isSame(c.date, ganttHeader.unit))
             }
           ]"
           :style="{ ...$styleBox.getBorderColor() }"
@@ -44,12 +44,14 @@ import useStyle from '@/composables/useStyle';
 import useParam from '@/composables/useParam';
 import useElement from '@/composables/useElement';
 import { onMounted } from 'vue';
+import useGanttHeader from '@/composables/useGanttHeader';
 
 const { $param } = useParam();
 const { $styleBox } = useStyle();
 const { dateList } = useData();
 const { ganttColumnWidth } = useGanttWidth();
 const { ganttHeaderRef, updateHeaderHeight } = useElement();
+const { ganttHeader } = useGanttHeader();
 onMounted(updateHeaderHeight);
 </script>
 

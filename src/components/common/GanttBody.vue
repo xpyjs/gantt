@@ -5,7 +5,7 @@
   >
     <!-- 滑动条 -->
     <template v-for="d in inView" :key="d.uuid">
-      <RowVue :data="d" class="xg-gantt-row">
+      <RowVue :data="d" class="xg-gantt-row" :render-style="false">
         <component :is="$slotsBox.slider" :data="d" />
       </RowVue>
     </template>
@@ -15,6 +15,11 @@
       <!-- <path stroke="red" fill="transparent" d="M 200 2 H 400 V 102"></path> -->
       <LinkPath v-for="link in $links.links" :key="link.uuid" :link="link" />
     </svg>
+
+    <!-- 行样式 -->
+    <template v-for="d in inView" :key="d.uuid">
+      <RowVue :data="d" />
+    </template>
 
     <!-- 周末 -->
     <template v-for="(date, i) in ganttHeader.dates">
@@ -66,16 +71,17 @@ const { $links } = useLinks();
 <style lang="scss" scoped>
 .xg-gantt-body {
   position: relative;
-  // background-color: darkkhaki;
   z-index: 9;
 
   .xg-gantt-row {
-    z-index: 99;
-    // width: 100%;
-    // position: absolute;
-    // overflow: hidden;
-    // border-bottom: 1px solid;
-    // box-sizing: border-box;
+    z-index: 9;
+  }
+
+  .xg-gantt-body-line-wrap {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 5;
   }
 
   .xg-gantt-body-date-line {
@@ -84,13 +90,6 @@ const { $links } = useLinks();
     position: absolute;
     top: 0;
     opacity: 0.6;
-  }
-
-  .xg-gantt-body-line-wrap {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    z-index: 5;
   }
 }
 </style>

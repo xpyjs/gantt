@@ -1,13 +1,12 @@
 import { day, formatDate } from '@/utils/date';
 
-export enum DateEnum {
+enum DateEnum {
   'year',
   'month',
   'day',
   'hour',
   'minute',
-  'second',
-  'millisecond'
+  'second'
 }
 
 /**
@@ -76,9 +75,13 @@ export class XDate {
       return day(this.date).week() === day(date.date).week();
     }
 
+    if (precision === 'millisecond') {
+      return this.date.getMilliseconds() === date.date.getMilliseconds();
+    }
+
     return (
-      this.date.toISOString().split(/T|-|:|\./)[DateEnum[precision]] ===
-      date.date.toISOString().split(/T|-|:|\./)[DateEnum[precision]]
+      this.date.toLocaleString().split(/\s|\/|:/)[DateEnum[precision]] ===
+      date.date.toLocaleString().split(/\s|\/|:/)[DateEnum[precision]]
     );
   }
 
@@ -94,6 +97,7 @@ export class XDate {
    */
   getBy(unit: DateUnit) {
     if (unit === 'week') return day(this.date).week();
+    if (unit === 'millisecond') return this.date.getMilliseconds();
 
     return parseInt(
       this.date.toLocaleString().split(/\s|\/|:/)[DateEnum[unit]]

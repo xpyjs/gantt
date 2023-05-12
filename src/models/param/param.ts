@@ -29,13 +29,13 @@ export default class Param {
     this._hoverItem = v;
   }
 
-  private _selectId: string = '';
-  public get selectId(): string {
-    return this._selectId;
+  private _selectItem: RowItem | null = null;
+  public get selectItem(): RowItem | null {
+    return this._selectItem;
   }
 
-  public set selectId(v: string) {
-    this._selectId = v;
+  public set selectItem(v: RowItem | null) {
+    this._selectItem = v;
   }
 
   private _showMoveLine: boolean = false;

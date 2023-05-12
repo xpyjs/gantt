@@ -2,12 +2,15 @@
   <div
     :class="[
       'xg-row',
-      { 'xg-row__hover': $param.hoverItem?.uuid === props.data.uuid },
-      { 'xg-row__select': $param.selectId === props.data.uuid }
+      {
+        'xg-row__hover': $param.hoverItem?.uuid === props.data?.uuid
+      },
+      { 'xg-row__select': $param.selectItem?.uuid === props.data?.uuid }
     ]"
     :style="{
-      top: `${props.data.flatIndex * rowHeight}px`,
+      top: `${(props.data?.flatIndex ?? 0) * rowHeight}px`,
       height: `${rowHeight}px`,
+      borderWidth: props.renderStyle ? '1px' : 0,
       ...$styleBox.getBorderColor()
     }"
     @mouseenter="onEnter"
@@ -25,13 +28,16 @@ import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
 import RowItem from '@/models/data/row';
 
-const props = defineProps<{ data: RowItem }>();
+const props = defineProps({
+  data: RowItem,
+  renderStyle: { type: Boolean, default: true }
+});
 
 const { rowHeight, $styleBox } = useStyle();
 
 const { $param } = useParam();
 function onEnter() {
-  $param.hoverItem = props.data;
+  $param.hoverItem = props.data ?? null;
 }
 
 function onLeave() {
@@ -40,8 +46,8 @@ function onLeave() {
 
 const { EmitClickRow } = useEvent();
 function onClick() {
-  $param.selectId = props.data.uuid;
-  EmitClickRow(props.data.data);
+  $param.selectItem = props.data ?? null;
+  EmitClickRow(props.data?.data);
 }
 
 function onDblClick() {
@@ -53,7 +59,6 @@ function onDblClick() {
 .xg-row {
   width: 100%;
   position: absolute;
-  // background-color: #fafafa;
   overflow: hidden;
   border-bottom: 1px solid;
   box-sizing: border-box;
