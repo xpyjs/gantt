@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-05-13 21:36:14
+ * @LastEditTime: 2023-05-13 21:40:32
  * @Description: 一条数据类
  */
 
@@ -196,8 +196,9 @@ export default class RowItem {
 
     // 首先判断起始日期不能大于结束日期
     if (
-      date.compareTo(this.end.getOffset(Variables.time.millisecondOf[unit])) ===
-      'r'
+      date.compareTo(
+        this.end.getOffset(-Variables.time.millisecondOf[unit])
+      ) === 'r'
     )
       this.__data[this.options.endLabel] = date.getOffset(
         Variables.time.millisecondOf[unit]
