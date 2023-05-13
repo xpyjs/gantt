@@ -11,6 +11,7 @@
       :show-today="true"
       :show-weekend="true"
       @row-click="onClickRow"
+      @move-slider="onMoveSlider"
     >
       <x-gantt-column label="group1">
         <x-gantt-column prop="index" width="120px"></x-gantt-column>
@@ -52,7 +53,13 @@
         ellipsis
       />
 
-      <x-gantt-slider prop="o.t1" :move="onMove" resize-left resize-right>
+      <x-gantt-slider
+        prop="o.t1"
+        :move="onMove"
+        resize-left
+        resize-right
+        linked-resize
+      >
         <!-- <template #content="scope">
           <div
             style="
@@ -139,7 +146,7 @@ const showExpand = ref(true);
 function onExpand() {
   showExpand.value = !showExpand.value;
 }
-const expandAll = ref(false);
+const expandAll = ref(true);
 function onExpandAll() {
   expandAll.value = !expandAll.value;
 }
@@ -166,6 +173,10 @@ function onReduce() {
 
 const onClickRow = (data: any) => {
   console.log('click row', data);
+};
+
+const onMoveSlider = (data: any) => {
+  console.log('move slider', data);
 };
 
 function onMove(data: any) {

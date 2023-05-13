@@ -2,12 +2,12 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-05-11 14:18:14
+ * @LastEditTime: 2023-05-13 21:09:27
  * @Description: 一条数据类
  */
 
 import { Variables } from '@/constants/vars';
-import { uuid } from '@/utils/common';
+import { addIfNotExist, uuid } from '@/utils/common';
 import { cloneDeep, isEqual } from 'lodash';
 import { XDate } from '../param/date';
 
@@ -190,7 +190,7 @@ export default class RowItem {
     date: XDate,
     unit: HeaderDateUnit,
     linkage = false,
-    modifyArr: RowItem[] = []
+    modifyArr?: MoveSliderData[]
   ) {
     this.__data[this.options.startLabel] = date.date;
 
@@ -203,30 +203,42 @@ export default class RowItem {
         Variables.time.millisecondOf[unit]
       ).date;
 
-    // if (!linkage) return;
+    if (!linkage) return;
 
-    // // 查看父节点
-    // let pNode = this.parentNode;
-    // while (pNode !== null) {
-    //   if (compareDate(this.start, pNode.start) === 'l') {
-    //     // 赋值应该给data的日期数据赋值
-    //     pNode.setStart(this.start, unit);
-    //     addIfNotExist<RowItem>(modifyArr, pNode);
-    //   } else {
-    //     break;
-    //   }
-    //   pNode = pNode.parentNode;
-    // }
+    // 查看父节点
+    let pNode = this.parentNode;
+    while (pNode !== null) {
+      if (this.start.compareTo(pNode.start) === 'l') {
+        const oldDate = pNode.start;
+        // 赋值应该给data的日期数据赋值
+        pNode.setStart(this.start, unit);
+        modifyArr &&
+          addIfNotExist<MoveSliderData>(
+            modifyArr,
+            {
+              row: pNode.data,
+              old: { start: oldDate.date, end: pNode.end.date }
+            },
+            item =>
+              item.row.uuid === pNode?.uuid &&
+              item.old.start === oldDate.date &&
+              item.old.end === pNode?.end.date
+          );
+      } else {
+        break;
+      }
+      pNode = pNode.parentNode;
+    }
 
-    // // 查看子节点
-    // this.__setChildrenDate(this, 'start', unit, modifyArr);
+    // 查看子节点
+    this.__setChildrenDate(this, 'start', unit, modifyArr);
   }
 
   setEnd(
     date: XDate,
     unit: HeaderDateUnit,
     linkage = false,
-    modifyArr: RowItem[] = []
+    modifyArr?: MoveSliderData[]
   ) {
     this.__data[this.options.endLabel] = date.date;
 
@@ -241,21 +253,33 @@ export default class RowItem {
         Variables.time.millisecondOf[unit]
       ).date;
 
-    // if (!linkage) return;
+    if (!linkage) return;
 
-    // let pNode = this.parentNode;
-    // while (pNode !== null) {
-    //   if (compareDate(this.end, pNode.end) === 'r') {
-    //     pNode.setEnd(this.end, unit);
-    //     addIfNotExist<RowItem>(modifyArr, pNode);
-    //   } else {
-    //     break;
-    //   }
-    //   pNode = pNode.parentNode;
-    // }
+    let pNode = this.parentNode;
+    while (pNode !== null) {
+      if (this.end.compareTo(pNode.end) === 'r') {
+        const oldDate = pNode.end;
+        pNode.setEnd(this.end, unit);
+        modifyArr &&
+          addIfNotExist<MoveSliderData>(
+            modifyArr,
+            {
+              row: pNode.data,
+              old: { start: pNode.start.date, end: oldDate.date }
+            },
+            item =>
+              item.row.uuid === pNode?.uuid &&
+              item.old.start === pNode?.start.date &&
+              item.old.end === pNode?.end.date
+          );
+      } else {
+        break;
+      }
+      pNode = pNode.parentNode;
+    }
 
-    // // 查看子节点
-    // this.__setChildrenDate(this, 'end', unit, modifyArr);
+    // 查看子节点
+    this.__setChildrenDate(this, 'end', unit, modifyArr);
   }
 
   /**
@@ -267,20 +291,40 @@ export default class RowItem {
     node: RowItem,
     key: 'start' | 'end',
     unit: HeaderDateUnit,
-    modifyArr: RowItem[]
+    modifyArr?: MoveSliderData[]
   ) {
+    const pushTo = (item: MoveSliderData) => {
+      modifyArr &&
+        addIfNotExist<MoveSliderData>(
+          modifyArr,
+          item,
+          i =>
+            i.row.uuid === item?.row.uuid &&
+            i.old.start === item?.old.start &&
+            i.old.end === item?.old.end
+        );
+    };
+
     for (let i = 0; i < node.children.length; i++) {
       const c = node.children[i];
       if (key === 'start') {
         if (c.start.compareTo(node.start) === 'l') {
+          const oldDate = c.start;
           c.setStart(node.start, unit);
-          modifyArr.push(c);
+          pushTo({
+            row: c.data,
+            old: { start: oldDate.date, end: c.end.date }
+          });
           this.__setChildrenDate(c, key, unit, modifyArr);
         }
       } else if (key === 'end') {
         if (c.end.compareTo(node.end) === 'r') {
+          const oldDate = c.end;
           c.setEnd(node.end, unit);
-          modifyArr.push(c);
+          pushTo({
+            row: c.data,
+            old: { start: c.start.date, end: oldDate.date }
+          });
           this.__setChildrenDate(c, key, unit, modifyArr);
         }
       }

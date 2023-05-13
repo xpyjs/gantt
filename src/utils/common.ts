@@ -93,11 +93,12 @@ export function camelToKebabCased(str: string): string {
 /**
  * 查找一个数组是否存在该元素，如果不存在，则将其添加
  */
-export function addIfNotExist<T>(arr: T[], item: T): T[] {
-  if (!arr.includes(item)) {
+export function addIfNotExist<T>(arr: T[], item: T, cb?: (item: T) => unknown) {
+  if (!item) return;
+
+  if (cb ? !~arr.findIndex(cb) : !arr.includes(item)) {
     arr.push(item);
   }
-  return arr;
 }
 
 /**

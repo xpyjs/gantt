@@ -23,7 +23,7 @@ const emit = defineEmits<{
   (e: 'row-click', data: any): void;
   (e: 'row-dbl-click', data: any): void;
   (e: 'row-checked', state: boolean, data: any): void;
-  (e: 'move-slider', data: any[], old: { start: Date; end: Date }): void;
+  (e: 'move-slider', data: MoveSliderData[]): void;
   (e: 'move-progress', data: any, old: number): void;
   (e: 'no-date-error'): void;
 }>();

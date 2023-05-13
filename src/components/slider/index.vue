@@ -96,7 +96,8 @@ import useDrag from '@/composables/useDrag';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
 import { formatDate } from '@/utils/date';
-import { isBoolean, isFunction } from 'lodash';
+import { flow, isBoolean, isFunction } from 'lodash';
+import useEvent from '@/composables/useEvent';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -167,6 +168,21 @@ onMounted(() => {
   });
 });
 
+// 移动过的对象数组
+const { EmitMoveSlider } = useEvent();
+let movedData: MoveSliderData[] = [];
+function EmitMove() {
+  movedData.unshift({
+    row: props.data!.data,
+    old: {
+      start: startDate!.date,
+      end: endDate!.date
+    }
+  });
+  EmitMoveSlider(movedData);
+  movedData = [];
+}
+
 let startDate = props.data?.start.clone();
 const setStart = (x: number) => {
   props.data?.setStart(
@@ -174,8 +190,11 @@ const setStart = (x: number) => {
       (x / ganttColumnWidth.value) * currentMillisecond.value
     ),
     ganttHeader.unit,
-    props.linkedResize
+    props.linkedResize,
+    movedData
   );
+
+  return x;
 };
 
 let endDate = props.data?.end.clone();
@@ -183,7 +202,8 @@ const setEnd = (x: number) =>
   props.data?.setEnd(
     endDate!.getOffset((x / ganttColumnWidth.value) * currentMillisecond.value),
     ganttHeader.unit,
-    props.linkedResize
+    props.linkedResize,
+    movedData
   );
 
 const sliderRef = ref(null) as Ref<HTMLElement | null>;
@@ -197,10 +217,8 @@ onDrag(sliderRef, {
     endDate = props.data?.end.clone();
   },
 
-  onMove: x => {
-    setStart(x);
-    setEnd(x);
-  }
+  onMove: flow(setStart, setEnd),
+  onEnd: EmitMove
 });
 // #endregion
 
@@ -219,9 +237,8 @@ onDrag(resizeLeftRef, {
     startDate = props.data?.start.clone();
   },
 
-  onMove: x => {
-    setStart(x);
-  }
+  onMove: setStart,
+  onEnd: EmitMove
 });
 // #endregion
 
@@ -240,9 +257,8 @@ onDrag(resizeRightRef, {
     endDate = props.data?.end.clone();
   },
 
-  onMove: x => {
-    setEnd(x);
-  }
+  onMove: setEnd,
+  onEnd: EmitMove
 });
 // #endregion
 

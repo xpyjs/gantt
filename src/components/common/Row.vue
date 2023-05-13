@@ -49,10 +49,10 @@ function onLeave() {
   $param.hoverItem = null;
 }
 
-const { EmitClickRow } = useEvent();
+const { EmitRowClick } = useEvent();
 function onClick() {
   $param.selectItem = props.data ?? null;
-  EmitClickRow(props.data?.data);
+  EmitRowClick(props.data?.data);
 }
 
 function onDblClick() {
