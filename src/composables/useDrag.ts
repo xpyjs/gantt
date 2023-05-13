@@ -37,7 +37,10 @@ export default () => {
         }
 
         const rect = (options?.target ?? el.value)?.getBoundingClientRect();
-        delta.value = Math.abs(left.value - (rect?.left ?? 0)) + e.offsetX;
+        delta.value =
+          Math.abs(left.value - (rect?.left ?? 0)) +
+          e.offsetX +
+          (((e?.target as any)?.offsetLeft as number) ?? 0);
 
         options?.onStart?.(pos, e);
       },

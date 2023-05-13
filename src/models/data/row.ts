@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-05-13 21:09:27
+ * @LastEditTime: 2023-05-13 21:36:14
  * @Description: 一条数据类
  */
 
@@ -250,7 +250,7 @@ export default class RowItem {
       ) === 'l'
     )
       this.__data[this.options.startLabel] = date.getOffset(
-        Variables.time.millisecondOf[unit]
+        -Variables.time.millisecondOf[unit]
       ).date;
 
     if (!linkage) return;
