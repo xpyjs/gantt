@@ -10,11 +10,11 @@ export default () => {
   const { $styleBox } = useStyle();
 
   const today = new XDate();
-  today.startOf();
+  today.startOf(ganttHeader.unit);
 
   const todayLeft = computed(() => {
     const start = ganttHeader.start?.clone();
-    start?.startOf();
+    start?.startOf(ganttHeader.unit);
     return (
       (today.intervalTo(start) / currentMillisecond.value) *
       ganttColumnWidth.value

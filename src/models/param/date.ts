@@ -129,12 +129,25 @@ export class XDate {
   }
 
   /**
-   * 将日期置为当日最开始（0点0分0秒）
+   * 件日期置为单位的起始位置
    */
-  startOf() {
-    this.date.setHours(0);
-    this.date.setMinutes(0);
-    this.date.setSeconds(0);
-    this.date.setMilliseconds(0);
+  startOf(unit: DateUnit) {
+    switch (unit) {
+      case 'year':
+        this.date.setMonth(0);
+      case 'month':
+        this.date.setDate(1);
+      case 'week':
+        this.date.setDate(this.date.getDate() - day(this.date).day());
+      case 'day':
+        this.date.setHours(0);
+      case 'hour':
+        this.date.setMinutes(0);
+      case 'minute':
+        this.date.setSeconds(0);
+      case 'second':
+        this.date.setMilliseconds(0);
+        break;
+    }
   }
 }

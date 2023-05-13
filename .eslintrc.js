@@ -38,6 +38,8 @@ module.exports = {
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
 
     'no-plusplus': 'off',
+    'no-fallthrough': 'off',
+
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',

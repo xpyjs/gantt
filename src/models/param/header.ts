@@ -215,6 +215,7 @@ class GanttHeader extends Header {
   ) {
     this.unit = unit;
     this.start = start?.getOffset(-Variables.time.millisecondOf[this.unit]);
+    this.start?.startOf(this.unit);
     this.end = end;
     this.minLength = minLen;
 
