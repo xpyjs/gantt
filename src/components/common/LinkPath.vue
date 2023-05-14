@@ -1,5 +1,5 @@
 <template>
-  <path stroke="red" fill="transparent" :d="path"></path>
+  <path stroke="#eca710" fill="transparent" :d="path"></path>
 </template>
 
 <script lang="ts" setup>
@@ -44,9 +44,9 @@ const y2 = computed(
 
 const path = computed(
   () =>
-    `M ${x.value + 10} ${y.value} H ${x.value + 50} V ${
-      y.value + rowHeight.value / 2
-    } H ${x2.value - 10} V ${y2.value}`
+    `M ${x.value + 10} ${y.value} H ${x.value + 20} V ${
+      x2.value - 20 >= x.value + 20 ? y.value : y.value + rowHeight.value / 2
+    } H ${x2.value - 20} V ${y2.value} H ${x2.value - 10}`
 );
 </script>
 
