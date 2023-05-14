@@ -98,6 +98,7 @@ import useStyle from '@/composables/useStyle';
 import { formatDate } from '@/utils/date';
 import { flow, isBoolean, isFunction } from 'lodash';
 import useEvent from '@/composables/useEvent';
+import { MoveSliderInternalData, RowData } from '@/typings/data';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -170,16 +171,18 @@ onMounted(() => {
 
 // 移动过的对象数组
 const { EmitMoveSlider } = useEvent();
-let movedData: MoveSliderData[] = [];
+let movedData: MoveSliderInternalData[] = [];
 function EmitMove() {
   movedData.unshift({
-    row: props.data!.data,
+    row: props.data!,
     old: {
       start: startDate!.date,
       end: endDate!.date
     }
   });
-  EmitMoveSlider(movedData);
+  EmitMoveSlider(
+    movedData.map(item => ({ row: item.row.data, old: item.old }))
+  );
   movedData = [];
 }
 

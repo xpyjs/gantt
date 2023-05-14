@@ -2,11 +2,12 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-05-13 21:40:32
+ * @LastEditTime: 2023-05-15 00:46:31
  * @Description: 一条数据类
  */
 
 import { Variables } from '@/constants/vars';
+import { type MoveSliderInternalData } from '@/typings/data';
 import { addIfNotExist, uuid } from '@/utils/common';
 import { cloneDeep, isEqual } from 'lodash';
 import { XDate } from '../param/date';
@@ -60,6 +61,9 @@ export default class RowItem {
   private __data: any;
   private __isExpand: boolean = false;
   private __isChecked: boolean = false;
+
+  private __oldStart?: XDate = undefined;
+  private __oldEnd?: XDate = undefined;
 
   /**
    * 原始数据
@@ -190,8 +194,11 @@ export default class RowItem {
     date: XDate,
     unit: HeaderDateUnit,
     linkage = false,
-    modifyArr?: MoveSliderData[]
+    modifyArr?: MoveSliderInternalData[]
   ) {
+    this.__oldStart = new XDate(this.__data[this.options.startLabel]);
+    this.__oldEnd = new XDate(this.__data[this.options.endLabel]);
+
     this.__data[this.options.startLabel] = date.date;
 
     // 首先判断起始日期不能大于结束日期
@@ -199,10 +206,11 @@ export default class RowItem {
       date.compareTo(
         this.end.getOffset(-Variables.time.millisecondOf[unit])
       ) === 'r'
-    )
+    ) {
       this.__data[this.options.endLabel] = date.getOffset(
         Variables.time.millisecondOf[unit]
       ).date;
+    }
 
     if (!linkage) return;
 
@@ -210,20 +218,19 @@ export default class RowItem {
     let pNode = this.parentNode;
     while (pNode !== null) {
       if (this.start.compareTo(pNode.start) === 'l') {
-        const oldDate = pNode.start;
         // 赋值应该给data的日期数据赋值
         pNode.setStart(this.start, unit);
         modifyArr &&
-          addIfNotExist<MoveSliderData>(
+          addIfNotExist<MoveSliderInternalData>(
             modifyArr,
             {
-              row: pNode.data,
-              old: { start: oldDate.date, end: pNode.end.date }
+              row: pNode,
+              old: {
+                start: pNode.__oldStart?.date ?? pNode.start.date,
+                end: pNode.__oldEnd?.date ?? pNode.end.date
+              }
             },
-            item =>
-              item.row.uuid === pNode?.uuid &&
-              item.old.start === oldDate.date &&
-              item.old.end === pNode?.end.date
+            item => item.row.uuid === pNode?.uuid
           );
       } else {
         break;
@@ -239,8 +246,11 @@ export default class RowItem {
     date: XDate,
     unit: HeaderDateUnit,
     linkage = false,
-    modifyArr?: MoveSliderData[]
+    modifyArr?: MoveSliderInternalData[]
   ) {
+    this.__oldStart = new XDate(this.__data[this.options.startLabel]);
+    this.__oldEnd = new XDate(this.__data[this.options.endLabel]);
+
     this.__data[this.options.endLabel] = date.date;
 
     // 首先判断起始日期不能大于结束日期
@@ -249,29 +259,29 @@ export default class RowItem {
       date.compareTo(
         this.start.getOffset(Variables.time.millisecondOf[unit])
       ) === 'l'
-    )
+    ) {
       this.__data[this.options.startLabel] = date.getOffset(
         -Variables.time.millisecondOf[unit]
       ).date;
+    }
 
     if (!linkage) return;
 
     let pNode = this.parentNode;
     while (pNode !== null) {
       if (this.end.compareTo(pNode.end) === 'r') {
-        const oldDate = pNode.end;
         pNode.setEnd(this.end, unit);
         modifyArr &&
-          addIfNotExist<MoveSliderData>(
+          addIfNotExist<MoveSliderInternalData>(
             modifyArr,
             {
-              row: pNode.data,
-              old: { start: pNode.start.date, end: oldDate.date }
+              row: pNode,
+              old: {
+                start: pNode.__oldStart?.date ?? pNode.start.date,
+                end: pNode.__oldEnd?.date ?? pNode.end.date
+              }
             },
-            item =>
-              item.row.uuid === pNode?.uuid &&
-              item.old.start === pNode?.start.date &&
-              item.old.end === pNode?.end.date
+            item => item.row.uuid === pNode?.uuid
           );
       } else {
         break;
@@ -292,40 +302,42 @@ export default class RowItem {
     node: RowItem,
     key: 'start' | 'end',
     unit: HeaderDateUnit,
-    modifyArr?: MoveSliderData[]
+    modifyArr?: MoveSliderInternalData[]
   ) {
-    const pushTo = (item: MoveSliderData) => {
-      modifyArr &&
-        addIfNotExist<MoveSliderData>(
-          modifyArr,
-          item,
-          i =>
-            i.row.uuid === item?.row.uuid &&
-            i.old.start === item?.old.start &&
-            i.old.end === item?.old.end
-        );
-    };
-
     for (let i = 0; i < node.children.length; i++) {
       const c = node.children[i];
       if (key === 'start') {
         if (c.start.compareTo(node.start) === 'l') {
-          const oldDate = c.start;
           c.setStart(node.start, unit);
-          pushTo({
-            row: c.data,
-            old: { start: oldDate.date, end: c.end.date }
-          });
+          modifyArr &&
+            addIfNotExist<MoveSliderInternalData>(
+              modifyArr,
+              {
+                row: c,
+                old: {
+                  start: c.__oldStart?.date ?? c.start.date,
+                  end: c.__oldEnd?.date ?? c.end.date
+                }
+              },
+              i => i.row.uuid === c.uuid
+            );
           this.__setChildrenDate(c, key, unit, modifyArr);
         }
       } else if (key === 'end') {
         if (c.end.compareTo(node.end) === 'r') {
-          const oldDate = c.end;
           c.setEnd(node.end, unit);
-          pushTo({
-            row: c.data,
-            old: { start: c.start.date, end: oldDate.date }
-          });
+          modifyArr &&
+            addIfNotExist<MoveSliderInternalData>(
+              modifyArr,
+              {
+                row: c,
+                old: {
+                  start: c.__oldStart?.date ?? c.start.date,
+                  end: c.__oldEnd?.date ?? c.end.date
+                }
+              },
+              i => i.row.uuid === c.uuid
+            );
           this.__setChildrenDate(c, key, unit, modifyArr);
         }
       }
