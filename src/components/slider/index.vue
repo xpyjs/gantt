@@ -317,10 +317,8 @@ onDrag(outAnchorRef, {
 const { EmitAddLink } = useEvent();
 function onPointerUp() {
   if (linking.startRow) {
-    if (linking.startRow?.uuid !== props.data?.uuid) {
-      const link = $links.addLink(linking.startRow, props.data!);
-      EmitAddLink(link);
-    }
+    const link = $links.addLink(linking.startRow, props.data!);
+    if (link) EmitAddLink(link);
 
     setLinking({ startRow: null, endRow: null });
   }
@@ -332,6 +330,7 @@ function onPointerUp() {
 .xg-slider {
   position: absolute;
   transition: filter 0.2s;
+  pointer-events: auto;
 
   .xg-slider-block {
     overflow: hidden;

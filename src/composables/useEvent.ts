@@ -39,7 +39,6 @@ export default () => {
     );
   }
 
-  // (e: 'add-link', data: LinkProps): void;
   /**
    * 添加连线事件
    * @param data

@@ -88,6 +88,7 @@ const { ganttBodyRef } = useElement();
     height: 100%;
     position: absolute;
     z-index: 5;
+    pointer-events: none;
   }
 
   .xg-gantt-body-date-line {
@@ -96,6 +97,7 @@ const { ganttBodyRef } = useElement();
     position: absolute;
     top: 0;
     opacity: 0.6;
+    pointer-events: none;
   }
 }
 </style>

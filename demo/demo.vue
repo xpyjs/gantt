@@ -13,6 +13,7 @@
       @row-click="onClickRow"
       @move-slider="onMoveSlider"
       @add-link="onAddLink"
+      @click-link="onClickLink"
     >
       <x-gantt-column label="group1">
         <x-gantt-column prop="index" width="120px"></x-gantt-column>
@@ -100,7 +101,7 @@ let id = 0;
 
 const ganttData = reactive<any>([]);
 
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 15; i++) {
   onAdd();
 }
 
@@ -195,6 +196,10 @@ const onMoveSlider = (data: any) => {
 
 const onAddLink = (data: any) => {
   console.log('add link', data);
+};
+
+const onClickLink = (data: any) => {
+  console.log('click link', data);
 };
 
 function onMove(data: any) {

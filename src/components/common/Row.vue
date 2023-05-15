@@ -9,7 +9,8 @@
       {
         'xg-row__select':
           props.renderStyle && $param.selectItem?.uuid === props.data?.uuid
-      }
+      },
+      { 'xg-row__only': !props.renderStyle }
     ]"
     :style="{
       top: `${(props.data?.flatIndex ?? 0) * rowHeight}px`,
@@ -18,8 +19,8 @@
       backgroundColor: props.renderStyle ? ($styleBox.levelColor[props.data!.level] ?? undefined) : undefined,
       ...$styleBox.getBorderColor()
     }"
-    @pointerenter="onEnter"
-    @pointerleave="onLeave"
+    @pointerenter.stop="onEnter"
+    @pointerleave.stop="onLeave"
     @click="onClick"
     @dblclick="onDblClick"
   >
@@ -67,6 +68,10 @@ function onDblClick() {
   overflow: hidden;
   border-bottom: 1px solid #e5e5e5;
   box-sizing: border-box;
+}
+
+.xg-row__only {
+  pointer-events: none;
 }
 
 .xg-row.xg-row__hover {

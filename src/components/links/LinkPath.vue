@@ -1,5 +1,9 @@
 <template>
-  <g>
+  <g
+    ref="svgRef"
+    :class="['xg-link', { 'xg-link__selected': selected }]"
+    @click.stop="onClick"
+  >
     <path
       :d="path"
       fill="transparent"
@@ -15,7 +19,7 @@
         :id="`triangle_${link.color}`"
         markerWidth="5"
         markerHeight="4"
-        refX="0"
+        refX="2"
         refY="2"
         orient="auto"
         markerUnits="strokeWidth"
@@ -43,13 +47,24 @@ import useGanttHeader from '@/composables/useGanttHeader';
 import useGanttWidth from '@/composables/useGanttWidth';
 import useStyle from '@/composables/useStyle';
 import { LinkItem } from '@/models/data/links';
-import { computed, PropType } from 'vue';
+import { computed, PropType, Ref, ref } from 'vue';
+import { onClickOutside } from '@vueuse/core';
 
 const props = defineProps({
   link: {
     type: Object as PropType<LinkItem>,
     default: () => ({})
   }
+});
+
+const selected = ref(false);
+function onClick() {
+  selected.value = true;
+}
+
+const svgRef = ref(null) as Ref<SVGGElement | null>;
+onClickOutside(svgRef, () => {
+  selected.value = false;
 });
 
 const { ganttHeader } = useGanttHeader();
@@ -90,4 +105,24 @@ const path = computed(
 );
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.xg-link {
+  cursor: pointer;
+  transition: filter 0.2s;
+  pointer-events: auto;
+
+  path {
+    transition: stroke-width 0.2s;
+  }
+
+  &:hover {
+    filter: brightness(1.2);
+  }
+}
+
+.xg-link__selected {
+  path {
+    stroke-width: 3;
+  }
+}
+</style>
