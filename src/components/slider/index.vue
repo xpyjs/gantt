@@ -316,11 +316,17 @@ function onOutAnchorDown() {
         width: 12px;
         height: 100%;
         opacity: 0;
+        transition: filter 0.2s;
+
+        &:hover {
+          filter: grayscale(0.8);
+        }
       }
     }
 
     .xg-slider-resize.left {
       left: 0;
+      cursor: w-resize;
 
       .resize-chunk {
         border-top-left-radius: 4px;
@@ -330,6 +336,7 @@ function onOutAnchorDown() {
 
     .xg-slider-resize.right {
       right: 0;
+      cursor: e-resize;
 
       .resize-chunk {
         border-top-right-radius: 4px;
