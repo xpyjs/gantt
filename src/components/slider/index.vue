@@ -14,6 +14,7 @@
           ? 0
           : `calc(calc(100% - ${height}) / 2)`
     }"
+    @click.stop
   >
     <div
       :class="[

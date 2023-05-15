@@ -6,7 +6,7 @@
     name="arrow-right"
     :class="['expand-icon', { 'expand-icon__expanded': data?.isExpand }]"
     :style="{ width: `${rowHeight / 2}px`, height: `${rowHeight / 2}px` }"
-    @click="
+    @click.stop="
       () => {
         data?.setExpand(!data.isExpand);
         flattenData();
@@ -14,7 +14,12 @@
     "
   />
 
-  <input v-if="$styleBox.showCheckbox" v-model="checked" type="checkbox" />
+  <input
+    v-if="$styleBox.showCheckbox"
+    v-model="checked"
+    type="checkbox"
+    @click.stop
+  />
 </template>
 
 <script lang="ts" setup>
