@@ -1,5 +1,5 @@
 <template>
-  <div style="top: 20vh; width: 100%; height: 500px">
+  <div style="top: 20vh; width: 100%; height: 500px; padding-left: 5vw">
     <x-gantt
       data-id="index"
       :data="ganttData"
@@ -12,6 +12,7 @@
       :show-weekend="true"
       @row-click="onClickRow"
       @move-slider="onMoveSlider"
+      @add-link="onAddLink"
     >
       <x-gantt-column label="group1">
         <x-gantt-column prop="index" width="120px"></x-gantt-column>
@@ -133,12 +134,25 @@ const ganttLinks = [
   {
     index: 1,
     from: 1,
-    to: 2
+    to: 2,
+    color: 'green'
   },
   {
     index: 2,
     from: 2,
     to: 5
+  },
+  {
+    index: 3,
+    from: 4,
+    to: 2,
+    color: 'red'
+  },
+  {
+    index: 4,
+    from: 4,
+    to: 3,
+    color: '#abc'
   }
 ];
 
@@ -177,6 +191,10 @@ const onClickRow = (data: any) => {
 
 const onMoveSlider = (data: any) => {
   console.log('move slider', data);
+};
+
+const onAddLink = (data: any) => {
+  console.log('add link', data);
 };
 
 function onMove(data: any) {

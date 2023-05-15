@@ -2,6 +2,7 @@ import type rootProps from '@/components/root/rootProps';
 import Variables from '@/constants/vars';
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
+import { type RowData } from '@/typings/data';
 import { isString } from 'lodash';
 import { computed, type ExtractPropTypes, toRaw, watch, type Ref } from 'vue';
 import useGanttHeader from './useGanttHeader';

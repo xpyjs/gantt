@@ -18,8 +18,8 @@
       backgroundColor: props.renderStyle ? ($styleBox.levelColor[props.data!.level] ?? undefined) : undefined,
       ...$styleBox.getBorderColor()
     }"
-    @mouseenter="onEnter"
-    @mouseleave="onLeave"
+    @pointerenter="onEnter"
+    @pointerleave="onLeave"
     @click="onClick"
     @dblclick="onDblClick"
   >

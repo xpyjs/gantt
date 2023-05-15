@@ -15,8 +15,9 @@
           : `calc(calc(100% - ${height}) / 2)`
     }"
     @click.stop
+    @pointerup="onPointerUp"
   >
-    <div
+    <!-- <div
       :class="[
         'xg-slider-anchor',
         'in-anchor',
@@ -25,7 +26,7 @@
         }
       ]"
       @pointerdown="onInAnchorDown"
-    ></div>
+    ></div> -->
 
     <div class="xg-slider-block">
       <!-- 滑块主体 -->
@@ -74,6 +75,7 @@
     </div>
 
     <div
+      ref="outAnchorRef"
       :class="[
         'xg-slider-anchor',
         'out-anchor',
@@ -100,6 +102,8 @@ import { formatDate } from '@/utils/date';
 import { flow, isBoolean, isFunction } from 'lodash';
 import useEvent from '@/composables/useEvent';
 import { MoveSliderInternalData, RowData } from '@/typings/data';
+import useLinks from '@/composables/useLinks';
+import useElement from '@/composables/useElement';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -267,16 +271,59 @@ onDrag(resizeRightRef, {
 // #endregion
 
 // #region inAnchor
-function onInAnchorDown() {
-  handleDisableMove();
-}
+// function onInAnchorDown() {
+//   handleDisableMove();
+// }
 // #endregion
 
 // #region outAnchor
-function onOutAnchorDown() {
+function onOutAnchorDown(e: PointerEvent) {
   handleDisableMove();
+}
 
-  console.log('outAnchorDown', props.data);
+const { setLinking, linking, $links } = useLinks();
+const { ganttBodyRef } = useElement();
+const { rowHeight } = useStyle();
+const outAnchorRef = ref(null) as Ref<HTMLElement | null>;
+const startPos = { x: 0, y: 0 };
+onDrag(outAnchorRef, {
+  reset: true,
+
+  onStart: pos => {
+    startPos.x = (ganttBodyRef.value?.getBoundingClientRect().x ?? 0) - pos.x;
+    startPos.y = (ganttBodyRef.value?.getBoundingClientRect().y ?? 0) - pos.y;
+
+    const _sp = {
+      x: sliderLeft.value + sliderWidth.value + 10,
+      y: ((props.data?.flatIndex ?? 0) + 0.5) * rowHeight.value
+    };
+    setLinking({
+      isLinking: true,
+      startRow: props.data,
+      startPos: _sp,
+      endPos: _sp
+    });
+  },
+
+  onMove: (x, pos) => {
+    setLinking({ endPos: { x: pos.x - startPos.x, y: pos.y - startPos.y } });
+  },
+
+  onFinally: () => {
+    setLinking({ isLinking: false });
+  }
+});
+
+const { EmitAddLink } = useEvent();
+function onPointerUp() {
+  if (linking.startRow) {
+    if (linking.startRow?.uuid !== props.data?.uuid) {
+      const link = $links.addLink(linking.startRow, props.data!);
+      EmitAddLink(link);
+    }
+
+    setLinking({ startRow: null, endRow: null });
+  }
 }
 // #endregion
 </script>
@@ -382,9 +429,9 @@ function onOutAnchorDown() {
   opacity: 1;
 }
 
-.in-anchor {
-  left: -12px;
-}
+// .in-anchor {
+//   left: -12px;
+// }
 
 .out-anchor {
   right: -12px;

@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="ganttBodyRef"
     class="xg-gantt-body"
     :style="{ height: bodyHeight, width: `${ganttWidth}px` }"
   >
@@ -14,6 +15,8 @@
     <svg class="xg-gantt-body-line-wrap" :style="{ width: `${ganttWidth}px` }">
       <!-- <path stroke="red" fill="transparent" d="M 200 2 H 400 V 102"></path> -->
       <LinkPath v-for="link in $links.links" :key="link.uuid" :link="link" />
+
+      <Linking />
     </svg>
 
     <!-- 行样式 -->
@@ -55,9 +58,11 @@ import useInView from '@/composables/useInView';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useStyle from '@/composables/useStyle';
 import useToday from '@/composables/useToday';
-import RowVue from './Row.vue';
-import LinkPath from './LinkPath.vue';
 import useLinks from '@/composables/useLinks';
+import RowVue from './Row.vue';
+import LinkPath from '@/components/links/LinkPath.vue';
+import Linking from '@/components/links/Linking.vue';
+import useElement from '@/composables/useElement';
 
 const { $slotsBox } = useSlotsBox();
 const { bodyHeight, $styleBox } = useStyle();
@@ -66,6 +71,7 @@ const { inView } = useInView();
 const { todayLeft, showToday } = useToday();
 const { ganttHeader } = useGanttHeader();
 const { $links } = useLinks();
+const { ganttBodyRef } = useElement();
 </script>
 
 <style lang="scss" scoped>

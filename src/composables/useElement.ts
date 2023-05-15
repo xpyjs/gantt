@@ -4,6 +4,7 @@ import useParam from './useParam';
 
 const tableHeaderRef = ref<HTMLElement | null>(null);
 const ganttHeaderRef = ref<HTMLElement | null>(null);
+const ganttBodyRef = ref<HTMLElement | null>(null);
 
 export default () => {
   const { $param } = useParam();
@@ -25,6 +26,7 @@ export default () => {
   return {
     tableHeaderRef,
     ganttHeaderRef,
+    ganttBodyRef,
     getMaxHeader,
     updateHeaderHeight
   };

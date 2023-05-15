@@ -1,4 +1,4 @@
-import { useDraggable } from '@vueuse/core';
+import { type Position, useDraggable } from '@vueuse/core';
 import { type Ref, ref, computed, onMounted, nextTick } from 'vue';
 import useElement from './useElement';
 import useParam from './useParam';
@@ -8,9 +8,9 @@ const lineLeft = ref(0);
 const mousedown = ref(false);
 
 interface DragOptions {
-  onStart?: (pos: { x: number; y: number }, e: MouseEvent) => void;
-  onMove?: (x: number, e: MouseEvent) => void;
-  onEnd?: (x: number, e: MouseEvent) => Promise<void> | void;
+  onStart?: (pos: Position, e: PointerEvent) => void;
+  onMove?: (x: number, pos: Position, e: PointerEvent) => void;
+  onEnd?: (x: number, pos: Position, e: PointerEvent) => Promise<void> | void;
   onFinally?: () => void;
   target?: El;
   reset?: boolean;
@@ -51,14 +51,14 @@ export default () => {
         isMove.value = true;
 
         left.value = e.clientX - delta.value;
-        options?.onMove?.(left.value, e);
+        options?.onMove?.(left.value, pos, e);
       },
 
       onEnd: (pos, e) => {
         if (options.disabled?.()) return;
 
         mousedown.value = false;
-        if (isMove.value) void options?.onEnd?.(left.value, e);
+        if (isMove.value) void options?.onEnd?.(left.value, pos, e);
 
         options?.onFinally?.();
       }
@@ -88,7 +88,7 @@ export default () => {
       onDrag(el, {
         reset: true,
 
-        onMove: (x, e) => {
+        onMove: (x, pos, e) => {
           const clientX = e.clientX - (rootRect?.left ?? 0);
           if (options?.preMove && !options?.preMove(x, clientX)) return;
 

@@ -1,3 +1,5 @@
+import { type MoveSliderData } from '@/typings/data';
+import { type LinkProps } from '@/typings/link';
 import { ref, toRaw } from 'vue';
 
 const rootEmit: any = ref(null);
@@ -37,9 +39,19 @@ export default () => {
     );
   }
 
+  // (e: 'add-link', data: LinkProps): void;
+  /**
+   * 添加连线事件
+   * @param data
+   */
+  function EmitAddLink(data: LinkProps) {
+    rootEmit.value?.('add-link', data);
+  }
+
   return {
     setRootEmit,
     EmitRowClick,
-    EmitMoveSlider
+    EmitMoveSlider,
+    EmitAddLink
   };
 };

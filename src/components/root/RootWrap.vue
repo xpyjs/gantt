@@ -8,6 +8,8 @@ import { initStore } from '@/store';
 import useRoot from '@/composables/useRoot';
 import Root from './index.vue';
 import useEvent from '@/composables/useEvent';
+import { MoveSliderData } from '@/typings/data';
+import { LinkProps } from '@/typings/link';
 
 export default defineComponent({
   name: 'RootWrap',
@@ -25,6 +27,7 @@ const emit = defineEmits<{
   (e: 'row-checked', state: boolean, data: any): void;
   (e: 'move-slider', data: MoveSliderData[]): void;
   (e: 'move-progress', data: any, old: number): void;
+  (e: 'add-link', data: LinkProps): void;
   (e: 'no-date-error'): void;
 }>();
 
