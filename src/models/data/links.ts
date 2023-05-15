@@ -70,6 +70,15 @@ export default class AllLinks {
    * 添加一条连线
    */
   addLink(from: RowItem, to: RowItem) {
+    if (
+      from.uuid === to.uuid ||
+      this.links.some(
+        link => link.fromRow.uuid === from.uuid && link.toRow.uuid === to.uuid
+      )
+    ) {
+      return;
+    }
+
     const link = {
       from: from.id,
       to: to.id
