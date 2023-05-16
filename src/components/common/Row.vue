@@ -19,8 +19,8 @@
       backgroundColor: props.renderStyle ? ($styleBox.levelColor[props.data!.level] ?? undefined) : undefined,
       ...$styleBox.getBorderColor()
     }"
-    @pointerenter.stop="onEnter"
-    @pointerleave.stop="onLeave"
+    @mouseenter.capture="onEnter"
+    @mouseleave="onLeave"
     @click="onClick"
     @dblclick="onDblClick"
   >
@@ -47,6 +47,8 @@ function onEnter() {
 }
 
 function onLeave() {
+  if (!props.renderStyle) return;
+
   $param.hoverItem = null;
 }
 

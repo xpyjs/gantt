@@ -101,7 +101,7 @@ let id = 0;
 
 const ganttData = reactive<any>([]);
 
-for (let i = 0; i < 15; i++) {
+for (let i = 0; i < 5; i++) {
   onAdd();
 }
 
