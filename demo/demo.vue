@@ -11,6 +11,7 @@
       :show-today="true"
       :show-weekend="true"
       @row-click="onClickRow"
+      @row-dbl-click="onDblClickRow"
       @move-slider="onMoveSlider"
       @add-link="onAddLink"
       @click-link="onClickLink"
@@ -188,6 +189,10 @@ function onReduce() {
 
 const onClickRow = (data: any) => {
   console.log('click row', data);
+};
+
+const onDblClickRow = (data: any) => {
+  console.log('dblclick row', data);
 };
 
 const onMoveSlider = (data: any) => {

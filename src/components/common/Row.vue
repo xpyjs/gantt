@@ -22,7 +22,6 @@
     @mouseenter.capture="onEnter"
     @mouseleave="onLeave"
     @click="onClick"
-    @dblclick="onDblClick"
   >
     <slot />
   </div>
@@ -52,14 +51,27 @@ function onLeave() {
   $param.hoverItem = null;
 }
 
-const { EmitRowClick } = useEvent();
+const { EmitRowClick, EmitRowDblClick } = useEvent();
+let clicks = 0;
+const delay = 300;
+let timer: any = null;
 function onClick() {
-  $param.selectItem = props.data ?? null;
-  EmitRowClick(props.data?.data);
-}
+  clicks++;
+  if (clicks === 1) {
+    // click
+    timer = setTimeout(() => {
+      clicks = 0;
+    }, delay);
 
-function onDblClick() {
-  // 抛出 data
+    $param.selectItem = props.data ?? null;
+    EmitRowClick(props.data?.data);
+  } else {
+    // dbl-click
+    clearTimeout(timer);
+    clicks = 0;
+
+    EmitRowDblClick(props.data?.data);
+  }
 }
 </script>
 

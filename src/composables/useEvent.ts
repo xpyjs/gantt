@@ -18,10 +18,22 @@ export default () => {
   }
 
   // (e: 'row-dbl-click', data: any): void;
+  /**
+   * 双击行事件
+   * @param row 该行的原始数据
+   */
+  function EmitRowDblClick(row: any) {
+    rootEmit.value?.('row-dbl-click', toRaw(row));
+  }
+
   // (e: 'row-checked', state: boolean, data: any): void;
-  // (e: 'move-slider', { row: any; old: { start: Date; end: Date } }[]): void;
-  // (e: 'move-progress', data: any, old: number): void;
-  // (e: 'no-date-error'): void;
+  /**
+   * 选择行事件 checkbox
+   * @param row 该行的原始数据
+   */
+  function EmitRowChecked(row: any) {
+    rootEmit.value?.('row-checked', toRaw(row));
+  }
 
   /**
    * 移动滑块事件
@@ -47,9 +59,14 @@ export default () => {
     rootEmit.value?.('add-link', data);
   }
 
+  // (e: 'move-progress', data: any, old: number): void;
+  // (e: 'no-date-error'): void;
+
   return {
     setRootEmit,
     EmitRowClick,
+    EmitRowDblClick,
+    EmitRowChecked,
     EmitMoveSlider,
     EmitAddLink
   };
