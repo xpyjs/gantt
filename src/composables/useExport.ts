@@ -1,9 +1,11 @@
 import { XDate } from '@/models/param/date';
 import { isDate, isUndefined } from 'lodash';
 import { type Ref, type DefineComponent } from 'vue';
+import useData from './useData';
 import useEvent from './useEvent';
 import useGanttHeader from './useGanttHeader';
 import useGanttWidth from './useGanttWidth';
+import useParam from './useParam';
 import useToday from './useToday';
 
 export default (ganttRef: Ref<DefineComponent | null>) => {
@@ -15,7 +17,7 @@ export default (ganttRef: Ref<DefineComponent | null>) => {
   /**
    * 跳转到某个日期
    */
-  function handleJumpTo(_date: Date | undefined) {
+  function jumpToDate(_date: Date | undefined) {
     if (!ganttRef.value) return;
 
     let date: XDate;
@@ -28,7 +30,7 @@ export default (ganttRef: Ref<DefineComponent | null>) => {
     }
 
     if (!isInArea(date)) {
-      EmitNoDateError();
+      EmitNoDateError(date.date);
       return;
     }
 
@@ -85,8 +87,17 @@ export default (ganttRef: Ref<DefineComponent | null>) => {
     window.requestAnimationFrame(step);
   }
 
+  const { $data } = useData();
+  const { $param } = useParam();
+  function setSelected(data: any) {
+    const find = $data.flatData.find(d => d.isSame(data));
+    if (!find) return null;
+
+    $param.selectItem = find;
+  }
+
   return {
-    setSelected: () => {},
-    jumpToDate: handleJumpTo
+    setSelected,
+    jumpToDate
   };
 };

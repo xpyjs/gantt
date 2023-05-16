@@ -63,8 +63,8 @@ export default () => {
   /**
    * 日期不存在当前组件中事件
    */
-  function EmitNoDateError() {
-    rootEmit.value?.('no-date-error');
+  function EmitNoDateError(date: Date) {
+    rootEmit.value?.('no-date-error', date);
   }
 
   return {

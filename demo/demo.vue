@@ -102,6 +102,43 @@
     <button @click="onChangeBorderColor">border颜色</button>
     <button @click="changeUnit">切换单位</button>
     <button @click="jumpToDate">跳转到</button>
+    <button @click="setSelected">设置选择</button>
+  </div>
+
+  <div style="width: 100%; height: 400px; margin-top: 50px">
+    <x-gantt
+      data-id="index"
+      :data="ganttData2"
+      :show-today="true"
+      @row-click="onClickRow2"
+      @row-dbl-click="onDblClickRow2"
+      @row-checked="onCheckedRow2"
+      @move-slider="onMoveSlider2"
+      @no-date-error="onNoDateError2"
+    >
+      <x-gantt-column label="group2">
+        <x-gantt-column
+          prop="index"
+          width="120px"
+          :column-style="{ 'background-color': 'yellow' }"
+        ></x-gantt-column>
+        <x-gantt-column label="group2">
+          <x-gantt-column
+            prop="name"
+            :merge="(scope: any) => scope.$index % 3 === 0"
+          ></x-gantt-column>
+        </x-gantt-column>
+      </x-gantt-column>
+
+      <x-gantt-column
+        label="结束日期"
+        prop="endDate"
+        date-format="MM-dd HH:mm:ss"
+        ellipsis
+      />
+
+      <x-gantt-slider prop="o.t1"> </x-gantt-slider>
+    </x-gantt>
   </div>
 </template>
 
@@ -232,16 +269,82 @@ function onMove(data: any) {
   return true;
 }
 
-const onNoDateError = () => {
-  console.log('no date error');
+const onNoDateError = (date: Date) => {
+  console.log('no date error', date);
 };
 
 const ganttRef = ref(null) as any;
 function jumpToDate() {
-  console.log('jumpToDate', ganttRef.value);
-
   ganttRef.value?.jumpToDate();
 }
+function setSelected() {
+  const s = ganttRef.value?.setSelected(ganttData[0]);
+  console.log('setSelected', s);
+}
+
+let id2 = 0;
+
+const ganttData2 = reactive<any>([]);
+
+function onAdd2() {
+  ganttData2.push({
+    index: ++id2,
+    name: 't' + id2,
+    startDate: new Date(2023, 5, id2),
+    endDate: new Date(2023, 5, id2 + 5),
+    o: { t1: 'a', t2: 'b' }
+  });
+}
+
+for (let i = 0; i < 10; i++) {
+  onAdd2();
+}
+
+ganttData2[0].children = [
+  {
+    index: ++id2,
+    name: 'sub-t' + id2,
+    startDate: new Date(2023, 5, 1),
+    endDate: new Date(2023, 5, 5),
+    o: { t1: 'a', t2: 'b' }
+  },
+  {
+    index: ++id2,
+    name: 'sub-t' + id2,
+    startDate: new Date(2023, 5, 1),
+    endDate: new Date(2023, 5, 5),
+    o: { t1: 'a', t2: 'b' },
+    children: [
+      {
+        index: ++id2,
+        name: 'sub-sub-t' + id2,
+        startDate: new Date(2023, 5, 1),
+        endDate: new Date(2023, 5, 5),
+        o: { t1: 'a', t2: 'b' }
+      }
+    ]
+  }
+];
+
+const onClickRow2 = (data: any) => {
+  console.log('click row', data);
+};
+
+const onDblClickRow2 = (data: any) => {
+  console.log('dblclick row', data);
+};
+
+const onCheckedRow2 = (state: boolean, data: any) => {
+  console.log('checked row', state, data);
+};
+
+const onMoveSlider2 = (data: any) => {
+  console.log('move slider', data);
+};
+
+const onNoDateError2 = (date: Date) => {
+  console.log('no date error', date);
+};
 </script>
 
 <style scoped></style>
