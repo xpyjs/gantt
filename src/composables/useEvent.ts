@@ -59,7 +59,13 @@ export default () => {
   }
 
   // (e: 'move-progress', data: any, old: number): void;
-  // (e: 'no-date-error'): void;
+
+  /**
+   * 日期不存在当前组件中事件
+   */
+  function EmitNoDateError() {
+    rootEmit.value?.('no-date-error');
+  }
 
   return {
     setRootEmit,
@@ -67,6 +73,7 @@ export default () => {
     EmitRowDblClick,
     EmitRowChecked,
     EmitMoveSlider,
-    EmitAddLink
+    EmitAddLink,
+    EmitNoDateError
   };
 };

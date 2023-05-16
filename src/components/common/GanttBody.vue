@@ -25,17 +25,19 @@
     </template>
 
     <!-- 周末 -->
-    <template v-for="(date, i) in ganttHeader.dates">
-      <div
-        v-if="$styleBox.showWeekend && date.isWeekend()"
-        :key="i"
-        class="xg-gantt-body-date-line weekend"
-        :style="{
-          width: `${ganttColumnWidth}px`,
-          left: `${ganttColumnWidth * i}px`,
-          backgroundColor: '#ccc'
-        }"
-      ></div>
+    <template v-if="$styleBox.unit === 'day'">
+      <template v-for="(date, i) in ganttHeader.dates">
+        <div
+          v-if="$styleBox.showWeekend && date.isWeekend()"
+          :key="i"
+          class="xg-gantt-body-date-line weekend"
+          :style="{
+            width: `${ganttColumnWidth}px`,
+            left: `${ganttColumnWidth * i}px`,
+            backgroundColor: '#ccc'
+          }"
+        ></div>
+      </template>
     </template>
 
     <!-- 今天 -->

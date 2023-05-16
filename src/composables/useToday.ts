@@ -9,29 +9,33 @@ export default () => {
   const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
   const { $styleBox } = useStyle();
 
-  const today = new XDate();
-  today.startOf(ganttHeader.unit);
+  const generateToday = computed(() => {
+    const today = new XDate();
+    today.startOf(ganttHeader.unit);
+    return today;
+  });
 
   const todayLeft = computed(() => {
     const start = ganttHeader.start?.clone();
     start?.startOf(ganttHeader.unit);
+
     return (
-      (today.intervalTo(start) / currentMillisecond.value) *
+      (generateToday.value.intervalTo(start) / currentMillisecond.value) *
       ganttColumnWidth.value
     );
   });
 
+  function isInArea(date: XDate) {
+    if (ganttHeader.dates.length === 0) return false;
+
+    const sd = ganttHeader.dates[0];
+    const ed = ganttHeader.dates[ganttHeader.dates.length - 1];
+
+    return sd?.compareTo(date) === 'l' && ed?.compareTo(date) === 'r';
+  }
+
   const showToday = computed(() => {
-    function isInArea(date: XDate) {
-      if (ganttHeader.dates.length === 0) return false;
-
-      const sd = ganttHeader.start;
-      const ed = ganttHeader.end;
-
-      return sd?.compareTo(date) === 'l' && ed?.compareTo(date) === 'r';
-    }
-
-    return $styleBox.showToday && isInArea(today);
+    return $styleBox.showToday && isInArea(generateToday.value);
   });
 
   return {

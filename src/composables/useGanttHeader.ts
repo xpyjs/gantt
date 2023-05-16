@@ -1,4 +1,5 @@
 import { useStore } from '@/store';
+import { watch } from 'vue';
 import useGanttWidth from './useGanttWidth';
 import useTableWidth from './useTableWidth';
 
@@ -17,6 +18,8 @@ export default () => {
       store.$styleBox.unit
     );
   }
+
+  watch(() => store.$styleBox.unit, setGanttHeaders);
 
   return {
     setGanttHeaders,

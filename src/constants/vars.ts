@@ -16,7 +16,24 @@ export const Variables = {
     minContentRowHeight: 20,
     maxContentRowHeight: 70,
     minHeaderHeight: 30,
-    minTableColumnWidth: 40
+    minTableColumnWidth: 40,
+    ganttColumnWidth: {
+      small: {
+        hour: 10,
+        day: 15,
+        week: 50
+      },
+      normal: {
+        hour: 15,
+        day: 30,
+        week: 80
+      },
+      large: {
+        hour: 30,
+        day: 60,
+        week: 120
+      }
+    }
   },
 
   default: {

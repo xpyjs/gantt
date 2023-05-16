@@ -7,18 +7,7 @@ export default () => {
 
   const ganttColumnWidth = computed(() => {
     const size = store.$styleBox.ganttColumnSize;
-    switch (size) {
-      case 'small':
-        if (store.$styleBox.unit === 'week') return 7;
-        return 20;
-      case 'large':
-        if (store.$styleBox.unit === 'week') return 30;
-        return 60;
-      case 'normal':
-      default:
-        if (store.$styleBox.unit === 'week') return 15;
-        return 30;
-    }
+    return Variables.size.ganttColumnWidth[size][store.ganttHeader.unit];
   });
 
   const ganttWidth = computed(() => {

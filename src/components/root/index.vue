@@ -76,6 +76,7 @@ import useDrag from '@/composables/useDrag';
 import useRoot from '@/composables/useRoot';
 import useLinks from '@/composables/useLinks';
 import Variables from '@/constants/vars';
+import useExport from '@/composables/useExport';
 
 const containerId = uuid(10);
 const props = defineProps(rootProps);
@@ -184,6 +185,10 @@ onResizeTableColumn(midLineRef, {
 // #endregion
 
 console.log('.....root', getCurrentInstance());
+
+// #region 暴露方法
+defineExpose(useExport());
+// #endregion
 </script>
 
 <style scoped lang="scss">

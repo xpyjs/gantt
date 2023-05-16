@@ -10,6 +10,7 @@
       :expand-all="expandAll"
       :show-today="true"
       :show-weekend="true"
+      :unit="unit"
       @row-click="onClickRow"
       @row-dbl-click="onDblClickRow"
       @row-checked="onCheckedRow"
@@ -97,6 +98,7 @@
       {{ expandAll ? '闭合' : '展开' }}
     </button>
     <button @click="onChangeBorderColor">border颜色</button>
+    <button @click="changeUnit">切换单位</button>
   </div>
 </template>
 
@@ -115,22 +117,22 @@ ganttData[0].children = [
   {
     index: ++id,
     name: 'sub-t' + id,
-    startDate: new Date(2023, 3, 1),
-    endDate: new Date(2023, 3, 5),
+    startDate: new Date(2023, 4, 1),
+    endDate: new Date(2023, 4, 5),
     o: { t1: 'a', t2: 'b' }
   },
   {
     index: ++id,
     name: 'sub-t' + id,
-    startDate: new Date(2023, 3, 1),
-    endDate: new Date(2023, 3, 5),
+    startDate: new Date(2023, 4, 1),
+    endDate: new Date(2023, 4, 5),
     o: { t1: 'a', t2: 'b' },
     children: [
       {
         index: ++id,
         name: 'sub-sub-t' + id,
-        startDate: new Date(2023, 3, 1),
-        endDate: new Date(2023, 3, 5),
+        startDate: new Date(2023, 4, 1),
+        endDate: new Date(2023, 4, 5),
         o: { t1: 'a', t2: 'b' }
       }
     ]
@@ -178,12 +180,19 @@ function onChangeBorderColor() {
   borderColor.value = colors[Math.floor(Math.random() * colors.length)];
 }
 
+const unit = ref('day');
+const changeUnit = () => {
+  const u = ['week', 'day', 'hour'];
+  unit.value = u[(u.indexOf(unit.value) + 1) % u.length];
+  console.log('unit', unit.value);
+};
+
 function onAdd() {
   ganttData.push({
     index: ++id,
     name: 't' + id,
-    startDate: new Date(2023, 3, id),
-    endDate: new Date(2023, 3, id + 5),
+    startDate: new Date(2023, 4, id),
+    endDate: new Date(2023, 4, id + 5),
     o: { t1: 'a', t2: 'b' }
   });
 }

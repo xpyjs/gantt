@@ -209,7 +209,10 @@ export default {
    */
   unit: {
     type: String as PropType<HeaderDateUnit>,
-    default: 'day'
+    default: 'day',
+    validator: (v: HeaderDateUnit) => {
+      return ['week', 'day', 'hour'].includes(v);
+    }
   },
 
   /**
