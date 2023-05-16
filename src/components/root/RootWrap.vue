@@ -3,9 +3,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, useSlots } from 'vue';
+import { defineComponent, ref, useSlots } from 'vue';
 import { initStore } from '@/store';
-import useRoot from '@/composables/useRoot';
 import Root from './index.vue';
 import useEvent from '@/composables/useEvent';
 import { MoveSliderData } from '@/typings/data';
@@ -38,24 +37,18 @@ initStore();
 const { setRootEmit } = useEvent();
 setRootEmit(emit);
 
-const { rootRef } = useRoot();
-
+const rootWrapRef = ref(null) as any;
 const setSelected = (args: any) => {
-  (rootRef.value as any)?.setSelected(args);
+  (rootWrapRef.value as any)?.setSelected(args);
 };
 const jumpToDate = (args: any) => {
-  (rootRef.value as any)?.jumpToDate(args);
-};
-
-const setHeaderUnit = (args: any) => {
-  (rootRef.value as any)?.setHeaderUnit(args);
+  (rootWrapRef.value as any)?.jumpToDate(args);
 };
 
 // ***** 对外方法 ***** //
 defineExpose({
   setSelected,
-  jumpToDate,
-  setHeaderUnit
+  jumpToDate
 });
 </script>
 

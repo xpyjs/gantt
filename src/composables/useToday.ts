@@ -28,8 +28,8 @@ export default () => {
   function isInArea(date: XDate) {
     if (ganttHeader.dates.length === 0) return false;
 
-    const sd = ganttHeader.dates[0];
-    const ed = ganttHeader.dates[ganttHeader.dates.length - 1];
+    const sd = ganttHeader.start;
+    const ed = ganttHeader.end;
 
     return sd?.compareTo(date) === 'l' && ed?.compareTo(date) === 'r';
   }
@@ -40,6 +40,7 @@ export default () => {
 
   return {
     todayLeft,
-    showToday
+    showToday,
+    isInArea
   };
 };

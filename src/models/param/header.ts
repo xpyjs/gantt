@@ -199,7 +199,14 @@ class GanttHeader extends Header {
    */
   dates: XDate[] = [];
 
+  /**
+   * 甘特的起始时间（数据起始时间请使用 data.start）
+   */
   start?: XDate;
+
+  /**
+   * 甘特的结束时间（数据结束时间请使用 data.end）
+   */
   end?: XDate;
   unit: HeaderDateUnit = 'day';
   minLength: number = 0;
@@ -268,6 +275,7 @@ class GanttHeader extends Header {
     });
 
     this.headers = this.convertToRows(columns, this.getAllColumns(columns));
+    this.end = this.dates[this.dates.length - 1];
   }
 
   /**

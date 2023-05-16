@@ -187,7 +187,8 @@ onResizeTableColumn(midLineRef, {
 console.log('.....root', getCurrentInstance());
 
 // #region 暴露方法
-defineExpose(useExport());
+const exports = useExport(ganttRef);
+defineExpose(exports);
 // #endregion
 </script>
 

@@ -1,6 +1,7 @@
 <template>
   <div style="top: 20vh; width: 100%; height: 500px; padding-left: 5vw">
     <x-gantt
+      ref="ganttRef"
       data-id="index"
       :data="ganttData"
       :links="ganttLinks"
@@ -17,6 +18,7 @@
       @move-slider="onMoveSlider"
       @add-link="onAddLink"
       @click-link="onClickLink"
+      @no-date-error="onNoDateError"
     >
       <x-gantt-column label="group1">
         <x-gantt-column
@@ -99,6 +101,7 @@
     </button>
     <button @click="onChangeBorderColor">border颜色</button>
     <button @click="changeUnit">切换单位</button>
+    <button @click="jumpToDate">跳转到</button>
   </div>
 </template>
 
@@ -117,22 +120,22 @@ ganttData[0].children = [
   {
     index: ++id,
     name: 'sub-t' + id,
-    startDate: new Date(2023, 4, 1),
-    endDate: new Date(2023, 4, 5),
+    startDate: new Date(2023, 3, 1),
+    endDate: new Date(2023, 3, 5),
     o: { t1: 'a', t2: 'b' }
   },
   {
     index: ++id,
     name: 'sub-t' + id,
-    startDate: new Date(2023, 4, 1),
-    endDate: new Date(2023, 4, 5),
+    startDate: new Date(2023, 3, 1),
+    endDate: new Date(2023, 3, 5),
     o: { t1: 'a', t2: 'b' },
     children: [
       {
         index: ++id,
         name: 'sub-sub-t' + id,
-        startDate: new Date(2023, 4, 1),
-        endDate: new Date(2023, 4, 5),
+        startDate: new Date(2023, 3, 1),
+        endDate: new Date(2023, 3, 5),
         o: { t1: 'a', t2: 'b' }
       }
     ]
@@ -227,6 +230,17 @@ const onClickLink = (data: any) => {
 
 function onMove(data: any) {
   return true;
+}
+
+const onNoDateError = () => {
+  console.log('no date error');
+};
+
+const ganttRef = ref(null) as any;
+function jumpToDate() {
+  console.log('jumpToDate', ganttRef.value);
+
+  ganttRef.value?.jumpToDate();
 }
 </script>
 
