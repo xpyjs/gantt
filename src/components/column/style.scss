@@ -17,21 +17,26 @@
     text-overflow: ellipsis;
     padding: 0 6px;
 
-    .expand-icon {
-      margin-right: 4px;
-      cursor: pointer;
-      transition: transform 0.2s ease-in-out;
-    }
-
-    .expand-icon__expanded {
-      transform: rotate(90deg);
-    }
-
-    .level-block {
+    .prefix {
       display: inline-block;
+
+      .expand-icon {
+        margin-right: 4px;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+      }
+
+      .expand-icon__expanded {
+        transform: rotate(90deg);
+      }
+
+      .level-block {
+        display: inline-block;
+      }
     }
 
     .cell {
+      width: 100%;
       display: inline-block;
     }
 

@@ -18,7 +18,11 @@
       @click-link="onClickLink"
     >
       <x-gantt-column label="group1">
-        <x-gantt-column prop="index" width="120px"></x-gantt-column>
+        <x-gantt-column
+          prop="index"
+          width="120px"
+          :column-style="{ 'background-color': 'yellow' }"
+        ></x-gantt-column>
         <x-gantt-column label="group2">
           <x-gantt-column
             prop="name"

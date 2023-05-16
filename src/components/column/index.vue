@@ -9,7 +9,9 @@
     }"
   >
     <div :style="{ lineHeight: `${rowHeight}px`, height: `${rowHeight}px` }">
-      <SelectionVue v-if="props.__index === 0" :data="data" :indent="20" />
+      <div v-if="props.__index === 0" ref="selectionRef" class="prefix">
+        <SelectionVue :data="data" :indent="20" />
+      </div>
 
       <div
         :class="[
@@ -20,7 +22,7 @@
           },
           props.columnClass
         ]"
-        :style="props.columnStyle"
+        :style="[props.columnStyle, { width: `calc(100% - ${prefixWidth}px` }]"
       >
         <slot v-if="slots.default" v-bind="toRowData(props.data)" />
 
@@ -37,7 +39,7 @@
 <script lang="ts">
 import Variables from '@/constants/vars';
 import columnProps from './props';
-import { defineComponent, useSlots, computed } from 'vue';
+import { defineComponent, useSlots, computed, ref, onMounted } from 'vue';
 import useStyle from '@/composables/useStyle';
 import useSlotsBox from '@/composables/useSlotsBox';
 import SelectionVue from './selection.vue';
@@ -79,6 +81,12 @@ const realWidth = computed(() => {
   return curWidth;
 });
 // #endregion
+
+const selectionRef = ref(null) as any;
+const prefixWidth = ref(0);
+onMounted(() => {
+  prefixWidth.value = selectionRef.value?.clientWidth ?? 0;
+});
 </script>
 
 <style lang="scss" scoped>
