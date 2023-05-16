@@ -17,7 +17,6 @@ export default () => {
     rootEmit.value?.('row-click', toRaw(row));
   }
 
-  // (e: 'row-dbl-click', data: any): void;
   /**
    * 双击行事件
    * @param row 该行的原始数据
@@ -26,13 +25,13 @@ export default () => {
     rootEmit.value?.('row-dbl-click', toRaw(row));
   }
 
-  // (e: 'row-checked', state: boolean, data: any): void;
   /**
    * 选择行事件 checkbox
+   * @param state 选择状态
    * @param row 该行的原始数据
    */
-  function EmitRowChecked(row: any) {
-    rootEmit.value?.('row-checked', toRaw(row));
+  function EmitRowChecked(state: boolean, row: any) {
+    rootEmit.value?.('row-checked', state, toRaw(row));
   }
 
   /**

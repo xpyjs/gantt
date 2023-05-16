@@ -12,6 +12,7 @@
       :show-weekend="true"
       @row-click="onClickRow"
       @row-dbl-click="onDblClickRow"
+      @row-checked="onCheckedRow"
       @move-slider="onMoveSlider"
       @add-link="onAddLink"
       @click-link="onClickLink"
@@ -193,6 +194,10 @@ const onClickRow = (data: any) => {
 
 const onDblClickRow = (data: any) => {
   console.log('dblclick row', data);
+};
+
+const onCheckedRow = (state: boolean, data: any) => {
+  console.log('checked row', state, data);
 };
 
 const onMoveSlider = (data: any) => {

@@ -23,16 +23,14 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref } from 'vue';
+import { PropType, ref, watch } from 'vue';
 import useStyle from '@/composables/useStyle';
 import useData from '@/composables/useData';
 import RowItem from '@/models/data/row';
 import Icon from '../common/Icon.vue';
+import useEvent from '@/composables/useEvent';
 
-const { rowHeight, $styleBox } = useStyle();
-const checked = ref(false);
-
-defineProps({
+const props = defineProps({
   data: {
     type: Object as PropType<RowItem>,
     default: () => ({})
@@ -42,6 +40,16 @@ defineProps({
     default: 20
   }
 });
+
+const { rowHeight, $styleBox } = useStyle();
+const checked = ref(false);
+const { EmitRowChecked } = useEvent();
+watch(
+  () => checked.value,
+  val => {
+    EmitRowChecked(val, props.data);
+  }
+);
 
 const { flattenData } = useData();
 </script>
