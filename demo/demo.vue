@@ -70,6 +70,7 @@
         resize-left
         resize-right
         linked-resize
+        progress
       >
         <!-- <template #content="scope">
           <div
@@ -157,6 +158,7 @@ ganttData[0].children = [
     name: 'sub-t' + id,
     startDate: new Date(2023, 3, 1),
     endDate: new Date(2023, 3, 5),
+    progress: 0.8,
     o: { t1: 'a', t2: 'b' }
   },
   {
@@ -164,6 +166,7 @@ ganttData[0].children = [
     name: 'sub-t' + id,
     startDate: new Date(2023, 3, 1),
     endDate: new Date(2023, 3, 5),
+    progress: 0.5,
     o: { t1: 'a', t2: 'b' },
     children: [
       {
@@ -171,6 +174,7 @@ ganttData[0].children = [
         name: 'sub-sub-t' + id,
         startDate: new Date(2023, 3, 1),
         endDate: new Date(2023, 3, 5),
+        progress: 0.3333333333,
         o: { t1: 'a', t2: 'b' }
       }
     ]

@@ -6,7 +6,6 @@
       left: `${sliderLeft}px`,
       width: `${sliderWidth}px`,
       maxHeight: `${$styleBox.rowHeight}px`,
-      backgroundColor: props?.bgColor,
       height: height,
       top:
         height === '100%' ||
@@ -24,7 +23,11 @@
         name="content"
         v-bind="toRowData(props.data)"
       />
-      <div v-else class="xg-slider-content">
+      <div
+        v-else
+        class="xg-slider-content"
+        :style="{ backgroundColor: bgColor }"
+      >
         <slot v-if="slots.default" v-bind="toRowData(props.data)" />
 
         <div
@@ -38,6 +41,15 @@
               : originData
           }}
         </div>
+
+        <!-- progress -->
+        <div
+          v-if="props.progress"
+          class="xg-slider-progress"
+          :style="{ width: `${progressValue}%`, backgroundColor: bgColor }"
+        >
+          {{ progressValue }}%
+        </div>
       </div>
 
       <!-- 左滑块 -->
@@ -48,7 +60,11 @@
         @pointerdown.stop="onResizeLeftDown"
       >
         <slot v-if="slots.left" name="left" v-bind="toRowData(props.data)" />
-        <div v-else class="resize-chunk" />
+        <div
+          v-else
+          class="resize-chunk"
+          :style="{ backgroundColor: bgColor }"
+        />
       </div>
 
       <!-- 右滑块 -->
@@ -59,7 +75,11 @@
         @pointerdown.stop="onResizeRightDown"
       >
         <slot v-if="slots.right" name="right" v-bind="toRowData(props.data)" />
-        <div v-else class="resize-chunk" />
+        <div
+          v-else
+          class="resize-chunk"
+          :style="{ backgroundColor: bgColor }"
+        />
       </div>
     </div>
 
@@ -74,6 +94,7 @@
           'xg-slider-anchor__show': $param.hoverItem?.uuid === props.data?.uuid
         }
       ]"
+      :style="{ borderColor: bgColor }"
       @pointerdown="onOutAnchorDown"
     ></div>
   </div>
@@ -90,7 +111,7 @@ import useDrag from '@/composables/useDrag';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
 import { formatDate } from '@/utils/date';
-import { flow, isBoolean, isFunction } from 'lodash';
+import { flow, isBoolean, isFunction, isNumber } from 'lodash';
 import useEvent from '@/composables/useEvent';
 import { MoveSliderInternalData, RowData } from '@/typings/data';
 import useLinks from '@/composables/useLinks';
@@ -117,6 +138,10 @@ const height = computed(() => {
   }
 
   return props.height;
+});
+
+const bgColor = computed(() => {
+  return props?.bgColor || '#eca710';
 });
 
 const { toRowData, getProp } = useData();
@@ -312,6 +337,24 @@ function onPointerUp() {
   }
 }
 // #endregion
+
+// #region progress
+const progressValue = computed(() => {
+  let v = props.data?.progress ?? 0;
+  if (v > 1) v = 1;
+  else if (v < 0) v = 0;
+
+  // 显示方式，默认整数
+  if (isNumber(props.progressDecimal)) {
+    let fixed = Math.floor(props.progressDecimal);
+    if (fixed < 0) fixed = 0;
+    else if (fixed > 10) fixed = 10;
+    return (v * 100).toFixed(fixed);
+  }
+
+  return props.progressDecimal ? (v * 100).toFixed(2) : Math.floor(v * 100);
+});
+// #endregion
 </script>
 
 <style lang="scss" scoped>
@@ -327,7 +370,6 @@ function onPointerUp() {
     height: 100%;
 
     .xg-slider-content {
-      background-color: goldenrod;
       border-radius: 4px;
       height: 100%;
       padding: 0 12px;
@@ -339,6 +381,18 @@ function onPointerUp() {
       }
     }
 
+    .xg-slider-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      opacity: 0.5;
+      filter: grayscale(0.8);
+      transition: width 0.2s;
+      text-align: right;
+      font-size: 10px;
+    }
+
     .xg-slider-resize {
       height: 100%;
       position: absolute;
@@ -347,15 +401,10 @@ function onPointerUp() {
       cursor: ew-resize;
 
       .resize-chunk {
-        background-color: #b18424;
         width: 12px;
         height: 100%;
         opacity: 0;
         transition: filter 0.2s;
-
-        &:hover {
-          filter: grayscale(0.8);
-        }
       }
     }
 
@@ -383,9 +432,17 @@ function onPointerUp() {
   &:hover {
     filter: brightness(1.2);
 
+    .xg-slider-progress {
+      filter: grayscale(0.8) brightness(1.2);
+    }
+
     .xg-slider-resize {
       .resize-chunk {
         opacity: 1;
+
+        &:hover {
+          filter: brightness(0.8) sepia(1);
+        }
       }
     }
   }
@@ -400,9 +457,9 @@ function onPointerUp() {
   height: 4px;
   border-radius: 50%;
   background-color: #fff;
-  border: 2px solid goldenrod;
+  border: 2px solid black;
   position: absolute;
-  top: calc(50% - 3px);
+  top: calc(50% - 4px);
   cursor: pointer;
   opacity: 0;
   transition: transform 0.2s, opacity 0.2s;
@@ -415,10 +472,6 @@ function onPointerUp() {
 .xg-slider-anchor__show {
   opacity: 1;
 }
-
-// .in-anchor {
-//   left: -12px;
-// }
 
 .out-anchor {
   right: -12px;

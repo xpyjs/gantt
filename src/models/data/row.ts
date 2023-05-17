@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-05-15 00:46:31
+ * @LastEditTime: 2023-05-17 11:14:55
  * @Description: 一条数据类
  */
 
@@ -118,6 +118,27 @@ export default class RowItem {
    */
   get id() {
     return this.__data[this.options.dataId];
+  }
+
+  /**
+   * 进度
+   */
+  get progress(): number | undefined {
+    if (this.children.length > 0) {
+      let progress = 0;
+      for (const child of this.children) {
+        progress += child.progress ?? 0;
+      }
+      return progress / this.children.length;
+    }
+
+    return this.__data.progress ?? 0;
+  }
+
+  setProgress(v: number) {
+    if (v < 0) this.__data.progress = 0;
+    else if (v > 1) this.__data.progress = 1;
+    else this.__data.progress = v;
   }
 
   /**
