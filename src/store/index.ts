@@ -57,6 +57,12 @@ export const initStore = (emit: any) => {
     endRow: null
   }) as LinkingItem;
   provide('linking', linking);
+
+  const moveLineLeft = ref(0);
+  provide('moveLineLeft', moveLineLeft);
+
+  const moveLineMousedown = ref(false);
+  provide('moveLineMousedown', moveLineMousedown);
 };
 
 export const useStore = () => {
@@ -124,7 +130,17 @@ export const useStore = () => {
     /**
      * 鼠标创建的连接中的连线数据
      */
-    linking: inject('linking') as LinkingItem
+    linking: inject('linking') as LinkingItem,
+
+    /**
+     * 移动线的left值
+     */
+    moveLineLeft: inject('moveLineLeft') as Ref<number>,
+
+    /**
+     * 移动线的鼠标按下状态
+     */
+    moveLineMousedown: inject('moveLineMousedown') as Ref<boolean>
   };
 };
 

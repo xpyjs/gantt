@@ -219,11 +219,20 @@ defineExpose(exports);
   position: relative;
   background-color: #e5e5e5;
   transition: background-color 0.1s;
+  cursor: col-resize;
 
   &:hover {
     background-color: #d5d5d5;
     box-shadow: 0 0 10px #d5d5d5;
-    cursor: col-resize;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 10px;
   }
 }
 

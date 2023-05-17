@@ -6,7 +6,7 @@ export default () => {
   const { $param } = useParam();
   const { tableHeaderRef, ganttHeaderRef, ganttBodyRef } = useStore();
 
-  function getMaxHeader() {
+  function getMaxHeaderHeight() {
     return Math.max(
       tableHeaderRef.value?.clientHeight ?? 0,
       ganttHeaderRef.value?.clientHeight ?? 0,
@@ -17,14 +17,14 @@ export default () => {
   function updateHeaderHeight() {
     if (!$param.headerHeight) return;
 
-    $param.headerHeight = getMaxHeader();
+    $param.headerHeight = getMaxHeaderHeight();
   }
 
   return {
     tableHeaderRef,
     ganttHeaderRef,
     ganttBodyRef,
-    getMaxHeader,
+    getMaxHeaderHeight,
     updateHeaderHeight
   };
 };

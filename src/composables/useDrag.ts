@@ -1,11 +1,9 @@
+import useStore from '@/store';
 import { type Position, useDraggable } from '@vueuse/core';
 import { type Ref, ref, computed, onMounted, nextTick } from 'vue';
 import useElement from './useElement';
 import useParam from './useParam';
 import useRoot from './useRoot';
-
-const lineLeft = ref(0);
-const mousedown = ref(false);
 
 interface DragOptions {
   onStart?: (pos: Position, e: PointerEvent) => void;
@@ -18,6 +16,8 @@ interface DragOptions {
 }
 
 export default () => {
+  const { moveLineLeft, moveLineMousedown } = useStore();
+
   function onDrag(el: Ref<El>, options: DragOptions = {}) {
     const left = ref(0);
     const delta = ref(0);
@@ -28,7 +28,7 @@ export default () => {
       onStart: (pos, e) => {
         if (options.disabled?.()) return;
 
-        mousedown.value = true;
+        moveLineMousedown.value = true;
         isMove.value = false;
 
         if (options.reset) {
@@ -57,7 +57,7 @@ export default () => {
       onEnd: (pos, e) => {
         if (options.disabled?.()) return;
 
-        mousedown.value = false;
+        moveLineMousedown.value = false;
         if (isMove.value) void options?.onEnd?.(left.value, pos, e);
 
         options?.onFinally?.();
@@ -78,21 +78,22 @@ export default () => {
     onMounted(() => {
       const rootRect = rootRef.value?.getBoundingClientRect();
 
-      const { getMaxHeader } = useElement();
+      const { getMaxHeaderHeight } = useElement();
 
       (el.value as HTMLElement)?.addEventListener('pointerdown', e => {
-        lineLeft.value = e.clientX - (rootRect?.left ?? 0);
+        moveLineLeft.value = e.clientX - (rootRect?.left ?? 0);
         $param.showMoveLine = true;
       });
 
       onDrag(el, {
         reset: true,
+        target: rootRef.value,
 
         onMove: (x, pos, e) => {
           const clientX = e.clientX - (rootRect?.left ?? 0);
           if (options?.preMove && !options?.preMove(x, clientX)) return;
 
-          lineLeft.value = clientX;
+          moveLineLeft.value = clientX;
         },
 
         onEnd: async x => {
@@ -100,7 +101,7 @@ export default () => {
 
           await nextTick();
 
-          $param.headerHeight = getMaxHeader();
+          $param.headerHeight = getMaxHeaderHeight();
         },
 
         onFinally: () => {
@@ -115,8 +116,8 @@ export default () => {
   return {
     onDrag,
     showLine,
-    lineLeft,
+    lineLeft: moveLineLeft,
     onResizeTableColumn,
-    mousedown
+    mousedown: moveLineMousedown
   };
 };
