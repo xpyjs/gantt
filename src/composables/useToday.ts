@@ -6,19 +6,19 @@ import useStyle from './useStyle';
 
 export default () => {
   const { ganttHeader } = useGanttHeader();
-  const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
+  const { ganttColumnWidth, currentMillisecond, headerShowUnit } =
+    useGanttWidth();
   const { $styleBox } = useStyle();
 
   const generateToday = computed(() => {
     const today = new XDate();
-    today.startOf(ganttHeader.unit);
+    today.startOf(headerShowUnit.value);
     return today;
   });
 
   const todayLeft = computed(() => {
     const start = ganttHeader.start?.clone();
-    start?.startOf(ganttHeader.unit);
-
+    start?.startOf(headerShowUnit.value);
     return (
       (generateToday.value.intervalTo(start) / currentMillisecond.value) *
       ganttColumnWidth.value

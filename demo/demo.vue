@@ -156,24 +156,24 @@ ganttData[0].children = [
   {
     index: ++id,
     name: 'sub-t' + id,
-    startDate: new Date(2023, 3, 1),
-    endDate: new Date(2023, 3, 5),
+    startDate: new Date(2023, 3, 5),
+    endDate: new Date(2023, 3, 10),
     progress: 0.8,
     o: { t1: 'a', t2: 'b' }
   },
   {
     index: ++id,
     name: 'sub-t' + id,
-    startDate: new Date(2023, 3, 1),
-    endDate: new Date(2023, 3, 5),
+    startDate: new Date(2023, 3, 6),
+    endDate: new Date(2023, 3, 10),
     progress: 0.5,
     o: { t1: 'a', t2: 'b' },
     children: [
       {
         index: ++id,
         name: 'sub-sub-t' + id,
-        startDate: new Date(2023, 3, 1),
-        endDate: new Date(2023, 3, 5),
+        startDate: new Date(2023, 3, 5),
+        endDate: new Date(2023, 3, 10),
         progress: 0.3333333333,
         o: { t1: 'a', t2: 'b' }
       }
@@ -224,7 +224,7 @@ function onChangeBorderColor() {
 
 const unit = ref('day');
 const changeUnit = () => {
-  const u = ['week', 'day', 'hour'];
+  const u = ['month', 'week', 'day', 'hour'];
   unit.value = u[(u.indexOf(unit.value) + 1) % u.length];
   console.log('unit', unit.value);
 };

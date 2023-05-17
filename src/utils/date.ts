@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import IsoWeek from 'dayjs/plugin/isoWeek';
+import Variables from '@/constants/vars';
 
 /** ********************************** */
 /** *** 下面方法全部使用 dayjs 实现 **** */
@@ -77,4 +78,12 @@ export function formatDate(
     fmt = fmt.replace(RegExp.$1, WEEK[lang][date.getDay()]);
   }
   return fmt;
+}
+
+export function getMillisecondBy(unit: HeaderDateUnit, date?: Date | number) {
+  if (unit === 'month') {
+    return dayjs(date).daysInMonth() * Variables.time.millisecondOf.day;
+  }
+
+  return Variables.time.millisecondOf[unit];
 }

@@ -1,8 +1,7 @@
-declare type HeaderDateUnit = 'week' | 'day' | 'hour';
+declare type HeaderDateUnit = 'month' | 'week' | 'day' | 'hour';
 
 declare type DateUnit =
   | 'year'
-  | 'month'
   | HeaderDateUnit
   | 'minute'
   | 'millisecond'

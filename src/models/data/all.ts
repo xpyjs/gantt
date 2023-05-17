@@ -1,5 +1,5 @@
 import { isArray } from 'lodash';
-import { XDate } from '../param/date';
+import { type XDate } from '../param/date';
 import RowItem from './row';
 
 export default class AllData {
@@ -26,12 +26,12 @@ export default class AllData {
   /**
    * 整体最开始的日期
    */
-  start: XDate = new XDate();
+  start?: XDate;
 
   /**
    * 整体最末尾的日期
    */
-  end: XDate = new XDate();
+  end?: XDate;
 
   /**
    * 整体数据结构的层级数量

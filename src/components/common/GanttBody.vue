@@ -13,7 +13,6 @@
 
     <!-- 连线 -->
     <svg class="xg-gantt-body-line-wrap" :style="{ width: `${ganttWidth}px` }">
-      <!-- <path stroke="red" fill="transparent" d="M 200 2 H 400 V 102"></path> -->
       <LinkPath v-for="link in $links.links" :key="link.uuid" :link="link" />
 
       <Linking />
@@ -25,19 +24,17 @@
     </template>
 
     <!-- 周末 -->
-    <template v-if="$styleBox.unit === 'day'">
-      <template v-for="(date, i) in ganttHeader.dates">
-        <div
-          v-if="$styleBox.showWeekend && date.isWeekend()"
-          :key="i"
-          class="xg-gantt-body-date-line weekend"
-          :style="{
-            width: `${ganttColumnWidth}px`,
-            left: `${ganttColumnWidth * i}px`,
-            backgroundColor: '#ccc'
-          }"
-        ></div>
-      </template>
+    <template v-for="(date, i) in ganttHeader.datesByUnit">
+      <div
+        v-if="$styleBox.showWeekend && date.isWeekend()"
+        :key="i"
+        class="xg-gantt-body-date-line weekend"
+        :style="{
+          width: `${ganttColumnWidth}px`,
+          left: `${ganttColumnWidth * i}px`,
+          backgroundColor: '#ddd'
+        }"
+      ></div>
     </template>
 
     <!-- 今天 -->

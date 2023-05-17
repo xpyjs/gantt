@@ -2,6 +2,8 @@ import { XDate } from './date';
 import { isArray } from 'lodash';
 import { type VNode } from 'vue';
 import Variables from '@/constants/vars';
+import { getMillisecondBy } from '@/utils/date';
+import { uuid } from '@/utils/common';
 
 class Column {
   children?: Column[];
@@ -46,6 +48,7 @@ class GanttColumn extends Column {
   declare children?: GanttColumn[];
   date: XDate;
   label: string;
+  uuid: string = uuid();
 
   constructor(date: XDate, unit: DateUnit) {
     super();
@@ -195,9 +198,14 @@ class GanttHeader extends Header {
   headers: GanttColumn[][] = [];
 
   /**
-   * 整体的日期列表
+   * 完整的表头日期列表
    */
   dates: XDate[] = [];
+
+  /**
+   * 起止日期间，根据单位生成的全量日期
+   */
+  datesByUnit: XDate[] = [];
 
   /**
    * 甘特的起始时间（数据起始时间请使用 data.start）
@@ -220,10 +228,29 @@ class GanttHeader extends Header {
     end?: XDate,
     unit: HeaderDateUnit = 'day'
   ) {
+    let step = -Variables.time.millisecondOf.day;
+    if (unit === 'hour') {
+      step = -Variables.time.millisecondOf.hour * 5;
+    }
+
+    const _start = start?.getOffset(step);
+    _start?.startOf(unit);
+    const _end = end;
+
+    // 避免重复渲染
+    if (
+      this.unit === unit &&
+      _start &&
+      this.start?.isSame(_start, unit) &&
+      _end &&
+      this.end?.isSame(_end, unit) &&
+      this.minLength === minLen
+    )
+      return;
+
     this.unit = unit;
-    this.start = start?.getOffset(-Variables.time.millisecondOf[this.unit]);
-    this.start?.startOf(this.unit);
-    this.end = end;
+    this.start = _start;
+    this.end = _end;
     this.minLength = minLen;
 
     this.generate();
@@ -240,15 +267,15 @@ class GanttHeader extends Header {
 
     // TODO 这里可以优化一下，直接一次循环就可以组成 headers。因为是固定格式
     let s: number;
-    const step = Variables.time.millisecondOf[this.unit];
-    for (s = start; s <= end; s += step) {
+    for (s = start; s <= end; ) {
       this.dates.push(new XDate(s));
+      s += getMillisecondBy(this.unit, s);
     }
 
     // 保证要占满所有宽度
     while (this.dates.length < this.minLength) {
       this.dates.push(new XDate(s));
-      s += step;
+      s += getMillisecondBy(this.unit, s);
     }
 
     let last: number;
@@ -276,6 +303,9 @@ class GanttHeader extends Header {
 
     this.headers = this.convertToRows(columns, this.getAllColumns(columns));
     this.end = this.dates[this.dates.length - 1];
+
+    // 最后根据单位生成全量日期
+    this.setDatesByUnit();
   }
 
   /**
@@ -292,6 +322,22 @@ class GanttHeader extends Header {
       }
     });
     return result;
+  }
+
+  /**
+   * 生成全量日期列表
+   */
+  setDatesByUnit() {
+    this.datesByUnit = [];
+
+    const start = this.start!.date.getTime();
+    const end = this.end!.date.getTime();
+
+    let s: number;
+    for (s = start; s <= end; ) {
+      this.datesByUnit.push(new XDate(s));
+      s += getMillisecondBy(this.unit === 'hour' ? 'hour' : 'day', s);
+    }
   }
 }
 

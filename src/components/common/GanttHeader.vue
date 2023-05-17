@@ -8,10 +8,16 @@
     border="0"
   >
     <colgroup>
-      <template v-for="i in dateList[1].length" :key="i">
-        <col :width="`${ganttColumnWidth}px`" />
+      <template v-for="(c, i) in dateList[1]" :key="i">
+        <col
+          :width="`${getGanttUnitColumnWidth(
+            c.date.date,
+            i === 0 ? 'after' : undefined
+          )}px`"
+        />
       </template>
     </colgroup>
+
     <thead>
       <tr v-for="(r, trIndex) in dateList" :key="trIndex">
         <th
@@ -54,7 +60,7 @@ import useGanttHeader from '@/composables/useGanttHeader';
 const { $param } = useParam();
 const { $styleBox } = useStyle();
 const { dateList } = useData();
-const { ganttColumnWidth } = useGanttWidth();
+const { getGanttUnitColumnWidth } = useGanttWidth();
 const { ganttHeaderRef, updateHeaderHeight } = useElement();
 const { ganttHeader } = useGanttHeader();
 onMounted(updateHeaderHeight);

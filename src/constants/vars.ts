@@ -19,19 +19,22 @@ export const Variables = {
     minTableColumnWidth: 40,
     ganttColumnWidth: {
       small: {
-        hour: 10,
+        hour: 15,
         day: 15,
-        week: 50
+        week: 5,
+        month: 5
       },
       normal: {
-        hour: 15,
+        hour: 30,
         day: 30,
-        week: 80
+        week: 10,
+        month: 10
       },
       large: {
-        hour: 30,
+        hour: 60,
         day: 60,
-        week: 120
+        week: 20,
+        month: 20
       }
     }
   },
@@ -56,7 +59,8 @@ export const Variables = {
       week: 604800000
     },
     aggregation: {
-      week: 'year',
+      month: 'year',
+      week: 'month',
       day: 'month',
       hour: 'day',
       minute: 'hour'

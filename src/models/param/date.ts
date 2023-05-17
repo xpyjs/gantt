@@ -98,11 +98,17 @@ export class XDate {
    * 通过不同单位获取当前时间的不同精度值
    */
   getBy(unit: DateUnit) {
-    const t = this.date.toLocaleString().split(/\s|\/|:/);
-    t.splice(2, 0, day(this.date).week().toString());
-    t.push(this.date.getMilliseconds().toString());
+    const t = [];
+    t.push(day(this.date).year());
+    t.push(day(this.date).month() + 1);
+    t.push(day(this.date).week());
+    t.push(day(this.date).date());
+    t.push(day(this.date).hour());
+    t.push(day(this.date).minute());
+    t.push(day(this.date).second());
+    t.push(day(this.date).millisecond());
 
-    return parseInt(t[DateEnum[unit]]);
+    return t[DateEnum[unit]];
   }
 
   /**
@@ -129,7 +135,7 @@ export class XDate {
   }
 
   /**
-   * 件日期置为单位的起始位置
+   * 将日期置为单位的起始位置
    */
   startOf(unit: DateUnit) {
     switch (unit) {
