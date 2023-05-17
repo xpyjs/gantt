@@ -45,8 +45,14 @@
         <!-- progress -->
         <div
           v-if="props.progress"
-          class="xg-slider-progress"
-          :style="{ width: `${progressValue}%`, backgroundColor: bgColor }"
+          :class="[
+            'xg-slider-progress',
+            { 'xg-slider-progress__default': !props.progressColor }
+          ]"
+          :style="{
+            width: `${progressValue}%`,
+            backgroundColor: props.progressColor || bgColor
+          }"
         >
           {{ progressValue }}%
         </div>
@@ -386,11 +392,14 @@ const progressValue = computed(() => {
       top: 0;
       left: 0;
       height: 100%;
-      opacity: 0.5;
-      filter: grayscale(0.8);
+      opacity: 0.6;
       transition: width 0.2s;
       text-align: right;
       font-size: 10px;
+    }
+
+    .xg-slider-progress__default {
+      filter: grayscale(1);
     }
 
     .xg-slider-resize {
@@ -432,8 +441,8 @@ const progressValue = computed(() => {
   &:hover {
     filter: brightness(1.2);
 
-    .xg-slider-progress {
-      filter: grayscale(0.8) brightness(1.2);
+    .xg-slider-progress__default {
+      filter: grayscale(1) brightness(1.2);
     }
 
     .xg-slider-resize {

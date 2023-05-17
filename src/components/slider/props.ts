@@ -127,6 +127,13 @@ export default {
     }
   },
 
+  /**
+   * 自定义进度条颜色
+   */
+  progressColor: {
+    type: String
+  },
+
   // ****** 内部参数 ****** //
   data: RowItem
 };
