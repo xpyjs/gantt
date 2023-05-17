@@ -1,8 +1,8 @@
-import { ref } from 'vue';
-
-const rootRef = ref<HTMLElement | null>(null);
+import useStore from '@/store';
 
 export default () => {
+  const { rootRef } = useStore();
+
   return {
     rootRef
   };

@@ -113,8 +113,6 @@
       @row-click="onClickRow2"
       @row-dbl-click="onDblClickRow2"
       @row-checked="onCheckedRow2"
-      @move-slider="onMoveSlider2"
-      @no-date-error="onNoDateError2"
     >
       <x-gantt-column label="group2">
         <x-gantt-column
@@ -338,13 +336,13 @@ const onCheckedRow2 = (state: boolean, data: any) => {
   console.log('checked row', state, data);
 };
 
-const onMoveSlider2 = (data: any) => {
-  console.log('move slider', data);
-};
+// const onMoveSlider2 = (data: any) => {
+//   console.log('move slider', data);
+// };
 
-const onNoDateError2 = (date: Date) => {
-  console.log('no date error', date);
-};
+// const onNoDateError2 = (date: Date) => {
+//   console.log('no date error', date);
+// };
 </script>
 
 <style scoped></style>

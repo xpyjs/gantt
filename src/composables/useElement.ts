@@ -1,13 +1,10 @@
 import Variables from '@/constants/vars';
-import { ref } from 'vue';
+import useStore from '@/store';
 import useParam from './useParam';
-
-const tableHeaderRef = ref<HTMLElement | null>(null);
-const ganttHeaderRef = ref<HTMLElement | null>(null);
-const ganttBodyRef = ref<HTMLElement | null>(null);
 
 export default () => {
   const { $param } = useParam();
+  const { tableHeaderRef, ganttHeaderRef, ganttBodyRef } = useStore();
 
   function getMaxHeader() {
     return Math.max(

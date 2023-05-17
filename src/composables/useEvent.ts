@@ -1,13 +1,10 @@
+import useStore from '@/store';
 import { type MoveSliderData } from '@/typings/data';
 import { type LinkProps } from '@/typings/link';
-import { ref, toRaw } from 'vue';
-
-const rootEmit: any = ref(null);
+import { toRaw } from 'vue';
 
 export default () => {
-  function setRootEmit(emit: any) {
-    rootEmit.value = emit;
-  }
+  const { rootEmit } = useStore();
 
   /**
    * 点击行事件
@@ -68,7 +65,6 @@ export default () => {
   }
 
   return {
-    setRootEmit,
     EmitRowClick,
     EmitRowDblClick,
     EmitRowChecked,

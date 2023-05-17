@@ -1,28 +1,19 @@
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
-import { type LinkingItem } from '@/typings/link';
 import { isBoolean } from 'lodash';
-import { reactive, watch, type Ref } from 'vue';
-
-const linking = reactive({
-  startPos: { x: 0, y: 0 },
-  endPos: { x: 0, y: 0 },
-  isLinking: false,
-  startRow: null as RowItem | null,
-  endRow: null as RowItem | null
-}) as LinkingItem;
+import { watch, type Ref } from 'vue';
 
 export default () => {
-  const store = useStore();
+  const { linking, $links, $data } = useStore();
 
   function initLinks(links: Ref<any[]>) {
-    store.$links.init(store.$data.flatData, links.value);
+    $links.init($data.flatData, links.value);
 
     watch(
-      () => [links, store.$data.flatData],
+      () => [links, $data.flatData],
       () => {
         // 更新数据
-        store.$links.init(store.$data.flatData, links.value);
+        $links.init($data.flatData, links.value);
       },
       { deep: true }
     );
@@ -43,7 +34,7 @@ export default () => {
   }
 
   return {
-    $links: store.$links,
+    $links,
     initLinks,
     linking,
     setLinking

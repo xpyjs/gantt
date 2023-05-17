@@ -6,7 +6,6 @@
 import { defineComponent, ref, useSlots } from 'vue';
 import { initStore } from '@/store';
 import Root from './index.vue';
-import useEvent from '@/composables/useEvent';
 import { MoveSliderData } from '@/typings/data';
 import { LinkProps } from '@/typings/link';
 
@@ -31,11 +30,7 @@ const emit = defineEmits<{
 }>();
 
 // 初始全局数据
-initStore();
-
-// 设置 emit
-const { setRootEmit } = useEvent();
-setRootEmit(emit);
+initStore(emit);
 
 const rootWrapRef = ref(null) as any;
 const setSelected = (args: any) => {

@@ -1,6 +1,6 @@
 import type rootProps from '@/components/root/rootProps';
 import { useStore } from '@/store';
-import { type ExtractPropTypes, computed, unref, watch } from 'vue';
+import { type ExtractPropTypes, computed, unref, watchEffect } from 'vue';
 
 export default () => {
   const store = useStore();
@@ -32,26 +32,7 @@ export default () => {
 
     fn();
 
-    watch(
-      () => [
-        props.border,
-        props.borderColor,
-        props.ganttColumnSize,
-        props.unit,
-        props.rowHeight,
-        props.showCheckbox,
-        props.highlightDate,
-        props.showExpand,
-        props.showToday,
-        props.showWeekend,
-        props.levelColor,
-        props.headerStyle,
-        props.bodyStyle,
-        props.primaryColor
-      ],
-      fn,
-      { deep: true }
-    );
+    watchEffect(fn);
   };
 
   return { rowHeight, bodyHeight, setStyles, $styleBox: store.$styleBox };
