@@ -135,7 +135,7 @@
         ellipsis
       />
 
-      <x-gantt-slider prop="o.t1"> </x-gantt-slider>
+      <x-gantt-slider prop="o.t1" :allow-link="false"> </x-gantt-slider>
     </x-gantt>
   </div>
 </template>

@@ -1,5 +1,6 @@
 import Variables from '@/constants/vars';
 import RowItem from '@/models/data/row';
+import { type RowData } from '@/typings/data';
 import { type PropType } from 'vue';
 
 export default {
@@ -86,6 +87,14 @@ export default {
    */
   linkedResize: {
     type: Boolean
+  },
+
+  /**
+   * 允许创建、修改连线。如果设置为 false，不会影响已有连线的展示
+   */
+  allowLink: {
+    type: Boolean,
+    default: true
   },
 
   /**

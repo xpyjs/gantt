@@ -17,17 +17,6 @@
     @click.stop
     @pointerup="onPointerUp"
   >
-    <!-- <div
-      :class="[
-        'xg-slider-anchor',
-        'in-anchor',
-        {
-          'xg-slider-anchor__show': $param.hoverItem?.uuid === props.data?.uuid
-        }
-      ]"
-      @pointerdown="onInAnchorDown"
-    ></div> -->
-
     <div class="xg-slider-block">
       <!-- 滑块主体 -->
       <slot
@@ -74,7 +63,9 @@
       </div>
     </div>
 
+    <!-- 创建连线的按钮 -->
     <div
+      v-if="props.allowLink"
       ref="outAnchorRef"
       :class="[
         'xg-slider-anchor',
@@ -270,12 +261,6 @@ onDrag(resizeRightRef, {
 });
 // #endregion
 
-// #region inAnchor
-// function onInAnchorDown() {
-//   handleDisableMove();
-// }
-// #endregion
-
 // #region outAnchor
 function onOutAnchorDown(e: PointerEvent) {
   handleDisableMove();
@@ -288,6 +273,7 @@ const outAnchorRef = ref(null) as Ref<HTMLElement | null>;
 const startPos = { x: 0, y: 0 };
 onDrag(outAnchorRef, {
   reset: true,
+  disabled: () => !outAnchorRef.value && !props.allowLink,
 
   onStart: pos => {
     startPos.x = (ganttBodyRef.value?.getBoundingClientRect().x ?? 0) - pos.x;
@@ -316,6 +302,8 @@ onDrag(outAnchorRef, {
 
 const { EmitAddLink } = useEvent();
 function onPointerUp() {
+  if (!props.allowLink) return;
+
   if (linking.startRow) {
     const link = $links.addLink(linking.startRow, props.data!);
     if (link) EmitAddLink(link);
