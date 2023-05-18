@@ -28,6 +28,7 @@
             {
               highlight:
                 trIndex === dateList.length - 1 &&
+                ['day', 'hour'].includes(ganttHeader.unit) &&
                 ($param.hoverItem?.start.isSame(c.date, ganttHeader.unit) ||
                   $param.hoverItem?.end.isSame(c.date, ganttHeader.unit))
             }
