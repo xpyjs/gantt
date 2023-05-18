@@ -1,22 +1,18 @@
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
 import { isBoolean } from 'lodash';
-import { watch, type Ref } from 'vue';
+import { watchEffect } from 'vue';
 
 export default () => {
   const { linking, $links, $data } = useStore();
 
-  function initLinks(links: Ref<any[]>) {
-    $links.init($data.flatData, links.value);
+  function initLinks(links: any[]) {
+    $links.init($data.flatData, links);
 
-    watch(
-      () => [links, $data.flatData],
-      () => {
-        // 更新数据
-        $links.update($data.flatData, links.value);
-      },
-      { deep: true }
-    );
+    watchEffect(() => {
+      // 更新数据
+      $links.update($data.flatData, links);
+    });
   }
 
   function setLinking(params: {

@@ -331,17 +331,18 @@ onDrag(outAnchorRef, {
   }
 });
 
+// 最后抛出添加连线事件
 const { EmitAddLink } = useEvent();
 function onPointerUp() {
   if (!props.allowLink) return;
 
   if (linking.startRow) {
-    const link = $links.addLink(linking.startRow, props.data!);
+    const link = $links.createLink(linking.startRow, props.data!);
     if (link) {
       EmitAddLink(
         link,
         { from: linking.startRow.data, to: props.data!.data },
-        _link => $links.updateLink(_link)
+        _link => $links.addLink(_link, linking.startRow!, props.data!)
       );
     }
 

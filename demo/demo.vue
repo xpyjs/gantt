@@ -184,7 +184,7 @@ ganttData[0].children = [
 ];
 
 let linkId = 1;
-const ganttLinks = [
+const ganttLinks = reactive([
   {
     index: linkId++,
     from: 1,
@@ -208,7 +208,7 @@ const ganttLinks = [
     to: 3,
     color: '#abc'
   }
-];
+]);
 
 const showExpand = ref(true);
 function onExpand() {
@@ -287,12 +287,22 @@ const onAddLink = (
   };
   ganttLinks.push(_link);
 
-  console.log('add link', _link, data);
+  console.log('add link', _link, data, ganttLinks);
   cb(_link);
 };
 
-const onClickLink = (data: any) => {
-  console.log('click link', data);
+const onClickLink = (link: any | null) => {
+  console.log('click link', link);
+
+  if (link) {
+    setTimeout(() => {
+      ganttLinks.splice(
+        ganttLinks.findIndex(l => l.from === link.from && l.to === link.to),
+        1
+      );
+      console.log('remove link', ganttLinks);
+    }, 1000);
+  }
 };
 
 function onMove(data: any) {

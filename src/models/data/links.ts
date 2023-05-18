@@ -63,12 +63,13 @@ export default class AllLinks {
    */
   update(data: RowItem[], links?: LinkProps[]) {
     this.init(data, links ?? this.originLinks);
+    console.log('update links', this.links, this.originLinks);
   }
 
   /**
-   * 添加一条连线
+   * 创建一条连线
    */
-  addLink(from: RowItem, to: RowItem): LinkProps | null {
+  createLink(from: RowItem, to: RowItem): LinkProps | null {
     if (
       from.uuid === to.uuid ||
       this.links.some(
@@ -82,12 +83,24 @@ export default class AllLinks {
       from: from.id,
       to: to.id
     };
-    this.originLinks.push(link);
-    this.links.push(new LinkItem(link, from, to));
-
     return link;
   }
 
+  /**
+   * 添加一条连线
+   */
+  addLink(link: LinkProps, from: RowItem, to: RowItem) {
+    if (!link.from || !link.to) return;
+    if (this.originLinks.some(l => l.from === link.from && l.to === link.to))
+      return;
+
+    this.originLinks.push(link);
+    this.links.push(new LinkItem(link, from, to));
+  }
+
+  /**
+   * 更新一条连线
+   */
   updateLink(link: LinkProps) {
     if (!link.from || !link.to) return;
 

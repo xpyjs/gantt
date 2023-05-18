@@ -139,13 +139,13 @@ const { tableWidth } = useTableWidth();
 // #endregion
 
 // #region 初始化各种数据
-const { data, links } = toRefs(props);
+const { data } = toRefs(props);
 
 const { initData } = useData();
 initData(data, props);
 
 const { initLinks } = useLinks();
-initLinks(links);
+initLinks(props.links);
 // #endregion
 
 // #region 监听 gantt 尺寸变化，表头和宽度需要重新渲染

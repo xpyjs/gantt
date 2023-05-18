@@ -30,7 +30,7 @@ const emit = defineEmits<{
     data: { from: any; to: any },
     cb: (link: LinkProps) => void
   ): void;
-  (e: 'click-link', data: LinkProps): void;
+  (e: 'click-link', link: LinkProps | null): void;
   (e: 'no-date-error', date: Date): void;
 }>();
 

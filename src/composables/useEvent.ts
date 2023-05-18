@@ -64,6 +64,13 @@ export default () => {
   }
 
   /**
+   * 点击连线事件
+   */
+  function EmitClickLink(link: LinkProps | null) {
+    rootEmit.value?.('click-link', link ? toRaw(link) : null);
+  }
+
+  /**
    * 日期不存在当前组件中事件
    */
   function EmitNoDateError(date: Date) {
@@ -76,6 +83,7 @@ export default () => {
     EmitRowChecked,
     EmitMoveSlider,
     EmitAddLink,
+    EmitClickLink,
     EmitNoDateError
   };
 };

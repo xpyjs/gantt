@@ -49,6 +49,7 @@ import useStyle from '@/composables/useStyle';
 import { LinkItem } from '@/models/data/links';
 import { computed, PropType, Ref, ref } from 'vue';
 import { onClickOutside } from '@vueuse/core';
+import useEvent from '@/composables/useEvent';
 
 const props = defineProps({
   link: {
@@ -57,14 +58,20 @@ const props = defineProps({
   }
 });
 
+const { EmitClickLink } = useEvent();
+
 const selected = ref(false);
 function onClick() {
   selected.value = true;
+  EmitClickLink(props.link.originLink);
 }
 
 const svgRef = ref(null) as Ref<SVGGElement | null>;
 onClickOutside(svgRef, () => {
+  if (!selected.value) return;
+
   selected.value = false;
+  EmitClickLink(null);
 });
 
 const { ganttHeader } = useGanttHeader();
