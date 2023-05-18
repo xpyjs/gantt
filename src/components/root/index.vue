@@ -1,8 +1,11 @@
 <template>
   <div
     ref="rootRef"
-    :class="['xg-root', { 'xg-root-dragging': mousedown }]"
-    :style="{ ...$styleBox.getBorder(), ...$styleBox.getBorderColor() }"
+    :class="[
+      'xg-root',
+      { 'xg-root-dragging': mousedown, 'xg-root__dark': isDark }
+    ]"
+    :style="[$styleBox.getBorder(), { 'border-color': $styleBox.borderColor }]"
   >
     <!-- 左侧表格 -->
     <sync-scroll-container
@@ -22,7 +25,13 @@
     </sync-scroll-container>
 
     <!-- 中分线 -->
-    <div ref="midLineRef" class="xg-mid-separate-line" />
+    <div
+      ref="midLineRef"
+      :class="[
+        'xg-mid-separate-line',
+        { 'xg-mid-separate-line__dark': isDark }
+      ]"
+    />
     <!-- 移动示意线 -->
     <div
       v-show="showLine"
@@ -115,7 +124,7 @@ onMounted(() => {
 // #endregion
 
 // #region 处理样式参数
-const { setStyles, $styleBox } = useStyle();
+const { setStyles, $styleBox, isDark } = useStyle();
 setStyles(props);
 // #endregion
 
@@ -200,6 +209,13 @@ defineExpose(exports);
   width: 100%;
   height: 100%;
   border: 1px solid #e5e5e5;
+
+  transition: background-color 0.1s, color 0.1s, border-color 0.1s;
+}
+
+.xg-root__dark {
+  color: #fff;
+  background-color: #303133;
 }
 
 .xg-root-dragging {
@@ -233,6 +249,15 @@ defineExpose(exports);
     top: 0;
     bottom: 0;
     width: 10px;
+  }
+}
+
+.xg-mid-separate-line__dark {
+  background-color: #303133;
+
+  &:hover {
+    background-color: #2c2c2c;
+    box-shadow: 0 0 10px #2c2c2c;
   }
 }
 

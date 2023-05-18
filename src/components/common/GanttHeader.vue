@@ -33,7 +33,7 @@
             }
           ]"
           :style="{
-            ...$styleBox.getBorderColor(),
+            'border-color': $styleBox.borderColor,
             color: $styleBox.headerStyle?.textColor,
             backgroundColor:
               $styleBox.headerStyle?.bgColor || $styleBox.primaryColor
@@ -87,7 +87,6 @@ onMounted(updateHeaderHeight);
     border-bottom: 1px solid #e5e5e5;
     border-right: 1px solid #e5e5e5;
     font-size: 14px;
-    background-color: #eca710;
   }
 
   .highlight {

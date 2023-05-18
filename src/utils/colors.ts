@@ -1,12 +1,5 @@
 const reRGBA = /^rgb(a)?\((\d{1,3}),(\d{1,3}),(\d{1,3}),?([01]?\.?\d*?)?\)$/;
 
-interface Rgba {
-  r: number;
-  g: number;
-  b: number;
-  a?: number;
-}
-
 function hexToRgb(hex: string) {
   if (typeof hex !== 'string') {
     throw new TypeError('Expected a string');

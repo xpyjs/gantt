@@ -5,7 +5,7 @@
     class="xg-table-cell"
     :style="{
       width: `${realWidth}px`,
-      ...$styleBox.getBorderColor()
+      'border-color': $styleBox.borderColor
     }"
   >
     <div :style="{ lineHeight: `${rowHeight}px`, height: `${rowHeight}px` }">

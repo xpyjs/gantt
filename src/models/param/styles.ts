@@ -12,13 +12,13 @@ export default class StyleBox {
     return { border: `${this.__border}px solid` };
   }
 
-  private __borderColor: string = '#e5e5e5';
-  setBorderColor(bc: string) {
-    this.__borderColor = bc;
+  private _borderColor: string = '#e5e5e5';
+  public get borderColor(): string {
+    return this._borderColor;
   }
 
-  getBorderColor(): Style {
-    return { 'border-color': this.__borderColor };
+  public set borderColor(v: string) {
+    this._borderColor = v;
   }
 
   private __ganttColumnSize: GanttColumnSize = 'normal';

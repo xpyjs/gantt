@@ -1,6 +1,7 @@
 import type rootProps from '@/components/root/rootProps';
 import { useStore } from '@/store';
-import { type ExtractPropTypes, computed, unref, watchEffect } from 'vue';
+import { blend } from '@/utils/colors';
+import { type ExtractPropTypes, computed, watchEffect, ref } from 'vue';
 
 export default () => {
   const store = useStore();
@@ -11,23 +12,40 @@ export default () => {
     () => `${rowHeight.value * store.$data.length}px`
   );
 
+  const isDark = ref(false);
+  const darkColor = computed(() => ({
+    r: 0,
+    g: 0,
+    b: 0,
+    a: 50
+  }));
+  const darkWrap = (color: string, darkColor: string | Rgba) => {
+    return blend(darkColor, color);
+  };
+
   const setStyles = (props: ExtractPropTypes<typeof rootProps>) => {
     const fn = () => {
-      store.$styleBox.setBorder(props.border);
-      store.$styleBox.setBorderColor(props.borderColor);
+      isDark.value = props.dark;
 
-      store.$styleBox.ganttColumnSize = unref(props.ganttColumnSize);
-      store.$styleBox.unit = unref(props.unit);
-      store.$styleBox.rowHeight = unref(props.rowHeight);
-      store.$styleBox.showCheckbox = unref(props.showCheckbox);
-      store.$styleBox.highlightDate = unref(props.highlightDate);
-      store.$styleBox.showExpand = unref(props.showExpand);
-      store.$styleBox.showToday = unref(props.showToday);
-      store.$styleBox.showWeekend = unref(props.showWeekend);
-      store.$styleBox.levelColor = unref(props.levelColor);
-      store.$styleBox.headerStyle = unref(props.headerStyle);
-      store.$styleBox.bodyStyle = unref(props.bodyStyle);
-      store.$styleBox.primaryColor = unref(props.primaryColor);
+      const bc = props.borderColor ?? '#e5e5e5';
+      store.$styleBox.borderColor = isDark.value
+        ? darkWrap(bc, darkColor.value)
+        : bc;
+
+      store.$styleBox.setBorder(props.border);
+
+      store.$styleBox.ganttColumnSize = props.ganttColumnSize;
+      store.$styleBox.unit = props.unit;
+      store.$styleBox.rowHeight = props.rowHeight;
+      store.$styleBox.showCheckbox = props.showCheckbox;
+      store.$styleBox.highlightDate = props.highlightDate;
+      store.$styleBox.showExpand = props.showExpand;
+      store.$styleBox.showToday = props.showToday;
+      store.$styleBox.showWeekend = props.showWeekend;
+      store.$styleBox.levelColor = props.levelColor;
+      store.$styleBox.headerStyle = props.headerStyle;
+      store.$styleBox.bodyStyle = props.bodyStyle;
+      store.$styleBox.primaryColor = props.primaryColor;
     };
 
     fn();
@@ -35,5 +53,11 @@ export default () => {
     watchEffect(fn);
   };
 
-  return { rowHeight, bodyHeight, setStyles, $styleBox: store.$styleBox };
+  return {
+    rowHeight,
+    bodyHeight,
+    setStyles,
+    isDark,
+    $styleBox: store.$styleBox
+  };
 };

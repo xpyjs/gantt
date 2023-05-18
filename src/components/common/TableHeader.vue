@@ -43,7 +43,6 @@ onMounted(updateHeaderHeight);
 <style lang="scss" scoped>
 .xg-table-header {
   width: 100%;
-  background-color: #eca710;
   table-layout: fixed;
   border-collapse: separate;
   top: 0;

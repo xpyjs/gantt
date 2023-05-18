@@ -17,8 +17,8 @@
       height: `${rowHeight}px`,
       borderWidth: props.renderStyle ? '1px' : 0,
       backgroundColor: props.renderStyle ? ($styleBox.levelColor[props.data!.level] ?? undefined) : undefined,
-      ...$styleBox.getBorderColor()
-    }"
+      'border-color': $styleBox.borderColor
+      }"
     @mouseenter.capture="onEnter"
     @mouseleave="onLeave"
     @click="onClick"

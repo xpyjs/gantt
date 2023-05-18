@@ -7,7 +7,7 @@
         'cell-resizable': !props.column.isLast
       }
     ]"
-    :style="{ ...$styleBox.getBorderColor() }"
+    :style="{ 'border-color': $styleBox.borderColor }"
     :colspan="props.column.colSpan"
     :rowspan="props.column.rowSpan"
   >

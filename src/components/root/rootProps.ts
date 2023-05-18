@@ -104,8 +104,7 @@ export default {
    * border 颜色
    */
   borderColor: {
-    type: String,
-    default: '#e5e5e5'
+    type: String
   },
 
   /**

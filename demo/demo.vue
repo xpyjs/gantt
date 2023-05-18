@@ -12,6 +12,7 @@
       :show-today="true"
       :show-weekend="true"
       :unit="unit"
+      :dark="isDark"
       @row-click="onClickRow"
       @row-dbl-click="onDblClickRow"
       @row-checked="onCheckedRow"
@@ -104,6 +105,7 @@
     <button @click="changeUnit">切换单位</button>
     <button @click="jumpToDate">跳转到</button>
     <button @click="setSelected">设置选择</button>
+    <button @click="setDark">{{ isDark ? '浅色' : '深色' }}</button>
   </div>
 
   <div style="width: 100%; height: 400px; margin-top: 50px">
@@ -214,6 +216,11 @@ function onExpand() {
 const expandAll = ref(true);
 function onExpandAll() {
   expandAll.value = !expandAll.value;
+}
+
+const isDark = ref(false);
+function setDark() {
+  isDark.value = !isDark.value;
 }
 
 const colors = ['red', 'blue', 'green', 'yellow', 'pink', 'orange'];
