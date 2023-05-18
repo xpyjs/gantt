@@ -1,12 +1,15 @@
 <template>
-  <svg class="xg-icon" aria-hidden="true">
+  <!-- <svg class="xg-icon" aria-hidden="true">
     <use :xlink:href="icon"></use>
-  </svg>
+  </svg> -->
+
+  <i class="iconfont xg-icon" :class="icon"></i>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import '@/assets/iconfont/iconfont.js';
+// import '@/assets/iconfont/iconfont.js';
+import '@/assets/iconfont/iconfont.css';
 
 const props = defineProps({
   name: {
@@ -15,15 +18,20 @@ const props = defineProps({
   }
 });
 
-const icon = computed(() => `#icon-${props.name}`);
+const icon = computed(() => `icon-${props.name}`);
 </script>
 
 <style scoped lang="scss">
+// .xg-icon {
+//   width: 1em;
+//   height: 1em;
+//   vertical-align: -0.15em;
+//   fill: currentColor;
+//   overflow: hidden;
+// }
+
 .xg-icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
+  color: #999;
+  display: inline-block;
 }
 </style>
