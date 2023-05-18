@@ -234,7 +234,7 @@ defineExpose(exports);
   display: inline-block;
   position: relative;
   background-color: #e5e5e5;
-  transition: background-color 0.1s;
+  transition: background-color 0.1s, box-shadow 0.1s;
   cursor: col-resize;
 
   &:hover {
@@ -253,11 +253,11 @@ defineExpose(exports);
 }
 
 .xg-mid-separate-line__dark {
-  background-color: #303133;
+  background-color: #6e7074;
 
   &:hover {
-    background-color: #2c2c2c;
-    box-shadow: 0 0 10px #2c2c2c;
+    background-color: #87898d;
+    box-shadow: 0 0 10px #87898d;
   }
 }
 

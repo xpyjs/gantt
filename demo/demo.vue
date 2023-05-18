@@ -223,7 +223,14 @@ function setDark() {
   isDark.value = !isDark.value;
 }
 
-const colors = ['red', 'blue', 'green', 'yellow', 'pink', 'orange'];
+const colors = [
+  '#eca710',
+  '#e31010',
+  '#2196F3',
+  '#ff0000',
+  '#4CAF50',
+  '#FFC107'
+];
 const borderColor = ref('');
 function onChangeBorderColor() {
   borderColor.value = colors[Math.floor(Math.random() * colors.length)];
