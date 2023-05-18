@@ -13,7 +13,7 @@ export default () => {
       () => [links, $data.flatData],
       () => {
         // 更新数据
-        $links.init($data.flatData, links.value);
+        $links.update($data.flatData, links.value);
       },
       { deep: true }
     );

@@ -337,7 +337,13 @@ function onPointerUp() {
 
   if (linking.startRow) {
     const link = $links.addLink(linking.startRow, props.data!);
-    if (link) EmitAddLink(link);
+    if (link) {
+      EmitAddLink(
+        link,
+        { from: linking.startRow.data, to: props.data!.data },
+        _link => $links.updateLink(_link)
+      );
+    }
 
     setLinking({ startRow: null, endRow: null });
   }

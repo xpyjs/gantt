@@ -183,26 +183,27 @@ ganttData[0].children = [
   }
 ];
 
+let linkId = 1;
 const ganttLinks = [
   {
-    index: 1,
+    index: linkId++,
     from: 1,
     to: 2,
     color: 'green'
   },
   {
-    index: 2,
+    index: linkId++,
     from: 2,
     to: 5
   },
   {
-    index: 3,
+    index: linkId++,
     from: 4,
     to: 2,
     color: 'red'
   },
   {
-    index: 4,
+    index: linkId++,
     from: 4,
     to: 3,
     color: '#abc'
@@ -273,8 +274,21 @@ const onMoveSlider = (data: any) => {
   console.log('move slider', data);
 };
 
-const onAddLink = (data: any) => {
-  console.log('add link', data);
+const onAddLink = (
+  link: any,
+  data: { from: any; to: any },
+  cb: (link: any) => void
+) => {
+  const _link = {
+    index: linkId++,
+    from: link.from,
+    to: link.to,
+    color: 'green'
+  };
+  ganttLinks.push(_link);
+
+  console.log('add link', _link, data);
+  cb(_link);
 };
 
 const onClickLink = (data: any) => {

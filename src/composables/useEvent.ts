@@ -49,13 +49,19 @@ export default () => {
 
   /**
    * 添加连线事件
-   * @param data
    */
-  function EmitAddLink(data: LinkProps) {
-    rootEmit.value?.('add-link', data);
+  function EmitAddLink(
+    link: LinkProps,
+    data: { from: any; to: any },
+    cb: (link: LinkProps) => void
+  ) {
+    rootEmit.value?.(
+      'add-link',
+      link,
+      { from: toRaw(data.from), to: toRaw(data.to) },
+      cb
+    );
   }
-
-  // (e: 'move-progress', data: any, old: number): void;
 
   /**
    * 日期不存在当前组件中事件

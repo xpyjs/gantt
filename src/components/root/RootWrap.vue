@@ -24,8 +24,13 @@ const emit = defineEmits<{
   (e: 'row-dbl-click', data: any): void;
   (e: 'row-checked', state: boolean, data: any): void;
   (e: 'move-slider', data: MoveSliderData[]): void;
-  (e: 'move-progress', data: any, old: number): void;
-  (e: 'add-link', data: LinkProps): void;
+  (
+    e: 'add-link',
+    link: LinkProps,
+    data: { from: any; to: any },
+    cb: (link: LinkProps) => void
+  ): void;
+  (e: 'click-link', data: LinkProps): void;
   (e: 'no-date-error', date: Date): void;
 }>();
 

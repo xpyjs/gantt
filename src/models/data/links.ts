@@ -62,21 +62,20 @@ export default class AllLinks {
    * @param links 新数据（原始）。如果不传，则使用原始数据更新当前已有
    */
   update(data: RowItem[], links?: LinkProps[]) {
-    // this.__diff(this.data, data, options);
-    // this.__flatten();
+    this.init(data, links ?? this.originLinks);
   }
 
   /**
    * 添加一条连线
    */
-  addLink(from: RowItem, to: RowItem) {
+  addLink(from: RowItem, to: RowItem): LinkProps | null {
     if (
       from.uuid === to.uuid ||
       this.links.some(
         link => link.fromRow.uuid === from.uuid && link.toRow.uuid === to.uuid
       )
     ) {
-      return;
+      return null;
     }
 
     const link = {
@@ -87,5 +86,33 @@ export default class AllLinks {
     this.links.push(new LinkItem(link, from, to));
 
     return link;
+  }
+
+  updateLink(link: LinkProps) {
+    if (!link.from || !link.to) return;
+
+    const index = this.originLinks.findIndex(
+      l => l.from === link.from && l.to === link.to
+    );
+
+    if (index > -1) {
+      this.originLinks.splice(index, 1, link);
+
+      const linkIndex = this.links.findIndex(
+        l => l.fromRow.id === link.from && l.toRow.id === link.to
+      );
+
+      if (linkIndex > -1) {
+        this.links.splice(
+          linkIndex,
+          1,
+          new LinkItem(
+            link,
+            this.links[linkIndex].fromRow,
+            this.links[linkIndex].toRow
+          )
+        );
+      }
+    }
   }
 }
