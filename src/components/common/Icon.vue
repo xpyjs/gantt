@@ -33,5 +33,6 @@ const icon = computed(() => `icon-${props.name}`);
 .xg-icon {
   color: #999;
   display: inline-block;
+  font-size: 14px;
 }
 </style>

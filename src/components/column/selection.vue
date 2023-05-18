@@ -17,6 +17,7 @@
   <input
     v-if="$styleBox.showCheckbox"
     v-model="checked"
+    class="checkbox"
     type="checkbox"
     @click.stop
   />
