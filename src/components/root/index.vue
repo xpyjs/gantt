@@ -66,15 +66,7 @@ import GanttBody from '@/components/common/GanttBody.vue';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useTableWidth from '@/composables/useTableWidth';
 import { uuid } from '@/utils/common';
-import {
-  DefineComponent,
-  getCurrentInstance,
-  onMounted,
-  onUpdated,
-  Ref,
-  ref,
-  toRefs
-} from 'vue';
+import { DefineComponent, onMounted, onUpdated, Ref, ref, toRefs } from 'vue';
 import rootProps from './rootProps';
 import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
@@ -193,7 +185,7 @@ onResizeTableColumn(midLineRef, {
 });
 // #endregion
 
-console.log('.....root', getCurrentInstance());
+// console.log('.....root', getCurrentInstance());
 
 // #region 暴露方法
 const exports = useExport(ganttRef);
