@@ -63,7 +63,6 @@ export default class AllLinks {
    */
   update(data: RowItem[], links?: LinkProps[]) {
     this.init(data, links ?? this.originLinks);
-    console.log('update links', this.links, this.originLinks);
   }
 
   /**
