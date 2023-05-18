@@ -32,7 +32,8 @@ export class XDate {
    * 获取日期的周数文本
    */
   toWeek() {
-    return `第 ${day(this.date).week()} 周`;
+    // return `第 ${day(this.date).week()} 周`;
+    return `W${day(this.date).week()}`;
   }
 
   /**
