@@ -2,6 +2,72 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/xpyjs/gantt/compare/v1.0.2...v2.0.0) (2023-05-19)
+
+
+### Features
+
+* ✨封装 icon ([39190a6](https://github.com/xpyjs/gantt/commit/39190a6241291a49a7f62c19784a42e2aaa7981c))
+* ✨滑块的左右单独移动 ([ddcc06d](https://github.com/xpyjs/gantt/commit/ddcc06d38a35461f252b06d6e9cac908b7db454b))
+* ✨添加 column 对日期格式化的支持 ([e3b27f8](https://github.com/xpyjs/gantt/commit/e3b27f8a555add54e6603d5797406c26b3c23287))
+* ✨添加 slider 的插槽 ([e598762](https://github.com/xpyjs/gantt/commit/e598762232a346c80ba72616d68380b68b27390d))
+* ✨添加 slider 两端锚点 ([aef0a80](https://github.com/xpyjs/gantt/commit/aef0a806de281cc1b23b3e6d93ac099d0abefdaf))
+* ✨添加初始化数据的 options ([b426863](https://github.com/xpyjs/gantt/commit/b42686368567be8a35dcca5f8e37331c1dd5f219))
+* ✨添加点击连线事件 ([6262cc0](https://github.com/xpyjs/gantt/commit/6262cc0ca9fb23e0f804d25144441ed84b13d427))
+* ✨添加点击连线事件 ([f4e5efa](https://github.com/xpyjs/gantt/commit/f4e5efa62847218b9f92d0c48c934f2b524413df))
+* ✨添加连线的控制开关属性 ([b5c3d98](https://github.com/xpyjs/gantt/commit/b5c3d98e1d84406366a04cfa584e6236231c587d))
+* ✨添加连线功能（基础） ([faebcc7](https://github.com/xpyjs/gantt/commit/faebcc7a77c97938f1c12e42d39af4f8ae4c001d))
+* ✨添加连线以及动态增加连线 ([567eedd](https://github.com/xpyjs/gantt/commit/567eedd0236bb2154ee7a3fd6452d1d23ea4fc66))
+* ✨添加抛出事件 ([08ad555](https://github.com/xpyjs/gantt/commit/08ad5554dd7f511b5afafa309b289a7cc2ce668f))
+* ✨添加所有 root 的 props ([295c129](https://github.com/xpyjs/gantt/commit/295c129a656d23ea1576d38dd08f90fd0c3183d1))
+* ✨添加移动的层级联动 ([fce07ce](https://github.com/xpyjs/gantt/commit/fce07ce55f8917268794d3f3fca78e8811c372ef))
+* ✨添加展示数据的逻辑 ([625e862](https://github.com/xpyjs/gantt/commit/625e8628ec543cda47d49c69055c5a22b17f1a7d))
+* ✨添加周末 ([edddd9d](https://github.com/xpyjs/gantt/commit/edddd9d128ba6e7f38faf5f3aa06cd262fb74576))
+* ✨引入table的列合并功能 ([6f48a20](https://github.com/xpyjs/gantt/commit/6f48a2020dd97af500599269ee5b338aab1c4f07))
+* ✨支持深层获取属性的 prop ([d39a98b](https://github.com/xpyjs/gantt/commit/d39a98bfb3c6a90ef550719ff003264e69bdc8d0))
+* ✨add  jump to date function ([44f0f9c](https://github.com/xpyjs/gantt/commit/44f0f9c1ae65f906516f22d4a3c8f61eb5f79a7d))
+* ✨add a date class and replace all ([be8e167](https://github.com/xpyjs/gantt/commit/be8e167fa2842a9ee1a8a1bf7145c1adfa680a94))
+* ✨add checkbox event ([9e33b68](https://github.com/xpyjs/gantt/commit/9e33b6885a6090fe94b04102b5779b9acfa4867a))
+* ✨add column props ([c5d5b43](https://github.com/xpyjs/gantt/commit/c5d5b43c94fe54d4a58c926428ee286c39a5abf0))
+* ✨add column resize ([6e756df](https://github.com/xpyjs/gantt/commit/6e756df754f2211c1f79810fc8159f0fc4005d79))
+* ✨add dark ([a1ad9ac](https://github.com/xpyjs/gantt/commit/a1ad9ac681bf16473ff0dc464627113d558f1ac4))
+* ✨add date line in column ([9f1a1e9](https://github.com/xpyjs/gantt/commit/9f1a1e97fc07a8659bbf769bb898cb1680be18b9))
+* ✨add dbl click event ([4839744](https://github.com/xpyjs/gantt/commit/48397442fa4642ebd293042a342c19b0d0db4726))
+* ✨add expand ([7ad8c81](https://github.com/xpyjs/gantt/commit/7ad8c8196c421d1a60ffb05a27bc2c26d8541cb6))
+* ✨add gantt header logic ([c926e9d](https://github.com/xpyjs/gantt/commit/c926e9dfcb460e9e8b03057fe7bbdb6aff76b65e))
+* ✨add indent ([33928f6](https://github.com/xpyjs/gantt/commit/33928f6c6cfc812bb3d9236714ae97fe1cb81baf))
+* ✨add mid line resizable ([4cd6dec](https://github.com/xpyjs/gantt/commit/4cd6dec2cba931e0a7e78bd9c956ead5bf468d03))
+* ✨add progress ([c1e45a1](https://github.com/xpyjs/gantt/commit/c1e45a1d4012600274db5463522f3b79531ec1ae))
+* ✨add reactive gantt header by unit and width ([e315b06](https://github.com/xpyjs/gantt/commit/e315b06175eb6c8007f1ebdea3162fd8a4c1c468))
+* ✨add selection ([ba22406](https://github.com/xpyjs/gantt/commit/ba224061b346f75ed2582051e28cae290b06fcd2))
+* ✨add slider move ([36c32c8](https://github.com/xpyjs/gantt/commit/36c32c8d65dcaa2308e9b114c37c956ff10fe14b))
+* ✨add slider's props ([84a13de](https://github.com/xpyjs/gantt/commit/84a13de8c089438ad986b1e67cd7548a26a034d3))
+* ✨complete row ([8eac017](https://github.com/xpyjs/gantt/commit/8eac01758d7a6a2e8092f1514ed6c5a45b0fdf6f))
+* ✨generate gantt header logic ([145c65a](https://github.com/xpyjs/gantt/commit/145c65adcddf9200c9af721e0b9eeb1d8ccf38f5))
+* add style set/get methods ([36d7162](https://github.com/xpyjs/gantt/commit/36d71623985525a6f97d47727fe6a41a8115ff29))
+* change gantt header to table element ([f95d8d7](https://github.com/xpyjs/gantt/commit/f95d8d70afa9fe29bd889e16b9cd889ec4ca0fef))
+
+
+### Bug Fixes
+
+* 🐛表头拖拽后左右高度不一致 ([ddca95c](https://github.com/xpyjs/gantt/commit/ddca95c24da85168774666ef8bd96187dda459aa))
+* 🐛调整第一列可以拖动大小 ([35dd5f4](https://github.com/xpyjs/gantt/commit/35dd5f4994aee881f7fd2a6d57b39a8260d5829d))
+* 🐛解决展开后 column 错乱以及表头出现异常的问题 ([ab6cced](https://github.com/xpyjs/gantt/commit/ab6cced3fdde0f09ff05d6fc01877ca229a898f2))
+* 🐛今天线错位 ([45b15fe](https://github.com/xpyjs/gantt/commit/45b15fefa9eaa99df3b070a5c02f7fba637a9a34))
+* 🐛链式移动时日期问题 ([128ca9f](https://github.com/xpyjs/gantt/commit/128ca9f821d2b6535bb8dd5f3007ff9b30f1159d))
+* 🐛判断日期相等误差 ([8d29741](https://github.com/xpyjs/gantt/commit/8d2974101d9fc96357e1e1197078e718765661c4))
+* 🐛时间比较方法问题 ([dcedfe7](https://github.com/xpyjs/gantt/commit/dcedfe751da9c0f7ffca3d390b380866a84abfa4))
+* 🐛修改gap位置 ([c383283](https://github.com/xpyjs/gantt/commit/c3832831c437ba5db01e1057828f88f07b9abaf1))
+* 🐛修正 slider 位移后的旧日期 ([85d395d](https://github.com/xpyjs/gantt/commit/85d395d22ad616ebf67d566fb5985908ba28b248))
+* 🐛修正表头缺失日期 ([6926dcd](https://github.com/xpyjs/gantt/commit/6926dcdacdc6f6e8cb8c625ade72ee693176bee6))
+* 🐛修正滑块宽度 ([a8fcfc0](https://github.com/xpyjs/gantt/commit/a8fcfc01d70f5dd373ca2676f30eae5d395664b6))
+* 🐛修正重设时间后 slider 位置不准确 ([5ad9253](https://github.com/xpyjs/gantt/commit/5ad92534029ff07ae6f11bf204ba9b58e9aa474c))
+* 🐛border 颜色默认值 ([8e559a5](https://github.com/xpyjs/gantt/commit/8e559a5353ce7357acc333940616fcf4c713d90a))
+* 🐛change 事件名称 ([9238946](https://github.com/xpyjs/gantt/commit/9238946078283dace20dd1577f9fe1b134e1e0e5))
+* 🐛delete column 1 flex ([ee01ac1](https://github.com/xpyjs/gantt/commit/ee01ac1dc78faac0453df3850970ce02443bc91a))
+* 🐛expand can not hide expanded children ([84b37f7](https://github.com/xpyjs/gantt/commit/84b37f793614e17d169da6fd0e460086ba01b893))
+* 🐛merge column error ([01e1749](https://github.com/xpyjs/gantt/commit/01e17499394d8f9d68284b743986f37bd8d99ba2))
+
 ### [1.0.2](https://github.com/xpyjs/gantt/compare/v1.0.1...v1.0.2) (2022-06-29)
 
 ### Features
