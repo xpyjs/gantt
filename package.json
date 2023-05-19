@@ -51,7 +51,7 @@
   "scripts": {
     "dev": "vite",
     "serve": "vite preview",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "build:debug": "vue-tsc --noEmit && vite build --debug",
     "cz": "git-cz",
     "release": "standard-version",

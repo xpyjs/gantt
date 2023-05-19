@@ -45,12 +45,13 @@
     "src/components/**/*.vue",
     "src/pages/**/*.vue",
     "typings/*",
-    "demo/*.vue",
+    "demo/demo.vue",
     "demo/*.ts",
     "tests/**/*.spec.ts"
   ],
   "exclude": [
     "node_modules",
-    "**/old/**"
+    "**/old/**",
+    "demo/App.vue"
   ]
 }

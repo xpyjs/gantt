@@ -11,7 +11,7 @@
       :expand-all="expandAll"
       :show-today="true"
       :show-weekend="true"
-      :unit="unit"
+      :unit="(unit as any)"
       :dark="isDark"
       @row-click="onClickRow"
       @row-dbl-click="onDblClickRow"

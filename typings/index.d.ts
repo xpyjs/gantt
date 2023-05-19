@@ -1,9 +1,10 @@
-import * as XGantt from './x-gantt';
+/* eslint-disable @typescript-eslint/consistent-type-imports */
+import '@vue/runtime-core';
 
-export {
-  XGanttComponent,
-  XGanttColumnComponent,
-  XGanttSliderComponent
-} from './x-gantt';
-
-export default XGantt;
+declare module '@vue/runtime-core' {
+  interface GlobalComponents {
+    XGantt: typeof import('../src/exports/root').default;
+    XGanttColumn: typeof import('../src/exports/column').default;
+    XGanttSlider: typeof import('../src/exports/slider').default;
+  }
+}
