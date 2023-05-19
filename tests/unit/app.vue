@@ -1,182 +1,171 @@
 <template>
-  <div style="height: 400px; padding-bottom: 10px">
-    <XGantt
-      ref="gantt"
-      header-height="48"
-      row-height="30"
-      data-index="index"
-      expand-all
-      :dark="isDark"
+  <div style="top: 20vh; width: 100%; height: 1000px; padding-left: 5vw">
+    <x-gantt
+      ref="ganttRef"
+      data-id="index"
+      :data="data"
+      :links="links"
+      :border-color="borderColor"
       :show-checkbox="showCheckbox"
-      :show-weekend="showWeekend"
-      :show-today="showToday"
       :show-expand="showExpand"
-      :data="dataList"
-      :header-style="headerStyle"
-      :body-style="bodyStyle"
-      :level-color="levelColor"
-      @row-click="rowClick"
-      @row-dbl-click="rowDblClick"
-      @row-checked="rowChecked"
-      @move-slider="moveSlider"
-      @no-date-error="noDateError"
+      :expand-all="expandAll"
+      :show-today="showToday"
+      :show-weekend="showWeekend"
+      :unit="unit"
+      :dark="dark"
+      @row-click="onClickRow"
+      @row-dbl-click="onDblClickRow"
+      @row-checked="onCheckedRow"
+      @move-slider="onMoveSlider"
+      @add-link="onAddLink"
+      @click-link="onClickLink"
+      @no-date-error="onNoDateError"
     >
-      <template>
-        <div>123</div>
-      </template>
+    <x-gantt-column
+      prop="index"
+      width="120px"
+      :column-style="{ 'background-color': 'yellow' }"
+    ></x-gantt-column>
 
-      <div>a</div>
+    <x-gantt-column
+      prop="name"
+    ></x-gantt-column>
 
-      <div>b</div>
-
-      <XGanttSlider
-        flat
-        label="startDate"
-        date-format="MM-dd H:mm:s"
-        empty-data=""
-        :move="handleMove"
-        :resize-left="true"
-        :resize-right="true"
-        :linked-resize="true"
-      >
-        <!-- <template v-slot="data">
-          <div>{{ data.name }}</div>
-        </template> -->
-        <template #content="{ data, level }">
-          <div v-if="level === 1" class="slider-level-one"></div>
-          <!-- <div v-else style="background-color: #123456; height: 5px"></div> -->
-        </template>
-        <!-- <template #left>
-          <div style="background-color: #123456; width: 5px; height: 10px" />
-        </template>
-        <template #right>
-          <div style="background-color: #123456; width: 5px; height: 10px" />
-        </template> -->
-      </XGanttSlider>
-
-      <XGanttColumn label="index" :merge="merge3">
-        <template #default="{ data }">
-          <div style="background-color: #ccc; width: 100%">
-            {{ data.name }}
-          </div>
-        </template>
-      </XGanttColumn>
-
-      <XGanttColumn label="name" width="150" :merge="merge3">
-        <template #default="{ data }">
-          <div>2 - {{ data }}</div>
-        </template>
-      </XGanttColumn>
-
-      <XGanttColumn label="aaa" date-format :merge="merge5">
-        <template #default>
-          <div v-for="i in 100" :key="i">
-            {{ i }}
-          </div>
-        </template>
-      </XGanttColumn>
-
-      <XGanttColumn
-        label="startDate"
-        width="180"
-        center
-        date-format
-        :merge="merge4"
-      />
-
-      <x-gantt-column
-        label="endDate"
-        name="自定义标签"
-        width="200"
-        date-format="q yyyy-MM-dd HH:mm:ss"
-        :merge="merge4"
-      >
-        <template #default="{ data }">
-          <span
-            name="end"
-            :style="{ backgroundColor: `#${555}`, color: '#789' }"
-          >
-            abc - {{ data.endDate }}
-          </span>
-        </template>
+      <x-gantt-column v-slot="scope" label="起始日期">
+        {{ scope.row.startDate.getMonth() + 1 }}-{{
+          scope.row.startDate.getDate()
+        }}
+        {{ scope.row.startDate.getHours() }}:{{
+          scope.row.startDate.getMinutes()
+        }}
       </x-gantt-column>
 
-      <XGanttColumn label="picture12345" :merge="merge5">
-        <template #default="{ data }">
-          👀😃✨✔🐱‍🚀🐱‍👓 {{ data.ttt.b }}
-        </template>
-      </XGanttColumn>
+      <x-gantt-column
+        label="结束日期"
+        prop="endDate"
+        date-format="MM-dd HH:mm:ss"
+        ellipsis
+      />
 
-      <template #settings>
-        <div>
-          <p>标题</p>
-          <input />
-        </div>
-      </template>
-    </XGantt>
+      <x-gantt-slider
+        prop="o.t1"
+        :move="true"
+        resize-left
+        resize-right
+        linked-resize
+        progress
+      >
+        <template #left>
+          <div style="width: 4px; height: 100%; background-color: aqua"></div>
+        </template>
+      </x-gantt-slider>
+    </x-gantt>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { reactive, ref } from 'vue';
-import { dataList } from './data';
-import XGantt from '@/components/root/index.vue';
-import XGanttColumn from '@/components/column/index.vue';
-import XGanttSlider from '@/components/slider/index.vue';
+<script setup lang="ts">
+import XGantt from '../../src/components/root/rootWrap.vue';
+import XGanttColumn from '../../src/components/column/index.vue';
+import XGanttSlider from '../../src/components/slider/index.vue';
 
-const isDark = ref(false);
-const showCheckbox = ref(false);
-const showWeekend = ref(false);
-const showToday = ref(false);
-const showExpand = ref(false);
+const props = defineProps({
+  data: {
+    type: Array,
+    default: () => []
+  },
 
-const headerStyle = reactive({
-  bgColor: '',
-  textColor: ''
+  links: {
+    type: Array,
+    default: () => []
+  },
+
+  borderColor: {
+    type: String,
+    default: '#ccc'
+  },
+
+  showCheckbox: {
+    type: Boolean,
+    default: true
+  },
+
+  showExpand: {
+    type: Boolean,
+    default: true
+  },
+
+  expandAll: {
+    type: Boolean,
+    default: false
+  },
+
+  unit: {
+    type: String,
+    default: 'day'
+  },
+
+  dark: {
+    type: Boolean,
+    default: false
+  },
+
+  showToday: {
+    type: Boolean,
+    default: true
+  },
+
+  showWeekend: {
+    type: Boolean,
+    default: true
+  }
 });
-const bodyStyle = reactive({
-  textColor: '',
-  todayColor: '',
-  weekendColor: ''
-  // hoverColor: "#f00",
-  // selectColor: "#0f0"
-});
-const levelColor = reactive([]);
 
-function rowClick(data) {
-  console.log('click row data:', data);
-}
-function rowDblClick(data) {
-  console.log('double click row data:', data);
-}
+const emit = defineEmits<{
+  (e: 'row-click', data: any): void;
+  (e: 'row-dbl-click', data: any): void;
+  (e: 'row-checked', state: boolean, data: any): void;
+  (e: 'move-slider', data: any[]): void;
+  (
+    e: 'add-link',
+    link: any,
+    data: { from: any; to: any },
+    cb: (link: any) => void
+  ): void;
+  (e: 'click-link', link: any | null): void;
+  (e: 'no-date-error', date: Date): void;
+}>();
 
-function rowChecked(state, data) {
-  console.log('check row:', state, data);
-}
+const onClickRow = (data: any) => {
+  emit('row-click', data);
+};
 
-function moveSlider(newValue, data) {
-  console.log('move slider:', newValue, data);
-}
+const onDblClickRow = (data: any) => {
+  emit('row-dbl-click', data);
+};
 
-function noDateError(date) {
-  console.log(`${date}不在范围内`);
-}
+const onCheckedRow = (state: boolean, data: any) => {
+  emit('row-checked', state, data);
+};
 
-function handleMove({ level }) {
-  return level !== 1;
-}
+const onMoveSlider = (data: any) => {
+  emit('move-slider', data);
+};
 
-function merge3(data) {
-  return data.index % 3 !== 0;
-}
+const onAddLink = (
+  link: any,
+  data: { from: any; to: any },
+  cb: (link: any) => void
+) => {
+  emit('add-link', link, data, cb);
+};
 
-function merge4(data) {
-  return data.index % 4 !== 0;
-}
+const onClickLink = (link: any | null) => {
+  emit('click-link', link);
+};
 
-function merge5(data) {
-  return data.index % 5 !== 0;
-}
+const onNoDateError = (date: Date) => {
+  emit('no-date-error', date);
+};
 </script>
 
 <style scoped></style>

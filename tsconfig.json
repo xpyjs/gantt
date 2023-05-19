@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "allowJs": true,
     "types": [
-      "node"
+      "node",
     ],
     "typeRoots": [
       "./typings",
@@ -36,7 +36,7 @@
       "utils/*": [
         "./src/utils/*"
       ]
-    }
+    },
   },
   "include": [
     "src/**/*.ts",
@@ -47,8 +47,10 @@
     "typings/*",
     "demo/*.vue",
     "demo/*.ts",
+    "tests/**/*.spec.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/old/**"
   ]
 }
