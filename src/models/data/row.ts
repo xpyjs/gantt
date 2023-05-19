@@ -2,13 +2,14 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-05-17 11:14:55
+ * @LastEditTime: 2023-05-19 18:26:45
  * @Description: 一条数据类
  */
 
 import { Variables } from '@/constants/vars';
 import { type MoveSliderInternalData } from '@/typings/data';
 import { addIfNotExist, uuid } from '@/utils/common';
+import { getMillisecondBy } from '@/utils/date';
 import { cloneDeep, isEqual } from 'lodash';
 import { XDate } from '../param/date';
 
@@ -225,11 +226,11 @@ export default class RowItem {
     // 首先判断起始日期不能大于结束日期
     if (
       date.compareTo(
-        this.end.getOffset(-Variables.time.millisecondOf[unit])
+        this.end.getOffset(-getMillisecondBy(unit, this.end.date))
       ) === 'r'
     ) {
       this.__data[this.options.endLabel] = date.getOffset(
-        Variables.time.millisecondOf[unit]
+        getMillisecondBy(unit, date.date)
       ).date;
     }
 
@@ -278,11 +279,11 @@ export default class RowItem {
 
     if (
       date.compareTo(
-        this.start.getOffset(Variables.time.millisecondOf[unit])
+        this.start.getOffset(getMillisecondBy(unit, this.start.date))
       ) === 'l'
     ) {
       this.__data[this.options.startLabel] = date.getOffset(
-        -Variables.time.millisecondOf[unit]
+        -getMillisecondBy(unit, date.date)
       ).date;
     }
 
