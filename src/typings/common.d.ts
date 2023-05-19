@@ -8,3 +8,10 @@ declare interface Rgba {
   b: number;
   a?: number;
 }
+
+declare interface DataOptions {
+  isExpand?: boolean;
+  startLabel?: string;
+  endLabel?: string;
+  dataId?: string;
+}

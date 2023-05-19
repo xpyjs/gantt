@@ -1,13 +1,41 @@
-import type { App, DefineComponent } from 'vue';
+/* eslint-disable @typescript-eslint/ban-types */
+import type {
+  App,
+  ComponentOptionsMixin,
+  ComputedOptions,
+  DefineComponent,
+  EmitsOptions,
+  MethodOptions
+} from 'vue';
 
-export type ComponentConstructor<T> = DefineComponent<T> & {
+export type ComponentConstructor<
+  Prop,
+  M extends MethodOptions = MethodOptions,
+  E extends EmitsOptions = {}
+> = DefineComponent<
+  Prop,
+  {},
+  {},
+  ComputedOptions,
+  M,
+  ComponentOptionsMixin,
+  ComponentOptionsMixin,
+  E
+> & {
   install: (app: App) => void;
 };
 
-export const withInstall = <T = any>(name: string, comp: any) => {
-  (comp as ComponentConstructor<T>).install = app => {
+export const withInstall = <
+  T = {},
+  M extends MethodOptions = MethodOptions,
+  E extends EmitsOptions = {}
+>(
+  name: string,
+  comp: any
+) => {
+  (comp as ComponentConstructor<T, M, E>).install = app => {
     app.component(name, comp);
   };
 
-  return comp as ComponentConstructor<T>;
+  return comp as ComponentConstructor<T, M, E>;
 };

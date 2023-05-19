@@ -1,13 +1,7 @@
 import type { App, Plugin } from 'vue';
-import Column from 'components/column/index.vue';
-import Slider from 'components/slider/index.vue';
-import Root from 'components/root/RootWrap.vue';
-import { Variables } from './constants/vars';
-import { withInstall } from './utils/install';
-
-const XGantt = withInstall(Variables.name.root, Root);
-const XGanttColumn = withInstall(Variables.name.column, Column);
-const XGanttSlider = withInstall(Variables.name.slider, Slider);
+import XGantt from './exports/root';
+import XGanttColumn from './exports/column';
+import XGanttSlider from './exports/slider';
 
 const components: Record<string, Plugin> = {
   XGantt,
