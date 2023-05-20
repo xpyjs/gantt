@@ -13,6 +13,16 @@ A high-performance vue gantt component for vue3.
 
 - vue2 version is [HERE](https://github.com/xpyjs/gantt-vue2)
 
+## About Version
+
+`v1` and `v2` are not compatible.
+
+- props not same
+- slots not same
+- components not same
+
+More details see [document](https://docs.xiaopangying.com/gantt/)
+
 ## Important
 
 This repo is pervious `jz-gantt`. Only vue3 version. If you have used `jz-gantt` before, you should read the following section carefully.

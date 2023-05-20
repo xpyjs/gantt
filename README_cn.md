@@ -2,7 +2,6 @@
 
 ![](./src/assets/logo.png)
 
-
 [![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small) ![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag) ![](https://img.shields.io/npm/v/@xpyjs/gantt.svg) ![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag&include_prereleases&label=lastest)
 ![](https://badgen.net/npm/dt/@xpyjs/gantt) ![](https://img.shields.io/npm/l/@xpyjs/gantt.svg) ![](https://shields.io/github/workflow/status/xpyjs/gantt/%E5%8F%91%E5%B8%83%20Release%20%E5%8C%85) ![](https://shields.io/github/workflow/status/xpyjs/gantt/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3%E5%92%8C%20Demo?label=gh-pages)
 ![](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
@@ -13,6 +12,16 @@
 ![vue 3.x](https://img.shields.io/badge/vue-3.x-43B984) ![animate.css](https://img.shields.io/badge/animate.css-4.x-9E84E2)
 
 - vue2 版本请移步 [这里](https://github.com/xpyjs/gantt-vue2)
+
+## 关于版本
+
+`v1` 和 `v2` 不兼容。
+
+- 参数不同
+- 插槽不同
+- 组件不同
+
+更多细节请参见 [文档](https://docs.xiaopangying.com/gantt/)
 
 ## 十分重要
 
