@@ -12,18 +12,19 @@ export default defineUserConfig({
   head: [
     [
       'link',
-      { rel: 'icon', href: 'https://www.xiaopangying.com/my-logo/jz-gantt.png' }
+      { rel: 'icon', href: 'https://res.xiaopangying.com/logo/jz-gantt.png' }
     ]
   ],
 
   theme: defaultTheme({
-    logo: 'https://www.xiaopangying.com/my-logo/jz-gantt.png',
+    logo: 'https://res.xiaopangying.com/logo/jz-gantt.png',
 
     navbar: [
       {
         text: '更多版本',
         children: [
-          { text: 'vue3', link: '/' },
+          { text: 'vue3-v2', link: '/' },
+          { text: 'vue3-v1', link: '/vue3-v1/' },
           { text: 'vue2', link: '/vue2/' }
         ]
       },
