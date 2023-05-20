@@ -55,6 +55,6 @@ watch(
 const { flattenData } = useData();
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './style.scss';
 </style>

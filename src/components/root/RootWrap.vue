@@ -58,5 +58,3 @@ defineExpose({
   jumpToDate
 });
 </script>
-
-<style scoped lang="scss"></style>

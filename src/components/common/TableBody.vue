@@ -31,7 +31,7 @@ const { inView } = useInView();
 const { $slotsBox } = useSlotsBox();
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .xg-table-body {
   width: 100%;
   position: relative;

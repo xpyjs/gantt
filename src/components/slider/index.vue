@@ -370,7 +370,7 @@ const progressValue = computed(() => {
 // #endregion
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .xg-slider {
   position: absolute;
   transition: filter 0.2s;
@@ -462,34 +462,34 @@ const progressValue = computed(() => {
       }
     }
   }
+
+  .xg-slider-anchor {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid black;
+    position: absolute;
+    top: calc(50% - 4px);
+    cursor: pointer;
+    opacity: 0;
+    transition: transform 0.2s, opacity 0.2s;
+
+    &:hover {
+      transform: scale(1.5);
+    }
+  }
+
+  .xg-slider-anchor__show {
+    opacity: 1;
+  }
+
+  .out-anchor {
+    right: -12px;
+  }
 }
 
 .xg-slider.xg-slider-drag {
   cursor: ew-resize;
-}
-
-.xg-slider-anchor {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: #fff;
-  border: 2px solid black;
-  position: absolute;
-  top: calc(50% - 4px);
-  cursor: pointer;
-  opacity: 0;
-  transition: transform 0.2s, opacity 0.2s;
-
-  &:hover {
-    transform: scale(1.5);
-  }
-}
-
-.xg-slider-anchor__show {
-  opacity: 1;
-}
-
-.out-anchor {
-  right: -12px;
 }
 </style>

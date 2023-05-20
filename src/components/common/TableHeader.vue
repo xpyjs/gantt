@@ -40,7 +40,7 @@ const { tableHeaderRef, updateHeaderHeight } = useElement();
 onMounted(updateHeaderHeight);
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .xg-table-header {
   width: 100%;
   table-layout: fixed;

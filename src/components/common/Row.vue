@@ -75,7 +75,7 @@ function onClick() {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .xg-row {
   width: 100%;
   position: absolute;

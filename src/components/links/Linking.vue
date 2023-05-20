@@ -39,5 +39,3 @@ const path = computed(
     `M ${linking.startPos.x} ${linking.startPos.y} L ${linking.endPos.x} ${linking.endPos.y}`
 );
 </script>
-
-<style scoped lang="scss"></style>

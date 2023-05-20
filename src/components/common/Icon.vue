@@ -21,7 +21,7 @@ const props = defineProps({
 const icon = computed(() => `icon-${props.name}`);
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 // .xg-icon {
 //   width: 1em;
 //   height: 1em;

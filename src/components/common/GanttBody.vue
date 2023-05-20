@@ -73,7 +73,7 @@ const { $links } = useLinks();
 const { ganttBodyRef } = useElement();
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .xg-gantt-body {
   position: relative;
   z-index: 9;

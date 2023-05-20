@@ -67,7 +67,7 @@ const { ganttHeader } = useGanttHeader();
 onMounted(updateHeaderHeight);
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .xg-gantt-header {
   width: 100%;
   table-layout: fixed;

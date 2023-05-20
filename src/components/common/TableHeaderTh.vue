@@ -4,7 +4,7 @@
     :class="[
       'xg-table-header-cell',
       {
-        'cell-resizable': !props.column.isLast
+        'xg-table-header-cell-resizable': !props.column.isLast
       }
     ]"
     :style="{ 'border-color': $styleBox.borderColor }"
@@ -62,7 +62,7 @@ onResizeTableColumn(headerRef, {
 });
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .xg-table-header-cell {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -77,7 +77,7 @@ onResizeTableColumn(headerRef, {
   pointer-events: none;
 }
 
-.cell-resizable {
+.xg-table-header-cell-resizable {
   &::after {
     content: '';
     position: absolute;

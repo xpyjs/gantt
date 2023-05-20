@@ -2,7 +2,7 @@
   <div
     ref="divRef"
     class="xg-scroll-container"
-    :class="{ 'hide-scroll': hideScroll }"
+    :class="{ 'xg-scroll-container__hide-scroll': hideScroll }"
   >
     <slot />
   </div>
@@ -151,7 +151,7 @@ onMounted(() => {
 });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .xg-scroll-container {
   width: 100%;
   height: 100%;
@@ -159,7 +159,7 @@ onMounted(() => {
   position: relative;
 }
 
-.hide-scroll::-webkit-scrollbar {
+.xg-scroll-container__hide-scroll::-webkit-scrollbar {
   width: 0;
   height: 0;
 }

@@ -117,7 +117,7 @@
       @row-dbl-click="onDblClickRow2"
       @row-checked="onCheckedRow2"
     >
-      <x-gantt-column label="group2">
+      <!-- <x-gantt-column label="group2">
         <x-gantt-column
           prop="index"
           width="120px"
@@ -136,7 +136,7 @@
         prop="endDate"
         date-format="MM-dd HH:mm:ss"
         ellipsis
-      />
+      /> -->
 
       <x-gantt-slider prop="o.t1" :allow-link="false"> </x-gantt-slider>
     </x-gantt>
@@ -150,7 +150,7 @@ let id = 0;
 
 const ganttData = reactive<any>([]);
 
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 50; i++) {
   onAdd();
 }
 

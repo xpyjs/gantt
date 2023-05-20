@@ -193,7 +193,7 @@ defineExpose(exports);
 // #endregion
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .xg-root {
   box-sizing: border-box;
   overflow: hidden;
@@ -201,8 +201,63 @@ defineExpose(exports);
   width: 100%;
   height: 100%;
   border: 1px solid #e5e5e5;
+  text-align: left !important;
 
   transition: background-color 0.1s, color 0.1s, border-color 0.1s;
+
+  .xg-table-container {
+    height: 100%;
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+  }
+
+  .xg-mid-separate-line {
+    width: 3px;
+    height: 100%;
+    display: inline-block;
+    position: relative;
+    background-color: #e5e5e5;
+    transition: background-color 0.1s, box-shadow 0.1s;
+    cursor: col-resize;
+
+    &:hover {
+      background-color: #d5d5d5;
+      box-shadow: 0 0 10px #d5d5d5;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 10px;
+    }
+  }
+
+  .xg-mid-separate-line__dark {
+    background-color: #6e7074;
+
+    &:hover {
+      background-color: #87898d;
+      box-shadow: 0 0 10px #87898d;
+    }
+  }
+
+  .xg-move-line {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 0px;
+    z-index: 100;
+    border-left: 1px dashed #d5d5d5;
+  }
+
+  .xg-gantt-container {
+    height: 100%;
+    display: inline-block;
+  }
 }
 
 .xg-root__dark {
@@ -212,58 +267,5 @@ defineExpose(exports);
 
 .xg-root-dragging {
   user-select: none;
-}
-
-.xg-table-container {
-  height: 100%;
-  display: inline-block;
-  position: relative;
-}
-
-.xg-mid-separate-line {
-  width: 3px;
-  height: 100%;
-  display: inline-block;
-  position: relative;
-  background-color: #e5e5e5;
-  transition: background-color 0.1s, box-shadow 0.1s;
-  cursor: col-resize;
-
-  &:hover {
-    background-color: #d5d5d5;
-    box-shadow: 0 0 10px #d5d5d5;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 10px;
-  }
-}
-
-.xg-mid-separate-line__dark {
-  background-color: #6e7074;
-
-  &:hover {
-    background-color: #87898d;
-    box-shadow: 0 0 10px #87898d;
-  }
-}
-
-.xg-move-line {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 0px;
-  z-index: 100;
-  border-left: 1px dashed #d5d5d5;
-}
-
-.xg-gantt-container {
-  height: 100%;
-  display: inline-block;
 }
 </style>

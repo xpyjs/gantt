@@ -112,7 +112,7 @@ const path = computed(
 );
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .xg-link {
   cursor: pointer;
   transition: filter 0.2s;
