@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="1.0.2" date="2022-06-29" copyright="jeremyjone" />
+<Description author="jeremyjone" version="2.0.1" date="2023-05-20" copyright="jeremyjone" />
 
 [![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small) ![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag) ![](https://img.shields.io/npm/v/@xpyjs/gantt.svg) ![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag&include_prereleases&label=lastest)
 ![](https://badgen.net/npm/dt/@xpyjs/gantt) ![](https://img.shields.io/npm/l/@xpyjs/gantt.svg) ![](https://shields.io/github/workflow/status/xpyjs/gantt/%E5%8F%91%E5%B8%83%20Release%20%E5%8C%85) ![](https://shields.io/github/workflow/status/xpyjs/gantt/%E9%83%A8%E7%BD%B2%E6%96%87%E6%A1%A3%E5%92%8C%20Demo?label=gh-pages)
@@ -31,6 +31,27 @@
 
 除此之外，无需其他改动。
 
+## 关于版本
+
+`v1` 和 `v2` 不兼容。
+
+- 参数不同
+  - `data-index` 改为 `data-id
+  - 增加 `unit` 参数，替换之前的 `setHeaderUnit` 方法
+  - `label` 改为 `prop`
+  - `name` 改为 `label`
+- 插槽不同
+  - `xg-gantt-column` 支持多层嵌套，以达到多级表头效果
+- 组件不同
+  - 移除了抽屉组件
+
+相较 `v1`，`v2` 更加灵活，更加易用，更加强大。
+
+- 滚动更加流畅，重写了两边的滚动联动效果
+- 支持多级表头
+- 增加了连线模式
+- 调整了进度条的显示方式，移除了改变进度的功能
+
 ## 什么是 XGantt
 
 `XGantt` 是一个基于 `vue` 的甘特图表插件，它包含常用的甘特图功能，如：
@@ -47,18 +68,18 @@
 - [x] 定制任意风格
 - [x] 支持黑暗模式
 - [x] 支持多种日期显示模式切换
+- [x] 支持表格部分多级表头
+- [x] 支持甘特部分的连线
 - [ ] 更多持续更新
 
-_动图展示_：
+效果展示：
 
-<img :src="$withBase('/assets/gantt_v1.gif')" alt="gif">
+<img :src="$withBase('/assets/v2-preview.png')" alt="v2-preview.png">
 
 ## 安装
 
-使用 `npm` 安装：
-
 <CodeGroup>
-  <CodeGroupItem title="YARN">
+  <CodeGroupItem title="YARN" active>
 
 ```bash:no-line-numbers
 yarn add @xpyjs/gantt
@@ -66,7 +87,7 @@ yarn add @xpyjs/gantt
 
   </CodeGroupItem>
 
-  <CodeGroupItem title="NPM" active>
+  <CodeGroupItem title="NPM">
 
 ```bash:no-line-numbers
 npm install @xpyjs/gantt --save
@@ -90,53 +111,42 @@ createApp(App).use(Gantt).mount('#app');
 
 XGantt 需要一个数组形式的数据对象。例如，您拥有如下数据：
 
+> 确保数组嵌套在 `reactive` 方法中，它可以保证数据的内外响应式。
+
 ```js
-const dataList = reactive([
-  {
-    index: 1,
-    startDate: '2020-06-05',
-    endDate: '2020-08-20',
-    ttt: {
-      a: 'aaa',
-      b: 'bbb'
-    },
-    name: 'mydata1',
-    children: [] // children 是必须的，如果没有，给一个空数组即可
-  },
-  {
-    index: 2,
-    startDate: '2020-07-07',
-    endDate: '2020-09-11',
-    ttt: {},
-    name: 'mydata2',
-    children: [
-      {
-        index: 3,
-        startDate: '2020-07-10',
-        endDate: '2020-08-15',
-        ttt: {
-          a: 'aaa'
-        },
-        name: 'child1',
-        children: [] // children 是必须的，如果没有，给一个空数组即可
-      }
-    ]
-  }
-]);
+
+let id = 0;
+
+const dataList = reactive<any>([]);
+
+function onAdd() {
+  dataList.push({
+    index: ++id,
+    name: 't' + id,
+    startDate: new Date(2023, 5, id),
+    endDate: new Date(2023, 5, id + 5),
+    o: { t1: 'a', t2: 'b' }
+  });
+}
+
+for (let i = 0; i < 10; i++) {
+  onAdd();
+}
+
 ```
 
 那么只需要在 `html` 中简单的使用 XGantt，即可创建一个甘特内容：
 
 ```html{2}
 <x-gantt
-  data-index="index" <!-- 请确保它存在 -->
+  data-id="index" <!-- 请确保它存在 -->
   :data="dataList"
 />
 ```
 
 如上操作之后，您将看到：
 
-<img :src="$withBase('/assets/basic.png')" alt="basic">
+<img :src="$withBase('/assets/v2-basic.png')" alt="basic">
 
 如果没有，请尝试重新操作。
 

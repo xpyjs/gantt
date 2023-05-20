@@ -59,6 +59,13 @@ export default defineUserConfig({
     sidebarDepth: 2,
     sidebar: {
       '/': ['/README.md', '/root.md', '/column.md', '/slider.md', 'common.md'],
+      '/vue3-v1/': [
+        '/vue3-v1/README.md',
+        '/vue3-v1/root.md',
+        '/vue3-v1/column.md',
+        '/vue3-v1/slider.md',
+        '/vue3-v1/common.md'
+      ],
       '/vue2/': [
         '/vue2/README.md',
         '/vue2/root.md',

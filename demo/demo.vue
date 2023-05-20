@@ -1,5 +1,5 @@
 <template>
-  <div style="top: 20vh; width: 100%; height: 500px; padding-left: 5vw">
+  <div style="top: 20vh; width: 1400px; height: 500px; padding-left: 5vw">
     <x-gantt
       ref="ganttRef"
       data-id="index"
@@ -340,31 +340,31 @@ for (let i = 0; i < 10; i++) {
   onAdd2();
 }
 
-ganttData2[0].children = [
-  {
-    index: ++id2,
-    name: 'sub-t' + id2,
-    startDate: new Date(2023, 5, 1),
-    endDate: new Date(2023, 5, 5),
-    o: { t1: 'a', t2: 'b' }
-  },
-  {
-    index: ++id2,
-    name: 'sub-t' + id2,
-    startDate: new Date(2023, 5, 1),
-    endDate: new Date(2023, 5, 5),
-    o: { t1: 'a', t2: 'b' },
-    children: [
-      {
-        index: ++id2,
-        name: 'sub-sub-t' + id2,
-        startDate: new Date(2023, 5, 1),
-        endDate: new Date(2023, 5, 5),
-        o: { t1: 'a', t2: 'b' }
-      }
-    ]
-  }
-];
+// ganttData2[0].children = [
+//   {
+//     index: ++id2,
+//     name: 'sub-t' + id2,
+//     startDate: new Date(2023, 5, 1),
+//     endDate: new Date(2023, 5, 5),
+//     o: { t1: 'a', t2: 'b' }
+//   },
+//   {
+//     index: ++id2,
+//     name: 'sub-t' + id2,
+//     startDate: new Date(2023, 5, 1),
+//     endDate: new Date(2023, 5, 5),
+//     o: { t1: 'a', t2: 'b' },
+//     children: [
+//       {
+//         index: ++id2,
+//         name: 'sub-sub-t' + id2,
+//         startDate: new Date(2023, 5, 1),
+//         endDate: new Date(2023, 5, 5),
+//         o: { t1: 'a', t2: 'b' }
+//       }
+//     ]
+//   }
+// ];
 
 const onClickRow2 = (data: any) => {
   console.log('click row', data);

@@ -1,6 +1,6 @@
 # 列组件 XGanttColumn
 
-<Description author="jeremyjone" date="2022-06-22" copyright="jeremyjone" />
+<Description author="jeremyjone" date="2023-05-20" copyright="jeremyjone" />
 
 因为我们在内部已经将其加载，所以您并不需要显示的再次导入到您的组件中就可以使用。
 
@@ -14,10 +14,10 @@
 
 ```html{5}
 <x-gantt
-    data-index="index"
+    data-id="index"
     :data="dataList"
 >
-    <x-gantt-column label="index" />
+    <x-gantt-column prop="index" />
 </x-gantt>
 ```
 
@@ -57,19 +57,23 @@
 
 更多关于日期格式化的属性，参看 [日期格式化属性](./common.html#日期格式化属性)
 
+### ellipsis <Badge text="新增" type="tip"/>
+
+<DataParameter t="Boolean" d="false" />
+
+如果内容过长，是否显示省略号。
+
 ### empty-data
 
 <DataParameter t="String" d="无数据 😢" />
 
 设置空数据时显示的内容。如果数据内容为空，则会显示空数据内容。
 
-### label\* <Badge text="required" type="danger"/>
+### prop <Badge text="新增" type="tip"/>
 
-<DataParameter r t="String" />
+<DataParameter t="String" />
 
-`label` 是一个必填属性，它应当对应您给出数据的某一个键名。
-
-它将加载该字段数据的内容显示在列内容中，同时表头的名称默认也会显示为该 `label` 名称。当然，您可以通过设置 [`name`](#name) 来自定义。
+`prop` 是一个重要的属性，它应当对应您给出数据的某一个键名。
 
 ::: tip 更新
 从 `v1.1.7` 开始，它支持通过 `.` 深度读取对象内部属性。
@@ -86,19 +90,23 @@ const data = {
 };
 ```
 
-那么，`label` 可以通过 `a.b.c` 直接读取到值，而不用像之前那样需要通过模板导出数据再读取内部属性。
+那么，`prop` 可以通过 `a.b.c` 直接读取到值，而不用像之前那样需要通过模板导出数据再读取内部属性。
 :::
 
 ### merge
 
-<DataParameter t="(data) => boolean | Boolean" d="false" />
+<DataParameter t="(({row: any; $index: number; level: number}) => boolean) | Boolean" d="false" />
 
 设置当前列是否需要与前一列合并。您可以给出一个 Boolean 值或者一个返回 Boolean 值的函数。
 
 - 函数允许您使用行内数据。
 
-```js
-mergeFunc: function(data) {
+```ts
+mergeFunc: function({
+      row: any,
+      $index: number,
+      level: number
+    }) {
     // your code
     return true; // 请确保返回一个 Boolean 值。
 }
@@ -108,17 +116,17 @@ mergeFunc: function(data) {
 
 **请注意**，该字段对首列无效。
 
-### name
+### label <Badge text="调整" type="tip"/>
 
 <DataParameter t="String" />
 
-设置该列表头的显示文本，如果没有，则会显示 `label` 的内容。它的优先级比 `label` 高。
+设置该列表头的显示文本，如果没有，则会显示 `prop` 的内容。它的优先级比 `prop` 高。
 
-### selectable
+### ~~selectable~~ <Badge text="废弃" type="warn"/>
 
-<DataParameter t="Boolean" d="false" />
+~~<DataParameter t="Boolean" d="false" />~~
 
-设置当前列内容的文本是否可以选择，默认禁止选择。
+~~设置当前列内容的文本是否可以选择，默认禁止选择。~~
 
 ### width
 
@@ -134,12 +142,22 @@ mergeFunc: function(data) {
 
 列组件内部允许您插入任何内容，同时它会抛出当前行的数据以供您使用。
 
+插槽抛出一些数据，方便使用：
+
+```ts
+{
+  row: any,
+  $index: number,
+  level: number
+}
+```
+
 一个简单的示例：
 
 ```html
-<x-gantt-column label="name">
-  <template v-slot="data">
-    <div>{{ data }}</div>
+<x-gantt-column prop="name">
+  <template v-slot="{row, $index, level}">
+    <div>{{ row }}</div>
   </template>
 </x-gantt-column>
 ```

@@ -1,6 +1,6 @@
 # 根组件 XGantt
 
-<Description author="jeremyjone" date="2021-12-10" copyright="jeremyjone" />
+<Description author="jeremyjone" date="2023-05-20" copyright="jeremyjone" />
 
 对于 `XGantt` 组件，它具有非常丰富的属性。
 
@@ -10,27 +10,72 @@
 
 <DataParameter t="Array" d="[]" />
 
-数据源，接收数组类型，同时数组中的每一个对象都应当包含 `index`, `startDate`, `endDate` 和 `children` 这些键，确保正确显示数据内容。
+数据源，接收数组类型，同时数组中的每一个对象都应当包含 `index`, `startDate`, `endDate` 和 ~~`children`~~ 这些键，确保正确显示数据内容。
+
+> `children` 不再是必填项。
 
 另外，这些键名不是固定样式的，它可以通过传递参数进行替换，它们的作用不变。
 
 ::: tip 提示
 
 - `index` 确保数据的唯一性，它应对于所有数据全局唯一的。通过 [data-index](#data-index) 替换
-- `children` 可以使数据层级嵌套，如果没有子集，只需要置空即可
+- ~~`children` 可以使数据层级嵌套，如果没有子集，只需要置空即可~~
 - `startDate` 可以在甘特图中正确渲染数据的起始日期。通过 [start-key](#start-key) 替换
 - `endDate` 可以在甘特图中正确渲染数据的截止日期。通过 [end-key](#end-key) 替换
 
 :::
 
-### data-index\* <Badge text="required" type="danger"/>
+### links <Badge text="新增" type="tip"/>
+
+<DataParameter t="Array" d="[]" />
+
+数据的连线数据。接收数组类型，数组中的每一个对象都应当包含 `from`, `to`，确保正确显示数据内容。
+
+例如：
+
+```js
+const ganttLinks = reactive([
+  {
+    index: 1,
+    from: 1,
+    to: 2,
+    color: 'green'
+  },
+  {
+    index: 2,
+    from: 2,
+    to: 5
+  },
+  {
+    index: 3,
+    from: 4,
+    to: 3,
+    color: '#abc'
+  }
+]);
+```
+
+如上，`from` 和 `to` 属性是必须的，这两个字段的值应当对应 `data` 中的 `data-id` 值。`color` 是可选的，可以设置连线的颜色。
+
+### ~~data-index~~ <Badge text="移除" type="warning"/>
 
 <DataParameter r t="String" />
 
-数据的全局唯一键，它应当是数据中的某一个键名，通常它会是 `index`、`id`、`uid` 等。如果它不是全局唯一的，则会引起渲染错误。
+~~数据的全局唯一键，它应当是数据中的某一个键名，通常它会是 `index`、`id`、`uid` 等。如果它不是全局唯一的，则会引起渲染错误。~~
 
 ::: tip 提示
-这也是我们建议在 `data` 中确保有一个 `index` 字段的具体作用。您也可以使用其他自定义字段，只需要匹配即可。
+~~这也是我们建议在 `data` 中确保有一个 `index` 字段的具体作用。您也可以使用其他自定义字段，只需要匹配即可。~~
+:::
+
+### data-id <Badge text="十分重要" type="danger"/>
+
+<DataParameter t="String" d="id" />
+
+数据的全局唯一键，默认为 `id`。您必须确保它是数据中的某一个唯一的键名，通常它会是 `index`、`id`、`uid` 等。如果它不是全局唯一的，则会引起渲染错误。
+
+::: tip 提示
+如果数据中包含 `id` 属性，那么可以不提供该属性。
+同时需要确保 `data` 中的每一个数据对象都包含该属性字段，并且是唯一的。
 :::
 
 ### end-key
@@ -54,6 +99,14 @@
 它对应数据中起始日期的键，默认值为 `startDate`。如果找不到，则不会渲染甘特图中的内容。
 
 ## 样式
+
+::: tip 提示
+
+所有颜色属性除特殊情况外，都可以传递 rgb 或 `#` 开头的 16 进制颜色值，但是不接受英文颜色值。英文颜色在黑暗模式下可能会失效。
+
+推荐统一使用 `#` 开头的 16 进制颜色值。
+
+:::
 
 ### body-style
 
@@ -133,9 +186,15 @@
 它是默认属性，只会调整默认值。如果您设置了自定义的样式，该方案则不会生效。
 :::
 
+::: warning 请注意
+
+如果颜色使用了英文颜色值，那么在黑暗模式下可能会失效。为了避免此情况，请使用 `#` 开头的 16 进制颜色值。
+
+:::
+
 ### header-height
 
-<DataParameter t="Number | String" d="100" />
+<DataParameter t="Number | String" d="80" />
 
 设置表头的高度，它的范围应该至少大于 `30`，否则会引起渲染异常。
 
@@ -164,6 +223,12 @@
 设置表头的文本颜色。
 
 它接收任意颜色参数，包括符合 html 规范的颜色英文，16 进制颜色描述（**注意 `#` 符号不可缺少**），或者 `rgb()` 样式的内容，它只要是字符串格式即可。
+
+### highlight-date <Badge text="新增" type="warning" />
+
+<DataParameter t="Boolean" d="false" />
+
+是否在悬停当前行时，高亮显示当前日期，默认为 `false`。
 
 ### gantt-column-size
 
@@ -215,21 +280,13 @@
 通常情况下，您不用设置这两个属性，因为它们已经处于使用的状态。除非您不希望展开功能，设置 `show-expand` 为 `false` 即可。
 :::
 
-### show-setting-btn
+### ~~show-setting-btn~~ <Badge text="移除" type="warning" />
 
 <DataParameter t="Boolean" d="true" />
 
-设置是否显示右上角的设置栏按钮。默认为 `true`。
+~~设置是否显示右上角的设置栏按钮。默认为 `true`。~~
 
-如果关闭该选项，同时提供了对应的设置方法，可以供使用者通过调用对应方法进行设置，这给样式的自定义提供了一种便利。
-
-::: tip 提示
-设置栏中提供的内容可以进行如下替换：
-
-- 列宽：可以通过修改 [gantt-column-size](#gantt-column-size) 属性
-- 行高：可以通过修改 [row-height](#row-height) 属性
-- 显示方式：可以通过调用 [setHeaderUnit](#setHeaderUnit) 方法
-  :::
+~~如果关闭该选项，同时提供了对应的设置方法，可以供使用者通过调用对应方法进行设置，这给样式的自定义提供了一种便利。~~
 
 ### show-today
 
@@ -243,7 +300,51 @@
 
 设置是否显示甘特图中的 `周末` 时间线。
 
+### unit <Badge text="新增" type="tip" />
+
+<DataParameter t="'month' | 'week' | 'day' | 'hour'" d="day" />
+
+设置甘特图的时间单位。默认为 `day`，即以天为单位。它接收 `month`、`week`、`day`、`hour` 四种单位。
+
+::: tip 提示
+
+该属性替代了之前的 `setHeaderUnit` 方法。
+
+:::
+
 ## 事件
+
+### add-link <Badge text="更新" type="tip" />
+
+<DataParameter f="@add-link -> function(link: {from: string | number, to: string | number}, { from: any, to: any }, cb: ({from: string | number, to: string | number}) => void)" />
+
+添加连线时触发事件。它接收两个参数，第一个参数是当前添加的连线，第二个参数是当前添加的连线对应的数据，第三个参数是一个回调函数，如果您需要修改当前添加的连线，可以在回调函数中调整新建的连线。回调函数会在创建之后、渲染之前执行。
+
+例如：
+
+```js
+const onAddLink = (
+  link: any,
+  data: { from: any; to: any },
+  cb: (link: any) => void
+) => {
+  const _link = {
+    index: linkId++,
+    from: link.from,
+    to: link.to,
+    color: 'green'
+  };
+  ganttLinks.push(_link);
+
+  cb(_link);
+};
+```
+
+### click-link <Badge text="更新" type="tip" />
+
+<DataParameter f="@click-link -> function(link: any | null)" />
+
+点击连线时触发事件。参数是当前点击的连线数据。如果没有选择，会返回 null。
 
 ### no-date-error
 
@@ -251,22 +352,27 @@
 
 `跳转到` 事件触发后，如果给出的日期不在当前甘特范围内，则触发该异常，可以接收该异常并自定义后续事件。
 
-### move-progress
+### ~~move-progress~~ <Badge text="移除" type="warning" />
 
 <DataParameter f="@move-progress -> function(data: any, old: number)" />
 
-移动指定甘特行中的进度条触发事件。会返回当前行的数据以及原进度数值。
+~~移动指定甘特行中的进度条触发事件。会返回当前行的数据以及原进度数值。~~
 
-### move-slider
+### move-slider <Badge text="更新" type="tip" />
 
-<DataParameter f="@move-slider -> function(data: any[], {start: Date, end: Date})" />
+~~<DataParameter f="@move-slider -> function(data: any[], {start: Date, end: Date})" />~~
+<DataParameter f="@move-slider -> function({row: any, old: {start: Date, end: Date}}[])" />
 
-- data: 更新后的数据内容数组，Array\<Object\>。它的第一项是当前选择拖动的内容，如果启用了子父级联动（[linked-resize](./slider.html#linked-resize)），则当子父级有变化时，会一同抛出，方便保存到数据库。
-- {start: Date, end: Date}: 当前拖动项的旧的起止日期。
+数组的第一项是当前选择拖动的内容，如果启用了子父级联动（[linked-resize](./slider.html#linked-resize)），则当子父级有变化时，会一同抛出，方便保存到数据库。
+
+- row: 更新后的数据内容
+- ~~{start: Date, end: Date}: 当前拖动项的旧的起止日期。~~
+
+每一条数据都会单独保存它移动前的旧日期，方便后续操作。
 
 移动甘特行滑块后的事件。
 
-### row-checked
+### row-checked <Badge text="调整，目前没有级联选择" type="warning" />
 
 <DataParameter f="@row-checked -> function(state: Boolean, data: any, list: any[])" />
 
@@ -275,16 +381,6 @@
 - list: 当前事件中所影响到的数据集合，Array
 
 选择复选框时触发该事件。
-
-::: tip v1.3.0 更新内容
-
-现在复选框支持右键深度选取。左键选取当前项，右键选取当前项以及所有子项。
-
-`list` 参数的使用：
-
-> 该参数返回此次点击事件中所影响的数据，默认第一项永远是当前项，所以在左键单击时，其值只有一项，且与 `data` 一致；而右键单击时，其值中至少包含一项并在 0 号位，且与 `data` 一致。
->
-> 无论 **选中** 还是 **取消选中**，都会返回影响集合。用户可以通过 `state` 并结合该参数自行处理结果集。
 
 :::
 
