@@ -48,7 +48,7 @@ const { EmitRowChecked } = useEvent();
 watch(
   () => checked.value,
   val => {
-    EmitRowChecked(val, props.data);
+    EmitRowChecked(val, props.data.data);
   }
 );
 
