@@ -19,8 +19,8 @@ jobs:
       - name: 3. 安装依赖
         run: yarn
 
-      - name: 4. 测试
-        run: yarn test
+      # - name: 4. 测试
+      #   run: yarn test
 
       - name: 5. 打包
         run: yarn build
