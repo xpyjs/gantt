@@ -4,7 +4,6 @@ on:
     branches: [master]
     paths:
       - 'docs/**'
-      - 'src/App.vue'
 
 jobs:
   create-gh-pages:
