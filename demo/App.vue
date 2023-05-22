@@ -35,10 +35,11 @@
         ref="gantt"
         header-height="48"
         :row-height="rowHeight1"
-        data-index="id"
+        data-id="id"
         start-key="startTime"
         end-key="endTime"
         expand-all
+        highlight-date
         :dark="isDark"
         :gantt-column-size="colSize"
         :show-checkbox="showCheckbox"
@@ -49,7 +50,6 @@
         :header-style="headerStyle"
         :body-style="bodyStyle"
         :level-color="levelColor"
-        :show-setting-btn="showSettingBtn"
         @row-click="rowClick"
         @row-dbl-click="rowDblClick"
         @row-checked="rowChecked"
@@ -69,8 +69,7 @@
         <div>b</div>
 
         <XGanttSlider
-          flat
-          label="startTime"
+          prop="startTime"
           date-format="MM-dd H:mm:s"
           empty-data=""
           :move="handleMove"
@@ -79,12 +78,11 @@
           :linked-resize="true"
           progress
           progress-decimal
-          highlight-date
         >
-          <!-- <template v-slot="data">
-          <div>{{ data.name }}</div>
+          <!-- <template v-slot="row">
+          <div>{{ row.name }}</div>
         </template> -->
-          <template #content="{ data, level }">
+          <template #content="{ row, level }">
             <div v-if="level === 1" class="slider-level-one"></div>
             <!-- <div v-else style="background-color: #123456; height: 5px"></div> -->
           </template>
@@ -96,28 +94,28 @@
         </template> -->
         </XGanttSlider>
 
-        <XGanttColumn label="id" :merge="merge3">
-          <template #default="{ data }">
+        <XGanttColumn prop="id" :merge="merge3" width="150">
+          <template #default="{ row }">
             <div style="background-color: #ccc; width: 100%">
-              {{ data.name }}
+              {{ row.name }}
             </div>
           </template>
         </XGanttColumn>
 
-        <XGanttColumn label="name" width="150" :merge="merge3">
-          <template #default="{ data }">
-            <div>2 - {{ data }}</div>
+        <XGanttColumn prop="name" width="150" :merge="merge3">
+          <template #default="{ row }">
+            <div>2 - {{ row }}</div>
           </template>
         </XGanttColumn>
 
         <XGanttColumn
-          label="ttt.a"
+          prop="ttt.a"
           :merge="merge5"
           column-style="backgroundColor: #cde; padding-left: 10px"
           column-class="test-class"
         />
 
-        <XGanttColumn label="bbb" :merge="merge5">
+        <XGanttColumn prop="bbb" :merge="merge5">
           <template #default>
             <div v-for="i in 100" :key="i">
               {{ i }}
@@ -125,37 +123,32 @@
           </template>
         </XGanttColumn>
 
-        <XGanttColumn label="startTime" width="180" center :merge="merge4" />
+        <XGanttColumn label="时间">
+          <XGanttColumn prop="startTime" width="150" center :merge="merge4" />
 
-        <x-gantt-column
-          label="endTime"
-          name="自定义标签"
-          width="200"
-          date-format="q yyyy-MM-dd HH:mm:ss"
-          :merge="merge4"
-        >
-          <template #default="{ data }">
-            <span
-              name="end"
-              :style="{ backgroundColor: `#${555}`, color: '#789' }"
-            >
-              abc - {{ data.endTime }}
-            </span>
-          </template>
-        </x-gantt-column>
-
-        <XGanttColumn label="picture12345" :merge="merge5">
-          <template #default="{ data }">
-            👀😃✨✔🐱‍🚀🐱‍👓 {{ data.ttt.b }}
-          </template>
+          <x-gantt-column
+            prop="endTime"
+            label="自定义标签"
+            width="150"
+            date-format="q yyyy-MM-dd HH:mm:ss"
+            :merge="merge4"
+          >
+            <template #default="{ row }">
+              <div
+                name="end"
+                :style="{ backgroundColor: `#${555}`, color: '#789' }"
+              >
+                abc - {{ row.endTime }}
+              </div>
+            </template>
+          </x-gantt-column>
         </XGanttColumn>
 
-        <template #settings>
-          <div>
-            <p>标题</p>
-            <input />
-          </div>
-        </template>
+        <XGanttColumn prop="picture12345" :merge="merge5">
+          <template #default="{ row }">
+            👀😃✨✔🐱‍🚀🐱‍👓 {{ row.ttt.b }}
+          </template>
+        </XGanttColumn>
       </XGantt>
     </div>
 
@@ -178,24 +171,12 @@
     <button @click="setSelected">设置选择</button>
     <button @click="jumpTo">跳转到</button>
     <input type="range" name="" id="" min="20" max="70" v-model="rowHeight1" />
-    <button @click="() => (showSettingBtn = !showSettingBtn)">
-      显示设置按钮
-    </button>
-    <template v-if="!showSettingBtn">
       <div style="display: inline-block">
         选择列宽
         <button @click="() => (colSize = 'small')">小</button>
         <button @click="() => (colSize = 'normal')">中</button>
         <button @click="() => (colSize = 'large')">大</button>
       </div>
-
-      <div style="display: inline-block">
-        选择显示
-        <button @click="() => setHeaderUnit('day')">日</button>
-        <button @click="() => setHeaderUnit('week')">周</button>
-        <button @click="() => setHeaderUnit('month')">月</button>
-      </div>
-    </template>
   </div>
 
   <div v-else aria-label="多页">
@@ -205,7 +186,7 @@
           ref="gantt2"
           header-height="60"
           :row-height="rowHeight2"
-          data-index="index"
+          data-id="index"
           expand-all
           :dark="isDark2"
           :gantt-column-size="colSize2"
@@ -217,7 +198,6 @@
           :header-style="headerStyle2"
           :body-style="bodyStyle2"
           :level-color="levelColor2"
-          :show-setting-btn="showSettingBtn2"
           @row-click="rowClick"
           @row-dbl-click="rowDblClick"
           @row-checked="rowChecked"
@@ -225,33 +205,32 @@
           @no-date-error="noDateError"
         >
           <XGanttSlider
-            flat
-            label="name"
+            prop="name"
             date-format="MM-dd H:mm:ss"
             empty-data=""
           />
 
-          <XGanttColumn label="index" :merge="merge3">
-            <template #default="{ data }">
+          <XGanttColumn prop="index" :merge="merge3">
+            <template #default="{ row }">
               <div style="background-color: #ccc; width: 100%">
-                {{ data.name }}
+                {{ row.name }}
               </div>
             </template>
           </XGanttColumn>
 
           <x-gantt-column
-            label="endDate"
-            name="自定义标签"
+            prop="endDate"
+            label="自定义标签"
             width="200"
             date-format="q yyyy-MM-dd HH:mm:ss"
             :merge="merge4"
           >
-            <template #default="{ data }">
+            <template #default="{ row }">
               <span
                 name="end"
                 :style="{ backgroundColor: `#${555}`, color: '#789' }"
               >
-                abc - {{ data.endDate }}
+                abc - {{ row.endDate }}
               </span>
             </template>
           </x-gantt-column>
@@ -286,24 +265,12 @@
         max="70"
         v-model="rowHeight2"
       />
-      <button @click="() => (showSettingBtn2 = !showSettingBtn2)">
-        显示设置按钮
-      </button>
-      <template v-if="!showSettingBtn2">
         <div style="display: inline-block">
           选择列宽
           <button @click="() => (colSize2 = 'small')">小</button>
           <button @click="() => (colSize2 = 'normal')">中</button>
           <button @click="() => (colSize2 = 'large')">大</button>
         </div>
-
-        <div style="display: inline-block">
-          选择显示
-          <button @click="() => setHeaderUnit2('day')">日</button>
-          <button @click="() => setHeaderUnit2('week')">周</button>
-          <button @click="() => setHeaderUnit2('month')">月</button>
-        </div>
-      </template>
     </div>
 
     <div style="padding-bottom: 10px">
@@ -312,7 +279,7 @@
           ref="gantt3"
           header-height="30"
           :row-height="rowHeight3"
-          data-index="uid"
+          data-id="uid"
           expand-all
           :dark="isDark3"
           :gantt-column-size="colSize3"
@@ -324,7 +291,6 @@
           :header-style="headerStyle3"
           :body-style="bodyStyle3"
           :level-color="levelColor3"
-          :show-setting-btn="showSettingBtn3"
           @row-click="rowClick"
           @row-dbl-click="rowDblClick"
           @row-checked="rowChecked"
@@ -332,8 +298,7 @@
           @no-date-error="noDateError"
         >
           <XGanttSlider
-            flat
-            label="uid"
+            prop="uid"
             date-format="MM-dd H:mm:ss"
             empty-data=""
             :move="handleMove"
@@ -343,14 +308,14 @@
             bg-color="lightgreen"
           />
 
-          <XGanttColumn label="name" width="150">
-            <template #default="{ data }">
-              <div>{{ data.uid }} - {{ data.name }}</div>
+          <XGanttColumn prop="name" width="150">
+            <template #default="{ row }">
+              <div>{{ row.uid }} - {{ row.name }}</div>
             </template>
           </XGanttColumn>
 
           <XGanttColumn
-            label="ttt.a"
+            prop="ttt.a"
             column-style="backgroundColor: #cde; padding-left: 10px"
             column-class="test-class"
           />
@@ -385,24 +350,12 @@
         max="70"
         v-model="rowHeight3"
       />
-      <button @click="() => (showSettingBtn3 = !showSettingBtn3)">
-        显示设置按钮
-      </button>
-      <template v-if="!showSettingBtn3">
         <div style="display: inline-block">
           选择列宽
           <button @click="() => (colSize3 = 'small')">小</button>
           <button @click="() => (colSize3 = 'normal')">中</button>
           <button @click="() => (colSize3 = 'large')">大</button>
         </div>
-
-        <div style="display: inline-block">
-          选择显示
-          <button @click="() => setHeaderUnit3('day')">日</button>
-          <button @click="() => setHeaderUnit3('week')">周</button>
-          <button @click="() => setHeaderUnit3('month')">月</button>
-        </div>
-      </template>
     </div>
   </div>
 
@@ -516,7 +469,6 @@ export default defineComponent({
           b: 'bbb'
         },
         name: '我的数据: ' + s,
-        children: []
       });
       if (s > 30) s = 2;
       if (e > 30) e = 5;
@@ -529,6 +481,9 @@ export default defineComponent({
         e = t;
       }
       [0, 1, 3, 4, 5, 7, 9].forEach(index => {
+        if (this.dataList[index]['children'] === undefined)
+          this.dataList[index]['children'] = [];
+
         this.dataList[index]['children'].push({
           id: i,
           startTime: `2021-08-${s++}`,
@@ -538,7 +493,6 @@ export default defineComponent({
             a: 's-aaa',
             b: 's-bbb'
           },
-          children: []
         });
       });
       if (s > 30) s = 2;
@@ -552,6 +506,9 @@ export default defineComponent({
         e = t;
       }
       [0, 2].forEach(index => {
+        if (this.dataList[0]['children'][index]['children'] === undefined)
+          this.dataList[0]['children'][index]['children'] = [];
+
         this.dataList[0]['children'][index]['children'].push({
           id: i,
           startTime: `2021-08-${s++}`,
@@ -562,7 +519,6 @@ export default defineComponent({
             b: 'gs-bbb'
           },
           progress: Math.random(),
-          children: []
         });
       });
       if (s > 30) s = 2;
@@ -576,21 +532,18 @@ export default defineComponent({
         startDate: '2021-11-01',
         endDate: '2021-11-10',
         name: '2号数据: 1',
-        children: []
       },
       {
         index: 2,
         startDate: '2021-11-11',
         endDate: '2021-11-20',
         name: '2号数据: 2',
-        children: []
       },
       {
         index: 3,
         startDate: '2021-11-21',
         endDate: '2021-11-30',
         name: '2号数据: 3',
-        children: []
       }
     ];
 
@@ -605,7 +558,6 @@ export default defineComponent({
           a: 'aaa1',
           b: 'bbb1'
         },
-        children: []
       },
       {
         uid: 2,
@@ -616,7 +568,6 @@ export default defineComponent({
           a: 'aaa2',
           b: 'bbb2'
         },
-        children: []
       },
       {
         uid: 3,
@@ -627,7 +578,6 @@ export default defineComponent({
           a: 'aaa3',
           b: 'bbb3'
         },
-        children: []
       },
       {
         uid: 4,
@@ -638,7 +588,6 @@ export default defineComponent({
           a: 'aaa4',
           b: 'bbb4'
         },
-        children: []
       }
     ];
   },
@@ -671,18 +620,18 @@ export default defineComponent({
     },
 
     merge3: function (data: any) {
-      return data.id % 3 !== 0;
+      return data.row.id % 3 !== 0;
     },
 
     merge4: function (data: any) {
-      return data.id % 4 !== 0;
+      return data.row.id % 4 !== 0;
     },
 
     merge5: function (data: any) {
-      return data.id % 5 !== 0;
+      return data.row.id % 5 !== 0;
     },
 
-    handleMove: function ({ level }: { data: any; level: number }) {
+    handleMove: function ({ level }: { row: any; $index: number; level: number }) {
       return level !== 1;
     },
 
@@ -704,7 +653,6 @@ export default defineComponent({
             b: 'bbb'
           },
           name: '我的数据: ' + s,
-          children: []
         });
         if (s > 30) s = 2;
         if (e > 30) e = 5;
@@ -717,6 +665,9 @@ export default defineComponent({
           e = t;
         }
         [0, 1, 3, 4, 5, 7, 9].forEach(index => {
+          if (this.dataList[index]['children'] === undefined)
+            this.dataList[index]['children'] = [];
+
           this.dataList[index]['children'].push({
             id: i,
             startTime: `2021-06-${s++}`,
@@ -726,7 +677,6 @@ export default defineComponent({
               a: 's-aaa',
               b: 's-bbb'
             },
-            children: []
           });
         });
         if (s > 30) s = 2;
@@ -740,6 +690,9 @@ export default defineComponent({
           e = t;
         }
         [0, 2].forEach(index => {
+          if (this.dataList[0]['children'][index]['children'] === undefined)
+            this.dataList[0]['children'][index]['children'] = [];
+
           this.dataList[0]['children'][index]['children'].push({
             id: i,
             startTime: `2021-07-${s++}`,
@@ -749,7 +702,6 @@ export default defineComponent({
               a: 'gs-aaa',
               b: 'gs-bbb'
             },
-            children: []
           });
         });
         if (s > 30) s = 2;
@@ -786,7 +738,6 @@ export default defineComponent({
           a: 's-aaa' + INDEX,
           b: 's-bbb' + INDEX
         },
-        children: []
       });
     },
 
@@ -810,7 +761,6 @@ export default defineComponent({
               a: 's-aaa' + INDEX,
               b: 's-bbb' + INDEX
             },
-            children: []
           }
         ]
       });
@@ -869,42 +819,36 @@ export default defineComponent({
           startDate: '2021-11-01',
           endDate: '2021-11-10',
           name: '2号数据: reload-1',
-          children: []
         },
         {
           index: 2,
           startDate: '2021-11-11',
           endDate: '2021-11-20',
           name: '2号数据: reload-2',
-          children: []
         },
         {
           index: 3,
           startDate: '2021-11-21',
           endDate: '2021-11-30',
           name: '2号数据: reload-3',
-          children: []
         },
         {
           index: 4,
           startDate: '2021-12-01',
           endDate: '2021-12-10',
           name: '2号数据: reload-4',
-          children: []
         },
         {
           index: 5,
           startDate: '2021-12-11',
           endDate: '2021-12-20',
           name: '2号数据: reload-5',
-          children: []
         },
         {
           index: 6,
           startDate: '2021-12-21',
           endDate: '2021-12-30',
           name: '2号数据: reload-6',
-          children: []
         }
       ];
     },
@@ -932,11 +876,14 @@ export default defineComponent({
         startDate: `2021-11-10`,
         endDate: `2021-11-20`,
         name: '2号数据: ' + INDEX,
-        children: []
       });
     },
 
     handleClickInsertChildren2() {
+      if (!this.dataList2[0]['children']) {
+        this.dataList2[0]['children'] = [];
+      }
+
       this.dataList2[0]['children'].unshift({
         index: INDEX++,
         startDate: `2021-11-13`,
@@ -948,7 +895,6 @@ export default defineComponent({
             startDate: `2021-11-5`,
             endDate: `2021-11-21`,
             name: '2号孙数据: ' + INDEX,
-            children: []
           }
         ]
       });
@@ -1010,7 +956,6 @@ export default defineComponent({
             a: 'aaa',
             b: 'bbb'
           },
-          children: []
         },
         {
           uid: 2,
@@ -1021,7 +966,6 @@ export default defineComponent({
             a: 'aaa',
             b: 'bbb'
           },
-          children: []
         },
         {
           uid: 3,
@@ -1032,7 +976,6 @@ export default defineComponent({
             a: 'aaa',
             b: 'bbb'
           },
-          children: []
         },
         {
           uid: 4,
@@ -1043,7 +986,6 @@ export default defineComponent({
             a: 'aaa',
             b: 'bbb'
           },
-          children: []
         }
       ];
     },
@@ -1075,7 +1017,6 @@ export default defineComponent({
           a: 'aaa',
           b: 'bbb'
         },
-        children: []
       });
     },
 
@@ -1099,7 +1040,6 @@ export default defineComponent({
               a: 'aaa',
               b: 'bbb'
             },
-            children: []
           }
         ]
       });
