@@ -25,6 +25,29 @@
 
 <img :src="$withBase('/assets/column-basic.png')" alt="column-basic">
 
+在 `v2.x` 版本中，我们添加了多层表头，它可以通过嵌套 `x-gantt-column` 来实现。
+
+> 在多级表头的实现中，父级表头只接收 `label` 属性作为展示字段，其余字段均无效。
+
+```html{5,6}
+<x-gantt
+    data-id="index"
+    :data="dataList"
+>
+    <x-gantt-column prop="index" />
+    <x-gantt-column prop="name" />
+
+    <x-gantt-column label="时间">
+        <x-gantt-column prop="startDate" />
+        <x-gantt-column prop="endDate" />
+    </x-gantt-column>
+</x-gantt>
+```
+
+它将显示成如下内容：
+
+<img :src="$withBase('/assets/v2-multi-header.png')" alt="v2-multi-header">
+
 ## 属性
 
 ### center
@@ -122,6 +145,12 @@ mergeFunc: function({
 
 设置该列表头的显示文本，如果没有，则会显示 `prop` 的内容。它的优先级比 `prop` 高。
 
+::: tip 提示
+
+在多级表头的实现中，父级表头只接收 `label` 属性作为展示字段，其余字段均无效。
+
+:::
+
 ### ~~selectable~~ <Badge text="废弃" type="warn"/>
 
 ~~<DataParameter t="Boolean" d="false" />~~
@@ -138,7 +167,7 @@ mergeFunc: function({
 
 ### default
 
-<DataParameter f="scope = data:any" />
+<DataParameter f="scope = { row: any; $index: number; level: number }" />
 
 列组件内部允许您插入任何内容，同时它会抛出当前行的数据以供您使用。
 
