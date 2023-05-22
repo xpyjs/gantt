@@ -403,6 +403,7 @@ const progressValue = computed(() => {
       transition: width 0.2s;
       text-align: right;
       font-size: 10px;
+      border-radius: 4px;
     }
 
     .xg-slider-progress__default {
