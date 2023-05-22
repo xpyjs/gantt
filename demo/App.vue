@@ -47,6 +47,7 @@
         :show-today="showToday"
         :show-expand="showExpand"
         :data="dataList"
+        :links="linkList"
         :header-style="headerStyle"
         :body-style="bodyStyle"
         :level-color="levelColor"
@@ -55,6 +56,7 @@
         @row-checked="rowChecked"
         @move-slider="moveSlider"
         @move-progress="moveProgress"
+        @add-link="onAddLink"
         @no-date-error="noDateError"
       >
         <!-- 无效 slot -->
@@ -171,12 +173,12 @@
     <button @click="setSelected">设置选择</button>
     <button @click="jumpTo">跳转到</button>
     <input type="range" name="" id="" min="20" max="70" v-model="rowHeight1" />
-      <div style="display: inline-block">
-        选择列宽
-        <button @click="() => (colSize = 'small')">小</button>
-        <button @click="() => (colSize = 'normal')">中</button>
-        <button @click="() => (colSize = 'large')">大</button>
-      </div>
+    <div style="display: inline-block">
+      选择列宽
+      <button @click="() => (colSize = 'small')">小</button>
+      <button @click="() => (colSize = 'normal')">中</button>
+      <button @click="() => (colSize = 'large')">大</button>
+    </div>
   </div>
 
   <div v-else aria-label="多页">
@@ -195,6 +197,7 @@
           :show-today="showToday2"
           :show-expand="showExpand2"
           :data="dataList2"
+          :links="linkList2"
           :header-style="headerStyle2"
           :body-style="bodyStyle2"
           :level-color="levelColor2"
@@ -202,13 +205,10 @@
           @row-dbl-click="rowDblClick"
           @row-checked="rowChecked"
           @move-slider="moveSlider"
+          @add-link="onAddLink2"
           @no-date-error="noDateError"
         >
-          <XGanttSlider
-            prop="name"
-            date-format="MM-dd H:mm:ss"
-            empty-data=""
-          />
+          <XGanttSlider prop="name" date-format="MM-dd H:mm:ss" empty-data="" />
 
           <XGanttColumn prop="index" :merge="merge3">
             <template #default="{ row }">
@@ -265,12 +265,12 @@
         max="70"
         v-model="rowHeight2"
       />
-        <div style="display: inline-block">
-          选择列宽
-          <button @click="() => (colSize2 = 'small')">小</button>
-          <button @click="() => (colSize2 = 'normal')">中</button>
-          <button @click="() => (colSize2 = 'large')">大</button>
-        </div>
+      <div style="display: inline-block">
+        选择列宽
+        <button @click="() => (colSize2 = 'small')">小</button>
+        <button @click="() => (colSize2 = 'normal')">中</button>
+        <button @click="() => (colSize2 = 'large')">大</button>
+      </div>
     </div>
 
     <div style="padding-bottom: 10px">
@@ -288,6 +288,7 @@
           :show-today="showToday3"
           :show-expand="showExpand3"
           :data="dataList3"
+          :links="linkList3"
           :header-style="headerStyle3"
           :body-style="bodyStyle3"
           :level-color="levelColor3"
@@ -295,6 +296,7 @@
           @row-dbl-click="rowDblClick"
           @row-checked="rowChecked"
           @move-slider="moveSlider"
+          @add-link="onAddLink3"
           @no-date-error="noDateError"
         >
           <XGanttSlider
@@ -350,12 +352,12 @@
         max="70"
         v-model="rowHeight3"
       />
-        <div style="display: inline-block">
-          选择列宽
-          <button @click="() => (colSize3 = 'small')">小</button>
-          <button @click="() => (colSize3 = 'normal')">中</button>
-          <button @click="() => (colSize3 = 'large')">大</button>
-        </div>
+      <div style="display: inline-block">
+        选择列宽
+        <button @click="() => (colSize3 = 'small')">小</button>
+        <button @click="() => (colSize3 = 'normal')">中</button>
+        <button @click="() => (colSize3 = 'large')">大</button>
+      </div>
     </div>
   </div>
 
@@ -370,9 +372,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, reactive } from 'vue';
 
 let INDEX = 1;
+let LINK_INDEX = 1;
 
 export default defineComponent({
   name: 'App',
@@ -383,6 +386,7 @@ export default defineComponent({
       changeColor: 0,
       isDark: false,
       dataList: [] as any[],
+      linkList: reactive([]) as any[],
       rowHeight1: 30,
       showCheckbox: true,
       showWeekend: true,
@@ -405,6 +409,7 @@ export default defineComponent({
 
       isDark2: false,
       dataList2: [] as any[],
+      linkList2: reactive([]) as any[],
       rowHeight2: 30,
       showCheckbox2: true,
       showWeekend2: true,
@@ -427,6 +432,7 @@ export default defineComponent({
 
       isDark3: true,
       dataList3: [] as any[],
+      linkList3: reactive([]) as any[],
       rowHeight3: 20,
       showCheckbox3: true,
       showWeekend3: true,
@@ -461,14 +467,14 @@ export default defineComponent({
         e = t;
       }
       this.dataList.push({
-        id: i,
+        id: INDEX++,
         startTime: `2021-08-${s++}`,
         endTime: `2021-10-${e++}`,
         ttt: {
           a: 'aaa',
           b: 'bbb'
         },
-        name: '我的数据: ' + s,
+        name: '我的数据: ' + s
       });
       if (s > 30) s = 2;
       if (e > 30) e = 5;
@@ -485,14 +491,14 @@ export default defineComponent({
           this.dataList[index]['children'] = [];
 
         this.dataList[index]['children'].push({
-          id: i,
+          id: INDEX++,
           startTime: `2021-08-${s++}`,
           endTime: `2021-10-${e++}`,
           name: '子数据: ' + s,
           ttt: {
             a: 's-aaa',
             b: 's-bbb'
-          },
+          }
         });
       });
       if (s > 30) s = 2;
@@ -510,7 +516,7 @@ export default defineComponent({
           this.dataList[0]['children'][index]['children'] = [];
 
         this.dataList[0]['children'][index]['children'].push({
-          id: i,
+          id: INDEX++,
           startTime: `2021-08-${s++}`,
           endTime: `2021-10-${e++}`,
           name: '孙数据: ' + s,
@@ -518,7 +524,7 @@ export default defineComponent({
             a: 'gs-aaa',
             b: 'gs-bbb'
           },
-          progress: Math.random(),
+          progress: Math.random()
         });
       });
       if (s > 30) s = 2;
@@ -528,56 +534,56 @@ export default defineComponent({
     // 添加2号数据
     this.dataList2 = [
       {
-        index: 1,
+        index: INDEX++,
         startDate: '2021-11-01',
         endDate: '2021-11-10',
-        name: '2号数据: 1',
+        name: '2号数据: 1'
       },
       {
-        index: 2,
+        index: INDEX++,
         startDate: '2021-11-11',
         endDate: '2021-11-20',
-        name: '2号数据: 2',
+        name: '2号数据: 2'
       },
       {
-        index: 3,
+        index: INDEX++,
         startDate: '2021-11-21',
         endDate: '2021-11-30',
-        name: '2号数据: 3',
+        name: '2号数据: 3'
       }
     ];
 
     // 添加3号数据
     this.dataList3 = [
       {
-        uid: 1,
+        uid: INDEX++,
         startDate: '2021-10-01',
         endDate: '2021-10-10',
         name: '3号数据: 1',
         ttt: {
           a: 'aaa1',
           b: 'bbb1'
-        },
+        }
       },
       {
-        uid: 2,
+        uid: INDEX++,
         startDate: '2021-10-11',
         endDate: '2021-10-20',
         name: '3号数据: 2',
         ttt: {
           a: 'aaa2',
           b: 'bbb2'
-        },
+        }
       },
       {
-        uid: 3,
+        uid: INDEX++,
         startDate: '2021-10-21',
         endDate: '2021-10-30',
         name: '3号数据: 3',
         ttt: {
           a: 'aaa3',
           b: 'bbb3'
-        },
+        }
       },
       {
         uid: 4,
@@ -587,7 +593,7 @@ export default defineComponent({
         ttt: {
           a: 'aaa4',
           b: 'bbb4'
-        },
+        }
       }
     ];
   },
@@ -631,7 +637,13 @@ export default defineComponent({
       return data.row.id % 5 !== 0;
     },
 
-    handleMove: function ({ level }: { row: any; $index: number; level: number }) {
+    handleMove: function ({
+      level
+    }: {
+      row: any;
+      $index: number;
+      level: number;
+    }) {
       return level !== 1;
     },
 
@@ -645,14 +657,14 @@ export default defineComponent({
           e = t;
         }
         this.dataList.push({
-          id: i,
+          id: INDEX++,
           startTime: `2020-06-${s++}`,
           endTime: `2020-08-${e++}`,
           ttt: {
             a: 'aaa',
             b: 'bbb'
           },
-          name: '我的数据: ' + s,
+          name: '我的数据: ' + s
         });
         if (s > 30) s = 2;
         if (e > 30) e = 5;
@@ -669,14 +681,14 @@ export default defineComponent({
             this.dataList[index]['children'] = [];
 
           this.dataList[index]['children'].push({
-            id: i,
+            id: INDEX++,
             startTime: `2021-06-${s++}`,
             endTime: `2021-07-${e++}`,
             name: '子数据: ' + s,
             ttt: {
               a: 's-aaa',
               b: 's-bbb'
-            },
+            }
           });
         });
         if (s > 30) s = 2;
@@ -694,14 +706,14 @@ export default defineComponent({
             this.dataList[0]['children'][index]['children'] = [];
 
           this.dataList[0]['children'][index]['children'].push({
-            id: i,
+            id: INDEX++,
             startTime: `2021-07-${s++}`,
             endTime: `2021-08-${e++}`,
             name: '孙数据: ' + s,
             ttt: {
               a: 'gs-aaa',
               b: 'gs-bbb'
-            },
+            }
           });
         });
         if (s > 30) s = 2;
@@ -737,7 +749,7 @@ export default defineComponent({
         ttt: {
           a: 's-aaa' + INDEX,
           b: 's-bbb' + INDEX
-        },
+        }
       });
     },
 
@@ -760,7 +772,7 @@ export default defineComponent({
             ttt: {
               a: 's-aaa' + INDEX,
               b: 's-bbb' + INDEX
-            },
+            }
           }
         ]
       });
@@ -800,6 +812,22 @@ export default defineComponent({
       }
     },
 
+    onAddLink(
+      link: any,
+      data: { from: any; to: any },
+      cb: (link: any) => void
+    ) {
+      const _link = {
+        index: LINK_INDEX++,
+        from: link.from,
+        to: link.to,
+        color: 'green'
+      };
+      this.linkList.push(_link);
+
+      cb(_link);
+    },
+
     setSelected() {
       (this.$refs.gantt as any).setSelected(this.dataList[0]);
     },
@@ -815,40 +843,40 @@ export default defineComponent({
     handleClickReloadData2() {
       this.dataList2 = [
         {
-          index: 1,
+          index: INDEX++,
           startDate: '2021-11-01',
           endDate: '2021-11-10',
-          name: '2号数据: reload-1',
+          name: '2号数据: reload-1'
         },
         {
-          index: 2,
+          index: INDEX++,
           startDate: '2021-11-11',
           endDate: '2021-11-20',
-          name: '2号数据: reload-2',
+          name: '2号数据: reload-2'
         },
         {
-          index: 3,
+          index: INDEX++,
           startDate: '2021-11-21',
           endDate: '2021-11-30',
-          name: '2号数据: reload-3',
+          name: '2号数据: reload-3'
         },
         {
-          index: 4,
+          index: INDEX++,
           startDate: '2021-12-01',
           endDate: '2021-12-10',
-          name: '2号数据: reload-4',
+          name: '2号数据: reload-4'
         },
         {
-          index: 5,
+          index: INDEX++,
           startDate: '2021-12-11',
           endDate: '2021-12-20',
-          name: '2号数据: reload-5',
+          name: '2号数据: reload-5'
         },
         {
-          index: 6,
+          index: INDEX++,
           startDate: '2021-12-21',
           endDate: '2021-12-30',
-          name: '2号数据: reload-6',
+          name: '2号数据: reload-6'
         }
       ];
     },
@@ -875,7 +903,7 @@ export default defineComponent({
         index: INDEX++,
         startDate: `2021-11-10`,
         endDate: `2021-11-20`,
-        name: '2号数据: ' + INDEX,
+        name: '2号数据: ' + INDEX
       });
     },
 
@@ -894,7 +922,7 @@ export default defineComponent({
             index: INDEX++,
             startDate: `2021-11-5`,
             endDate: `2021-11-21`,
-            name: '2号孙数据: ' + INDEX,
+            name: '2号孙数据: ' + INDEX
           }
         ]
       });
@@ -933,6 +961,22 @@ export default defineComponent({
       }
     },
 
+    onAddLink2(
+      link: any,
+      data: { from: any; to: any },
+      cb: (link: any) => void
+    ) {
+      const _link = {
+        index: LINK_INDEX++,
+        from: link.from,
+        to: link.to,
+        color: 'green'
+      };
+      this.linkList2.push(_link);
+
+      cb(_link);
+    },
+
     setSelected2() {
       (this.$refs.gantt2 as any).setSelected(this.dataList2[0]);
     },
@@ -948,44 +992,44 @@ export default defineComponent({
     handleClickReloadData3() {
       this.dataList3 = [
         {
-          uid: 1,
+          uid: INDEX++,
           startDate: '2021-11-01',
           endDate: '2021-11-10',
           name: '3号数据: reload-1',
           ttt: {
             a: 'aaa',
             b: 'bbb'
-          },
+          }
         },
         {
-          uid: 2,
+          uid: INDEX++,
           startDate: '2021-11-11',
           endDate: '2021-11-20',
           name: '3号数据: reload-2',
           ttt: {
             a: 'aaa',
             b: 'bbb'
-          },
+          }
         },
         {
-          uid: 3,
+          uid: INDEX++,
           startDate: '2021-11-21',
           endDate: '2021-11-30',
           name: '3号数据: reload-3',
           ttt: {
             a: 'aaa',
             b: 'bbb'
-          },
+          }
         },
         {
-          uid: 4,
+          uid: INDEX++,
           startDate: '2021-12-01',
           endDate: '2021-12-10',
           name: '3号数据: reload-4',
           ttt: {
             a: 'aaa',
             b: 'bbb'
-          },
+          }
         }
       ];
     },
@@ -1016,7 +1060,7 @@ export default defineComponent({
         ttt: {
           a: 'aaa',
           b: 'bbb'
-        },
+        }
       });
     },
 
@@ -1039,7 +1083,7 @@ export default defineComponent({
             ttt: {
               a: 'aaa',
               b: 'bbb'
-            },
+            }
           }
         ]
       });
@@ -1076,6 +1120,22 @@ export default defineComponent({
           textColor: 'white'
         };
       }
+    },
+
+    onAddLink3(
+      link: any,
+      data: { from: any; to: any },
+      cb: (link: any) => void
+    ) {
+      const _link = {
+        index: LINK_INDEX++,
+        from: link.from,
+        to: link.to,
+        color: 'green'
+      };
+      this.linkList3.push(_link);
+
+      cb(_link);
     },
 
     setSelected3() {

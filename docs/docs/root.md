@@ -318,11 +318,11 @@ const ganttLinks = reactive([
 
 <DataParameter f="@add-link -> function(link: {from: string | number, to: string | number}, { from: any, to: any }, cb: ({from: string | number, to: string | number}) => void)" />
 
-添加连线时触发事件。它接收两个参数，第一个参数是当前添加的连线，第二个参数是当前添加的连线对应的数据，第三个参数是一个回调函数，如果您需要修改当前添加的连线，可以在回调函数中调整新建的连线。回调函数会在创建之后、渲染之前执行。
+添加连线时触发事件。它接收三个参数，第一个参数是当前添加的连线，第二个参数是当前添加的连线对应的数据，第三个参数是一个回调函数，如果您需要修改当前添加的连线，可以在回调函数中调整新建的连线。回调函数会在创建之后、渲染之前执行。
 
 例如：
 
-```js
+```js{12}
 const onAddLink = (
   link: any,
   data: { from: any; to: any },
@@ -339,6 +339,8 @@ const onAddLink = (
   cb(_link);
 };
 ```
+
+注意上面代码的第12行（高亮行），在处理之后，请将该连线对象添加到 `ganttLinks` 中，以完成渲染。这是因为数据的填写应当在组件外部完成，它可以由用户更好的控制。
 
 ### click-link <Badge text="更新" type="tip" />
 
