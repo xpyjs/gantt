@@ -58,7 +58,7 @@ export default () => {
     return {
       row: toRaw(data?.data),
       $index: data?.flatIndex,
-      level: data?.level
+      level: data && data.level + 1
     };
   }
 
