@@ -306,7 +306,7 @@ const onClickLink = (link: any | null) => {
 };
 
 function onMove(data: any) {
-  return true;
+  return data.level !== 0;
 }
 
 const onNoDateError = (date: Date) => {

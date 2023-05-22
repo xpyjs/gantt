@@ -254,7 +254,7 @@ onDrag(sliderRef, {
 
 // #region 左滑块移动
 const canResizeLeft = computed(() => {
-  return calcMove(props.resizeLeft);
+  return canMove.value && calcMove(props.resizeLeft);
 });
 function onResizeLeftDown() {
   handleDisableMove();
@@ -274,7 +274,7 @@ onDrag(resizeLeftRef, {
 
 // #region 右滑块移动
 const canResizeRight = computed(() => {
-  return calcMove(props.resizeRight);
+  return canMove.value && calcMove(props.resizeRight);
 });
 function onResizeRightDown() {
   handleDisableMove();
