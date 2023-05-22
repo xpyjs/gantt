@@ -36,7 +36,7 @@
       "utils/*": [
         "./src/utils/*"
       ]
-    },
+    }
   },
   "include": [
     "src/**/*.ts",
@@ -44,7 +44,7 @@
     "src/**/*.tsx",
     "src/components/**/*.vue",
     "src/pages/**/*.vue",
-    "typings/*",
+    "typings/**/*.d.ts",
     "demo/demo.vue",
     "demo/*.ts",
     "tests/**/*.spec.ts"
