@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.2](https://github.com/xpyjs/gantt/compare/v2.0.1...v2.0.2) (2023-05-22)
+
+
+### Bug Fixes
+
+* 🐛修复插槽默认值问题 ([4263bf5](https://github.com/xpyjs/gantt/commit/4263bf52b88eebdf61db87fb553b116d245cd3b1))
+* 🐛check emit data type error ([63050e9](https://github.com/xpyjs/gantt/commit/63050e94bdfd907c9a68b577c1e1e433a8d592c4))
+* 🐛column 更新展示内容后宽度重新计算 ([b6f9daa](https://github.com/xpyjs/gantt/commit/b6f9daac3d437e77df2c54db3b149fe56e889ef6))
+* 🐛level 应该从1 起始，而不是 0。与语义和之前版本同步 ([817081f](https://github.com/xpyjs/gantt/commit/817081f3fb925e3e06026dc16c54e81500448b93))
+* 🐛move 属性为 false 时，left 和 right 依旧可以展示并拖拽的问题 ([9ebca0b](https://github.com/xpyjs/gantt/commit/9ebca0b4d36c2b66b7e4a16791131ea43ae13e72))
+
 ## [2.0.0](https://github.com/xpyjs/gantt/compare/v1.0.2...v2.0.0) (2023-05-19)
 
 

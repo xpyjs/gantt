@@ -4,7 +4,7 @@
   "author": "jeremyjone",
   "license": "MIT",
   "private": false,
-  "version": "2.0.1",
+  "version": "2.0.2",
   "preview": false,
   "publishConfig": {
     "access": "public",
@@ -29,6 +29,9 @@
     "typings",
     "src",
     "package.json",
+    "tsconfig.json",
+    "CHANGELOG.md",
+    "vite.config.ts",
     "README.md"
   ],
   "main": "./dist/index.umd.js",
