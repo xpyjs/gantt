@@ -88,7 +88,7 @@ if (isCi) {
     fs.writeFileSync(docPath, newDoc);
   }
 
-  setDocs();
+  // setDocs();
 }
 
 process.exit(0);
