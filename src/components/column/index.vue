@@ -39,7 +39,15 @@
 <script lang="ts">
 import Variables from '@/constants/vars';
 import columnProps from './props';
-import { defineComponent, useSlots, computed, ref, onMounted } from 'vue';
+import {
+  defineComponent,
+  useSlots,
+  computed,
+  ref,
+  onMounted,
+  watch,
+  nextTick
+} from 'vue';
 import useStyle from '@/composables/useStyle';
 import useSlotsBox from '@/composables/useSlotsBox';
 import SelectionVue from './selection.vue';
@@ -87,6 +95,14 @@ const prefixWidth = ref(0);
 onMounted(() => {
   prefixWidth.value = selectionRef.value?.clientWidth ?? 0;
 });
+
+watch(
+  () => [$styleBox.showCheckbox, $styleBox.showExpand],
+  async () => {
+    await nextTick();
+    prefixWidth.value = selectionRef.value?.clientWidth ?? 0;
+  }
+);
 </script>
 
 <style lang="scss">
