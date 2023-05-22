@@ -25,10 +25,10 @@ jobs:
       - name: 5. 打包
         run: yarn build
 
-      # - name: 6. 发布 npm 包
-      #   run: npm publish
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: 6. 发布 npm 包
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: 7. 读取当前版本号
         id: version
