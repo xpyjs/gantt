@@ -183,6 +183,10 @@
 
   <div v-else aria-label="多页">
     <div style="padding-bottom: 10px">
+      <div style="font-size='12px'">
+        该组件展示了传入错误的 slider 参数，渲染出来的效果：
+        <em>prop="name" date-format="MM-dd H:mm:ss"</em>
+      </div>
       <div style="height: 200px; padding-bottom: 10px">
         <XGantt
           ref="gantt2"
