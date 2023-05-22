@@ -1,6 +1,6 @@
 # 滑块组件 XGanttSlider
 
-<Description author="jeremyjone" date="2021-12-10" copyright="jeremyjone" />
+<Description author="jeremyjone" date="2023-05-20" copyright="jeremyjone" />
 
 因为我们在内部已经将其加载，所以您并不需要显示的再次导入到您的组件中就可以使用。
 
@@ -20,11 +20,11 @@
 
 ```html{6}
 <x-gantt
-    data-index="index"
+    data-id="index"
     :data="dataList"
 >
-    <x-gantt-column label="index" />
-    <x-gantt-slider bg-color="orange" />
+    <x-gantt-column prop="index" />
+    <x-gantt-slider bg-color="green" />
 </x-gantt>
 ```
 
@@ -32,15 +32,21 @@
 
 它将显示成如下内容：
 
-<img :src="$withBase('/assets/slider-basic.png')" alt="slider-basic">
+<img :src="$withBase('/assets/v2-slider-basic.png')" alt="slider-basic">
 
 ## 属性
 
 ### alignment
 
-<DataParameter t="String" d="left" />
+<DataParameter t="left | center | right" d="left" />
 
 设置内容对齐方式。接收字符串：`left`、`center` 或 `right`。
+
+### allowLink <Badge text="新增" type="tip" />
+
+<DataParameter t="Boolean" d="true" />
+
+是否允许创建、修改连线。如果设置为 false，仅仅是不可以从当前 slider 创建连线，而不会影响已有连线的展示。
 
 ### bg-color
 
@@ -68,25 +74,39 @@
 
 设置空数据时显示的内容。如果数据内容为空，则会显示空数据内容。
 
-### flat
+### ~~flat~~ <Badge text="移除" type="warning" />
 
-<DataParameter t="Boolean" d="false" />
+~~<DataParameter t="Boolean" d="false" />~~
 
-设置滑块样式是否扁平化。
+~~设置滑块样式是否扁平化。~~
 
-### highlightDate <Badge text="+v1.0.2" type="tip" />
+### ~~highlightDate~~ <Badge text="移除" type="warning" />
 
-<DataParameter t="Boolean" d="false" />
+~~<DataParameter t="Boolean" d="false" />~~
 
-允许鼠标悬停高亮表头对应日期
+~~允许鼠标悬停高亮表头对应日期~~
 
-### label
+::: tip 提示
+
+该属性移动到了 [x-gantt](./root.html#highlight-date) 组件中，现在可以在移动到行内任意地方实现该效果。
+
+:::
+
+### height <Badge text="新增" type="tip" />
+
+<DataParameter t="[Number, String]" d="'50%'" />
+
+滑块的高度，支持数值（单位 px），以及百分比形式（相对于父元素）
+
+### label <Badge text="修改" type="info" />
 
 <DataParameter t="String" />
 
-设置需要显示的内容字段。默认没有该属性情况下显示默认数据，即 `empty-data` 字段内容。
+~~设置需要显示的内容字段。默认没有该属性情况下显示默认数据，即 `empty-data` 字段内容。~~
 
-如果您提供了插槽内容，则无论您是否提供了 `label` 属性，都将用插槽的内容进行替换。更多信息请查看 [插槽](#插槽) 。
+~~如果您提供了插槽内容，则无论您是否提供了 `label` 属性，都将用插槽的内容进行替换。更多信息请查看 [插槽](#插槽) 。~~
+
+该属性的值会直接显示在滑块组件内，它之前的功能被 [prop](#prop) 属性所替代，同时，`label` 的优先级要比 `prop` 更高。如果您需要显示更多内容，可以使用插槽。
 
 ### linked-resize
 
@@ -106,7 +126,7 @@
 
 设置滑块组件是否可以被拖动，默认不可用。
 
-- Function：类型 `({ data: any, level: Number }) => Boolean`。将数据和层级抛出，用于更加精准的定义哪些数据可以移动
+- Function：类型 `({ row: any, $index: number, level: Number }) => Boolean`。将数据、当前索引和层级抛出，用于更加精准的定义哪些数据可以移动
 
 如果设置了 `true`，则意味着滑块可以被任意拖动。当拖动结束时，修改数据，同时会抛出 [`move-slider`](./root.html#move-slider) 事件。
 
@@ -122,6 +142,18 @@
 
 同时，如果您自定义了滑块插槽，那么无论您是否开启了进度条，都不会显示这个功能。
 
+### progressColor <Badge text="新增" type="tip" />
+
+<DataParameter t="String" d="#1890ff" />
+
+设置进度条的颜色，默认使用 [bg-color](#bg-color) 属性的值。
+
+::: tip 提示
+
+默认值会根据给出的背景色进行渲染。自定义颜色可以使颜色更加多样化，您可以尝试通过给 alpha 通道赋值来实现透明度效果。
+
+:::
+
 ### progressDecimal
 
 <DataParameter t="[Boolean, Number]" d="false" />
@@ -132,7 +164,9 @@
 
 ### resize-left
 
-<DataParameter t="Boolean" d="false" />
+<DataParameter t="[Boolean, Function]" d="false" />
+
+- Function：类型 `({ row: any, $index: number, level: Number }) => Boolean`。将数据、当前索引和层级抛出，用于更加精准的定义哪些数据可以移动
 
 **该属性只有当 `move` 属性可用时才会生效。**
 
@@ -142,7 +176,9 @@
 
 ### resize-right
 
-<DataParameter t="Boolean" d="false" />
+<DataParameter t="[Boolean, Function]" d="false" />
+
+- Function：类型 `({ row: any, $index: number, level: Number }) => Boolean`。将数据、当前索引和层级抛出，用于更加精准的定义哪些数据可以移动
 
 **该属性只有当 `move` 属性可用时才会生效。**
 
@@ -158,16 +194,16 @@
 
 ### default
 
-<DataParameter f="scope = {data:any, level:number}" />
+<DataParameter f="scope = {row:any, $index: number, level:number}" />
 
 滑块组件内部允许您插入任何内容，它将向滑块内注入您提供的所有模板内容。同时它会抛出当前行的数据以供您使用。
 
 一个简单的示例：
 
 ```html
-<x-gantt-slider flat bg-color="orange" :move="true" :linked-resize="true">
-  <template v-slot="{data, level}">
-    <div>{{ data.name }}</div>
+<x-gantt-slider bg-color="green" :move="true" :linked-resize="true">
+  <template v-slot="{row, $index, level}">
+    <div>{{ row.name }}</div>
   </template>
 </x-gantt-slider>
 ```
@@ -178,27 +214,35 @@
 
 ### content
 
-<DataParameter f="scope = {data:any, level:number}" />
+<DataParameter f="scope = {row:any, $index: number, level:number}" />
 
 有时候，您可能需要重新定义滑块样式，那么这个插槽一定适合您。它会使用您提供的插槽元素来替换默认的滑块元素，而不是向默认滑块内部插入内容。
 
 一个简单的示例：
 
 ```html
-<XGanttSlider flat label="startDate" bg-color="orange">
-  <template v-slot:content="{data, level}">
+<XGanttSlider prop="startDate" bg-color="green">
+  <template v-slot:content="{row, $index, level}">
     <div
       style="background-color: #123456;display: flex;justify-content: center;height:5px"
     >
-      {{ data.name }} - {{ data.index }}
+      {{ row.name }} - {{ row.index }}
     </div>
   </template>
 </XGanttSlider>
 ```
 
+::: warning 注意
+
+该插槽会替换包含在滑块内部的所有内容，如果启用了 [`progress`](#progress) 属性，那么您需要根据需要自行添加进度条。
+
+但不包括左右滑块，如果您需要替换左右滑块，那么请使用 [`left`](#left) 和 [`right`](#right) 插槽。
+
+:::
+
 ### left
 
-<DataParameter f="scope = {data:any, level:number}" />
+<DataParameter f="scope = {row:any, $index: number, level:number}" />
 
 当您重新定义了滑块的样式，那么侧边的滑动块一定也不符合现有的需求，所以我们提供了重载左右滑动块的插槽。通常情况下，它与 `content` 应该配套使用。
 
@@ -206,35 +250,54 @@
 
 ```html
 <XGanttSlider
-  flat
-  label="startDate"
+  prop="startDate"
   bg-color="orange"
   :move="true"
   :resize-left="true"
   :resize-right="true"
   :linked-resize="true"
 >
-  <template v-slot:content="{data, level}">
+  <template v-slot:content="{row, $index, level}">
     <div
       style="background-color: #123456;display: flex;justify-content: center;height:5px"
     >
-      {{ data.name }} - {{ data.index }}
+      {{ row.name }} - {{ row.index }}
     </div>
   </template>
 
   <template v-slot:left>
-    <div style="background-color:#123456;width:5px;height:10px" />
+    <div style="background-color:#123456;width:5px;height:10px;" />
   </template>
 
   <template v-slot:right>
-    <div style="background-color:#123456;width:5px;height:10px" />
+    <div style="background-color:#123456;width:5px;height:10px;" />
   </template>
 </XGanttSlider>
 ```
 
+::: tip 提示
+
+在默认的 slider 中，是包含一定圆角的。您可以通过以下方式实现：
+
+```css
+// 左侧
+border-left-top-radius: 4px;
+border-left-bottom-radius: 4px;
+
+// 和
+
+// 右侧
+border-right-top-radius: 4px;
+border-right-bottom-radius: 4px;
+```
+
+您可以根据实际情况而定。
+
+:::
+
 ### right
 
-<DataParameter f="scope = {data:any, level:number}" />
+<DataParameter f="scope = {row:any,  $index: number,level:number}" />
 
 它的功能与 `left` 插槽一致，仅仅是将 `left` 更换为 `right` 即可，参数与功能完全一致，不再赘述。
 
