@@ -24,9 +24,12 @@
         ]"
         :style="[props.columnStyle, { width: `calc(100% - ${prefixWidth}px` }]"
       >
-        <slot v-if="slots.default" v-bind="toRowData(props.data)" />
+        <slot
+          v-if="isValidSlots(slots.default, props.data)"
+          v-bind="toRowData(props.data)"
+        />
 
-        <template v-else-if="props.prop">{{
+        <template v-else-if="props.prop || props.label">{{
           props.dateFormat
             ? formatDate(originData, props.dateFormat)
             : originData
@@ -71,7 +74,7 @@ const originData = computed(() =>
 );
 
 // #region 计算宽度
-const { $slotsBox, isMerge } = useSlotsBox();
+const { $slotsBox, isMerge, isValidSlots } = useSlotsBox();
 
 const realWidth = computed(() => {
   let curWidth = $slotsBox.tableHeaders.leafs[props!.__index ?? 1].width;

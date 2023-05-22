@@ -19,7 +19,7 @@
     <div class="xg-slider-block">
       <!-- 滑块主体 -->
       <slot
-        v-if="slots.content"
+        v-if="isValidSlots(slots.content, props.data)"
         name="content"
         v-bind="toRowData(props.data)"
       />
@@ -28,10 +28,13 @@
         class="xg-slider-content"
         :style="{ backgroundColor: bgColor }"
       >
-        <slot v-if="slots.default" v-bind="toRowData(props.data)" />
+        <slot
+          v-if="isValidSlots(slots.default, props.data)"
+          v-bind="toRowData(props.data)"
+        />
 
         <div
-          v-else-if="props.prop"
+          v-else-if="props.prop || props.label"
           class="slider-text"
           :style="{ 'justify-content': props.alignment }"
         >
@@ -65,7 +68,11 @@
         class="xg-slider-resize left"
         @pointerdown.stop="onResizeLeftDown"
       >
-        <slot v-if="slots.left" name="left" v-bind="toRowData(props.data)" />
+        <slot
+          v-if="isValidSlots(slots.left, props.data)"
+          name="left"
+          v-bind="toRowData(props.data)"
+        />
         <div
           v-else
           class="resize-chunk"
@@ -80,7 +87,11 @@
         class="xg-slider-resize right"
         @pointerdown.stop="onResizeRightDown"
       >
-        <slot v-if="slots.right" name="right" v-bind="toRowData(props.data)" />
+        <slot
+          v-if="isValidSlots(slots.right, props.data)"
+          name="right"
+          v-bind="toRowData(props.data)"
+        />
         <div
           v-else
           class="resize-chunk"
@@ -122,6 +133,7 @@ import useEvent from '@/composables/useEvent';
 import { MoveSliderInternalData, RowData } from '@/typings/data';
 import useLinks from '@/composables/useLinks';
 import useElement from '@/composables/useElement';
+import useSlotsBox from '@/composables/useSlotsBox';
 
 export default defineComponent({
   name: Variables.name.slider
@@ -133,6 +145,7 @@ const props = defineProps(sliderProps);
 const slots = useSlots();
 const { $param } = useParam();
 const { $styleBox } = useStyle();
+const { isValidSlots } = useSlotsBox();
 
 const height = computed(() => {
   if (typeof props.height === 'number') {

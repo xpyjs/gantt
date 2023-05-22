@@ -1,7 +1,8 @@
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
 import { type RowData } from '@/typings/data';
-import { type Slots } from 'vue';
+import { isSymbol } from 'lodash';
+import { type Slots, type Slot } from 'vue';
 import useData from './useData';
 
 export default () => {
@@ -20,12 +21,13 @@ export default () => {
     return typeof m === 'function' ? m(toRowData(data)) : !!m;
   }
 
-  // watch(
-  //   () => [store.$styleBox.showCheckbox],
-  //   () => {
-  //     store.$slotsBox.setSlots(store.$slotsBox.cols);
-  //   }
-  // );
+  function isValidSlots(slots?: Slot<any>, data?: RowItem) {
+    if (!slots) return false;
 
-  return { $slotsBox: store.$slotsBox, setSlots, isMerge };
+    return (
+      slots?.(toRowData(data))?.filter(item => !isSymbol(item.type)).length > 0
+    );
+  }
+
+  return { $slotsBox: store.$slotsBox, setSlots, isMerge, isValidSlots };
 };
