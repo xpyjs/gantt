@@ -23,6 +23,8 @@ export default defineConfig({
 
   build: {
     // sourcemap: true,
+    target: 'modules',
+    minify: true,
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'index',

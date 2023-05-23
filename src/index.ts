@@ -9,6 +9,8 @@ const components: Record<string, Plugin> = {
   XGanttSlider
 };
 
+export { XGantt, XGanttColumn, XGanttSlider };
+
 const install = (app: App, options?: Record<string, unknown>) => {
   for (const key of Object.keys(components)) {
     app.use(components[key], options);
@@ -16,6 +18,5 @@ const install = (app: App, options?: Record<string, unknown>) => {
 };
 
 export default {
-  install,
-  ...components
+  install
 };

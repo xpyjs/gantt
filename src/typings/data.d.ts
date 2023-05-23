@@ -1,14 +1,5 @@
 import type RowItem from '@/models/data/row';
 
-/**
- * 事件抛出的数据
- */
-declare interface RowData {
-  row?: any;
-  $index?: number;
-  level?: number;
-}
-
 declare interface MoveSliderOldDate {
   start: Date;
   end: Date;

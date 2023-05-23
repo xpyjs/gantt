@@ -1,41 +1,17 @@
-/* eslint-disable @typescript-eslint/ban-types */
-import type {
-  App,
-  ComponentOptionsMixin,
-  ComputedOptions,
-  DefineComponent,
-  EmitsOptions,
-  MethodOptions
-} from 'vue';
-
-export type ComponentConstructor<
-  Prop,
-  M extends MethodOptions = MethodOptions,
-  E extends EmitsOptions = {}
-> = DefineComponent<
-  Prop,
-  {},
-  {},
-  ComputedOptions,
-  M,
-  ComponentOptionsMixin,
-  ComponentOptionsMixin,
-  E
-> & {
-  install: (app: App) => void;
-};
+import { type XComponentConstructor } from 'typings/install';
+import type { EmitsOptions, MethodOptions, ObjectEmitsOptions } from 'vue';
 
 export const withInstall = <
-  T = {},
+  T = Record<string, unknown>,
   M extends MethodOptions = MethodOptions,
-  E extends EmitsOptions = {}
+  E extends EmitsOptions = string[] | ObjectEmitsOptions
 >(
   name: string,
   comp: any
 ) => {
-  (comp as ComponentConstructor<T, M, E>).install = app => {
+  (comp as XComponentConstructor<T, M, E>).install = app => {
     app.component(name, comp);
   };
 
-  return comp as ComponentConstructor<T, M, E>;
+  return comp as XComponentConstructor<T, M, E>;
 };

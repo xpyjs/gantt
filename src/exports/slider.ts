@@ -1,10 +1,15 @@
 import { withInstall } from '../utils/install';
 import { Variables } from '../constants/vars';
 import Slider from 'components/slider/index.vue';
-import type props from '@/components/slider/props';
+import {
+  type SliderEmits,
+  type SliderMethods,
+  type SliderProps
+} from 'typings/slider/prop';
 
-type sliderProps = Omit<typeof props, 'data'>;
-
-const XGanttSlider = withInstall<sliderProps>(Variables.name.slider, Slider);
+const XGanttSlider = withInstall<SliderProps, SliderMethods, SliderEmits>(
+  Variables.name.slider,
+  Slider
+);
 
 export default XGanttSlider;

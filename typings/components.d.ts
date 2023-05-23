@@ -3,8 +3,8 @@ import '@vue/runtime-core';
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    XGantt: typeof import('../src/exports/root')['default'];
-    XGanttColumn: typeof import('../src/exports/column')['default'];
-    XGanttSlider: typeof import('../src/exports/slider')['default'];
+    XGantt: typeof import('./root/index')['default'];
+    XGanttColumn: typeof import('./column/index')['default'];
+    XGanttSlider: typeof import('./slider/index')['default'];
   }
 }

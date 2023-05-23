@@ -1,12 +1,12 @@
-import type XGantt from '../src/exports/root';
-import type XGanttColumn from '../src/exports/column';
-import type XGanttSlider from '../src/exports/slider';
+import XGantt from './root/index';
+import XGanttColumn from './column/index';
+import XGanttSlider from './slider/index';
 
-import './components.d.ts';
+// import './components.d';
 
-export const install: (
-  app: any,
-  options?: Record<string, unknown> | undefined
-) => any;
+declare const _default: {
+  install: (app: any, options?: Record<string, unknown> | undefined) => void;
+};
+export default _default;
 
 export { XGantt, XGanttColumn, XGanttSlider };
