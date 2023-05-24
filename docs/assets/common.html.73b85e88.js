@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-857b8d96","path":"/common.html","title":"通用方法","lang":"zh-CN","frontmatter":{},"excerpt":"","headers":[{"level":2,"title":"日期格式化属性","slug":"日期格式化属性","link":"#日期格式化属性","children":[]}],"git":{"updatedTime":1684926319000,"contributors":[{"name":"xpyjs","email":"jeremyjone@qq.com","commits":1}]},"filePathRelative":"common.md"}');export{e as data};
