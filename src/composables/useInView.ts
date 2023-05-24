@@ -35,7 +35,8 @@ export default () => {
         if (
           inView[i].hide ||
           inView[i].flatIndex <= top.value ||
-          inView[i].flatIndex >= bottom.value
+          inView[i].flatIndex >= bottom.value ||
+          store.$data.flatData[inView[i].flatIndex].id !== inView[i].id
         ) {
           inView.splice(i, 1);
         }
