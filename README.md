@@ -82,7 +82,7 @@ yarn add @xpyjs/gantt
 ### use
 
 ```js
-import XGantt from "gantt";
+import XGantt from "@xpyjs/gantt";
 import "@xpyjs/gantt/dist/index.css";
 
 createApp(App).use(XGantt).mount('#app')
@@ -91,6 +91,9 @@ createApp(App).use(XGantt).mount('#app')
 ### Basic use
 
 Data should be Array type, `index`, `startDate`, `endDate` and `children` are supposed in data item, they help to display the data correctly. Each field can be customized.
+
+> `children` in V2 is no longer required.
+> V2 `index` to `id` default.
 
 ```js
 const dataList = [
@@ -127,12 +130,22 @@ const dataList = [
 ];
 ```
 
+<details>
+<summary>version 1</summary>
+
 ```html
-<x-gantt
-    data-index="index"
-    :data="dataList"
-/>
+<x-gantt data-index="index" :data="dataList" />
 ```
+
+</details>
+<details>
+<summary>version 2</summary>
+
+```html
+<x-gantt data-id="index" :data="dataList" />
+```
+
+</details>
 
 ### Use table column
 
@@ -140,14 +153,26 @@ We provide a slot named `XGanttColumn`. `Label` is required, and it should match
 
 label is required, and it should match data key. label's value should correspond to the name of the field in 'data' (deep query support), which tells the component to render the column.
 
+<details>
+<summary>version 1</summary>
+
 ```html
-<x-gantt
-    data-index="index"
-    :data="dataList"
->
-    <x-gantt-column label="name" />
+<x-gantt data-index="index" :data="dataList">
+  <x-gantt-column label="name" />
 </x-gantt>
 ```
+
+</details>
+<details>
+<summary>version 2</summary>
+
+```html
+<x-gantt data-id="index" :data="dataList">
+  <x-gantt-column prop="name" />
+</x-gantt>
+```
+
+</details>
 
 ### Use gantt slider
 
@@ -155,13 +180,24 @@ We provide a slot named `XGanttSlider`.
 
 Only one slider whill be rendered. If you insert more than one slider, only last slider will be display.
 
+<details>
+<summary>version 1</summary>
+
 ```html
-<x-gantt
-    data-index="index"
-    :data="dataList"
->
-    <x-gantt-slider />  <!-- no render -->
-    <x-gantt-slider />  <!-- will be rendered -->
+<x-gantt data-id="index" :data="dataList">
+  <x-gantt-slider />   <!-- no render -->
+  <x-gantt-slider />   <!-- will be rendered -->
+</x-gantt>
+```
+
+</details>
+<details>
+<summary>version 2</summary>
+
+```html
+<x-gantt data-id="index" :data="dataList">
+  <x-gantt-slider />   <!-- no render -->
+  <x-gantt-slider />   <!-- will be rendered -->
 </x-gantt>
 ```
 

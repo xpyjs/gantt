@@ -91,6 +91,9 @@ createApp(App).use(Gantt).mount("#app");
 
 `Data` 应该是 `Array<any>` 类型，`index`，`startDate`，`endDate`和`children` 应该在 `Data item` 中，它们有助于正确显示数据。当然，每一个字段都可以自定义。
 
+> V2 中的 `children` 不再是必须的。
+> V2 中的 `index` 默认改为 `id`。
+
 ```js
 const dataList = [
   {
@@ -126,13 +129,29 @@ const dataList = [
 ];
 ```
 
+<details>
+<summary>v1 版本</summary>
+
 ```html
 <x-gantt data-index="index" :data="dataList" />
 ```
 
+</details>
+<details>
+<summary>v2 版本</summary>
+
+```html
+<x-gantt data-id="index" :data="dataList" />
+```
+
+</details>
+
 ### 使用列插槽组件
 
 我们提供了一个名为 `XGanttColumn` 的插槽。 `Label` 是必需的，它的值应当对应 `data` 中的字段名（支持深度查询），这会告诉组件渲染那一列内容。
+
+<details>
+<summary>v1 版本</summary>
 
 ```html
 <x-gantt data-index="index" :data="dataList">
@@ -140,16 +159,44 @@ const dataList = [
 </x-gantt>
 ```
 
+</details>
+<details>
+<summary>v2 版本</summary>
+
+```html
+<x-gantt data-id="index" :data="dataList">
+  <x-gantt-column prop="name" />
+</x-gantt>
+```
+
+</details>
+
 ### 使用滑块插槽组件
 
 我们提供一个名为 `XGanttSlider` 的插槽。如果传入多个滑块，有且只有最后一个滑块将被渲染。
 
+<details>
+<summary>v1 版本</summary>
+
 ```html
-<x-gantt data-index="index" :data="dataList">
+<x-gantt data-id="index" :data="dataList">
   <x-gantt-slider />   <!-- no render -->
   <x-gantt-slider />   <!-- will be rendered -->
 </x-gantt>
 ```
+
+</details>
+<details>
+<summary>v2 版本</summary>
+
+```html
+<x-gantt data-id="index" :data="dataList">
+  <x-gantt-slider />   <!-- no render -->
+  <x-gantt-slider />   <!-- will be rendered -->
+</x-gantt>
+```
+
+</details>
 
 ## 许可证
 
