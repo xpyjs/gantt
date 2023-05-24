@@ -11,10 +11,10 @@ import type {
 export type XComponentConstructor<
   Prop,
   M extends MethodOptions = MethodOptions,
-  E extends EmitsOptions = string[] | ObjectEmitsOptions
+  E extends EmitsOptions = ObjectEmitsOptions
 > = DefineComponent<
   Prop,
-  Record<string, unknown>,
+  M,
   Record<string, unknown>,
   ComputedOptions,
   M,
@@ -28,7 +28,7 @@ export type XComponentConstructor<
 export declare const withInstall: <
   T = Record<string, unknown>,
   M extends MethodOptions = MethodOptions,
-  E extends EmitsOptions = string[] | ObjectEmitsOptions
+  E extends EmitsOptions = ObjectEmitsOptions
 >(
   name: string,
   comp: any

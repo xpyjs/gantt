@@ -25,6 +25,14 @@
 
 :::
 
+::: warning 请注意
+
+当修改（拖动等）对象时，startDate 和 endDate 会默认转为 Date 对象。请在使用时确保它们的类型正确。
+
+所以建议直接使用 `Date` 对象，而不是字符串等。
+
+:::
+
 ### links <Badge text="新增" type="tip"/>
 
 <DataParameter t="Array" d="[]" />
@@ -168,7 +176,7 @@ const ganttLinks = reactive([
 
 是否显示甘特表整体的边框，默认为 1，0 为不显示。
 
-### borderColor
+### border-color
 
 <DataParameter t="String" d="#E5E5E5" />
 
@@ -262,7 +270,7 @@ const ganttLinks = reactive([
 
 <DataParameter t="Number | String" d="30" />
 
-设置内容区域的行高。默认值为 `30`， 最小值 `20`，最大值 70`。应当确保给定的数字再这个区间范围，否则会引起渲染错误。
+设置内容区域的行高。默认值为 `30`， 最小值 `20`，最大值 `70`。应当确保给定的数字再这个区间范围，否则会引起渲染错误。
 
 ### show-checkbox
 
@@ -428,11 +436,13 @@ const onAddLink = (
 参数 `data` 应该是数据列表中的某一个元素。
 :::
 
-### setHeaderUnit
+### ~~setHeaderUnit~~ <Badge text="移除" type="warning" />
 
-<DataParameter f="setSelected: (data: 'day' | 'week' | 'month') => void" />
+~~<DataParameter f="setSelected: (data: 'day' | 'week' | 'month') => void" />~~
 
-允许使用者切换甘特表头的显示方式。只接收被允许的值，如果给错误值，则默认显示为 `day`。
+~~允许使用者切换甘特表头的显示方式。只接收被允许的值，如果给错误值，则默认显示为 `day`。~~
+
+现在通过 [`unit`](#unit) 属性来设置表头显示方式。
 
 ## 插槽
 

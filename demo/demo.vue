@@ -32,9 +32,7 @@
             prop="name"
             :merge="(scope: any) => scope.$index % 3 === 0"
           ></x-gantt-column>
-          <x-gantt-column
-            prop="name2"
-            :merge="(scope: any) => scope.$index % 2 === 0"
+          <x-gantt-column prop="name2" :merge="scope => scope.$index! % 2 === 0"
             >n1</x-gantt-column
           >
         </x-gantt-column>
@@ -144,6 +142,7 @@
 </template>
 
 <script setup lang="ts">
+import type { XGantt } from '../types';
 import { reactive, ref } from 'vue';
 
 let id = 0;
@@ -313,7 +312,7 @@ const onNoDateError = (date: Date) => {
   console.log('no date error', date);
 };
 
-const ganttRef = ref(null) as any;
+const ganttRef = ref<XGantt | null>(null);
 function jumpToDate() {
   ganttRef.value?.jumpToDate();
 }

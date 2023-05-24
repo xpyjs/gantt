@@ -42,7 +42,7 @@
 
 设置内容对齐方式。接收字符串：`left`、`center` 或 `right`。
 
-### allowLink <Badge text="新增" type="tip" />
+### allow-link <Badge text="新增" type="tip" />
 
 <DataParameter t="Boolean" d="true" />
 
@@ -80,7 +80,7 @@
 
 ~~设置滑块样式是否扁平化。~~
 
-### ~~highlightDate~~ <Badge text="移除" type="warning" />
+### ~~highlight-date~~ <Badge text="移除" type="warning" />
 
 ~~<DataParameter t="Boolean" d="false" />~~
 
@@ -142,7 +142,7 @@
 
 同时，如果您自定义了滑块插槽，那么无论您是否开启了进度条，都不会显示这个功能。
 
-### progressColor <Badge text="新增" type="tip" />
+### progress-color <Badge text="新增" type="tip" />
 
 <DataParameter t="String" d="#1890ff" />
 
@@ -154,7 +154,13 @@
 
 :::
 
-### progressDecimal
+### progress-decimal
+
+### prop <Badge text="新增" type="tip"/>
+
+<DataParameter t="String" />
+
+`prop` 是一个重要的属性，它应当对应您给出数据的某一个键名。
 
 <DataParameter t="[Boolean, Number]" d="false" />
 

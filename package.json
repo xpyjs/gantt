@@ -26,19 +26,17 @@
   ],
   "files": [
     "dist",
-    "typings",
+    "types",
     "src",
     "package.json",
-    "tsconfig.json",
-    "CHANGELOG.md",
-    "vite.config.ts",
     "README.md"
   ],
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
-  "typings": "typings/index.d.ts",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js"
     },
@@ -56,6 +54,7 @@
     "serve": "vite preview",
     "build": "vite build",
     "build:debug": "vue-tsc --noEmit && vite build --debug",
+    "dts": "vue-tsc --declaration --emitDeclarationOnly --declarationDir ./types",
     "cz": "git-cz",
     "release": "standard-version",
     "lint": "eslint src/**/*.{vue,js,ts,jsx,tsx} --fix",
