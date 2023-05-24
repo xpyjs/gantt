@@ -31,6 +31,7 @@
         'xg-mid-separate-line',
         { 'xg-mid-separate-line__dark': isDark }
       ]"
+      :style="{ height: $param.rootHeight + 'px' }"
     />
     <!-- 移动示意线 -->
     <div
@@ -215,6 +216,7 @@ defineExpose(exports);
   .xg-mid-separate-line {
     width: 3px;
     height: 100%;
+    max-height: 100%;
     display: inline-block;
     position: relative;
     background-color: #e5e5e5;
@@ -257,6 +259,7 @@ defineExpose(exports);
   .xg-gantt-container {
     height: 100%;
     display: inline-block;
+    vertical-align: top;
   }
 }
 
