@@ -156,6 +156,10 @@ export default class AllData {
    * @param options 属性
    */
   update(data: any[], options: DataOptions = {}) {
+    this.__level = 0;
+    this.start = undefined;
+    this.end = undefined;
+    this.originData = data;
     this.__diff(this.data, data, options);
     this.__flatten();
   }

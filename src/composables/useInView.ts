@@ -34,8 +34,8 @@ export default () => {
       for (let i = inView.length - 1; i >= 0; i--) {
         if (
           inView[i].hide ||
-          inView[i].flatIndex < top.value ||
-          inView[i].flatIndex > bottom.value
+          inView[i].flatIndex <= top.value ||
+          inView[i].flatIndex >= bottom.value
         ) {
           inView.splice(i, 1);
         }
