@@ -9,7 +9,6 @@
 [[English](./README.md)] [[中文](./README_cn.md)]
 
 基于vue3的一个简单的甘特组件。
-![vue 3.x](https://img.shields.io/badge/vue-3.x-43B984) ![animate.css](https://img.shields.io/badge/animate.css-4.x-9E84E2)
 
 - vue2 版本请移步 [这里](https://github.com/xpyjs/gantt-vue2)
 
