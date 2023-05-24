@@ -4,14 +4,14 @@
     :class="[
       'xg-table-header-cell',
       {
-        'xg-table-header-cell-resizable': !props.column.isLast
+        'xg-table-header-cell-resizable': !column.isLast
       }
     ]"
     :style="{ 'border-color': $styleBox.borderColor }"
-    :colspan="props.column.colSpan"
-    :rowspan="props.column.rowSpan"
+    :colspan="column.colSpan"
+    :rowspan="column.rowSpan"
   >
-    {{ props.column.label }}
+    {{ column.label }}
   </th>
 </template>
 
@@ -34,13 +34,14 @@ const { $slotsBox } = useSlotsBox();
 const { $styleBox } = useStyle();
 const { onResizeTableColumn } = useDrag();
 
-const column = ref(props.column);
+const curColumn = ref(props.column);
 // 如果有children，取最后一个。children 可能有多层
-while (column.value.children?.length > 0) {
-  column.value = column.value.children[column.value.children.length - 1];
+while (curColumn.value.children?.length > 0) {
+  curColumn.value =
+    curColumn.value.children[curColumn.value.children.length - 1];
 }
 
-const index = column.value.node.props.__index;
+const index = curColumn.value.node.props.__index;
 
 const headerRef = ref(null) as Ref<HTMLElement | null>;
 onResizeTableColumn(headerRef, {
