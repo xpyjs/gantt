@@ -1,6 +1,6 @@
 # 入门
 
-<Description author="jeremyjone" version="2.0.1" date="2023-05-20" copyright="jeremyjone" />
+<Description author="jeremyjone" version="2.0.3" date="2023-05-24" copyright="xpyjs" />
 
 [![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small) ![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag) ![](https://img.shields.io/npm/v/@xpyjs/gantt.svg) ![](https://shields.io/github/v/release/xpyjs/gantt?display_name=tag&include_prereleases&label=lastest)
 ![](https://badgen.net/npm/dt/@xpyjs/gantt) ![](https://img.shields.io/npm/l/@xpyjs/gantt.svg) ![](https://img.shields.io/github/actions/workflow/status/xpyjs/gantt/release.yml?branch=master) ![](https://img.shields.io/github/actions/workflow/status/xpyjs/gantt/gh-pages.yml?branch=master&label=gh-pages)

@@ -1,6 +1,6 @@
 # 根组件 XGantt
 
-<Description author="jeremyjone" date="2023-05-20" copyright="jeremyjone" />
+<Description author="jeremyjone" copyright="xpyjs" />
 
 对于 `XGantt` 组件，它具有非常丰富的属性。
 

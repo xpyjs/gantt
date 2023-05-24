@@ -1,6 +1,6 @@
 # 滑块组件 XGanttSlider
 
-<Description author="jeremyjone" date="2023-05-20" copyright="jeremyjone" />
+<Description author="jeremyjone" copyright="xpyjs" />
 
 因为我们在内部已经将其加载，所以您并不需要显示的再次导入到您的组件中就可以使用。
 
