@@ -537,24 +537,24 @@ export default defineComponent({
 
     // 添加2号数据
     this.dataList2 = [
-      {
-        index: INDEX++,
-        startDate: '2021-11-01',
-        endDate: '2021-11-10',
-        name: '2号数据: 1'
-      },
-      {
-        index: INDEX++,
-        startDate: '2021-11-11',
-        endDate: '2021-11-20',
-        name: '2号数据: 2'
-      },
-      {
-        index: INDEX++,
-        startDate: '2021-11-21',
-        endDate: '2021-11-30',
-        name: '2号数据: 3'
-      }
+      // {
+      //   index: INDEX++,
+      //   startDate: '2021-11-01',
+      //   endDate: '2021-11-10',
+      //   name: '2号数据: 1'
+      // },
+      // {
+      //   index: INDEX++,
+      //   startDate: '2021-11-11',
+      //   endDate: '2021-11-20',
+      //   name: '2号数据: 2'
+      // },
+      // {
+      //   index: INDEX++,
+      //   startDate: '2021-11-21',
+      //   endDate: '2021-11-30',
+      //   name: '2号数据: 3'
+      // }
     ];
 
     // 添加3号数据

@@ -210,12 +210,12 @@ class GanttHeader extends Header {
   /**
    * 甘特的起始时间（数据起始时间请使用 data.start）
    */
-  start?: XDate;
+  start: XDate = new XDate();
 
   /**
    * 甘特的结束时间（数据结束时间请使用 data.end）
    */
-  end?: XDate;
+  end: XDate = new XDate().getOffset(Variables.time.millisecondOf.day);
   unit: HeaderDateUnit = 'day';
   minLength: number = 0;
 
@@ -249,8 +249,8 @@ class GanttHeader extends Header {
       return;
 
     this.unit = unit;
-    this.start = _start;
-    this.end = _end;
+    this.start = _start ?? new XDate();
+    this.end = _end ?? new XDate().getOffset(Variables.time.millisecondOf.day);
     this.minLength = minLen;
 
     this.generate();
@@ -262,8 +262,8 @@ class GanttHeader extends Header {
     // 通过 start 和 end 以及 unit 来生成 columns
     const columns: GanttColumn[] = [];
 
-    const start = this.start!.date.getTime();
-    const end = this.end!.date.getTime();
+    const start = this.start.date.getTime();
+    const end = this.end.date.getTime();
 
     // TODO 这里可以优化一下，直接一次循环就可以组成 headers。因为是固定格式
     let s: number;
@@ -330,8 +330,8 @@ class GanttHeader extends Header {
   setDatesByUnit() {
     this.datesByUnit = [];
 
-    const start = this.start!.date.getTime();
-    const end = this.end!.date.getTime();
+    const start = this.start.date.getTime();
+    const end = this.end.date.getTime();
 
     let s: number;
     for (s = start; s <= end; ) {
