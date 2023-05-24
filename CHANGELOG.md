@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.3](https://github.com/xpyjs/gantt/compare/v2.0.2...v2.0.3) (2023-05-24)
+
+
+### Bug Fixes
+
+* 🐛初始为空数据时，表头无法渲染 ([0ee9a56](https://github.com/xpyjs/gantt/commit/0ee9a5684f35c046647f602f525bd42eeb47a392))
+* 🐛清空数据异常 ([2506e97](https://github.com/xpyjs/gantt/commit/2506e97bdd504f82762e0c9569ba620ad91d5d3d))
+* 🐛中线在无高度情况下丢失 ([f04d632](https://github.com/xpyjs/gantt/commit/f04d632601c8cd7961c6a8a51ab237e15805e993))
+* 数据切换后展示不正常 ([c3cb633](https://github.com/xpyjs/gantt/commit/c3cb633e577c61cbdf48d64087348882b710d40a)), closes [#41](https://github.com/xpyjs/gantt/issues/41)
+
 ### [2.0.2](https://github.com/xpyjs/gantt/compare/v2.0.1...v2.0.2) (2023-05-22)
 
 
