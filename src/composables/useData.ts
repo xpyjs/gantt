@@ -66,7 +66,7 @@ export default () => {
     store.$links.update(store.$data.flatData);
   }
 
-  function getProp(data: RowItem, prop?: string, empty?: string) {
+  function getProp(data: RowItem, prop?: string, empty?: string): string {
     if (isString(prop)) {
       if (prop in data.data) return data.data[prop];
       if (prop.includes('.')) {
