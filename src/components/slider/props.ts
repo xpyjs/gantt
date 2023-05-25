@@ -1,6 +1,5 @@
 import Variables from '@/constants/vars';
 import RowItem from '@/models/data/row';
-import { type RowData } from '@/typings/data';
 import { type PropType } from 'vue';
 
 export default {

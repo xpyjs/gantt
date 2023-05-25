@@ -1,6 +1,5 @@
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
-import { type RowData } from '@/typings/data';
 import { isSymbol } from 'lodash';
 import { type Slots, type Slot } from 'vue';
 import useData from './useData';

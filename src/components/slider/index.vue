@@ -130,7 +130,7 @@ import useStyle from '@/composables/useStyle';
 import { formatDate } from '@/utils/date';
 import { flow, isBoolean, isFunction, isNumber } from 'lodash';
 import useEvent from '@/composables/useEvent';
-import { MoveSliderInternalData, RowData } from '@/typings/data';
+import { MoveSliderInternalData } from '@/typings/data';
 import useLinks from '@/composables/useLinks';
 import useElement from '@/composables/useElement';
 import useSlotsBox from '@/composables/useSlotsBox';
