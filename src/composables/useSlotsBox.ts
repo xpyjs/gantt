@@ -1,7 +1,6 @@
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
-import { isSymbol } from 'lodash';
-import { type Slots, type Slot } from 'vue';
+import { type Slots, type Slot, isVNode, Comment } from 'vue';
 import useData from './useData';
 
 export default () => {
@@ -24,7 +23,9 @@ export default () => {
     if (!slots) return false;
 
     return (
-      slots?.(toRowData(data))?.filter(item => !isSymbol(item.type)).length > 0
+      slots?.(toRowData(data))?.filter(
+        item => !(isVNode(item) && item.type === Comment)
+      ).length > 0
     );
   }
 
