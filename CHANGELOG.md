@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.4](https://github.com/xpyjs/gantt/compare/v2.0.3...v2.0.4) (2023-05-25)
+
+
+### Features
+
+* **reactive:** allow scope data to reactive ([d8f582c](https://github.com/xpyjs/gantt/commit/d8f582cc8314da1f48e10306494e42bd69e26247)), closes [#42](https://github.com/xpyjs/gantt/issues/42)
+
+
+### Bug Fixes
+
+* 🐛text slots can not display ([05a8e74](https://github.com/xpyjs/gantt/commit/05a8e74672bc3ccfbf235742af4875a4662cbc4f))
+
 ### [2.0.3](https://github.com/xpyjs/gantt/compare/v2.0.2...v2.0.3) (2023-05-24)
 
 
