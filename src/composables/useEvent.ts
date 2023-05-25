@@ -6,12 +6,16 @@ import { toRaw } from 'vue';
 export default () => {
   const { rootEmit } = useStore();
 
+  const toRowData = (data?: any) => {
+    return toRaw({ ...data });
+  };
+
   /**
    * 点击行事件
    * @param row 该行的原始数据
    */
   function EmitRowClick(row: any) {
-    rootEmit.value?.('row-click', toRaw(row));
+    rootEmit.value?.('row-click', toRowData(row));
   }
 
   /**
@@ -19,7 +23,7 @@ export default () => {
    * @param row 该行的原始数据
    */
   function EmitRowDblClick(row: any) {
-    rootEmit.value?.('row-dbl-click', toRaw(row));
+    rootEmit.value?.('row-dbl-click', toRowData(row));
   }
 
   /**
@@ -28,7 +32,7 @@ export default () => {
    * @param row 该行的原始数据
    */
   function EmitRowChecked(state: boolean, row: any) {
-    rootEmit.value?.('row-checked', state, toRaw(row));
+    rootEmit.value?.('row-checked', state, toRowData(row));
   }
 
   /**
@@ -40,7 +44,7 @@ export default () => {
       'move-slider',
       data.map(item => {
         return {
-          row: toRaw(item.row),
+          row: toRowData(item.row),
           old: item.old
         };
       })
@@ -58,7 +62,7 @@ export default () => {
     rootEmit.value?.(
       'add-link',
       link,
-      { from: toRaw(data.from), to: toRaw(data.to) },
+      { from: toRowData(data.from), to: toRowData(data.to) },
       cb
     );
   }
@@ -67,7 +71,7 @@ export default () => {
    * 点击连线事件
    */
   function EmitClickLink(link: LinkProps | null) {
-    rootEmit.value?.('click-link', link ? toRaw(link) : null);
+    rootEmit.value?.('click-link', link ? toRowData(link) : null);
   }
 
   /**

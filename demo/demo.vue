@@ -61,7 +61,12 @@
         prop="endDate"
         date-format="MM-dd HH:mm:ss"
         ellipsis
-      />
+      >
+        <template #default="scope">
+          <!-- <input v-model="scope.row.name" /> -->
+          <DatePicker v-model="scope.row.endDate" @click.stop />
+        </template>
+      </x-gantt-column>
 
       <x-gantt-slider
         prop="o.t1"
@@ -144,6 +149,7 @@
 <script setup lang="ts">
 import type { XGantt } from '../types';
 import { reactive, ref } from 'vue';
+import DatePicker from './components/DatePicker.vue';
 
 let id = 0;
 

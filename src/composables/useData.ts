@@ -3,7 +3,7 @@ import Variables from '@/constants/vars';
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
 import { isString } from 'lodash';
-import { computed, type ExtractPropTypes, toRaw, watch, type Ref } from 'vue';
+import { computed, type ExtractPropTypes, watch, type Ref } from 'vue';
 import useGanttHeader from './useGanttHeader';
 
 export default () => {
@@ -55,7 +55,7 @@ export default () => {
 
   function toRowData(data?: RowItem): RowData {
     return {
-      row: toRaw(data?.data),
+      row: data?.data,
       $index: data?.flatIndex,
       level: data && data.level + 1
     };

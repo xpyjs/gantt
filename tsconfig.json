@@ -46,6 +46,7 @@
     "src/pages/**/*.vue",
     "types/**/*.d.ts",
     "demo/demo.vue",
+    "demo/components/*.vue",
     "demo/*.ts",
     "tests/**/*.spec.ts"
   ],
