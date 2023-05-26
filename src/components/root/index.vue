@@ -222,6 +222,7 @@ defineExpose(exports);
     background-color: #e5e5e5;
     transition: background-color 0.1s, box-shadow 0.1s;
     cursor: col-resize;
+    z-index: 11;
 
     &:hover {
       background-color: #d5d5d5;
