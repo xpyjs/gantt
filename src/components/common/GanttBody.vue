@@ -32,7 +32,7 @@
         :style="{
           width: `${ganttColumnWidth}px`,
           left: `${ganttColumnWidth * i}px`,
-          backgroundColor: '#ddd'
+          backgroundColor: $styleBox.bodyStyle?.weekendColor || '#ddd'
         }"
       ></div>
     </template>
@@ -44,7 +44,7 @@
       :style="{
         width: `${ganttColumnWidth}px`,
         left: `${todayLeft}px`,
-        backgroundColor: '#87CEFA'
+        backgroundColor: $styleBox.bodyStyle?.todayColor || '#87CEFA'
       }"
     ></div>
   </div>

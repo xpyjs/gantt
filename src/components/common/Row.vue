@@ -2,23 +2,25 @@
   <div
     :class="[
       'xg-row',
-      {
-        'xg-row__hover':
-          props.renderStyle && $param.hoverItem?.uuid === props.data?.uuid
-      },
-      {
-        'xg-row__select':
-          props.renderStyle && $param.selectItem?.uuid === props.data?.uuid
-      },
+      // {
+      //   'xg-row__hover':
+      //     props.renderStyle && $param.hoverItem?.uuid === props.data?.uuid
+      // },
+      // {
+      //   'xg-row__select':
+      //     props.renderStyle && $param.selectItem?.uuid === props.data?.uuid
+      // },
       { 'xg-row__only': !props.renderStyle }
     ]"
     :style="{
       top: `${(props.data?.flatIndex ?? 0) * rowHeight}px`,
       height: `${rowHeight}px`,
       borderWidth: props.renderStyle ? '1px' : 0,
-      backgroundColor: props.renderStyle ? ($styleBox.levelColor[props.data!.level] ?? undefined) : undefined,
+      color: $styleBox.headerStyle?.textColor,
+      // backgroundColor: props.renderStyle ? ($styleBox.levelColor[props.data!.level] || $styleBox.headerStyle?.bgColor) : undefined,
+      backgroundColor: bgColor,
       'border-color': $styleBox.borderColor
-      }"
+    }"
     @mouseenter.capture="onEnter"
     @mouseleave="onLeave"
     @click="onClick"
@@ -32,6 +34,8 @@ import useEvent from '@/composables/useEvent';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
 import RowItem from '@/models/data/row';
+import { blend } from '@/utils/colors';
+import { computed } from 'vue';
 
 const props = defineProps({
   data: RowItem,
@@ -50,6 +54,23 @@ function onLeave() {
 
   $param.hoverItem = null;
 }
+
+const bgColor = computed(() => {
+  if (!props.renderStyle) return undefined;
+
+  let c =
+    $styleBox.levelColor[props.data!.level] || $styleBox.headerStyle?.bgColor;
+
+  if ($param.selectItem?.uuid === props.data?.uuid) {
+    c = blend('#ffffff99', $styleBox.bodyStyle?.selectColor ?? '#e0e0e0');
+  }
+
+  if ($param.hoverItem?.uuid === props.data?.uuid) {
+    c = blend('#ffffff99', $styleBox.bodyStyle?.hoverColor ?? '#f0f0f0');
+  }
+
+  return c;
+});
 
 const { EmitRowClick, EmitRowDblClick } = useEvent();
 let clicks = 0;

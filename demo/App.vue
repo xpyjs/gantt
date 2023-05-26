@@ -805,14 +805,8 @@ export default defineComponent({
         };
       } else {
         this.levelColor = ['azure', 'cornsilk'];
-        this.headerStyle = {
-          bgColor: '',
-          textColor: ''
-        };
-        this.bodyStyle = {
-          bgColor: '',
-          textColor: ''
-        };
+        this.headerStyle = {};
+        this.bodyStyle = {};
       }
     },
 
