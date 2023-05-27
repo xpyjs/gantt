@@ -1,6 +1,6 @@
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
-import { type Slots, type Slot, isVNode, Comment } from 'vue';
+import { type Slots, type Slot, isVNode, Comment, watch } from 'vue';
 import useData from './useData';
 
 export default () => {
@@ -8,6 +8,13 @@ export default () => {
 
   function setSlots(slots: Slots) {
     store.$slotsBox.setSlots(slots);
+
+    watch(
+      () => slots.default?.(),
+      () => {
+        store.$slotsBox.setSlots(slots);
+      }
+    );
   }
 
   const { toRowData } = useData();

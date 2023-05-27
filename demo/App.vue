@@ -78,7 +78,7 @@
           :resize-left="true"
           :resize-right="true"
           :linked-resize="true"
-          progress
+          :progress="useProgress"
           progress-decimal
         >
           <!-- <template v-slot="row">
@@ -179,6 +179,7 @@
       <button @click="() => (colSize = 'normal')">中</button>
       <button @click="() => (colSize = 'large')">大</button>
     </div>
+    <button @click="() => useProgress = !useProgress">使用进度</button>
   </div>
 
   <div v-else aria-label="多页">
@@ -307,7 +308,7 @@
             prop="uid"
             date-format="MM-dd H:mm:ss"
             empty-data=""
-            :move="handleMove"
+            :move="move3"
             :resize-left="true"
             :resize-right="true"
             :linked-resize="true"
@@ -340,6 +341,7 @@
       <button @click="handleClickInsertChildren3">插入子项</button>
       <button @click="handleClickDelete3">删除</button>
       <button @click="handleClickColor3">切换颜色</button>
+      <button @click="handleMoveChange3">可以移动</button>
       <button @click="() => (showCheckbox3 = !showCheckbox3)">
         显示checkbox
       </button>
@@ -389,6 +391,7 @@ export default defineComponent({
       isMulti: false,
       changeColor: 0,
       isDark: false,
+      useProgress: true,
       dataList: [] as any[],
       linkList: reactive([]) as any[],
       rowHeight1: 30,
@@ -442,6 +445,7 @@ export default defineComponent({
       showWeekend3: true,
       showToday3: true,
       showExpand3: true,
+      move3: true,
       levelColor3: ['', '#7A1', '#123'] as string[],
       headerStyle3: {
         bgColor: '#9c5',
@@ -472,8 +476,8 @@ export default defineComponent({
       }
       this.dataList.push({
         id: INDEX++,
-        startTime: `2021-08-${s++}`,
-        endTime: `2021-10-${e++}`,
+        startTime: `2023-08-${s++}`,
+        endTime: `2023-10-${e++}`,
         ttt: {
           a: 'aaa',
           b: 'bbb'
@@ -496,8 +500,8 @@ export default defineComponent({
 
         this.dataList[index]['children'].push({
           id: INDEX++,
-          startTime: `2021-08-${s++}`,
-          endTime: `2021-10-${e++}`,
+          startTime: `2023-08-${s++}`,
+          endTime: `2023-10-${e++}`,
           name: '子数据: ' + s,
           ttt: {
             a: 's-aaa',
@@ -521,8 +525,8 @@ export default defineComponent({
 
         this.dataList[0]['children'][index]['children'].push({
           id: INDEX++,
-          startTime: `2021-08-${s++}`,
-          endTime: `2021-10-${e++}`,
+          startTime: `2023-08-${s++}`,
+          endTime: `2023-10-${e++}`,
           name: '孙数据: ' + s,
           ttt: {
             a: 'gs-aaa',
@@ -539,20 +543,20 @@ export default defineComponent({
     this.dataList2 = [
       // {
       //   index: INDEX++,
-      //   startDate: '2021-11-01',
-      //   endDate: '2021-11-10',
+      //   startDate: '2023-11-01',
+      //   endDate: '2023-11-10',
       //   name: '2号数据: 1'
       // },
       // {
       //   index: INDEX++,
-      //   startDate: '2021-11-11',
-      //   endDate: '2021-11-20',
+      //   startDate: '2023-11-11',
+      //   endDate: '2023-11-20',
       //   name: '2号数据: 2'
       // },
       // {
       //   index: INDEX++,
-      //   startDate: '2021-11-21',
-      //   endDate: '2021-11-30',
+      //   startDate: '2023-11-21',
+      //   endDate: '2023-11-30',
       //   name: '2号数据: 3'
       // }
     ];
@@ -561,8 +565,8 @@ export default defineComponent({
     this.dataList3 = [
       {
         uid: INDEX++,
-        startDate: '2021-10-01',
-        endDate: '2021-10-10',
+        startDate: '2023-10-01',
+        endDate: '2023-10-10',
         name: '3号数据: 1',
         ttt: {
           a: 'aaa1',
@@ -571,8 +575,8 @@ export default defineComponent({
       },
       {
         uid: INDEX++,
-        startDate: '2021-10-11',
-        endDate: '2021-10-20',
+        startDate: '2023-10-11',
+        endDate: '2023-10-20',
         name: '3号数据: 2',
         ttt: {
           a: 'aaa2',
@@ -581,8 +585,8 @@ export default defineComponent({
       },
       {
         uid: INDEX++,
-        startDate: '2021-10-21',
-        endDate: '2021-10-30',
+        startDate: '2023-10-21',
+        endDate: '2023-10-30',
         name: '3号数据: 3',
         ttt: {
           a: 'aaa3',
@@ -591,8 +595,8 @@ export default defineComponent({
       },
       {
         uid: 4,
-        startDate: '2021-10-31',
-        endDate: '2021-11-10',
+        startDate: '2023-10-31',
+        endDate: '2023-11-10',
         name: '3号数据: 4',
         ttt: {
           a: 'aaa4',
@@ -686,8 +690,8 @@ export default defineComponent({
 
           this.dataList[index]['children'].push({
             id: INDEX++,
-            startTime: `2021-06-${s++}`,
-            endTime: `2021-07-${e++}`,
+            startTime: `2023-06-${s++}`,
+            endTime: `2023-07-${e++}`,
             name: '子数据: ' + s,
             ttt: {
               a: 's-aaa',
@@ -711,8 +715,8 @@ export default defineComponent({
 
           this.dataList[0]['children'][index]['children'].push({
             id: INDEX++,
-            startTime: `2021-07-${s++}`,
-            endTime: `2021-08-${e++}`,
+            startTime: `2023-07-${s++}`,
+            endTime: `2023-08-${e++}`,
             name: '孙数据: ' + s,
             ttt: {
               a: 'gs-aaa',
@@ -842,38 +846,38 @@ export default defineComponent({
       this.dataList2 = [
         {
           index: INDEX++,
-          startDate: '2021-11-01',
-          endDate: '2021-11-10',
+          startDate: '2023-11-01',
+          endDate: '2023-11-10',
           name: '2号数据: reload-1'
         },
         {
           index: INDEX++,
-          startDate: '2021-11-11',
-          endDate: '2021-11-20',
+          startDate: '2023-11-11',
+          endDate: '2023-11-20',
           name: '2号数据: reload-2'
         },
         {
           index: INDEX++,
-          startDate: '2021-11-21',
-          endDate: '2021-11-30',
+          startDate: '2023-11-21',
+          endDate: '2023-11-30',
           name: '2号数据: reload-3'
         },
         {
           index: INDEX++,
-          startDate: '2021-12-01',
-          endDate: '2021-12-10',
+          startDate: '2023-12-01',
+          endDate: '2023-12-10',
           name: '2号数据: reload-4'
         },
         {
           index: INDEX++,
-          startDate: '2021-12-11',
-          endDate: '2021-12-20',
+          startDate: '2023-12-11',
+          endDate: '2023-12-20',
           name: '2号数据: reload-5'
         },
         {
           index: INDEX++,
-          startDate: '2021-12-21',
-          endDate: '2021-12-30',
+          startDate: '2023-12-21',
+          endDate: '2023-12-30',
           name: '2号数据: reload-6'
         }
       ];
@@ -885,13 +889,13 @@ export default defineComponent({
 
     handleClickModify2() {
       Object.assign(this.dataList2[0], {
-        startDate: '2021-11-10',
-        endDate: '2021-11-20'
+        startDate: '2023-11-10',
+        endDate: '2023-11-20'
       });
 
       Object.assign(this.dataList2[0], {
-        startDate: `2021-11-13`,
-        endDate: `2021-11-17`,
+        startDate: `2023-11-13`,
+        endDate: `2023-11-17`,
         name: '2号孙数据: abcde'
       });
     },
@@ -899,8 +903,8 @@ export default defineComponent({
     handleClickInsert2() {
       this.dataList2.unshift({
         index: INDEX++,
-        startDate: `2021-11-10`,
-        endDate: `2021-11-20`,
+        startDate: `2023-11-10`,
+        endDate: `2023-11-20`,
         name: '2号数据: ' + INDEX
       });
     },
@@ -912,14 +916,14 @@ export default defineComponent({
 
       this.dataList2[0]['children'].unshift({
         index: INDEX++,
-        startDate: `2021-11-13`,
-        endDate: `2021-11-15`,
+        startDate: `2023-11-13`,
+        endDate: `2023-11-15`,
         name: '2号子数据: ' + INDEX,
         children: [
           {
             index: INDEX++,
-            startDate: `2021-11-5`,
-            endDate: `2021-11-21`,
+            startDate: `2023-11-5`,
+            endDate: `2023-11-21`,
             name: '2号孙数据: ' + INDEX
           }
         ]
@@ -991,8 +995,8 @@ export default defineComponent({
       this.dataList3 = [
         {
           uid: INDEX++,
-          startDate: '2021-11-01',
-          endDate: '2021-11-10',
+          startDate: '2023-11-01',
+          endDate: '2023-11-10',
           name: '3号数据: reload-1',
           ttt: {
             a: 'aaa',
@@ -1001,8 +1005,8 @@ export default defineComponent({
         },
         {
           uid: INDEX++,
-          startDate: '2021-11-11',
-          endDate: '2021-11-20',
+          startDate: '2023-11-11',
+          endDate: '2023-11-20',
           name: '3号数据: reload-2',
           ttt: {
             a: 'aaa',
@@ -1011,8 +1015,8 @@ export default defineComponent({
         },
         {
           uid: INDEX++,
-          startDate: '2021-11-21',
-          endDate: '2021-11-30',
+          startDate: '2023-11-21',
+          endDate: '2023-11-30',
           name: '3号数据: reload-3',
           ttt: {
             a: 'aaa',
@@ -1021,8 +1025,8 @@ export default defineComponent({
         },
         {
           uid: INDEX++,
-          startDate: '2021-12-01',
-          endDate: '2021-12-10',
+          startDate: '2023-12-01',
+          endDate: '2023-12-10',
           name: '3号数据: reload-4',
           ttt: {
             a: 'aaa',
@@ -1038,13 +1042,13 @@ export default defineComponent({
 
     handleClickModify3() {
       Object.assign(this.dataList3[0], {
-        startDate: '2021-11-10',
-        endDate: '2021-11-20'
+        startDate: '2023-11-10',
+        endDate: '2023-11-20'
       });
 
       Object.assign(this.dataList3[0], {
-        startDate: `2021-11-13`,
-        endDate: `2021-11-17`,
+        startDate: `2023-11-13`,
+        endDate: `2023-11-17`,
         name: '3号孙数据: abcde'
       });
     },
@@ -1052,8 +1056,8 @@ export default defineComponent({
     handleClickInsert3() {
       this.dataList3.unshift({
         uid: INDEX++,
-        startDate: `2021-11-10`,
-        endDate: `2021-11-20`,
+        startDate: `2023-11-10`,
+        endDate: `2023-11-20`,
         name: '3号数据: ' + INDEX,
         ttt: {
           a: 'aaa',
@@ -1065,8 +1069,8 @@ export default defineComponent({
     handleClickInsertChildren3() {
       this.dataList3[0]['children'].unshift({
         uid: INDEX++,
-        startDate: `2021-11-12`,
-        endDate: `2021-11-15`,
+        startDate: `2023-11-12`,
+        endDate: `2023-11-15`,
         name: '3号子数据: ' + INDEX,
         ttt: {
           a: 'aaa',
@@ -1075,8 +1079,8 @@ export default defineComponent({
         children: [
           {
             uid: INDEX++,
-            startDate: `2021-11-11`,
-            endDate: `2021-11-15`,
+            startDate: `2023-11-11`,
+            endDate: `2023-11-15`,
             name: '3号孙数据: ' + INDEX,
             ttt: {
               a: 'aaa',
@@ -1090,6 +1094,10 @@ export default defineComponent({
 
     handleClickDelete3() {
       console.log(this.dataList3.shift());
+    },
+
+    handleMoveChange3() {
+      this.move3 = !this.move3;
     },
 
     handleClickColor3() {
