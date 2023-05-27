@@ -7,7 +7,7 @@ export default () => {
   const { rootEmit } = useStore();
 
   const toRowData = (data?: any) => {
-    return toRaw({ ...data });
+    return { ...toRaw(data) };
   };
 
   /**
@@ -29,10 +29,13 @@ export default () => {
   /**
    * 选择行事件 checkbox
    * @param state 选择状态
-   * @param row 该行的原始数据
+   * @param list 该行的原始数据
    */
-  function EmitRowChecked(state: boolean, row: any) {
-    rootEmit.value?.('row-checked', state, toRowData(row));
+  function EmitRowChecked(state: boolean, data: any, list: any[] = []) {
+    rootEmit.value?.('row-checked', state, toRowData(data), [
+      toRowData(data),
+      ...list.map(item => toRowData(item))
+    ]);
   }
 
   /**

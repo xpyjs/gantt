@@ -5,7 +5,7 @@ import {
   type SliderEmits,
   type SliderMethods,
   type SliderProps
-} from 'typings/slider/prop';
+} from 'types/slider/prop';
 
 const XGanttSlider = withInstall<SliderProps, SliderMethods, SliderEmits>(
   Variables.name.slider,

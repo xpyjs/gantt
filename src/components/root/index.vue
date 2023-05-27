@@ -60,10 +60,10 @@
 
 <script lang="ts" setup>
 import SyncScrollContainer from '@/components/container/SyncScrollContainer.vue';
-import TableHeader from '@/components/common/TableHeader.vue';
-import TableBody from '@/components/common/TableBody.vue';
-import GanttHeader from '@/components/common/GanttHeader.vue';
-import GanttBody from '@/components/common/GanttBody.vue';
+import TableHeader from '@/components/container/TableHeader.vue';
+import TableBody from '@/components/container/TableBody.vue';
+import GanttHeader from '@/components/container/GanttHeader.vue';
+import GanttBody from '@/components/container/GanttBody.vue';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useTableWidth from '@/composables/useTableWidth';
 import { uuid } from '@/utils/common';

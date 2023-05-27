@@ -5,7 +5,7 @@ import {
   type ColumnEmits,
   type ColumnMethods,
   type ColumnProps
-} from 'typings/column/prop';
+} from 'types/column/prop';
 
 const XGanttColumn = withInstall<ColumnProps, ColumnMethods, ColumnEmits>(
   Variables.name.column,

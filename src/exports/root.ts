@@ -5,7 +5,7 @@ import {
   type RootEmits,
   type RootMethods,
   type RootProps
-} from 'typings/root/prop';
+} from 'types/root/prop';
 
 const XGantt = withInstall<RootProps, RootMethods, RootEmits>(
   Variables.name.root,

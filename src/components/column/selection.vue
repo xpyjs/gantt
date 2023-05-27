@@ -14,21 +14,21 @@
     "
   />
 
-  <input
+  <Checkbox
     v-if="$styleBox.showCheckbox"
     v-model="checked"
-    class="checkbox"
-    type="checkbox"
-    @click.stop
+    @click="onClickCheckbox"
+    @right-click="onRightClickCheckbox"
   />
 </template>
 
 <script lang="ts" setup>
-import { PropType, ref, watch } from 'vue';
+import { PropType, ref, watchEffect } from 'vue';
 import useStyle from '@/composables/useStyle';
 import useData from '@/composables/useData';
 import RowItem from '@/models/data/row';
 import Icon from '../common/Icon.vue';
+import Checkbox from '../common/Checkbox.vue';
 import useEvent from '@/composables/useEvent';
 
 const props = defineProps({
@@ -43,14 +43,35 @@ const props = defineProps({
 });
 
 const { rowHeight, $styleBox } = useStyle();
-const checked = ref(false);
+const checked = ref(props.data.isChecked);
 const { EmitRowChecked } = useEvent();
-watch(
-  () => checked.value,
-  val => {
-    EmitRowChecked(val, props.data.data);
+
+watchEffect(() => {
+  checked.value = props.data.isChecked;
+});
+
+const onClickCheckbox = (state: boolean) => {
+  EmitRowChecked(state, props.data.data);
+};
+
+const onRightClickCheckbox = (state: boolean) => {
+  // 选中时，先选中再抛出事件。取消时相反
+  if (!state) {
+    EmitRowChecked(
+      false,
+      props.data.data,
+      props.data.getFlattenChildren().map(v => v.data)
+    );
+    props.data.setChecked(false, true);
+  } else {
+    props.data.setChecked(true, true);
+    EmitRowChecked(
+      true,
+      props.data.data,
+      props.data.getFlattenChildren().map(v => v.data)
+    );
   }
-);
+};
 
 const { flattenData } = useData();
 </script>

@@ -22,7 +22,7 @@ const slots = useSlots();
 const emit = defineEmits<{
   (e: 'row-click', data: any): void;
   (e: 'row-dbl-click', data: any): void;
-  (e: 'row-checked', state: boolean, data: any): void;
+  (e: 'row-checked', state: boolean, data: any, list: any[]): void;
   (e: 'move-slider', data: MoveSliderData[]): void;
   (
     e: 'add-link',

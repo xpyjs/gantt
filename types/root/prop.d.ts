@@ -255,7 +255,7 @@ export declare interface RootMethods extends MethodOptions {
 export declare interface RootEmits extends ObjectEmitsOptions {
   // 'row-click': (data: any) => void;
   // 'row-dbl-click': (data: any) => void;
-  // 'row-checked': (state: boolean, data: any) => void;
+  // 'row-checked': (state: boolean, data: any, list: any[]) => void;
   // 'move-slider': (data: MoveSliderData[]) => void;
   // 'add-link': (
   //   link: LinkProps,
