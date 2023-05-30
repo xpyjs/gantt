@@ -136,47 +136,93 @@ export class XDate {
   }
 
   /**
-   * 将日期置为单位的起始位置
+   * 将日期置为单位的起始位置。如果传入日期，则按照日期精度调整
    */
-  startOf(unit: DateUnit) {
+  startOf(unit: DateUnit, date?: XDate) {
     switch (unit) {
+      // case 'year':
+      //   this.date.setMonth(0);
+      // case 'month':
+      //   this.date.setDate(1);
+      // case 'week':
+      //   this.date.setDate(this.date.getDate() - day(this.date).day());
+      // case 'day':
+      //   this.date.setHours(0);
+      // case 'hour':
+      //   this.date.setMinutes(0);
+      // case 'minute':
+      //   this.date.setSeconds(0);
+      // case 'second':
+      //   this.date.setMilliseconds(0);
+      //   break;
       case 'year':
-        this.date.setMonth(0);
+        this.date.setMonth(date?.date ? day(date.date).month() : 0);
       case 'month':
-        this.date.setDate(1);
+        this.date.setDate(date?.date ? day(date.date).date() : 1);
       case 'week':
-        this.date.setDate(this.date.getDate() - day(this.date).day());
+        this.date.setDate(
+          (date?.date ?? this.date).getDate() -
+            day(date?.date ?? this.date).day()
+        );
       case 'day':
-        this.date.setHours(0);
+        this.date.setHours(date?.date ? day(date.date).hour() : 0);
       case 'hour':
-        this.date.setMinutes(0);
+        this.date.setMinutes(date?.date ? day(date.date).minute() : 0);
       case 'minute':
-        this.date.setSeconds(0);
+        this.date.setSeconds(date?.date ? day(date.date).second() : 0);
       case 'second':
-        this.date.setMilliseconds(0);
+        this.date.setMilliseconds(
+          date?.date ? day(date.date).millisecond() : 0
+        );
         break;
     }
   }
 
   /**
-   * 将日期置为单位的结束位置
+   * 将日期置为单位的结束位置。如果传入日期，则按照日期精度调整
    */
-  endOf(unit: DateUnit) {
+  endOf(unit: DateUnit, date?: XDate) {
+    // switch (unit) {
+    //   case 'year':
+    //     this.date.setMonth(11);
+    //   case 'month':
+    //     this.date.setDate(day(this.date).daysInMonth());
+    //   case 'week':
+    //     this.date.setDate(this.date.getDate() + (6 - day(this.date).day()));
+    //   case 'day':
+    //     this.date.setHours(23);
+    //   case 'hour':
+    //     this.date.setMinutes(59);
+    //   case 'minute':
+    //     this.date.setSeconds(59);
+    //   case 'second':
+    //     this.date.setMilliseconds(999);
+    //     break;
+    // }
     switch (unit) {
       case 'year':
-        this.date.setMonth(11);
+        this.date.setMonth(date?.date ? day(date.date).month() : 11);
       case 'month':
-        this.date.setDate(day(this.date).daysInMonth());
+        this.date.setDate(
+          date?.date
+            ? day(date.date).daysInMonth()
+            : day(this.date).daysInMonth()
+        );
       case 'week':
-        this.date.setDate(this.date.getDate() + (6 - day(this.date).day()));
+        this.date.setDate(
+          (date?.date ?? this.date).getDate() +
+            (6 - day(date?.date ?? this.date).day())
+        );
       case 'day':
-        this.date.setHours(23);
+        this.date.setHours(date?.date ? day(date.date).hour() : 23);
       case 'hour':
-        this.date.setMinutes(59);
+        this.date.setMinutes(date?.date ? day(date.date).minute() : 59);
       case 'minute':
-        this.date.setSeconds(59);
+        this.date.setSeconds(date?.date ? day(date.date).second() : 59);
       case 'second':
-        this.date.setMilliseconds(999);
+        this.date.setMilliseconds(
+          date?.date ? day(date.date).millisecond() : 999
+        );
         break;
     }
   }

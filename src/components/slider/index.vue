@@ -232,6 +232,9 @@ const setStart = (x: number) => {
     (x / ganttColumnWidth.value) * currentMillisecond.value
   );
 
+  if (props.moveByUnit)
+    d.startOf(ganttHeader.unit === 'hour' ? 'hour' : 'day', startDate!);
+
   if (
     !props.moveByUnit ||
     Math.abs(props.data!.start.intervalTo(d) / currentMillisecond.value) *
@@ -249,6 +252,9 @@ const setEnd = (x: number) => {
   const d = endDate!.getOffset(
     (x / ganttColumnWidth.value) * currentMillisecond.value
   );
+
+  if (props.moveByUnit)
+    d.endOf(ganttHeader.unit === 'hour' ? 'hour' : 'day', endDate!);
 
   if (
     !props.moveByUnit ||

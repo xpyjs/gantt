@@ -28,13 +28,13 @@ export const Variables = {
         hour: 30,
         day: 30,
         week: 10,
-        month: 10
+        month: 7
       },
       large: {
         hour: 60,
         day: 60,
         week: 20,
-        month: 20
+        month: 14
       }
     }
   },
