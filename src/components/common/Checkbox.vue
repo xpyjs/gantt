@@ -45,6 +45,10 @@ const toggleChecked = () => {
 };
 
 const toggleRightClick = () => {
+  if (props.modelValue === true) {
+    rightClick.value = true;
+  }
+
   rightClick.value = !rightClick.value;
   value.value = rightClick.value;
 
