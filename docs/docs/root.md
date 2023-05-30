@@ -382,7 +382,7 @@ const onAddLink = (
 
 移动甘特行滑块后的事件。
 
-### row-checked <Badge text="调整，目前没有级联选择" type="warning" />
+### row-checked
 
 <DataParameter f="@row-checked -> function(state: Boolean, data: any, list: any[])" />
 
@@ -391,8 +391,6 @@ const onAddLink = (
 - list: 当前事件中所影响到的数据集合，Array
 
 选择复选框时触发该事件。
-
-:::
 
 ### row-click
 
