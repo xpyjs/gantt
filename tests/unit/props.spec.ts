@@ -57,8 +57,8 @@ describe('Expand', () => {
 describe('Checkbox', () => {
   test('showCheckbox', async () => {
     await wrapper.setProps({ showCheckbox: true });
-    expect(wrapper.find('.checkbox').exists()).toBe(true);
+    expect(wrapper.find('.xg-checkbox').exists()).toBe(true);
     await wrapper.setProps({ showCheckbox: false });
-    expect(wrapper.find('.checkbox').exists()).toBe(false);
+    expect(wrapper.find('.xg-checkbox').exists()).toBe(false);
   });
 });
