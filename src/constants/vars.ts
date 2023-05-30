@@ -22,7 +22,7 @@ export const Variables = {
         hour: 15,
         day: 15,
         week: 5,
-        month: 5
+        month: 3
       },
       normal: {
         hour: 30,
