@@ -130,6 +130,14 @@
 
 如果设置了 `true`，则意味着滑块可以被任意拖动。当拖动结束时，修改数据，同时会抛出 [`move-slider`](./root.html#move-slider) 事件。
 
+### move-by-unit
+
+<DataParameter t="Boolean" d="false" />
+
+设置滑块组件移动时，是否按照单位进行移动。如果设置为 `true`，则会按照单位进行移动，否则按照像素进行移动。
+
+目前是基于 `hour` 和 `day` 两个单位进行移动，这取决于根组件中 [`unit`](./root.html#unit) 属性的值。
+
 ### progress
 
 <DataParameter t="Boolean" d="false" />

@@ -47,6 +47,7 @@
         :show-today="showToday"
         :show-expand="showExpand"
         :data="dataList"
+        :unit="unit"
         :links="linkList"
         :header-style="headerStyle"
         :body-style="bodyStyle"
@@ -80,6 +81,7 @@
           :linked-resize="true"
           :progress="useProgress"
           progress-decimal
+          move-by-unit
         >
           <!-- <template v-slot="row">
           <div>{{ row.name }}</div>
@@ -179,6 +181,7 @@
       <button @click="() => (colSize = 'normal')">中</button>
       <button @click="() => (colSize = 'large')">大</button>
     </div>
+    <button @click="changeUnit1">切换单位</button>
     <button @click="() => useProgress = !useProgress">使用进度</button>
   </div>
 
@@ -413,6 +416,7 @@ export default defineComponent({
       } as any,
       colSize: 'normal',
       showSettingBtn: true,
+      unit: 'day',
 
       isDark2: false,
       dataList2: [] as any[],
@@ -477,7 +481,7 @@ export default defineComponent({
       this.dataList.push({
         id: INDEX++,
         startTime: `2023-08-${s++}`,
-        endTime: `2023-10-${e++}`,
+        endTime: `2023-08-${e++}`,
         ttt: {
           a: 'aaa',
           b: 'bbb'
@@ -501,7 +505,7 @@ export default defineComponent({
         this.dataList[index]['children'].push({
           id: INDEX++,
           startTime: `2023-08-${s++}`,
-          endTime: `2023-10-${e++}`,
+          endTime: `2023-08-${e++}`,
           name: '子数据: ' + s,
           ttt: {
             a: 's-aaa',
@@ -526,7 +530,7 @@ export default defineComponent({
         this.dataList[0]['children'][index]['children'].push({
           id: INDEX++,
           startTime: `2023-08-${s++}`,
-          endTime: `2023-10-${e++}`,
+          endTime: `2023-08-${e++}`,
           name: '孙数据: ' + s,
           ttt: {
             a: 'gs-aaa',
@@ -541,24 +545,24 @@ export default defineComponent({
 
     // 添加2号数据
     this.dataList2 = [
-      // {
-      //   index: INDEX++,
-      //   startDate: '2023-11-01',
-      //   endDate: '2023-11-10',
-      //   name: '2号数据: 1'
-      // },
-      // {
-      //   index: INDEX++,
-      //   startDate: '2023-11-11',
-      //   endDate: '2023-11-20',
-      //   name: '2号数据: 2'
-      // },
-      // {
-      //   index: INDEX++,
-      //   startDate: '2023-11-21',
-      //   endDate: '2023-11-30',
-      //   name: '2号数据: 3'
-      // }
+      {
+        index: INDEX++,
+        startDate: '2023-05-01',
+        endDate: '2023-05-10',
+        name: '2号数据: 1'
+      },
+      {
+        index: INDEX++,
+        startDate: '2023-05-11',
+        endDate: '2023-05-20',
+        name: '2号数据: 2'
+      },
+      {
+        index: INDEX++,
+        startDate: '2023-05-21',
+        endDate: '2023-05-30',
+        name: '2号数据: 3'
+      }
     ];
 
     // 添加3号数据
@@ -638,11 +642,13 @@ export default defineComponent({
     },
 
     merge4: function (data: any) {
-      return data.row.id % 4 !== 0;
+      // return data.row.id % 4 !== 0;
+      return false
     },
 
     merge5: function (data: any) {
-      return data.row.id % 5 !== 0;
+      // return data.row.id % 5 !== 0;
+      return false
     },
 
     handleMove: function ({
@@ -812,6 +818,12 @@ export default defineComponent({
         this.headerStyle = {};
         this.bodyStyle = {};
       }
+    },
+
+    changeUnit1() {
+      const u = ['month', 'week', 'day', 'hour'];
+      this.unit = u[(u.indexOf(this.unit) + 1) % u.length];
+      console.log('this.unit', this.unit);
     },
 
     onAddLink(
