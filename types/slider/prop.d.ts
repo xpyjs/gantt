@@ -74,6 +74,16 @@ export declare const props: {
   move: PropType<boolean | ((data: RowData) => boolean)>;
 
   /**
+   * 使用最大单位移动，基于当前单位。
+   * @default false
+   *
+   * @description `小时`单位按照每小时移动，`天`单位或比`天`更高级的单位会一律按照每天规则移动
+   *
+   * @see https://docs.xiaopangying.com/gantt/slider.html#move-by-unit
+   */
+  moveByUnit: boolean;
+
+  /**
    * 允许左侧移动。只有在设置了 move 属性之后，该属性才会生效
    * @default false
    *

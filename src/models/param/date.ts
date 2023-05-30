@@ -157,4 +157,27 @@ export class XDate {
         break;
     }
   }
+
+  /**
+   * 将日期置为单位的结束位置
+   */
+  endOf(unit: DateUnit) {
+    switch (unit) {
+      case 'year':
+        this.date.setMonth(11);
+      case 'month':
+        this.date.setDate(day(this.date).daysInMonth());
+      case 'week':
+        this.date.setDate(this.date.getDate() + (6 - day(this.date).day()));
+      case 'day':
+        this.date.setHours(23);
+      case 'hour':
+        this.date.setMinutes(59);
+      case 'minute':
+        this.date.setSeconds(59);
+      case 'second':
+        this.date.setMilliseconds(999);
+        break;
+    }
+  }
 }

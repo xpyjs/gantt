@@ -228,26 +228,37 @@ function EmitMove() {
 
 let startDate = props.data?.start.clone();
 const setStart = (x: number) => {
-  props.data?.setStart(
-    startDate!.getOffset(
-      (x / ganttColumnWidth.value) * currentMillisecond.value
-    ),
-    ganttHeader.unit,
-    props.linkedResize,
-    movedData
+  const d = startDate!.getOffset(
+    (x / ganttColumnWidth.value) * currentMillisecond.value
   );
+
+  if (
+    !props.moveByUnit ||
+    Math.abs(props.data!.start.intervalTo(d) / currentMillisecond.value) *
+      ganttColumnWidth.value >=
+      ganttColumnWidth.value
+  ) {
+    props.data?.setStart(d, ganttHeader.unit, props.linkedResize, movedData);
+  }
 
   return x;
 };
 
 let endDate = props.data?.end.clone();
-const setEnd = (x: number) =>
-  props.data?.setEnd(
-    endDate!.getOffset((x / ganttColumnWidth.value) * currentMillisecond.value),
-    ganttHeader.unit,
-    props.linkedResize,
-    movedData
+const setEnd = (x: number) => {
+  const d = endDate!.getOffset(
+    (x / ganttColumnWidth.value) * currentMillisecond.value
   );
+
+  if (
+    !props.moveByUnit ||
+    Math.abs(props.data!.end.intervalTo(d) / currentMillisecond.value) *
+      ganttColumnWidth.value >=
+      ganttColumnWidth.value
+  ) {
+    props.data?.setEnd(d, ganttHeader.unit, props.linkedResize, movedData);
+  }
+};
 
 const sliderRef = ref(null) as Ref<HTMLElement | null>;
 const { onDrag } = useDrag();

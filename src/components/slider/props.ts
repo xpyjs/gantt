@@ -62,6 +62,13 @@ export default {
   },
 
   /**
+   * 使用最大单位移动，基于当前单位。day / hour
+   */
+  moveByUnit: {
+    type: Boolean
+  },
+
+  /**
    * 允许左侧移动
    */
   resizeLeft: {

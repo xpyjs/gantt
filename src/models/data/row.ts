@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-05-19 18:26:45
+ * @LastEditTime: 2023-05-30 16:59:38
  * @Description: 一条数据类
  */
 
@@ -226,11 +226,13 @@ export default class RowItem {
     // 首先判断起始日期不能大于结束日期
     if (
       date.compareTo(
-        this.end.getOffset(-getMillisecondBy(unit, this.end.date))
+        this.end.getOffset(
+          -getMillisecondBy(unit === 'hour' ? 'hour' : 'day', this.end.date)
+        )
       ) === 'r'
     ) {
       this.__data[this.options.endLabel] = date.getOffset(
-        getMillisecondBy(unit, date.date)
+        getMillisecondBy(unit === 'hour' ? 'hour' : 'day', date.date)
       ).date;
     }
 
@@ -276,14 +278,15 @@ export default class RowItem {
     this.__data[this.options.endLabel] = date.date;
 
     // 首先判断起始日期不能大于结束日期
-
     if (
       date.compareTo(
-        this.start.getOffset(getMillisecondBy(unit, this.start.date))
+        this.start.getOffset(
+          getMillisecondBy(unit === 'hour' ? 'hour' : 'day', this.start.date)
+        )
       ) === 'l'
     ) {
       this.__data[this.options.startLabel] = date.getOffset(
-        -getMillisecondBy(unit, date.date)
+        -getMillisecondBy(unit === 'hour' ? 'hour' : 'day', date.date)
       ).date;
     }
 
