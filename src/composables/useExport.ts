@@ -1,6 +1,5 @@
 import { XDate } from '@/models/param/date';
 import { isDate, isUndefined } from 'lodash';
-import { type Ref, type DefineComponent } from 'vue';
 import useData from './useData';
 import useEvent from './useEvent';
 import useGanttHeader from './useGanttHeader';
@@ -9,12 +8,14 @@ import useParam from './useParam';
 import useToday from './useToday';
 import { baseUnit } from '@/utils/date';
 import Variables from '@/constants/vars';
+import useElement from './useElement';
 
-export default (ganttRef: Ref<DefineComponent | null>) => {
+export default () => {
   const { isInArea } = useToday();
   const { EmitNoDateError } = useEvent();
   const { ganttHeader } = useGanttHeader();
   const { ganttColumnWidth, currentMillisecond } = useGanttWidth();
+  const { ganttRef } = useElement();
 
   /**
    * 跳转到某个日期
@@ -120,11 +121,11 @@ export default (ganttRef: Ref<DefineComponent | null>) => {
       (date.intervalTo(ganttHeader.start) / currentMillisecond.value) *
       ganttColumnWidth.value;
 
-    function animateScrollTo(width: number) {
-      if (!ganttRef.value) return;
+    const top = ganttRef.value.$el.scrollTop ?? 0;
 
+    function animateScrollTo(width: number) {
       const duration = 300; // in milliseconds
-      const start = ganttRef.value.$el.scrollLeft ?? 0;
+      const start = ganttRef.value?.$el.scrollLeft ?? 0;
       const change = width - start;
       const increment = 20;
       let currentTime = 0;
@@ -132,7 +133,7 @@ export default (ganttRef: Ref<DefineComponent | null>) => {
       function animateScroll() {
         currentTime += increment;
         const val = easeInOutQuad(currentTime, start, change, duration);
-        ganttRef.value?.$el.scrollTo(val, 0);
+        ganttRef.value?.$el.scrollTo(val, top);
         if (currentTime < duration) {
           setTimeout(animateScroll, increment);
         }
