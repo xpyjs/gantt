@@ -915,8 +915,8 @@ export default defineComponent({
     handleClickInsert2() {
       this.dataList2.unshift({
         index: INDEX++,
-        startDate: `2023-11-10`,
-        endDate: `2023-11-20`,
+        startDate: `2023-06-1`,
+        endDate: `2023-06-05`,
         name: '2号数据: ' + INDEX
       });
     },
