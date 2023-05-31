@@ -63,6 +63,12 @@ export declare const props: {
    *
    * @see https://docs.xiaopangying.com/gantt/column.html#date-format
    *
+   * @example
+   * 内部使用了 dayjs 的 format 方法：
+   * 无参: "2020-04-02T08:02:17-05:00"
+   * "[YYYYescape] YYYY-MM-DDTHH:mm:ssZ[Z]": "YYYYescape 2019-01-25T00:00:00-02:00Z"
+   * "DD/MM/YYYY": "25/01/2019"
+   *
    * @description
    * 格式化对接了 dayjs，所以格式化内容可以使用 dayjs 的格式化内容，包括它的 高级格式化。
    * 详看：https://dayjs.gitee.io/docs/zh-CN/display/format
