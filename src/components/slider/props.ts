@@ -20,7 +20,7 @@ export default {
    */
   dateFormat: {
     type: String
-    // 重要，此处不能设置 default 默认值，需要在创建阶段配置默认值 'yyyy-MM-dd'。
+    // 重要，此处不能设置 default 默认值，哪怕只给了key，会使用 ISO8601 格式进行解析，例如：2020-04-02T08:02:17-05:00
     // 如果这里设置了，所有属性都会被格式化。
   },
 
