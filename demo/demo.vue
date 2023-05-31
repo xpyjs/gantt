@@ -100,6 +100,8 @@
     共{{ ganttData.length }}条
     <button @click="onAdd">增加</button>
     <button @click="onReduce">减少</button>
+    <button @click="onEmpty">清空</button>
+    <button @click="onReload">重新赋值</button>
     <button @click="onExpand">{{ showExpand ? '隐藏' : '展示' }}</button>
     <button @click="onExpandAll">
       {{ expandAll ? '闭合' : '展开' }}
@@ -261,6 +263,17 @@ function onAdd() {
 
 function onReduce() {
   ganttData.splice(ganttData.length - 1, 1);
+}
+
+function onEmpty() {
+  ganttData.length = 0;
+}
+
+function onReload() {
+  ganttData.length = 0;
+  for (let i = 0; i < 10; i++) {
+    onAdd();
+  }
 }
 
 const onClickRow = (data: any) => {
