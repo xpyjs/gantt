@@ -40,7 +40,7 @@
         >
           {{
             props.dateFormat
-              ? formatDate(originData, props.dateFormat)
+              ? day(originData).format(props.dateFormat)
               : originData
           }}
         </div>
@@ -127,7 +127,7 @@ import useGanttWidth from '@/composables/useGanttWidth';
 import useDrag from '@/composables/useDrag';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
-import { baseUnit, formatDate } from '@/utils/date';
+import { baseUnit, day } from '@/utils/date';
 import { flow, isBoolean, isFunction, isNumber } from 'lodash';
 import useEvent from '@/composables/useEvent';
 import { MoveSliderInternalData } from '@/typings/data';

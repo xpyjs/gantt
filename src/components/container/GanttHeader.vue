@@ -32,7 +32,8 @@
                 ['day', 'hour'].includes(ganttHeader.unit) &&
                 ($param.hoverItem?.start.isSame(c.date, ganttHeader.unit) ||
                   $param.hoverItem?.end.isSame(c.date, ganttHeader.unit))
-            }
+            },
+            { 'xg-gantt-header-cell__each': trIndex !== 0 }
           ]"
           :style="{
             'border-color': $styleBox.borderColor,
@@ -89,6 +90,11 @@ onMounted(updateHeaderHeight);
     border-bottom: 1px solid #e5e5e5;
     border-right: 1px solid #e5e5e5;
     font-size: 14px;
+  }
+
+  .xg-gantt-header-cell__each {
+    font-size: 12px;
+    word-wrap: break-word;
   }
 
   .highlight {

@@ -1,4 +1,4 @@
-import { day, formatDate } from '@/utils/date';
+import { day } from '@/utils/date';
 
 enum DateEnum {
   'year',
@@ -29,25 +29,29 @@ export class XDate {
   }
 
   /**
-   * 获取日期的周数文本
+   * 基于单位获取当前日期的格式化字符
    */
-  toWeek() {
-    // return `第 ${day(this.date).week()} 周`;
-    return `W${day(this.date).week()}`;
-  }
-
-  /**
-   * 获取日期的月份文本
-   */
-  toMonth() {
-    return formatDate(this.date, 'yyyy-MM');
-  }
-
-  /**
-   * 获取日期在当月的具体日期的文本
-   */
-  toDate() {
-    return day(this.date).date().toString();
+  getString(unit: DateUnit) {
+    switch (unit) {
+      case 'year':
+        return day(this.date).format('YYYY');
+      case 'month':
+        return day(this.date).format('YYYY-MM');
+      case 'week':
+        return day(this.date).format('wo');
+      case 'day':
+        return day(this.date).format('Do');
+      case 'hour':
+        return day(this.date).format('H');
+      case 'minute':
+        return day(this.date).format('m');
+      case 'second':
+        return day(this.date).format('s');
+      case 'millisecond':
+        return day(this.date).format('SSS');
+      default:
+        return '';
+    }
   }
 
   /**
@@ -115,7 +119,7 @@ export class XDate {
   /**
    * 返回一个可格式化的日期字符串
    */
-  toString(format: string = 'YYYY-MM-DD') {
+  toString(format: string = 'YYYY-MM-DD : HH:mm:ss') {
     return day(this.date).format(format);
   }
 

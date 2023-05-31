@@ -31,7 +31,7 @@
 
         <template v-else-if="props.prop || props.label">{{
           props.dateFormat
-            ? formatDate(originData, props.dateFormat)
+            ? day(originData).format(props.dateFormat)
             : originData
         }}</template>
       </div>
@@ -55,7 +55,7 @@ import useStyle from '@/composables/useStyle';
 import useSlotsBox from '@/composables/useSlotsBox';
 import SelectionVue from './selection.vue';
 import useData from '@/composables/useData';
-import { formatDate } from '@/utils/date';
+import { day } from '@/utils/date';
 
 export default defineComponent({
   name: Variables.name.column

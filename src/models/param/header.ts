@@ -54,18 +54,7 @@ class GanttColumn extends Column {
     super();
 
     this.date = date;
-
-    // this.label = this.date.getBy(unit).toString();
-    switch (unit) {
-      case 'month':
-        this.label = this.date.toMonth();
-        break;
-      case 'week':
-        this.label = this.date.toWeek();
-        break;
-      default:
-        this.label = this.date.getBy(unit).toString();
-    }
+    this.label = this.date.getString(unit);
   }
 }
 
