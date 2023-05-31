@@ -87,3 +87,18 @@ export function getMillisecondBy(unit: HeaderDateUnit, date?: Date | number) {
 
   return Variables.time.millisecondOf[unit];
 }
+
+/**
+ * 根据传入的单位，获取内部支持的基本单位
+ */
+export function baseUnit(unit: HeaderDateUnit) {
+  switch (unit) {
+    case 'hour':
+      return 'hour';
+    case 'day':
+    case 'week':
+    case 'month':
+    default:
+      return 'day';
+  }
+}

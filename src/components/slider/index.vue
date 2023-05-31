@@ -127,7 +127,7 @@ import useGanttWidth from '@/composables/useGanttWidth';
 import useDrag from '@/composables/useDrag';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
-import { formatDate } from '@/utils/date';
+import { baseUnit, formatDate } from '@/utils/date';
 import { flow, isBoolean, isFunction, isNumber } from 'lodash';
 import useEvent from '@/composables/useEvent';
 import { MoveSliderInternalData } from '@/typings/data';
@@ -232,8 +232,7 @@ const setStart = (x: number) => {
     (x / ganttColumnWidth.value) * currentMillisecond.value
   );
 
-  if (props.moveByUnit)
-    d.startOf(ganttHeader.unit === 'hour' ? 'hour' : 'day', startDate!);
+  if (props.moveByUnit) d.startOf(baseUnit(ganttHeader.unit), startDate!);
 
   if (
     !props.moveByUnit ||
@@ -253,8 +252,7 @@ const setEnd = (x: number) => {
     (x / ganttColumnWidth.value) * currentMillisecond.value
   );
 
-  if (props.moveByUnit)
-    d.endOf(ganttHeader.unit === 'hour' ? 'hour' : 'day', endDate!);
+  if (props.moveByUnit) d.endOf(baseUnit(ganttHeader.unit), endDate!);
 
   if (
     !props.moveByUnit ||

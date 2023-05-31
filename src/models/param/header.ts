@@ -2,7 +2,7 @@ import { XDate } from './date';
 import { isArray } from 'lodash';
 import { type VNode } from 'vue';
 import Variables from '@/constants/vars';
-import { getMillisecondBy } from '@/utils/date';
+import { baseUnit, getMillisecondBy } from '@/utils/date';
 import { uuid } from '@/utils/common';
 
 class Column {
@@ -336,7 +336,7 @@ class GanttHeader extends Header {
     let s: number;
     for (s = start; s <= end; ) {
       this.datesByUnit.push(new XDate(s));
-      s += getMillisecondBy(this.unit === 'hour' ? 'hour' : 'day', s);
+      s += getMillisecondBy(baseUnit(this.unit), s);
     }
   }
 }
