@@ -64,16 +64,8 @@ export declare const props: {
    * @see https://docs.xiaopangying.com/gantt/column.html#date-format
    *
    * @description
-   * | format | description |
-   * | :----: | :---------: |
-   * |   y    |     年      |
-   * |   q    |    季度     |
-   * |   M    |     月      |
-   * |   d    |     日      |
-   * |   H    |     时      |
-   * |   m    |     分      |
-   * |   s    |     秒      |
-   * |   S    |    毫秒     |
+   * 格式化对接了 dayjs，所以格式化内容可以使用 dayjs 的格式化内容，包括它的 高级格式化。
+   * 详看：https://dayjs.gitee.io/docs/zh-CN/display/format
    */
   dateFormat: string;
 
