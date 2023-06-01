@@ -31,6 +31,7 @@
 
 <script setup lang="ts">
 import useEvent from '@/composables/useEvent';
+import useExport from '@/composables/useExport';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
 import RowItem from '@/models/data/row';
@@ -72,6 +73,8 @@ const bgColor = computed(() => {
   return c;
 });
 
+const { jumpToDate } = useExport();
+
 const { EmitRowClick, EmitRowDblClick } = useEvent();
 let clicks = 0;
 const delay = 300;
@@ -83,6 +86,10 @@ function onClick() {
     timer = setTimeout(() => {
       clicks = 0;
     }, delay);
+
+    if ($styleBox.sliderIntoView && props.data?.start) {
+      jumpToDate(props.data.start.date);
+    }
 
     $param.selectItem = props.data ?? null;
     EmitRowClick(props.data?.data);

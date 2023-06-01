@@ -308,6 +308,12 @@ const ganttLinks = reactive([
 
 设置是否显示甘特图中的 `周末` 时间线。
 
+### slider-into-view <Badge text="新增" type="tip" />
+
+<DataParameter t="Boolean" d="false" />
+
+该属性将允许在点击行时，将当前行的甘特区域的 slider 滑块滑动到可视区域内（如果该行数据有日期属性）。
+
 ### unit <Badge text="新增" type="tip" />
 
 <DataParameter t="'month' | 'week' | 'day' | 'hour'" d="day" />

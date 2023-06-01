@@ -79,6 +79,7 @@ import useRoot from '@/composables/useRoot';
 import useLinks from '@/composables/useLinks';
 import Variables from '@/constants/vars';
 import useExport from '@/composables/useExport';
+import useElement from '@/composables/useElement';
 
 const containerId = uuid(10);
 const props = defineProps(rootProps);
@@ -89,7 +90,7 @@ const { rootRef } = useRoot();
 
 // #region 获取表格下方的滚动条 gap
 const tableRef = ref<DefineComponent | null>(null);
-const ganttRef = ref<DefineComponent | null>(null);
+const { ganttRef } = useElement();
 const scrollGapSize = ref(0);
 
 function getScrollGapSize() {
@@ -189,7 +190,7 @@ onResizeTableColumn(midLineRef, {
 // console.log('.....root', getCurrentInstance());
 
 // #region 暴露方法
-const exports = useExport(ganttRef);
+const exports = useExport();
 defineExpose(exports);
 // #endregion
 </script>

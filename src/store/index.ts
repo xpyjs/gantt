@@ -2,11 +2,18 @@
  * @Author: JeremyJone
  * @Date: 2021-12-24 16:36:33
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-05-17 09:49:28
+ * @LastEditTime: 2023-06-01 00:26:42
  * @Description: 头部注释
  */
 
-import { inject, provide, reactive, type Ref, ref } from 'vue';
+import {
+  inject,
+  provide,
+  reactive,
+  type Ref,
+  ref,
+  type DefineComponent
+} from 'vue';
 import EventBus from '@/utils/bus';
 import { AllData, AllLinks } from '@/models/data';
 import { GanttHeader, Param, SlotsBox, StyleBox } from '@/models/param';
@@ -48,6 +55,9 @@ export const initStore = (emit: any) => {
 
   const ganttBodyRef = ref<HTMLElement | null>(null);
   provide('ganttBodyRef', ganttBodyRef);
+
+  const ganttRef = ref<DefineComponent | null>(null);
+  provide('ganttRef', ganttRef);
 
   const linking = reactive({
     startPos: { x: 0, y: 0 },
@@ -126,6 +136,11 @@ export const useStore = () => {
      * 甘特图主体ref
      */
     ganttBodyRef: inject('ganttBodyRef') as Ref<HTMLElement | null>,
+
+    /**
+     * 甘特图ref
+     */
+    ganttRef: inject('ganttRef') as Ref<DefineComponent | null>,
 
     /**
      * 鼠标创建的连接中的连线数据

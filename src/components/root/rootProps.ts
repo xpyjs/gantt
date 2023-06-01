@@ -220,5 +220,13 @@ export default {
   highlightDate: {
     type: Boolean,
     default: false
+  },
+
+  /**
+   * 允许点击行时，将甘特进度条滚动到可视区域
+   */
+  sliderIntoView: {
+    type: Boolean,
+    default: false
   }
 };

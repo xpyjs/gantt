@@ -236,6 +236,14 @@ export declare const props: {
    * @see https://docs.xiaopangying.com/gantt/root.html#highlight-date
    */
   highlightDate: boolean;
+
+  /**
+   * 点击行时，是否将当前行滚动到视图中
+   * @default false
+   *
+   * @see https://docs.xiaopangying.com/gantt/root.html#slider-into-view
+   */
+  sliderIntoView: boolean;
 };
 
 export type RootProps = ExtractPropTypes<typeof props>;

@@ -4,7 +4,7 @@ import useParam from './useParam';
 
 export default () => {
   const { $param } = useParam();
-  const { tableHeaderRef, ganttHeaderRef, ganttBodyRef } = useStore();
+  const { tableHeaderRef, ganttHeaderRef, ganttBodyRef, ganttRef } = useStore();
 
   function getMaxHeaderHeight() {
     return Math.max(
@@ -24,6 +24,7 @@ export default () => {
     tableHeaderRef,
     ganttHeaderRef,
     ganttBodyRef,
+    ganttRef,
     getMaxHeaderHeight,
     updateHeaderHeight
   };

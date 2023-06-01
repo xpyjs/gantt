@@ -46,6 +46,7 @@ export default () => {
       store.$styleBox.headerStyle = props.headerStyle;
       store.$styleBox.bodyStyle = props.bodyStyle;
       store.$styleBox.primaryColor = props.primaryColor;
+      store.$styleBox.sliderIntoView = props.sliderIntoView;
     };
 
     fn();

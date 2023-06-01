@@ -132,4 +132,13 @@ export default class StyleBox {
   public set bodyStyle(v: BodyOptions) {
     this._bodyStyle = v;
   }
+
+  private _sliderIntoView: boolean = false;
+  public get sliderIntoView(): boolean {
+    return this._sliderIntoView;
+  }
+
+  public set sliderIntoView(v: boolean) {
+    this._sliderIntoView = v;
+  }
 }
