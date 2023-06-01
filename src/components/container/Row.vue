@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="rowRef"
     :class="[
       'xg-row',
       // {
@@ -23,20 +24,20 @@
     }"
     @mouseenter.capture="onEnter"
     @mouseleave="onLeave"
-    @click="onClick"
   >
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
+import { onUnifyClick } from '@/composables/useClick';
 import useEvent from '@/composables/useEvent';
 import useExport from '@/composables/useExport';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
 import RowItem from '@/models/data/row';
 import { blend } from '@/utils/colors';
-import { computed } from 'vue';
+import { Ref, computed, ref } from 'vue';
 
 const props = defineProps({
   data: RowItem,
@@ -74,33 +75,46 @@ const bgColor = computed(() => {
 });
 
 const { jumpToDate } = useExport();
-
 const { EmitRowClick, EmitRowDblClick } = useEvent();
-let clicks = 0;
-const delay = 300;
-let timer: any = null;
-function onClick() {
-  clicks++;
-  if (clicks === 1) {
-    // click
-    timer = setTimeout(() => {
-      clicks = 0;
-    }, delay);
-
+const rowRef = ref(null) as Ref<HTMLDivElement | null>;
+onUnifyClick(rowRef, {
+  click: () => {
     if ($styleBox.sliderIntoView && props.data?.start) {
       jumpToDate(props.data.start.date);
     }
 
     $param.selectItem = props.data ?? null;
     EmitRowClick(props.data?.data);
-  } else {
-    // dbl-click
-    clearTimeout(timer);
-    clicks = 0;
-
+  },
+  dblClick: () => {
     EmitRowDblClick(props.data?.data);
   }
-}
+});
+// let clicks = 0;
+// const delay = 300;
+// let timer: any = null;
+// function onClick() {
+//   clicks++;
+//   if (clicks === 1) {
+//     // click
+//     timer = setTimeout(() => {
+//       clicks = 0;
+//     }, delay);
+
+//     if ($styleBox.sliderIntoView && props.data?.start) {
+//       jumpToDate(props.data.start.date);
+//     }
+
+//     $param.selectItem = props.data ?? null;
+//     EmitRowClick(props.data?.data);
+//   } else {
+//     // dbl-click
+//     clearTimeout(timer);
+//     clicks = 0;
+
+//     EmitRowDblClick(props.data?.data);
+//   }
+// }
 </script>
 
 <style lang="scss">
