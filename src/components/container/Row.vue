@@ -41,12 +41,15 @@ import { Ref, computed, ref } from 'vue';
 
 const props = defineProps({
   data: RowItem,
-  renderStyle: { type: Boolean, default: true }
+  renderStyle: { type: Boolean, default: true },
+  longPress: { type: Boolean, default: false }
 });
 
 const { rowHeight, $styleBox } = useStyle();
 
 const { $param } = useParam();
+
+// #region set hover
 function onEnter() {
   $param.hoverItem = props.data ?? null;
 }
@@ -56,7 +59,9 @@ function onLeave() {
 
   $param.hoverItem = null;
 }
+// #endregion
 
+// #region background color
 const bgColor = computed(() => {
   if (!props.renderStyle) return undefined;
 
@@ -73,7 +78,9 @@ const bgColor = computed(() => {
 
   return c;
 });
+// #endregion
 
+// #region 点击事件
 const { jumpToDate } = useExport();
 const { EmitRowClick, EmitRowDblClick } = useEvent();
 const rowRef = ref(null) as Ref<HTMLDivElement | null>;
@@ -90,6 +97,7 @@ onUnifyClick(rowRef, {
     EmitRowDblClick(props.data?.data);
   }
 });
+// #endregion
 </script>
 
 <style lang="scss">

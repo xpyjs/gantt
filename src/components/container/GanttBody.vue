@@ -6,7 +6,7 @@
   >
     <!-- 滑动条 -->
     <template v-for="d in inView" :key="d.uuid">
-      <RowVue :data="d" class="xg-gantt-row" :render-style="false">
+      <RowVue :data="d" class="xg-gantt-row" :render-style="false" long-press>
         <component :is="$slotsBox.slider" :data="d" />
       </RowVue>
     </template>
