@@ -40,6 +40,7 @@
     .cell {
       width: 100%;
       display: inline-block;
+      box-sizing: border-box;
     }
 
     .cell-center {

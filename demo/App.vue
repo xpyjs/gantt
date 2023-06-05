@@ -151,7 +151,6 @@
           >
             <template #default="{ row }">
               <div
-                name="end"
                 :style="{ backgroundColor: `#${555}`, color: '#789' }"
               >
                 abc - {{ row }}
@@ -164,7 +163,7 @@
           </x-gantt-column>
         </XGanttColumn>
 
-        <XGanttColumn prop="picture12345" :merge="merge5">
+        <XGanttColumn prop="picture12345" :merge="merge5" ellipsis>
           <template #default="{ row }">
             👀😃✨✔🐱‍🚀🐱‍👓 {{ row.ttt.b }}
           </template>
