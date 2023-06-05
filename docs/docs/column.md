@@ -197,4 +197,38 @@ mergeFunc: function({
 </x-gantt-column>
 ```
 
+### title <Badge text="新增 v2.1.0" type="tip"/> <Badge text="实验性" type="warning" />
+
+允许您在列头部插入任何内容，这对于一些特殊需求有效果，比如多行文本等样式，再比如您需要插入一些功能，排序、筛选等。
+
+```html
+<x-gantt-column prop="name">
+  <template v-slot:title="{prop, label, level}">
+    <div>自定义插槽内容</div>
+  </template>
+</x-gantt-column>
+```
+
+它抛出的数据如下：
+
+```ts
+{
+  prop: string | undefined,
+  label: string | undefined,
+  level: number
+}
+```
+
+- `prop`*: 当前列的 `prop` 属性。该属性在具有子项的表头中不存在，因为它只接收 `label` 属性作为展示字段，参见 [label](#label)。
+- `label`: 当前列的 `label` 属性。
+- `level`: 当前列的层级。多级表头中它会有用，从上至下，从 1 开始计算层级。
+
+::: tip 建议
+
+如果需要使用该插槽处理排序、筛选等，可以通过 `prop` 属性来获取当前列字段，然后通过自定义方法监听筛选事件，修改源数据即可。
+
+在使用该插槽的过程中，如果如果出现问题，请及时 [反馈](https://github.com/xpyjs/gantt/issues)。
+
+:::
+
 接下来，您将继续学习滑块组件的内容。

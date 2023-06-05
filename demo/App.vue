@@ -110,6 +110,14 @@
           <template #default="{ row }">
             <div>2 - {{ row }}</div>
           </template>
+
+          <template #title="data">
+            <div>
+              <div>name---{{data}}</div>
+              <div>line2</div>
+              <!-- <div>{{ a }}</div> -->
+            </div>
+          </template>
         </XGanttColumn>
 
         <XGanttColumn
@@ -128,6 +136,10 @@
         </XGanttColumn>
 
         <XGanttColumn label="时间">
+          <template #title="data">
+              <div style="padding: 12px 0">time from slot - {{data}}</div>
+            </template>
+
           <XGanttColumn prop="startTime" width="150" center :merge="merge4" />
 
           <x-gantt-column
@@ -142,8 +154,12 @@
                 name="end"
                 :style="{ backgroundColor: `#${555}`, color: '#789' }"
               >
-                abc - {{ row.endTime }}
+                abc - {{ row }}
               </div>
+            </template>
+
+            <template v-slot:title="data">
+              <span>end time-{{ data }}</span>
             </template>
           </x-gantt-column>
         </XGanttColumn>
