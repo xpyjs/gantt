@@ -22,15 +22,24 @@ class Column {
 }
 
 class TableColumn extends Column {
+  uuid: string = uuid();
   node: VNode;
   /**
    * 非叶子结点只接收 label 参数作为标题
    */
   label: string;
+  prop?: string;
   declare children?: TableColumn[];
   parent?: TableColumn;
   width: number = Variables.default.tableColumnWidth;
+  /**
+   * 是否是当前行的最后一列
+   */
   isLast: boolean = false;
+  /**
+   * 是否为当前列的最后一个叶子结点（最下面的一行）
+   */
+  isLeaf: boolean = false;
 
   /**
    *
@@ -172,6 +181,8 @@ class TableHeader extends Header {
         // 非叶子结点只接收 label 参数作为展示。叶子结点还可以展示 prop 参数值
         if (!column.label) column.label = column.node.props?.prop ?? '';
 
+        column.prop = column.node.props?.prop;
+        column.isLeaf = true;
         result.push(column);
         this.leafs.push(column);
       }

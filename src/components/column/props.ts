@@ -78,5 +78,8 @@ export default {
 
   // ********* 内部参数 ********* //
   data: RowItem,
-  __index: Number
+  __index: Number,
+  __renderTitle: Boolean,
+  __renderTitleLabel: String,
+  __renderTitleProps: Object
 };

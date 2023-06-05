@@ -11,16 +11,21 @@
     :colspan="column.colSpan"
     :rowspan="column.rowSpan"
   >
-    {{ column.label }}
+    <component
+      :is="column.node"
+      __render-title
+      :__render-title-label="column.label"
+      :__render-title-props="titleProps"
+    />
   </th>
 </template>
 
 <script lang="ts" setup>
+import { Ref, ref } from 'vue';
 import useDrag from '@/composables/useDrag';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useStyle from '@/composables/useStyle';
 import Variables from '@/constants/vars';
-import { Ref, ref } from 'vue';
 
 const props = defineProps({
   column: {
@@ -30,7 +35,6 @@ const props = defineProps({
 });
 
 const { $slotsBox } = useSlotsBox();
-
 const { $styleBox } = useStyle();
 const { onResizeTableColumn } = useDrag();
 
@@ -52,7 +56,7 @@ onResizeTableColumn(headerRef, {
     );
   },
 
-  preMove: (x, clientX) => {
+  preMove: x => {
     if (
       $slotsBox.tableHeaders.leafs[index].width + x <
       Variables.size.minTableColumnWidth
@@ -61,6 +65,17 @@ onResizeTableColumn(headerRef, {
     return true;
   }
 });
+
+const titleProps = props.column.isLeaf
+  ? {
+      prop: props.column.prop,
+      label: props.column.label,
+      level: props.column.level // 表头层级，从上到下，从1开始
+    }
+  : {
+      label: props.column.label,
+      level: props.column.level // 表头层级，从上到下，从1开始
+    };
 </script>
 
 <style lang="scss">
