@@ -1,6 +1,13 @@
 import Variables from '@/constants/vars';
 import SliderVue from '@/components/slider/index.vue';
-import { type Component, type VNode, h, type Slots } from 'vue';
+import {
+  type Component,
+  type VNode,
+  h,
+  type Slots,
+  Comment,
+  isVNode
+} from 'vue';
 import { TableHeader } from './header';
 
 export default class SlotsBox {
@@ -28,8 +35,12 @@ export default class SlotsBox {
     return !!v.type?.name && !!v.type?.setup;
   }
 
+  private static __isValidComponent(v: any): v is Component {
+    return !(isVNode(v) && v.type === Comment);
+  }
+
   private setMultiColumn(col: VNode, column: TableHeader['columns'][0]) {
-    const s: () => any[] = (col.children as any)?.default;
+    const s: () => VNode[] = (col.children as any)?.default;
 
     if (s) {
       try {
@@ -38,6 +49,7 @@ export default class SlotsBox {
             const type = (v.type as Component)?.name;
             return (
               type &&
+              SlotsBox.__isValidComponent(v) &&
               SlotsBox.__isCustomComponent(v) &&
               SlotsBox.__checkType(type, Variables.name.column)
             );
@@ -87,6 +99,7 @@ export default class SlotsBox {
         // 只接收自定义的两个组件
         return (
           type &&
+          SlotsBox.__isValidComponent(v) &&
           SlotsBox.__isCustomComponent(v) &&
           [Variables.name.column, Variables.name.slider]
             .map(n => SlotsBox.__checkType(type, n))
