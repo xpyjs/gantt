@@ -57,7 +57,7 @@ import useGanttWidth from '@/composables/useGanttWidth';
 import useStyle from '@/composables/useStyle';
 import useParam from '@/composables/useParam';
 import useElement from '@/composables/useElement';
-import { onMounted } from 'vue';
+import { onMounted, onUpdated } from 'vue';
 import useGanttHeader from '@/composables/useGanttHeader';
 
 const { $param } = useParam();
@@ -67,6 +67,7 @@ const { getGanttUnitColumnWidth } = useGanttWidth();
 const { ganttHeaderRef, updateHeaderHeight } = useElement();
 const { ganttHeader } = useGanttHeader();
 onMounted(updateHeaderHeight);
+onUpdated(updateHeaderHeight);
 </script>
 
 <style lang="scss">

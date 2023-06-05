@@ -17,7 +17,10 @@ export default () => {
   function updateHeaderHeight() {
     if (!$param.headerHeight) return;
 
-    $param.headerHeight = getMaxHeaderHeight();
+    const maxHeight = getMaxHeaderHeight();
+    if ($param.headerHeight !== maxHeight) {
+      $param.headerHeight = maxHeight;
+    }
   }
 
   return {

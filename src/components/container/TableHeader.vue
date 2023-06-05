@@ -29,7 +29,7 @@ import useSlotsBox from '@/composables/useSlotsBox';
 import useParams from '@/composables/useParam';
 import TableHeaderTh from './TableHeaderTh.vue';
 import useElement from '@/composables/useElement';
-import { onMounted } from 'vue';
+import { onMounted, onUpdated } from 'vue';
 import useStyle from '@/composables/useStyle';
 
 const { $slotsBox } = useSlotsBox();
@@ -38,6 +38,7 @@ const { $styleBox } = useStyle();
 const { $param } = useParams();
 const { tableHeaderRef, updateHeaderHeight } = useElement();
 onMounted(updateHeaderHeight);
+onUpdated(updateHeaderHeight);
 </script>
 
 <style lang="scss">
