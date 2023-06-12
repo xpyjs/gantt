@@ -7,18 +7,28 @@
 
   <div class="level-block" :style="{ width: `${data!.level * indent}px` }" />
 
-  <Icon
-    v-if="$styleBox.showExpand && !!data?.children?.length"
-    name="arrow-right"
-    :class="['expand-icon', { 'expand-icon__expanded': data?.isExpand }]"
-    :style="{ width: `${rowHeight / 2}px`, height: `${rowHeight / 2}px` }"
-    @click.stop="
-      () => {
-        data?.setExpand(!data.isExpand);
-        flattenData();
-      }
-    "
-  />
+  <div
+    v-if="$styleBox.showExpand"
+    :style="{
+      width: `${rowHeight / 2}px`,
+      height: `${rowHeight / 2}px`,
+      display: 'inline-block',
+      'box-sizing': 'border-box'
+    }"
+  >
+    <Icon
+      v-if="!!data?.children?.length"
+      name="arrow-right"
+      :class="['expand-icon', { 'expand-icon__expanded': data?.isExpand }]"
+      :style="{ width: '100%', height: '100%' }"
+      @click.stop="
+        () => {
+          data?.setExpand(!data.isExpand);
+          flattenData();
+        }
+      "
+    />
+  </div>
 
   <Checkbox
     v-if="$styleBox.showCheckbox"
