@@ -49,6 +49,7 @@
         :data="dataList"
         :unit="unit"
         :links="linkList"
+        :draggable="draggable"
         :header-style="headerStyle"
         :body-style="bodyStyle"
         :level-color="levelColor"
@@ -187,6 +188,7 @@
     <button @click="() => (showWeekend = !showWeekend)">显示weekend</button>
     <button @click="() => (showToday = !showToday)">显示today</button>
     <button @click="() => (showExpand = !showExpand)">显示expand</button>
+    <button @click="() => (draggable = !draggable)">拖拽</button>
     <button @click="setSelected">设置选择</button>
     <button @click="jumpTo">跳转到</button>
     <input type="range" name="" id="" min="20" max="70" v-model="rowHeight1" />
@@ -417,6 +419,7 @@ export default defineComponent({
       showWeekend: true,
       showToday: true,
       showExpand: true,
+      draggable: false,
       levelColor: ['azure', 'cornsilk'] as string[],
       headerStyle: {
         bgColor: '',
@@ -434,7 +437,7 @@ export default defineComponent({
       unit: 'day',
 
       isDark2: false,
-      dataList2: [] as any[],
+      dataList2: reactive([]) as any[],
       linkList2: reactive([]) as any[],
       rowHeight2: 30,
       showCheckbox2: true,
@@ -501,7 +504,7 @@ export default defineComponent({
           a: 'aaa',
           b: 'bbb'
         },
-        name: '我的数据: ' + s
+        name: '我的数据: ' + INDEX
       });
       if (s > 30) s = 2;
       if (e > 30) e = 5;
@@ -521,7 +524,7 @@ export default defineComponent({
           id: INDEX++,
           startTime: `2023-08-${s++}`,
           endTime: `2023-08-${e++}`,
-          name: '子数据: ' + s,
+          name: '子数据: ' + INDEX,
           ttt: {
             a: 's-aaa',
             b: 's-bbb'
@@ -546,7 +549,7 @@ export default defineComponent({
           id: INDEX++,
           startTime: `2023-08-${s++}`,
           endTime: `2023-08-${e++}`,
-          name: '孙数据: ' + s,
+          name: '孙数据: ' + INDEX,
           ttt: {
             a: 'gs-aaa',
             b: 'gs-bbb'

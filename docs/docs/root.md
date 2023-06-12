@@ -200,6 +200,20 @@ const ganttLinks = reactive([
 
 :::
 
+### draggable <Badge text="新增2.1.0+" type="tip" /> <Badge text="预览功能" type="warning" />
+
+<DataParameter t="Boolean | { level: 'all' | 'current' }" d="false" />
+
+::: warning 注意
+
+这是一个预览功能，如果出现任何 bug，或者您希望有所改进，欢迎给我们提出 [issue](https://github.com/xpyjs/gantt/issues)
+
+:::
+
+开启该属性，允许对甘特图中的每行任务进行拖拽排序。默认情况下，仅允许拖拽同层内容的顺序。如果需要任意层级的拖拽时，可以传递一个对象，将参数配置为：`{ level: 'all' }` 即可。
+
+它允许您将数据任意排序，但不允许拖拽具有子父关系的数据。
+
 ### header-height
 
 <DataParameter t="Number | String" d="80" />

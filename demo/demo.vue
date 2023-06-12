@@ -13,6 +13,7 @@
       :show-weekend="true"
       :unit="(unit as any)"
       :dark="isDark"
+      :draggable="draggable"
       @row-click="onClickRow"
       @row-dbl-click="onDblClickRow"
       @row-checked="onCheckedRow"
@@ -102,6 +103,7 @@
     <button @click="onReduce">减少</button>
     <button @click="onEmpty">清空</button>
     <button @click="onReload">重新赋值</button>
+    <button @click="() => (draggable = !draggable)">拖拽</button>
     <button @click="onExpand">{{ showExpand ? '隐藏' : '展示' }}</button>
     <button @click="onExpandAll">
       {{ expandAll ? '闭合' : '展开' }}
@@ -113,7 +115,7 @@
     <button @click="setDark">{{ isDark ? '浅色' : '深色' }}</button>
   </div>
 
-  <div style="width: 100%; height: 400px; margin-top: 50px">
+  <!-- <div style="width: 100%; height: 400px; margin-top: 50px">
     <x-gantt
       data-id="index"
       :data="ganttData2"
@@ -145,7 +147,7 @@
 
       <x-gantt-slider prop="o.t1" :allow-link="false"> </x-gantt-slider>
     </x-gantt>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">
@@ -166,7 +168,7 @@ ganttData[0].children = [
     index: ++id,
     name: 'sub-t' + id,
     startDate: new Date(2023, 3, 5),
-    endDate: new Date(2023, 3, 10),
+    endDate: new Date(2023, 3, 5, 23, 59, 59),
     progress: 0.8,
     o: { t1: 'a', t2: 'b' }
   },
@@ -216,6 +218,8 @@ const ganttLinks = reactive([
     color: '#abc'
   }
 ]);
+
+const draggable = ref(false);
 
 const showExpand = ref(true);
 function onExpand() {
@@ -384,17 +388,17 @@ for (let i = 0; i < 10; i++) {
 //   }
 // ];
 
-const onClickRow2 = (data: any) => {
-  console.log('click row', data);
-};
+// const onClickRow2 = (data: any) => {
+//   console.log('click row', data);
+// };
 
-const onDblClickRow2 = (data: any) => {
-  console.log('dblclick row', data);
-};
+// const onDblClickRow2 = (data: any) => {
+//   console.log('dblclick row', data);
+// };
 
-const onCheckedRow2 = (state: boolean, data: any) => {
-  console.log('checked row', state, data);
-};
+// const onCheckedRow2 = (state: boolean, data: any) => {
+//   console.log('checked row', state, data);
+// };
 
 // const onMoveSlider2 = (data: any) => {
 //   console.log('move slider', data);
