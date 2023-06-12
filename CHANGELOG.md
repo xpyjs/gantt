@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/xpyjs/gantt/compare/v2.0.5...v2.1.0) (2023-06-12)
+
+
+### Features
+
+* **data:** ✨ 允许拖拽 ([9daa076](https://github.com/xpyjs/gantt/commit/9daa076189fd6b33d6e8d7c78f44d712599522f2)), closes [#14](https://github.com/xpyjs/gantt/issues/14)
+* **date:** ✨ 对接 dayjs 显示 ([d02978f](https://github.com/xpyjs/gantt/commit/d02978f344c3523de45a63bd6ba4c34c6cb89c88))
+* **header:** ✨ 添加每列表头（table）的插槽 ([c6664bd](https://github.com/xpyjs/gantt/commit/c6664bd514265a8e9350de911e48a7a788c1a202)), closes [#44](https://github.com/xpyjs/gantt/issues/44)
+* **slider:** ✨ 点击行可以将 slider 移动到视图 ([53226e6](https://github.com/xpyjs/gantt/commit/53226e6a9e661ab258e36dd57ed482a40af567fc))
+* **slider:** ✨ 添加 move-by-unit 参数 ([d94f750](https://github.com/xpyjs/gantt/commit/d94f750c7e57469536fff2ed4c37396f98069392))
+
+
+### Bug Fixes
+
+* **column:** 🐛 列的盒子模型 ([31527bf](https://github.com/xpyjs/gantt/commit/31527bf2a0a10881b3bab7a65fd53d16615a94bc))
+* **header:** 🐛 表头内容更改时两边高度不统一 ([e3c7341](https://github.com/xpyjs/gantt/commit/e3c73414f1ea585a8ceb42571e432c54b0c57672))
+* **indent:** 🐛 更新缩进样式 ([7062371](https://github.com/xpyjs/gantt/commit/7062371b4d94a8ca1375cd1baf30287206485691))
+* **jump:** 🐛 jumpToDate方法日期位置跳转不准 ([5673fa9](https://github.com/xpyjs/gantt/commit/5673fa91fd71adcf42e534df1b2ad48ced1e4926)), closes [#43](https://github.com/xpyjs/gantt/issues/43)
+
 ### [2.0.5](https://github.com/xpyjs/gantt/compare/v2.0.4...v2.0.5) (2023-05-30)
 
 
