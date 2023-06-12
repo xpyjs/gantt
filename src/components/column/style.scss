@@ -20,6 +20,10 @@
     .prefix {
       display: inline-block;
 
+      .drag-icon {
+        cursor: move;
+      }
+
       .expand-icon {
         margin-right: 4px;
         cursor: pointer;

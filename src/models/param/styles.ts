@@ -1,4 +1,5 @@
 import Variables from '@/constants/vars';
+import { isBoolean } from 'lodash';
 
 type Style = Record<string, string>;
 
@@ -140,5 +141,16 @@ export default class StyleBox {
 
   public set sliderIntoView(v: boolean) {
     this._sliderIntoView = v;
+  }
+
+  private _draggable: DraggableOptions = { draggable: false, level: 'current' };
+  public get draggable(): DraggableOptions {
+    return this._draggable;
+  }
+
+  public set draggable(v: boolean | DraggableOptions) {
+    this._draggable = isBoolean(v)
+      ? { draggable: v, level: 'current' }
+      : Object.assign(this._draggable, v);
   }
 }

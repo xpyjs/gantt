@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-05-31 14:16:27
+ * @LastEditTime: 2023-06-12 09:14:48
  * @Description: 一条数据类
  */
 
@@ -17,7 +17,7 @@ export default class RowItem {
   /**
    * 当前数据唯一 ID
    */
-  readonly uuid: string = uuid(12);
+  uuid: string = uuid(12);
 
   /**
    * 该数据在当前层级下的索引位置
@@ -382,5 +382,24 @@ export default class RowItem {
         child.__getFlattenChildren(arr);
       }
     }
+  }
+
+  /**
+   * 查找一个对象是否包含在当前对象的子集中
+   */
+  include(row?: RowItem | null): boolean {
+    if (!row) return false;
+
+    if (this.children.length > 0) {
+      for (const child of this.children) {
+        if (child.uuid === row.uuid) {
+          return true;
+        }
+        if (child.include(row)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

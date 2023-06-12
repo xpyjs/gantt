@@ -263,4 +263,52 @@ export default class AllData {
 
     fn(this.data);
   }
+
+  /**
+   * 交换两个数据的顺序，包括修改原始数据顺序
+   */
+  swap(a: RowItem, b: RowItem) {
+    if (a.include(b) || b.include(a)) {
+      return false;
+    }
+
+    const aIndex = this.data.findIndex(item => item.id === a.id);
+    const bIndex = this.data.findIndex(item => item.id === b.id);
+
+    if (~aIndex && ~bIndex && a.level === b.level) {
+      this.originData.splice(aIndex, 1, b.data);
+      this.originData.splice(bIndex, 1, a.data);
+    } else {
+      const _s = (a: RowItem, b: RowItem, oIndex: number) => {
+        const parent = a.parentNode;
+        const path = a.parentPath;
+
+        if (!parent) {
+          // 根级，直接交换
+          this.originData.splice(oIndex, 1, b.data);
+        } else {
+          // 不是根级，需要找到位置
+          // a.parentPath 记录了 a 相对于 this.originData 的位置，它是一个索引数组，然后通过 index 找到当前位置
+          let currentData = this.data[path[0]].children;
+          let currentOriginData = this.originData[path[0]].children;
+
+          for (let i = 1; i < path.length; i++) {
+            const index = path[i];
+            currentData = currentData[index].children;
+            currentOriginData = currentOriginData[index].children;
+          }
+
+          const idx = currentData.findIndex(it => it.id === a.id);
+          if (!~idx) return false;
+
+          currentOriginData.splice(idx, 1, b.data);
+        }
+      };
+
+      _s(a, b, aIndex);
+      _s(b, a, bIndex);
+    }
+
+    return true;
+  }
 }

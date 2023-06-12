@@ -244,6 +244,18 @@ export declare const props: {
    * @see https://docs.xiaopangying.com/gantt/root.html#slider-into-view
    */
   sliderIntoView: boolean;
+
+  /**
+   * 允许拖拽行顺序。它将改变原始数据的顺序
+   * @default false
+   *
+   * @description 开启该属性，允许对甘特图中的每行任务进行拖拽排序。默认情况下，仅允许拖拽同层内容的顺序。如果需要任意层级的拖拽时，可以传递一个对象，将参数配置为：`{ level: 'all' }` 即可。
+   *
+   * @see https://docs.xiaopangying.com/gantt/root.html#draggable
+   *
+   * @notice 这是一个预览功能，如果出现任何 bug，或者您希望有所改进，欢迎给我们提出 [issue](https://github.com/xpyjs/gantt/issues)
+   */
+  draggable: boolean | DraggableOptions;
 };
 
 export type RootProps = ExtractPropTypes<typeof props>;

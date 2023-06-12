@@ -44,7 +44,14 @@ export default () => {
 
       for (let i = top.value; i < bottom.value; i++) {
         if (!~inView.findIndex(v => v.flatIndex === i)) {
-          inView.push(store.$data.flatData[i]);
+          const oldIndex = inView.findIndex(
+            v => v.flatIndex === store.$data.flatData[i].flatIndex
+          );
+          if (~oldIndex) {
+            inView.splice(oldIndex, 1, store.$data.flatData[i]);
+          } else {
+            inView.push(store.$data.flatData[i]);
+          }
         }
       }
     }

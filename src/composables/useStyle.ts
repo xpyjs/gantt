@@ -47,6 +47,7 @@ export default () => {
       store.$styleBox.bodyStyle = props.bodyStyle;
       store.$styleBox.primaryColor = props.primaryColor;
       store.$styleBox.sliderIntoView = props.sliderIntoView;
+      store.$styleBox.draggable = props.draggable;
     };
 
     fn();

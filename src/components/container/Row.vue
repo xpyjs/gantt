@@ -11,15 +11,27 @@
       //   'xg-row__select':
       //     props.renderStyle && $param.selectItem?.uuid === props.data?.uuid
       // },
+      {
+        'xg-row__ghost':
+          props.renderStyle &&
+          $param.moveStartItem &&
+          $param.moveStartItem.uuid === props.data?.uuid
+      },
+      {
+        'xg-row__drag-chosen':
+          props.renderStyle &&
+          $param.moveHoverItem &&
+          $param.moveHoverItem.uuid === props.data?.uuid
+      },
       { 'xg-row__only': !props.renderStyle }
     ]"
     :style="{
       top: `${(props.data?.flatIndex ?? 0) * rowHeight}px`,
       height: `${rowHeight}px`,
       borderWidth: props.renderStyle ? '1px' : 0,
-      color: $styleBox.headerStyle?.textColor,
+      '--color': $styleBox.headerStyle?.textColor,
       // backgroundColor: props.renderStyle ? ($styleBox.levelColor[props.data!.level] || $styleBox.headerStyle?.bgColor) : undefined,
-      backgroundColor: bgColor,
+      '--backgroundColor': bgColor,
       'border-color': $styleBox.borderColor
     }"
     @mouseenter.capture="onEnter"
@@ -107,6 +119,8 @@ onUnifyClick(rowRef, {
   overflow: hidden;
   border-bottom: 1px solid #e5e5e5;
   box-sizing: border-box;
+  color: var(--color);
+  background-color: var(--backgroundColor);
 }
 
 .xg-row__only {
@@ -114,10 +128,10 @@ onUnifyClick(rowRef, {
 }
 
 .xg-row.xg-row__hover {
-  background-color: #f0f0f0aa !important;
+  background-color: #f0f0f0aa;
 }
 
-.xg-row__select {
-  background-color: #e0e0e0aa !important;
+.xg-row.xg-row__select {
+  background-color: #e0e0e0aa;
 }
 </style>

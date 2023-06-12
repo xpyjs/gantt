@@ -5,7 +5,11 @@
       'xg-root',
       { 'xg-root-dragging': mousedown, 'xg-root__dark': isDark }
     ]"
-    :style="[$styleBox.getBorder(), { 'border-color': $styleBox.borderColor }]"
+    :style="[
+      $styleBox.getBorder(),
+      { 'border-color': $styleBox.borderColor },
+      { '--primary-color': $styleBox.primaryColor }
+    ]"
   >
     <!-- 左侧表格 -->
     <sync-scroll-container

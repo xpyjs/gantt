@@ -34,5 +34,7 @@ const icon = computed(() => `icon-${props.name}`);
   color: #999;
   display: inline-block;
   font-size: 14px;
+  width: 1em;
+  height: 1em;
 }
 </style>

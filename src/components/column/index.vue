@@ -106,17 +106,14 @@ const realWidth = computed(() => {
 
 const selectionRef = ref(null) as any;
 const prefixWidth = ref(0);
-onMounted(() => {
-  prefixWidth.value = selectionRef.value?.clientWidth ?? 0;
-});
 
-watch(
-  () => [$styleBox.showCheckbox, $styleBox.showExpand],
-  async () => {
-    await nextTick();
-    prefixWidth.value = selectionRef.value?.clientWidth ?? 0;
-  }
-);
+const setPrefixWidth = async () => {
+  await nextTick();
+  prefixWidth.value = selectionRef.value?.clientWidth ?? 0;
+};
+
+onMounted(setPrefixWidth);
+watch(() => [$styleBox.showCheckbox, $styleBox.showExpand], setPrefixWidth);
 </script>
 
 <style lang="scss">

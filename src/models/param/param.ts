@@ -38,6 +38,24 @@ export default class Param {
     this._selectItem = v;
   }
 
+  private _moveHoverItem: RowItem | null = null;
+  public get moveHoverItem(): RowItem | null {
+    return this._moveHoverItem;
+  }
+
+  public set moveHoverItem(v: RowItem | null) {
+    this._moveHoverItem = v;
+  }
+
+  private _moveStartItem: RowItem | null = null;
+  public get moveStartItem(): RowItem | null {
+    return this._moveStartItem;
+  }
+
+  public set moveStartItem(v: RowItem | null) {
+    this._moveStartItem = v;
+  }
+
   private _showMoveLine: boolean = false;
   public get showMoveLine(): boolean {
     return this._showMoveLine;

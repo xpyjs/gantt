@@ -1,4 +1,10 @@
 <template>
+  <Icon
+    v-if="$styleBox.draggable.draggable !== false"
+    name="drag"
+    class="drag-icon"
+  />
+
   <div class="level-block" :style="{ width: `${data!.level * indent}px` }" />
 
   <Icon
@@ -43,6 +49,9 @@ const props = defineProps({
 });
 
 const { rowHeight, $styleBox } = useStyle();
+const { flattenData } = useData();
+
+// #region checkbox
 const checked = ref(props.data.isChecked);
 const { EmitRowChecked } = useEvent();
 
@@ -72,8 +81,7 @@ const onRightClickCheckbox = (state: boolean) => {
     );
   }
 };
-
-const { flattenData } = useData();
+// #endregion
 </script>
 
 <style lang="scss">

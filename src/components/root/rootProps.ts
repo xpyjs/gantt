@@ -228,5 +228,13 @@ export default {
   sliderIntoView: {
     type: Boolean,
     default: false
+  },
+
+  /**
+   * 允许拖拽
+   */
+  draggable: {
+    type: [Object, Boolean] as PropType<boolean | Partial<DraggableOptions>>,
+    default: false
   }
 };
