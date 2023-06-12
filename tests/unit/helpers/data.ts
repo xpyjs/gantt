@@ -1,6 +1,8 @@
 import { reactive, ref } from 'vue';
 
 let id = 0;
+const curYear = new Date().getFullYear();
+const curMonth = new Date().getMonth();
 
 const ganttData = reactive<any>([]);
 
@@ -8,8 +10,8 @@ function onAdd() {
   ganttData.push({
     index: ++id,
     name: 't' + id,
-    startDate: new Date(2023, 4, id),
-    endDate: new Date(2023, 5, id + 5),
+    startDate: new Date(curYear, curMonth, id),
+    endDate: new Date(curYear, curMonth + 1, id + 5),
     o: { t1: 'a', t2: 'b' }
   });
 }
@@ -22,24 +24,24 @@ ganttData[0].children = [
   {
     index: ++id,
     name: 'sub-t' + id,
-    startDate: new Date(2023, 3, 5),
-    endDate: new Date(2023, 3, 10),
+    startDate: new Date(curYear, curMonth, 5),
+    endDate: new Date(curYear, curMonth, 10),
     progress: 0.8,
     o: { t1: 'a', t2: 'b' }
   },
   {
     index: ++id,
     name: 'sub-t' + id,
-    startDate: new Date(2023, 3, 6),
-    endDate: new Date(2023, 3, 10),
+    startDate: new Date(curYear, curMonth, 6),
+    endDate: new Date(curYear, curMonth, 10),
     progress: 0.5,
     o: { t1: 'a', t2: 'b' },
     children: [
       {
         index: ++id,
         name: 'sub-sub-t' + id,
-        startDate: new Date(2023, 3, 5),
-        endDate: new Date(2023, 3, 10),
+        startDate: new Date(curYear, curMonth, 5),
+        endDate: new Date(curYear, curMonth, 10),
         progress: 0.3333333333,
         o: { t1: 'a', t2: 'b' }
       }
