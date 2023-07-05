@@ -1,4 +1,4 @@
-import { type XComponentConstructor } from 'typings/install';
+import { type XComponentConstructor } from '../../types/install';
 import type { EmitsOptions, MethodOptions, ObjectEmitsOptions } from 'vue';
 
 export const withInstall = <
