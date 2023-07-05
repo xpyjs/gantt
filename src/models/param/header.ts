@@ -268,13 +268,17 @@ class GanttHeader extends Header {
     // TODO 这里可以优化一下，直接一次循环就可以组成 headers。因为是固定格式
     let s: number;
     for (s = start; s <= end; ) {
-      this.dates.push(new XDate(s));
+      const d = new XDate(s);
+      d.startOf(this.unit);
+      this.dates.push(d);
       s += getMillisecondBy(this.unit, s);
     }
 
     // 保证要占满所有宽度
     while (this.dates.length < this.minLength) {
-      this.dates.push(new XDate(s));
+      const d = new XDate(s);
+      d.startOf(this.unit);
+      this.dates.push(d);
       s += getMillisecondBy(this.unit, s);
     }
 

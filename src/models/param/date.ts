@@ -162,12 +162,14 @@ export class XDate {
       case 'year':
         this.date.setMonth(date?.date ? day(date.date).month() : 0);
       case 'month':
-        this.date.setDate(date?.date ? day(date.date).date() : 1);
       case 'week':
-        this.date.setDate(
-          (date?.date ?? this.date).getDate() -
-            day(date?.date ?? this.date).day()
-        );
+        if (unit === 'month')
+          this.date.setDate(date?.date ? day(date.date).date() : 1);
+        else if (unit === 'week')
+          this.date.setDate(
+            (date?.date ?? this.date).getDate() -
+              day(date?.date ?? this.date).day()
+          );
       case 'day':
         this.date.setHours(date?.date ? day(date.date).hour() : 0);
       case 'hour':

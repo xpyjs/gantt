@@ -12,9 +12,11 @@ export default () => {
   function setGanttHeaders() {
     store.ganttHeader.setDate(
       // 使用 window 的宽度减去 table 的宽度，就是最小需要的列数，再加一个阈值即可
-      (window.innerWidth - tableWidth.value) /
-        getGanttUnitColumnWidth(new Date()) +
-        5,
+      Math.ceil(
+        (window.innerWidth - tableWidth.value) /
+          getGanttUnitColumnWidth(new Date()) +
+          5
+      ),
       store.$data.start,
       store.$data.end,
       store.$styleBox.unit
