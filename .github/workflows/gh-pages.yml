@@ -17,7 +17,7 @@ jobs:
       - name: 2. 设置 Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 16
 
       - name: 3. 安装依赖
         run: yarn && cd docs && yarn
