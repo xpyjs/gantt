@@ -256,6 +256,15 @@ export declare const props: {
    * @notice 这是一个预览功能，如果出现任何 bug，或者您希望有所改进，欢迎给我们提出 [issue](https://github.com/xpyjs/gantt/issues)
    */
   draggable: boolean | DraggableOptions;
+
+  /**
+   * 国际化显示
+   *
+   * @default 'en'
+   *
+   * @see https://docs.xiaopangying.com/gantt/root.html#locale
+   */
+  locale: string;
 };
 
 export type RootProps = ExtractPropTypes<typeof props>;
