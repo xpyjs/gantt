@@ -236,5 +236,13 @@ export default {
   draggable: {
     type: [Object, Boolean] as PropType<boolean | Partial<DraggableOptions>>,
     default: false
+  },
+
+  /**
+   * 国际化
+   */
+  locale: {
+    type: String,
+    default: 'en'
   }
 };

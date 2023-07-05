@@ -40,6 +40,7 @@
         end-key="endTime"
         expand-all
         highlight-date
+        locale="zh-cn"
         :dark="isDark"
         :gantt-column-size="colSize"
         :show-checkbox="showCheckbox"
@@ -114,7 +115,7 @@
 
           <template #title="data">
             <div>
-              <div>name---{{data}}</div>
+              <div>name---{{ data }}</div>
               <div>line2</div>
               <!-- <div>{{ a }}</div> -->
             </div>
@@ -138,8 +139,8 @@
 
         <XGanttColumn label="时间">
           <template #title="data">
-              <div style="padding: 12px 0">time from slot - {{data}}</div>
-            </template>
+            <div style="padding: 12px 0">time from slot - {{ data }}</div>
+          </template>
 
           <XGanttColumn prop="startTime" width="150" center :merge="merge4" />
 
@@ -151,9 +152,7 @@
             :merge="merge4"
           >
             <template #default="{ row }">
-              <div
-                :style="{ backgroundColor: `#${555}`, color: '#789' }"
-              >
+              <div :style="{ backgroundColor: `#${555}`, color: '#789' }">
                 abc - {{ row }}
               </div>
             </template>
@@ -199,7 +198,7 @@
       <button @click="() => (colSize = 'large')">大</button>
     </div>
     <button @click="changeUnit1">切换单位</button>
-    <button @click="() => useProgress = !useProgress">使用进度</button>
+    <button @click="() => (useProgress = !useProgress)">使用进度</button>
   </div>
 
   <div v-else aria-label="多页">
@@ -221,6 +220,7 @@
           :show-weekend="showWeekend2"
           :show-today="showToday2"
           :show-expand="showExpand2"
+          :unit="unit2"
           :data="dataList2"
           :links="linkList2"
           :header-style="headerStyle2"
@@ -296,6 +296,7 @@
         <button @click="() => (colSize2 = 'normal')">中</button>
         <button @click="() => (colSize2 = 'large')">大</button>
       </div>
+      <button @click="changeUnit2">切换单位</button>
     </div>
 
     <div style="padding-bottom: 10px">
@@ -444,6 +445,7 @@ export default defineComponent({
       showWeekend2: true,
       showToday2: true,
       showExpand2: true,
+      unit2: 'day',
       levelColor2: ['#123456', '#654321'] as string[],
       headerStyle2: {
         bgColor: '#684',
@@ -565,7 +567,7 @@ export default defineComponent({
     this.dataList2 = [
       {
         index: INDEX++,
-        startDate: '2023-05-01',
+        startDate: '2023-04-28',
         endDate: '2023-05-10',
         name: '2号数据: 1'
       },
@@ -661,12 +663,12 @@ export default defineComponent({
 
     merge4: function (data: any) {
       // return data.row.id % 4 !== 0;
-      return false
+      return false;
     },
 
     merge5: function (data: any) {
       // return data.row.id % 5 !== 0;
-      return false
+      return false;
     },
 
     handleMove: function ({
@@ -959,6 +961,12 @@ export default defineComponent({
         ]
       });
       this.dataList2 = [...this.dataList2];
+    },
+
+    changeUnit2() {
+      const u = ['month', 'week', 'day', 'hour'];
+      this.unit2 = u[(u.indexOf(this.unit2) + 1) % u.length];
+      console.log('this.unit2', this.unit2);
     },
 
     handleClickDelete2() {

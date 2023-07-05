@@ -84,9 +84,13 @@ import useLinks from '@/composables/useLinks';
 import Variables from '@/constants/vars';
 import useExport from '@/composables/useExport';
 import useElement from '@/composables/useElement';
+import { setLocale } from '@/utils/date';
 
 const containerId = uuid(10);
 const props = defineProps(rootProps);
+
+// 本地化
+setLocale(props.locale);
 
 // #region 挂载实例
 const { rootRef } = useRoot();

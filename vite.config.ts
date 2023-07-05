@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
+import glob from 'fast-glob';
 import eslintPlugin from 'vite-plugin-eslint';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(async () => ({
   plugins: [
     vue(),
     eslintPlugin({
@@ -19,6 +20,14 @@ export default defineConfig({
       styles: path.resolve(__dirname, 'src/styles'),
       utils: path.resolve(__dirname, 'src/utils')
     }
+  },
+
+  optimizeDeps: {
+    include: (
+      await glob(['dayjs/locale/*.js'], {
+        cwd: path.resolve(__dirname, 'node_modules')
+      })
+    ).map(p => p.replace(/\.js$/, ''))
   },
 
   build: {
@@ -40,4 +49,4 @@ export default defineConfig({
       }
     }
   }
-});
+}));

@@ -157,40 +157,70 @@ import DatePicker from './components/DatePicker.vue';
 
 let id = 0;
 
-const ganttData = reactive<any>([]);
+// const ganttData = reactive<any>([]);
 
-for (let i = 0; i < 50; i++) {
-  onAdd();
-}
+// for (let i = 0; i < 50; i++) {
+//   onAdd();
+// }
 
-ganttData[0].children = [
+// ganttData[0].children = [
+//   {
+//     index: ++id,
+//     name: 'sub-t' + id,
+//     startDate: new Date(2023, 3, 5),
+//     endDate: new Date(2023, 3, 5, 23, 59, 59),
+//     progress: 0.8,
+//     o: { t1: 'a', t2: 'b' }
+//   },
+//   {
+//     index: ++id,
+//     name: 'sub-t' + id,
+//     startDate: new Date(2023, 3, 6),
+//     endDate: new Date(2023, 3, 10),
+//     progress: 0.5,
+//     o: { t1: 'a', t2: 'b' },
+//     children: [
+//       {
+//         index: ++id,
+//         name: 'sub-sub-t' + id,
+//         startDate: new Date(2023, 3, 5),
+//         endDate: new Date(2023, 3, 10),
+//         progress: 0.3333333333,
+//         o: { t1: 'a', t2: 'b' }
+//       }
+//     ]
+//   }
+// ];
+
+const ganttData = reactive([
   {
-    index: ++id,
-    name: 'sub-t' + id,
-    startDate: new Date(2023, 3, 5),
-    endDate: new Date(2023, 3, 5, 23, 59, 59),
-    progress: 0.8,
-    o: { t1: 'a', t2: 'b' }
-  },
-  {
-    index: ++id,
-    name: 'sub-t' + id,
-    startDate: new Date(2023, 3, 6),
-    endDate: new Date(2023, 3, 10),
-    progress: 0.5,
-    o: { t1: 'a', t2: 'b' },
+    index: '2',
+    type: 1,
+    startDate: new Date('2022-02-19'),
+    endDate: new Date('2022-07-24'),
     children: [
       {
-        index: ++id,
-        name: 'sub-sub-t' + id,
-        startDate: new Date(2023, 3, 5),
-        endDate: new Date(2023, 3, 10),
-        progress: 0.3333333333,
-        o: { t1: 'a', t2: 'b' }
+        index: '20000001',
+        startDate: new Date('2022-03-09'),
+        endDate: new Date('2022-07-17'),
+        children: [
+          {
+            index: '2000000101',
+            startDate: new Date('2022-03-09'),
+            endDate: new Date('2022-07-17'),
+            children: []
+          },
+          {
+            index: '2000000102',
+            startDate: new Date('2022-03-09'),
+            endDate: new Date('2022-06-19'),
+            children: []
+          }
+        ]
       }
     ]
   }
-];
+]);
 
 let linkId = 1;
 const ganttLinks = reactive([

@@ -1,8 +1,11 @@
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import IsoWeek from 'dayjs/plugin/isoWeek';
+import localeData from 'dayjs/plugin/localeData';
+import updateLocale from 'dayjs/plugin/updateLocale';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
 import Variables from '@/constants/vars';
+import './lang';
 
 /** ********************************** */
 /** *** 下面方法全部使用 dayjs 实现 **** */
@@ -15,7 +18,29 @@ dayjs.extend(IsoWeek);
 // 添加自定义格式化
 dayjs.extend(advancedFormat);
 
+// 添加本地化
+dayjs.extend(localeData);
+dayjs.extend(updateLocale);
+
 export const day = dayjs;
+
+let L = 'en';
+
+export function setLocale(locale: string) {
+  if (L === locale) return;
+
+  L = locale;
+  day.locale(locale);
+}
+
+/**
+ * 更新本地化
+ */
+export function updateLocaleData() {
+  dayjs.updateLocale(L, {
+    weekStart: 1
+  });
+}
 
 /**
  * 获取对应单位的毫秒数
