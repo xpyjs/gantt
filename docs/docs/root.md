@@ -274,6 +274,14 @@ const ganttLinks = reactive([
 当然，您也可以只传入长度为 1 的数组，那么甘特表只会渲染顶层层级数据的背景颜色，其他层级继续使用默认背景色。
 :::
 
+### locale <Badge text="新增" type="tip" />
+
+<DataParameter t="String" d="en" />
+
+设置显示语言。主要为表头内容。
+
+支持所有 `dayjs` 语言包。具体参看 [多语言](./common.html#多语言)。
+
 ### primary-color
 
 <DataParameter t="String" d="#ECA710" />
