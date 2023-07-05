@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.1](https://github.com/xpyjs/gantt/compare/v2.1.0...v2.1.1) (2023-07-05)
+
+
+### Bug Fixes
+
+* **日期:** 🐛 修复日期在特定情况下表头异常错位 ([89d5730](https://github.com/xpyjs/gantt/commit/89d57307820fb0b660d7cdbc98a94a2a24df6135)), closes [#53](https://github.com/xpyjs/gantt/issues/53)
+* **i18n:** 🐛 dayjs 切换语言不更新 ([7f9b1cb](https://github.com/xpyjs/gantt/commit/7f9b1cbaaf330d29b306acb697029007e4359f31)), closes [#54](https://github.com/xpyjs/gantt/issues/54)
+
 ## [2.1.0](https://github.com/xpyjs/gantt/compare/v2.0.5...v2.1.0) (2023-06-12)
 
 
