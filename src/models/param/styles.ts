@@ -1,5 +1,6 @@
 import Variables from '@/constants/vars';
 import { isBoolean } from 'lodash';
+import { XDate } from './date';
 
 type Style = Record<string, string>;
 
@@ -148,9 +149,31 @@ export default class StyleBox {
     return this._draggable;
   }
 
-  public set draggable(v: boolean | DraggableOptions) {
+  public set draggable(v: boolean | Partial<DraggableOptions>) {
     this._draggable = isBoolean(v)
       ? { draggable: v, level: 'current' }
       : Object.assign(this._draggable, v);
+  }
+
+  private _holidays: Array<{ date: XDate[]; color?: string }> = [];
+  public get holidays(): Array<{ date: XDate[]; color?: string }> {
+    return this._holidays;
+  }
+
+  public set holidays(
+    v: Array<{ date: LikeDate | LikeDate[]; color?: string }>
+  ) {
+    const h = v.map(item => {
+      if (!Array.isArray(item.date)) {
+        item.date = [item.date];
+      }
+
+      return {
+        date: item.date.map(d => new XDate(d)),
+        color: item.color ?? this.bodyStyle?.weekendColor ?? '#ddd'
+      };
+    });
+
+    this._holidays = h;
   }
 }

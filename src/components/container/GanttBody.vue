@@ -47,6 +47,20 @@
         backgroundColor: $styleBox.bodyStyle?.todayColor || '#87CEFA'
       }"
     ></div>
+
+    <!-- 节假日 -->
+    <template v-for="holidays in $styleBox.holidays">
+      <div
+        v-for="date in holidays.date"
+        :key="date.toString()"
+        class="xg-gantt-body-date-line holiday"
+        :style="{
+          width: `${ganttColumnWidth}px`,
+          left: `${calcLeft(date)}px`,
+          backgroundColor: holidays.color
+        }"
+      ></div>
+    </template>
   </div>
 </template>
 
@@ -62,15 +76,27 @@ import RowVue from './Row.vue';
 import LinkPath from '@/components/links/LinkPath.vue';
 import Linking from '@/components/links/Linking.vue';
 import useElement from '@/composables/useElement';
+import { XDate } from '@/models/param/date';
 
 const { $slotsBox } = useSlotsBox();
 const { bodyHeight, $styleBox } = useStyle();
-const { ganttWidth, ganttColumnWidth } = useGanttWidth();
+const { ganttWidth, ganttColumnWidth, headerShowUnit, currentMillisecond } =
+  useGanttWidth();
 const { inView } = useInView();
 const { todayLeft, showToday } = useToday();
 const { ganttHeader } = useGanttHeader();
 const { $links } = useLinks();
 const { ganttBodyRef } = useElement();
+
+const calcLeft = (date: XDate) => {
+  const start = ganttHeader.start?.clone();
+  start?.startOf(headerShowUnit.value);
+
+  date.startOf(headerShowUnit.value);
+  return (
+    (date.intervalTo(start) / currentMillisecond.value) * ganttColumnWidth.value
+  );
+};
 </script>
 
 <style lang="scss">

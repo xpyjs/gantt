@@ -244,5 +244,15 @@ export default {
   locale: {
     type: String,
     default: 'en'
+  },
+
+  /**
+   * 自定义节日
+   */
+  holidays: {
+    type: Array as PropType<
+      Array<{ date: LikeDate | LikeDate[]; color?: string }>
+    >,
+    default: () => []
   }
 };

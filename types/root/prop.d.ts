@@ -265,6 +265,15 @@ export declare const props: {
    * @see https://docs.xiaopangying.com/gantt/root.html#locale
    */
   locale: string;
+
+  /**
+   * 自定义节日
+   *
+   * @default []
+   *
+   * @see https://docs.xiaopangying.com/gantt/root.html#holidays
+   */
+  holidays: PropType<Array<{ date: LikeDate | LikeDate[]; color?: string }>>;
 };
 
 export type RootProps = ExtractPropTypes<typeof props>;

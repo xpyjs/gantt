@@ -6,3 +6,5 @@ declare type DateUnit =
   | 'minute'
   | 'millisecond'
   | 'second';
+
+declare type LikeDate = Date | number | string;

@@ -252,6 +252,23 @@ const ganttLinks = reactive([
 
 是否在悬停当前行时，高亮显示当前日期，默认为 `false`。
 
+### holidays <Badge text="新增" type="tip" />
+
+<DataParameter t="Array" d="[]" />
+
+允许用户自定义渲染特定假期。
+
+它接收一个数组，每一个数组都可以单独设置日期、颜色，用户可以根据自己的需求单独配置不同的日期。
+
+`TypeScript` 类型：
+
+```ts
+Array<{
+  date: (Date | number | string) | (Date | number | string)[];
+  color?: string
+}>
+```
+
 ### gantt-column-size
 
 <DataParameter t="normal | small | large" d="normal" />

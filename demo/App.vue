@@ -47,6 +47,10 @@
         :show-weekend="showWeekend"
         :show-today="showToday"
         :show-expand="showExpand"
+        :holidays="[
+          { date: '2023-8-5', color: '#f00' },
+          { date: '2023-8-8', color: 'green' }
+        ]"
         :data="dataList"
         :unit="unit"
         :links="linkList"

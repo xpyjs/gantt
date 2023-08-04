@@ -17,7 +17,7 @@ enum DateEnum {
 export class XDate {
   date: Date;
 
-  constructor(date?: Date | number | string) {
+  constructor(date?: LikeDate) {
     this.date = day(date).toDate();
   }
 
