@@ -10,10 +10,12 @@
   <div
     v-if="$styleBox.showExpand"
     :style="{
-      width: `${rowHeight / 2}px`,
-      height: `${rowHeight / 2}px`,
+      width: `${Math.min(rowHeight / 2, 16)}px`,
+      height: `${Math.min(rowHeight / 2, 16)}px`,
+      lineHeight: `${Math.min(rowHeight / 2, 16)}px`,
       display: 'inline-block',
-      'box-sizing': 'border-box'
+      'box-sizing': 'border-box',
+      'vertical-align': 'middle'
     }"
   >
     <Icon
