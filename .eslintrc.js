@@ -44,6 +44,7 @@ module.exports = {
     '@typescript-eslint/strict-boolean-expressions': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
 
-    'vue/multi-word-component-names': 'off'
+    'vue/multi-word-component-names': 'off',
+    'vue/no-setup-props-destructure': 'off'
   }
 };
