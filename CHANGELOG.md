@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.2](https://github.com/xpyjs/gantt/compare/v2.1.1...v2.1.2) (2023-08-04)
+
+
+### Features
+
+* **gantt:** ✨ 添加特殊日期的渲染 ([4f6c0f0](https://github.com/xpyjs/gantt/commit/4f6c0f067802db8d49b2b2da35d550cf78e43081)), closes [#46](https://github.com/xpyjs/gantt/issues/46) [#51](https://github.com/xpyjs/gantt/issues/51)
+
+
+### Bug Fixes
+
+* **column:** 🐛 展开按钮错位 ([55adf32](https://github.com/xpyjs/gantt/commit/55adf32fe06f35117b20b71eb593190d2a2824e1))
+
 ### [2.1.1](https://github.com/xpyjs/gantt/compare/v2.1.0...v2.1.1) (2023-07-05)
 
 
