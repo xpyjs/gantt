@@ -32,15 +32,21 @@ export default () => {
       if (condition === 'after') {
         // 计算全量之前的日期长度
         const d = new XDate(date);
-        const cur = d.getBy(headerShowUnit.value);
-        return full - cur + 1;
+        if (store.ganttHeader.unit === 'week') {
+          return full - day(date).weekday();
+        }
+
+        return full - d.getBy(headerShowUnit.value) + 1;
       }
 
       if (condition === 'before') {
         // 计算全量之前的日期长度
         const d = new XDate(date);
-        const cur = d.getBy(headerShowUnit.value);
-        return cur;
+        if (store.ganttHeader.unit === 'week') {
+          return day(date).weekday() + 1;
+        }
+
+        return d.getBy(headerShowUnit.value);
       }
 
       return full;

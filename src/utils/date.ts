@@ -4,6 +4,7 @@ import IsoWeek from 'dayjs/plugin/isoWeek';
 import localeData from 'dayjs/plugin/localeData';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
+import weekday from 'dayjs/plugin/weekday';
 import Variables from '@/constants/vars';
 import './lang';
 
@@ -21,6 +22,7 @@ dayjs.extend(advancedFormat);
 // 添加本地化
 dayjs.extend(localeData);
 dayjs.extend(updateLocale);
+dayjs.extend(weekday);
 
 export const day = dayjs;
 

@@ -14,7 +14,7 @@
             c.date.date,
             i === 0
               ? 'after'
-              : ganttHeader.unit === 'month' && i === dateList[1].length - 1
+              : i === dateList[1].length - 1
               ? 'before'
               : undefined
           )}px`"
