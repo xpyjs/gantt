@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.3](https://github.com/xpyjs/gantt/compare/v2.1.2...v2.1.3) (2023-08-17)
+
+
+### Bug Fixes
+
+* **header:** 🐛 修复 `月/周` 下头部长度问题 ([29d9440](https://github.com/xpyjs/gantt/commit/29d9440563c52e5fcd0020b290b3892367d39291))
+* **header:** 🐛 修复月单位下表头显示问题 ([cdaa7ca](https://github.com/xpyjs/gantt/commit/cdaa7caeda546d43d1c96deaf5616d189145c280)), closes [#57](https://github.com/xpyjs/gantt/issues/57) [#61](https://github.com/xpyjs/gantt/issues/61)
+
 ### [2.1.2](https://github.com/xpyjs/gantt/compare/v2.1.1...v2.1.2) (2023-08-04)
 
 
