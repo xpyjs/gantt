@@ -137,7 +137,7 @@ export default {
     type: String as PropType<GanttColumnSize>,
     default: 'normal',
     validator: (v: GanttColumnSize) => {
-      return ['small', 'normal', 'large'].includes(v);
+      return toString.call(v) === '[object Number]' || ['small', 'normal', 'large'].includes(v.toString());
     }
   },
 

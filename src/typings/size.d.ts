@@ -1,1 +1,1 @@
-declare type GanttColumnSize = 'small' | 'normal' | 'large';
+declare type GanttColumnSize = 'small' | 'normal' | 'large' | number;
