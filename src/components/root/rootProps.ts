@@ -134,10 +134,10 @@ export default {
    * 甘特图表的每一列宽度
    */
   ganttColumnSize: {
-    type: String as PropType<GanttColumnSize>,
+    type: String as PropType<GanttColumnSize> | number,
     default: 'normal',
     validator: (v: GanttColumnSize) => {
-      return ['small', 'normal', 'large'].includes(v);
+      return typeof v === 'number' || ['small', 'normal', 'large'].includes(v);
     }
   },
 
