@@ -11,4 +11,4 @@ fi
     # cd ..
     # git add ./docs/*
     # git commit -m "docs(release): v$VERSION"
-    # echo "Docs v$VERSION update succeeded!"
+    echo "Docs v$VERSION update succeeded!"
