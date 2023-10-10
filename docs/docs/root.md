@@ -271,9 +271,22 @@ Array<{
 
 ### gantt-column-size
 
-<DataParameter t="normal | small | large" d="normal" />
+<DataParameter t="'normal' | 'small' | 'large' | object" d="'normal'" />
 
 设置甘特图中每一列的列宽，支持 `小`、`中`、`大` 三种样式。默认为 `中`。
+
+`v2.1.4+` 增加自定义宽度。允许传递一个对象，分别对每一个单位的列宽进行单独设置（如果没有对应的值，则使用 `normal` 的值）。
+
+```html
+<x-gantt
+  :gantt-column-size="{
+    hour?: number;
+    day?: number;
+    week?: number;
+    month?: number;
+  }"
+/>
+```
 
 ### level-color
 
