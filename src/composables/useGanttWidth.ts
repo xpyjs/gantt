@@ -21,6 +21,9 @@ export default () => {
 
   const ganttColumnWidth = computed(() => {
     const size = store.$styleBox.ganttColumnSize;
+    if (typeof size === 'object') {
+      return size[store.ganttHeader.unit];
+    }
     return Variables.size.ganttColumnWidth[size][store.ganttHeader.unit];
   });
 
