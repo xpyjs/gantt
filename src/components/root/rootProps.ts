@@ -134,10 +134,16 @@ export default {
    * 甘特图表的每一列宽度
    */
   ganttColumnSize: {
-    type: String as PropType<GanttColumnSize> | number,
+    type: String as
+      | PropType<GanttColumnSize>
+      | object as PropType<ColumnSizeObject>,
     default: 'normal',
     validator: (v: GanttColumnSize) => {
-      return typeof v === 'number' || ['small', 'normal', 'large'].includes(v);
+      return typeof v === 'string'
+        ? ['small', 'normal', 'large'].includes(v)
+        : !Object.keys(v).some(
+            k => !['hour', 'day', 'week', 'month'].includes(k)
+          ) && !['hour', 'day', 'week', 'month'].some(k => !v[k]);
     }
   },
 
