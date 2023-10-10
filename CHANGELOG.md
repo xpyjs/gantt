@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.4](https://github.com/xpyjs/gantt/compare/v2.1.3...v2.1.4) (2023-10-10)
+
+
+### Features
+
+* GanttColumnSize添加支持自定义宽度 ([a9c19fe](https://github.com/xpyjs/gantt/commit/a9c19fed40bd5eb0d558ec298e5044e0a78155cf))
+* GanttColumnSize支持使用对象自定义宽度 ([b7fab5c](https://github.com/xpyjs/gantt/commit/b7fab5cd6d9f788ed5f834766d1c15ed2887011d))
+
 ### [2.1.3](https://github.com/xpyjs/gantt/compare/v2.1.2...v2.1.3) (2023-08-17)
 
 
