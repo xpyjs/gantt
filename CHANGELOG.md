@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.5](https://github.com/xpyjs/gantt/compare/v2.1.4...v2.1.5) (2023-12-14)
+
+
+### Bug Fixes
+
+* 🐛 支持列循环创建 ([c1fb02a](https://github.com/xpyjs/gantt/commit/c1fb02a82284935cb15db952e0d54346ffe52f08)), closes [#52](https://github.com/xpyjs/gantt/issues/52) [#68](https://github.com/xpyjs/gantt/issues/68)
+
 ### [2.1.4](https://github.com/xpyjs/gantt/compare/v2.1.3...v2.1.4) (2023-10-10)
 
 
