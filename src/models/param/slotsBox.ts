@@ -6,7 +6,8 @@ import {
   h,
   type Slots,
   Comment,
-  isVNode
+  isVNode,
+  Fragment
 } from 'vue';
 import { TableHeader } from './header';
 
@@ -39,26 +40,42 @@ export default class SlotsBox {
     return !(isVNode(v) && v.type === Comment);
   }
 
+  /**
+   * 将 slots 中的 fragment 平铺
+   */
+  private __flatFragment(slots: VNode[]): VNode[] {
+    return slots.reduce<VNode[]>((p, v) => {
+      if (
+        v.type === Fragment &&
+        Array.isArray(v.children) &&
+        v.children.length > 0
+      ) {
+        return [...p, ...(v.children as VNode[])];
+      } else {
+        return [...p, v];
+      }
+    }, []);
+  }
+
   private setMultiColumn(col: VNode, column: TableHeader['columns'][0]) {
-    const s: () => VNode[] = (col.children as any)?.default;
+    const slot: () => VNode[] = (col.children as any)?.default;
 
-    if (s) {
+    if (slot) {
       try {
-        s()
-          .filter(v => {
-            const type = (v.type as Component)?.name;
-            return (
-              type &&
-              SlotsBox.__isValidComponent(v) &&
-              SlotsBox.__isCustomComponent(v) &&
-              SlotsBox.__checkType(type, Variables.name.column)
-            );
-          })
-          .forEach(v => {
-            const c = this.tableHeaders.setSubColumn(v, column);
+        const s = this.__flatFragment(slot());
+        s.filter(v => {
+          const type = (v.type as Component)?.name;
+          return (
+            type &&
+            SlotsBox.__isValidComponent(v) &&
+            SlotsBox.__isCustomComponent(v) &&
+            SlotsBox.__checkType(type, Variables.name.column)
+          );
+        }).forEach(v => {
+          const c = this.tableHeaders.setSubColumn(v, column);
 
-            this.setMultiColumn(v, c);
-          });
+          this.setMultiColumn(v, c);
+        });
       } catch (err) {
         // pass
       }
@@ -88,6 +105,9 @@ export default class SlotsBox {
     } else {
       s = slots;
     }
+
+    // 首先要处理循环等非节点的情况
+    s = this.__flatFragment(s);
 
     // 1、slots.default 应该只包含 x-gantt-column 和 x-gantt-slider
     if (s.length > 0) {
