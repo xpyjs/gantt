@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 // import App from './demo.vue';
+// import App from './debug.vue';
 import Gantt from '../src/index';
 
 // import Gantt from '../dist/index.es';
