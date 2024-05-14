@@ -183,7 +183,7 @@ Only one slider whill be rendered. If you insert more than one slider, only last
 <summary>version 1</summary>
 
 ```html
-<x-gantt data-id="index" :data="dataList">
+<x-gantt data-index="index" :data="dataList">
   <x-gantt-slider />   <!-- no render -->
   <x-gantt-slider />   <!-- will be rendered -->
 </x-gantt>

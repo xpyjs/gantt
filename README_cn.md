@@ -178,7 +178,7 @@ const dataList = [
 <summary>v1 版本</summary>
 
 ```html
-<x-gantt data-id="index" :data="dataList">
+<x-gantt data-index="index" :data="dataList">
   <x-gantt-slider />   <!-- no render -->
   <x-gantt-slider />   <!-- will be rendered -->
 </x-gantt>
