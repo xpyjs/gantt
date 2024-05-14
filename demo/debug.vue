@@ -36,6 +36,7 @@
         label="优先级"
         width="150"
       ></x-gantt-column>
+      <x-gantt-slider move linked-resize resize-left resize-right />
     </x-gantt>
   </div>
 </template>
@@ -60,17 +61,97 @@ const headerStyle = {
 };
 
 const onAdd = () => {
-  let index = 0;
-  for (let i = 0; i < 10; i++) {
-    dataList.push({
-      index: ++index,
-      name: `task${index}`,
-      status: `status${index}`,
-      priority: `priority${index}`,
-      startDate: new Date(2024, 2, index),
-      endDate: new Date(2024, 2, index + 5)
-    });
-  }
+  // let index = 0;
+  // for (let i = 0; i < 10; i++) {
+  //   dataList.push({
+  //     index: ++index,
+  //     name: `task${index}`,
+  //     status: `status${index}`,
+  //     priority: `priority${index}`,
+  //     startDate: new Date(2024, 2, index),
+  //     endDate: new Date(2024, 2, index + 5)
+  //   });
+  // }
+
+  dataList.push({
+    index: 1,
+    name: 'task1',
+    status: 'status1',
+    priority: 'priority1',
+    startDate: new Date(2024, 2, 1),
+    endDate: new Date(2024, 2, 6),
+    children: [
+      {
+        index: 11,
+        name: 'task11',
+        status: 'status11',
+        priority: 'priority11',
+        startDate: new Date(2024, 2, 1),
+        endDate: new Date(2024, 2, 3)
+      },
+      {
+        index: 12,
+        name: 'task12',
+        status: 'status12',
+        priority: 'priority12',
+        startDate: new Date(2024, 2, 4),
+        endDate: new Date(2024, 2, 6)
+      }
+    ]
+  });
+
+  dataList.push({
+    index: 2,
+    name: 'task2',
+    status: 'status2',
+    priority: 'priority2',
+    startDate: new Date(2024, 2, 2),
+    endDate: new Date(2024, 2, 7),
+    children: [
+      {
+        index: 21,
+        name: 'task21',
+        status: 'status21',
+        priority: 'priority21',
+        startDate: new Date(2024, 2, 2),
+        endDate: new Date(2024, 2, 4)
+      },
+      {
+        index: 22,
+        name: 'task22',
+        status: 'status22',
+        priority: 'priority22',
+        startDate: new Date(2024, 2, 5),
+        endDate: new Date(2024, 2, 7)
+      },
+      {
+        index: 23,
+        name: 'task23',
+        status: 'status23',
+        priority: 'priority23',
+        startDate: new Date(2024, 2, 6),
+        endDate: new Date(2024, 2, 7),
+        children: [
+          {
+            index: 231,
+            name: 'task231',
+            status: 'status231',
+            priority: 'priority231',
+            startDate: new Date(2024, 2, 6),
+            endDate: new Date(2024, 2, 7)
+          },
+          {
+            index: 232,
+            name: 'task232',
+            status: 'status232',
+            priority: 'priority232',
+            startDate: new Date(2024, 2, 6),
+            endDate: new Date(2024, 2, 7)
+          }
+        ]
+      }
+    ]
+  });
 };
 
 onMounted(() => {

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2021-09-09 15:50:52
  * @LastEditors: JeremyJone
- * @LastEditTime: 2023-06-12 09:14:48
+ * @LastEditTime: 2024-05-14 09:32:57
  * @Description: 一条数据类
  */
 
@@ -232,6 +232,31 @@ export default class RowItem {
       this.__data[this.options.endLabel] = date.getOffset(
         getMillisecondBy(baseUnit(unit), date.date)
       ).date;
+
+      // 联动更新父级
+      if (linkage) {
+        let pNode = this.parentNode;
+        while (pNode !== null) {
+          if (this.end.compareTo(pNode.end) === 'r') {
+            pNode.setEnd(this.end, unit);
+            modifyArr &&
+              addIfNotExist<MoveSliderInternalData>(
+                modifyArr,
+                {
+                  row: pNode,
+                  old: {
+                    start: pNode.__oldStart?.date ?? pNode.start.date,
+                    end: pNode.__oldEnd?.date ?? pNode.end.date
+                  }
+                },
+                item => item.row.uuid === pNode?.uuid
+              );
+          } else {
+            break;
+          }
+          pNode = pNode.parentNode;
+        }
+      }
     }
 
     if (!linkage) return;
@@ -284,6 +309,31 @@ export default class RowItem {
       this.__data[this.options.startLabel] = date.getOffset(
         -getMillisecondBy(baseUnit(unit), date.date)
       ).date;
+
+      // 联动更新父级
+      if (linkage) {
+        let pNode = this.parentNode;
+        while (pNode !== null) {
+          if (this.start.compareTo(pNode.start) === 'l') {
+            pNode.setStart(this.start, unit);
+            modifyArr &&
+              addIfNotExist<MoveSliderInternalData>(
+                modifyArr,
+                {
+                  row: pNode,
+                  old: {
+                    start: pNode.__oldStart?.date ?? pNode.start.date,
+                    end: pNode.__oldEnd?.date ?? pNode.end.date
+                  }
+                },
+                item => item.row.uuid === pNode?.uuid
+              );
+          } else {
+            break;
+          }
+          pNode = pNode.parentNode;
+        }
+      }
     }
 
     if (!linkage) return;
