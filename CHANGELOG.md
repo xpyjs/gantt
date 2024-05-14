@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.6](https://github.com/xpyjs/gantt/compare/v2.1.5...v2.1.6) (2024-05-14)
+
+
+### Bug Fixes
+
+* **slider:** 修复两侧拖拽时可以超过对侧父级的内容 ([6ad734b](https://github.com/xpyjs/gantt/commit/6ad734bf7735dbc7e7d5529967d20c0d744b9174)), closes [#93](https://github.com/xpyjs/gantt/issues/93)
+
 ### [2.1.5](https://github.com/xpyjs/gantt/compare/v2.1.4...v2.1.5) (2023-12-14)
 
 
