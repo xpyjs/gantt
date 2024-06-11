@@ -21,6 +21,7 @@
         </div>
 
         <div
+          ref="cellRef"
           :class="[
             'cell',
             {
@@ -37,6 +38,7 @@
           <slot
             v-if="isValidSlots(slots.default, props.data)"
             v-bind="toRowData(props.data)"
+            :overflow="cellRef?.offsetWidth < cellRef?.scrollWidth"
           />
 
           <template v-else-if="props.prop || props.label">{{
@@ -76,6 +78,8 @@ export default defineComponent({
 <script lang="ts" setup>
 const props = defineProps(columnProps);
 const slots = useSlots();
+
+const cellRef = ref();
 
 const { $styleBox, rowHeight } = useStyle();
 const { toRowData, getProp } = useData();
