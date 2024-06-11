@@ -78,7 +78,7 @@ export default () => {
     onMounted(() => {
       const rootRect = rootRef.value?.getBoundingClientRect();
 
-      const { getMaxHeaderHeight } = useElement();
+      const { updateHeaderHeight } = useElement();
 
       (el.value as HTMLElement)?.addEventListener('pointerdown', e => {
         moveLineLeft.value = e.clientX - (rootRect?.left ?? 0);
@@ -101,7 +101,7 @@ export default () => {
 
           await nextTick();
 
-          $param.headerHeight = getMaxHeaderHeight();
+          updateHeaderHeight();
         },
 
         onFinally: () => {
