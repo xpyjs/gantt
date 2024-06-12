@@ -75,7 +75,7 @@
     "dayjs": "^1.11.7",
     "lodash": "^4.17.21",
     "sortablejs": "^1.15.0",
-    "vue": "^3.2.47"
+    "vue": "3.3.4"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.1",
