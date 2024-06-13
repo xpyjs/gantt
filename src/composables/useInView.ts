@@ -54,6 +54,9 @@ export default () => {
           }
         }
       }
+    },
+    {
+      immediate: true // 数据小于 preload 时，首次执行不会有变化，需要立即执行触发
     }
   );
 
