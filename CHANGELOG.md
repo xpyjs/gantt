@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.7](https://github.com/xpyjs/gantt/compare/v2.1.6...v2.1.7) (2024-06-13)
+
+
+### Features
+
+* column插槽抛出一个溢出属性 ([08d3f29](https://github.com/xpyjs/gantt/commit/08d3f292a18202b0e0e4d4599e9bde6bc221bf5b)), closes [#84](https://github.com/xpyjs/gantt/issues/84)
+
+
+### Bug Fixes
+
+* 表头高度重新设置 ([cacf8a0](https://github.com/xpyjs/gantt/commit/cacf8a0cd7c27555d69f98fba23d7cb75542efbe))
+* 加载数量过小时不渲染内容的问题 ([30dc9c2](https://github.com/xpyjs/gantt/commit/30dc9c262a7cbfcf6b9449656fbadd75e243f603))
+* 解决 vue 版本冲突问题 ([4a9ed5e](https://github.com/xpyjs/gantt/commit/4a9ed5ec3e81d781bf560e08191b8f93e9e56a25)), closes [#94](https://github.com/xpyjs/gantt/issues/94)
+
 ### [2.1.6](https://github.com/xpyjs/gantt/compare/v2.1.5...v2.1.6) (2024-05-14)
 
 
