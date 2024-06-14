@@ -29,8 +29,8 @@
       top: `${(props.data?.flatIndex ?? 0) * rowHeight}px`,
       height: `${rowHeight}px`,
       borderWidth: props.renderStyle ? '1px' : 0,
-      '--color': $styleBox.headerStyle?.textColor,
-      // backgroundColor: props.renderStyle ? ($styleBox.levelColor[props.data!.level] || $styleBox.headerStyle?.bgColor) : undefined,
+      '--color': $styleBox.bodyStyle?.textColor,
+      // backgroundColor: props.renderStyle ? ($styleBox.levelColor[props.data!.level] || $styleBox.bodyStyle?.bgColor) : undefined,
       '--backgroundColor': bgColor,
       'border-color': $styleBox.borderColor
     }"
@@ -78,7 +78,8 @@ const bgColor = computed(() => {
   if (!props.renderStyle) return undefined;
 
   let c =
-    $styleBox.levelColor[props.data!.level] || $styleBox.headerStyle?.bgColor;
+    $styleBox.levelColor[props.data?.level ?? 0] ||
+    $styleBox.bodyStyle?.bgColor;
 
   if ($param.selectItem?.uuid === props.data?.uuid) {
     c = blend('#ffffff99', $styleBox.bodyStyle?.selectColor ?? '#e0e0e0');
