@@ -51,7 +51,7 @@
 
 _动图展示_：
 
-<img :src="$withBase('/assets/gantt_v1.gif')" alt="gif">
+![](/assets/gantt_v1.gif)
 
 ## 安装
 
@@ -136,7 +136,7 @@ const dataList = reactive([
 
 如上操作之后，您将看到：
 
-<img :src="$withBase('/assets/basic.png')" alt="basic">
+![](/assets/basic.png)
 
 如果没有，请尝试重新操作。
 
@@ -158,7 +158,7 @@ import {
 
 按需导入使用即可。如：
 
-<img :src="$withBase('/assets/v1_type.png')" alt="type">
+![](/assets/v1_type.png)
 
 ## 更新日志
 

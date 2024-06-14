@@ -32,7 +32,7 @@
 
 它将显示成如下内容：
 
-<img :src="$withBase('/assets/slider-basic.png')" alt="slider-basic">
+![](/assets/slider-basic.png)
 
 ## 属性
 
@@ -234,6 +234,6 @@
 
 上述示例的效果如下：
 
-<img :src="$withBase('/assets/slider-content.png')" alt="slider-content">
+![](/assets/slider-content.png)
 
 恭喜您，您现在已经可以完全自定义属于您的甘特图组件了。

@@ -2,9 +2,19 @@
 
 <Description author="jeremyjone" copyright="xpyjs" />
 
+列组件会显示在甘特表的左侧，如果没有提供，则不显示任何表格列。
+
+::: info
+
 因为我们在内部已经将其加载，所以您并不需要显示的再次导入到您的组件中就可以使用。
 
-列组件会显示在甘特表的左侧，如果没有提供，则不显示任何列。
+:::
+
+::: tip 💡开发提示
+
+该组件在行为上和 `table` 类似，但是不应该当做表格使用。因为我们的主体应该是右侧日期甘特图，列内容只是作为对每一行数据的一个内容描述补充。所以，列不宜过多。
+
+:::
 
 ## 基础使用
 
@@ -12,41 +22,34 @@
 
 基于入门的示例，您可以直接这样使用：
 
-```html{5}
-<x-gantt
-    data-id="index"
-    :data="dataList"
->
-    <x-gantt-column prop="index" />
+```html{2}
+<x-gantt :data="dataList">
+  <x-gantt-column prop="name" />
 </x-gantt>
 ```
 
 它将显示成如下内容：
 
-<img :src="$withBase('/assets/column-basic.png')" alt="column-basic">
+<!-- @include: ./demo/column-demo/basic.md -->
 
-在 `v2.x` 版本中，我们添加了多层表头，它可以通过嵌套 `x-gantt-column` 来实现。
+在 `2.x` 版本中，我们添加了多层表头，它可以通过嵌套 `x-gantt-column` 来实现。
 
 > 在多级表头的实现中，父级表头只接收 `label` 属性作为展示字段，其余字段均无效。
 
-```html{5,6}
-<x-gantt
-    data-id="index"
-    :data="dataList"
->
-    <x-gantt-column prop="index" />
-    <x-gantt-column prop="name" />
+```html
+<x-gantt :data="dataList">
+  <x-gantt-column prop="name" />
 
-    <x-gantt-column label="时间">
-        <x-gantt-column prop="startDate" />
-        <x-gantt-column prop="endDate" />
-    </x-gantt-column>
+  <x-gantt-column label="时间"> // [!code focus]
+    <x-gantt-column prop="startDate" date-format="MM/DD" /> // [!code focus]
+    <x-gantt-column prop="endDate" date-format="MM/DD" /> // [!code focus]
+  </x-gantt-column> // [!code focus]
 </x-gantt>
 ```
 
 它将显示成如下内容：
 
-<img :src="$withBase('/assets/v2-multi-header.png')" alt="v2-multi-header">
+<!-- @include: ./demo/column-demo/multi-col.md -->
 
 ## 属性
 
@@ -98,13 +101,13 @@
 
 设置空数据时显示的内容。如果数据内容为空，则会显示空数据内容。
 
-### prop <Badge text="新增" type="tip"/>
+### prop
 
 <DataParameter t="String" />
 
 `prop` 是一个重要的属性，它应当对应您给出数据的某一个键名。
 
-::: tip 更新
+::: tip 便捷操作
 它支持通过 `.` 深度读取对象内部属性。
 
 比如原始对象为：
@@ -122,9 +125,13 @@ const data = {
 那么，`prop` 可以通过 `a.b.c` 直接读取到值，而不用像之前那样需要通过模板导出数据再读取内部属性。
 :::
 
+<!-- @include: ./demo/column-demo/prop-demo.md -->
+
 ### merge
 
 <DataParameter t="(({row: any; $index: number; level: number}) => boolean) | Boolean" d="false" />
+
+<!-- @include: ./demo/column-demo/merge.md -->
 
 设置当前列是否需要与前一列合并。您可以给出一个 Boolean 值或者一个返回 Boolean 值的函数。
 
@@ -159,9 +166,7 @@ mergeFunc: function({
 
 ### ~~selectable~~ <Badge text="废弃" type="warn"/>
 
-~~<DataParameter t="Boolean" d="false" />~~
-
-~~设置当前列内容的文本是否可以选择，默认禁止选择。~~
+该属性已废弃。
 
 ### width
 
@@ -230,5 +235,7 @@ mergeFunc: function({
 在使用该插槽的过程中，如果如果出现问题，请及时 [反馈](https://github.com/xpyjs/gantt/issues)。
 
 :::
+
+<!-- @include: ./demo/column-demo/title-demo.md -->
 
 接下来，您将继续学习滑块组件的内容。

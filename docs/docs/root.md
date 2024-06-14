@@ -1,3 +1,7 @@
+---
+outline: [2, 4]
+---
+
 # 根组件 XGantt
 
 <Description author="jeremyjone" copyright="xpyjs" />
@@ -10,7 +14,9 @@
 
 <DataParameter t="Array" d="[]" />
 
-数据源，接收数组类型，同时数组中的每一个对象都应当包含 `index`, `startDate`, `endDate` 和 ~~`children`~~ 这些键，确保正确显示数据内容。
+<!-- @include: ./demo/root-demo/basic.md -->
+
+数据源，接收数组类型，同时数组中的每一个对象都应当包含 `id`, `startDate`, `endDate` 和 ~~`children`~~ 这些键，确保正确显示数据内容。
 
 > `children` 不再是必填项。
 
@@ -18,8 +24,7 @@
 
 ::: tip 提示
 
-- `index` 确保数据的唯一性，它应对于所有数据全局唯一的。通过 [data-index](#data-index) 替换
-- ~~`children` 可以使数据层级嵌套，如果没有子集，只需要置空即可~~
+- `id` 确保数据的唯一性，它应对于所有数据全局唯一的。通过 [data-id](#data-id) 替换
 - `startDate` 可以在甘特图中正确渲染数据的起始日期。通过 [start-key](#start-key) 替换
 - `endDate` 可以在甘特图中正确渲染数据的截止日期。通过 [end-key](#end-key) 替换
 
@@ -32,38 +37,6 @@
 所以建议直接使用 `Date` 对象，而不是字符串等。
 
 :::
-
-### links <Badge text="新增" type="tip"/>
-
-<DataParameter t="Array" d="[]" />
-
-数据的连线数据。接收数组类型，数组中的每一个对象都应当包含 `from`, `to`，确保正确显示数据内容。
-
-例如：
-
-```js
-const ganttLinks = reactive([
-  {
-    index: 1,
-    from: 1,
-    to: 2,
-    color: 'green'
-  },
-  {
-    index: 2,
-    from: 2,
-    to: 5
-  },
-  {
-    index: 3,
-    from: 4,
-    to: 3,
-    color: '#abc'
-  }
-]);
-```
-
-如上，`from` 和 `to` 属性是必须的，这两个字段的值应当对应 `data` 中的 `data-id` 值。`color` 是可选的，可以设置连线的颜色。
 
 ### ~~data-index~~ <Badge text="移除" type="warning"/>
 
@@ -92,13 +65,15 @@ const ganttLinks = reactive([
 
 它对应数据中起始日期的键，默认值为 `endDate`。如果找不到，则不会渲染甘特图中的内容。
 
-### expand-all
+### links <Badge text="新增" type="tip"/>
 
-<DataParameter t="Boolean" d="true" />
+<DataParameter t="Array" d="[]" />
 
-是否展开所有数据，默认为展开。如果设置为 `false`，则只会渲染首层数据。
+数据的连线数据。接收数组类型，数组中的每一个对象都应当包含 `from`, `to`，确保正确显示数据内容。
 
-**请注意**，当且仅当属性 [`show-expand`](#show-expand) 为真时，该属性才会生效，否则所有数据一定会被全部展开渲染。
+<!-- @include: ./demo/root-demo/link.md -->
+
+如上，`from` 和 `to` 属性是必须的，这两个字段的值应当对应 `data` 中的 `data-id` 值。`color` 是可选的，可以设置连线的颜色。
 
 ### start-key
 
@@ -115,6 +90,8 @@ const ganttLinks = reactive([
 推荐统一使用 `#` 开头的 16 进制颜色值。
 
 :::
+
+<!-- @include: ./demo/root-demo/style-demo.md -->
 
 ### body-style
 
@@ -213,6 +190,16 @@ const ganttLinks = reactive([
 开启该属性，允许对甘特图中的每行任务进行拖拽排序。默认情况下，仅允许拖拽同层内容的顺序。如果需要任意层级的拖拽时，可以传递一个对象，将参数配置为：`{ level: 'all' }` 即可。
 
 它允许您将数据任意排序，但不允许拖拽具有子父关系的数据。
+
+### expand-all
+
+<DataParameter t="Boolean" d="true" />
+
+是否展开所有数据，默认为展开。如果设置为 `false`，则只会渲染首层数据。
+
+<!-- @include: ./demo/root-demo/expand-false.md -->
+
+**请注意**，当且仅当属性 [`show-expand`](#show-expand) 为真时，该属性才会生效，否则所有数据一定会被全部展开渲染。
 
 ### header-height
 
@@ -504,21 +491,9 @@ const onAddLink = (
 
 根组件不支持插入默认内容，它仅仅支持如下的具名插槽或者我们提供的子组件。
 
-### settings
+### ~~settings~~ <Badge text="已移除" type="warning" />
 
-_我不知道这个插槽是否真正需要，但还是把它添加了。_
-
-这个插槽会允许您在设置抽屉中添加任意内容。
-
-使用方式：
-
-```html
-<template v-slot:settings>
-  <div>
-    <!-- any element -->
-  </div>
-</template>
-```
+该插槽已移除
 
 ### 列组件
 

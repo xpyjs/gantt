@@ -23,7 +23,7 @@
 
 它将显示成如下内容：
 
-<img :src="$withBase('/assets/column-basic.png')" alt="column-basic">
+![](/assets/column-basic.png)
 
 ## 属性
 

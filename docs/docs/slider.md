@@ -18,13 +18,10 @@
 
 基于入门的示例，您现在应该拥有一个列，那么您可以继续这样使用：
 
-```html{6}
-<x-gantt
-    data-id="index"
-    :data="dataList"
->
-    <x-gantt-column prop="index" />
-    <x-gantt-slider bg-color="green" />
+```html{3}
+<x-gantt :data="dataList">
+  <x-gantt-column prop="name" />
+  <x-gantt-slider bg-color="green" />
 </x-gantt>
 ```
 
@@ -32,7 +29,7 @@
 
 它将显示成如下内容：
 
-<img :src="$withBase('/assets/v2-slider-basic.png')" alt="slider-basic">
+<!-- @include: ./demo/slider-demo/basic.md -->
 
 ## 属性
 
@@ -42,11 +39,21 @@
 
 设置内容对齐方式。接收字符串：`left`、`center` 或 `right`。
 
+<!-- @include: ./demo/slider-demo/alignment.md -->
+
 ### allow-link <Badge text="新增" type="tip" />
 
 <DataParameter t="Boolean" d="true" />
 
 是否允许创建、修改连线。如果设置为 false，仅仅是不可以从当前 slider 创建连线，而不会影响已有连线的展示。
+
+::: tip 说明
+
+添加连线需要根组件的 [`add-link`](./root.html#add-link) 事件配合。它可以完全自定义添加的连线内容。
+
+:::
+
+<!-- @include: ./demo/root-demo/link.md -->
 
 ### bg-color
 
@@ -82,15 +89,11 @@
 
 ### ~~flat~~ <Badge text="移除" type="warning" />
 
-~~<DataParameter t="Boolean" d="false" />~~
-
-~~设置滑块样式是否扁平化。~~
+该属性已移除。
 
 ### ~~highlight-date~~ <Badge text="移除" type="warning" />
 
-~~<DataParameter t="Boolean" d="false" />~~
-
-~~允许鼠标悬停高亮表头对应日期~~
+该属性已移除。
 
 ::: tip 提示
 
@@ -107,10 +110,6 @@
 ### label <Badge text="修改" type="info" />
 
 <DataParameter t="String" />
-
-~~设置需要显示的内容字段。默认没有该属性情况下显示默认数据，即 `empty-data` 字段内容。~~
-
-~~如果您提供了插槽内容，则无论您是否提供了 `label` 属性，都将用插槽的内容进行替换。更多信息请查看 [插槽](#插槽) 。~~
 
 该属性的值会直接显示在滑块组件内，它之前的功能被 [prop](#prop) 属性所替代，同时，`label` 的优先级要比 `prop` 更高。如果您需要显示更多内容，可以使用插槽。
 
@@ -136,6 +135,8 @@
 
 如果设置了 `true`，则意味着滑块可以被任意拖动。当拖动结束时，修改数据，同时会抛出 [`move-slider`](./root.html#move-slider) 事件。
 
+<!-- @include: ./demo/slider-demo/move-demo.md -->
+
 ### move-by-unit
 
 <DataParameter t="Boolean" d="false" />
@@ -156,6 +157,8 @@
 
 同时，如果您自定义了滑块插槽，那么无论您是否开启了进度条，都不会显示这个功能。
 
+<!-- @include: ./demo/slider-demo/progress-demo.md -->
+
 ### progress-color <Badge text="新增" type="tip" />
 
 <DataParameter t="String" d="#1890ff" />
@@ -170,17 +173,17 @@
 
 ### progress-decimal
 
-### prop <Badge text="新增" type="tip"/>
-
-<DataParameter t="String" />
-
-`prop` 是一个重要的属性，它应当对应您给出数据的某一个键名。
-
 <DataParameter t="[Boolean, Number]" d="false" />
 
 允许自定义进度条数值位数，默认只显示整数，通过传递 `true` 值，可以启动默认 2 位的小数。
 
 也可以传递一个数字（范围：[0, 10]）来自定义显示位数。
+
+### prop <Badge text="新增" type="tip"/>
+
+<DataParameter t="String" />
+
+`prop` 是一个重要的属性，它应当对应您给出数据的某一个键名。
 
 ### resize-left
 
@@ -220,13 +223,7 @@
 
 一个简单的示例：
 
-```html
-<x-gantt-slider bg-color="green" :move="true" :linked-resize="true">
-  <template v-slot="{row, $index, level}">
-    <div>{{ row.name }}</div>
-  </template>
-</x-gantt-slider>
-```
+<!-- @include: ./demo/slider-demo/default-demo.md -->
 
 ::: tip 提示
 `default` 插槽会包含一定样式，如果您想尝试完全替换现有的滑块内容，那么下面的内容将会更适合。
@@ -240,17 +237,7 @@
 
 一个简单的示例：
 
-```html
-<XGanttSlider prop="startDate" bg-color="green">
-  <template v-slot:content="{row, $index, level}">
-    <div
-      style="background-color: #123456;display: flex;justify-content: center;height:5px"
-    >
-      {{ row.name }} - {{ row.index }}
-    </div>
-  </template>
-</XGanttSlider>
-```
+<!-- @include: ./demo/slider-demo/content-demo.md -->
 
 ::: warning 注意
 
@@ -268,32 +255,7 @@
 
 一个简单的示例：
 
-```html
-<XGanttSlider
-  prop="startDate"
-  bg-color="orange"
-  :move="true"
-  :resize-left="true"
-  :resize-right="true"
-  :linked-resize="true"
->
-  <template v-slot:content="{row, $index, level}">
-    <div
-      style="background-color: #123456;display: flex;justify-content: center;height:5px"
-    >
-      {{ row.name }} - {{ row.index }}
-    </div>
-  </template>
-
-  <template v-slot:left>
-    <div style="background-color:#123456;width:5px;height:10px;" />
-  </template>
-
-  <template v-slot:right>
-    <div style="background-color:#123456;width:5px;height:10px;" />
-  </template>
-</XGanttSlider>
-```
+<!-- @include: ./demo/slider-demo/left-demo.md -->
 
 ::: tip 提示
 
@@ -320,9 +282,5 @@ border-right-bottom-radius: 4px;
 <DataParameter f="scope = {row:any,  $index: number,level:number}" />
 
 它的功能与 `left` 插槽一致，仅仅是将 `left` 更换为 `right` 即可，参数与功能完全一致，不再赘述。
-
-上述示例的效果如下：
-
-<img :src="$withBase('/assets/slider-content.png')" alt="slider-content">
 
 恭喜您，您现在已经可以完全自定义属于您的甘特图组件了。
