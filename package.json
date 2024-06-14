@@ -4,7 +4,7 @@
   "author": "jeremyjone",
   "license": "MIT",
   "private": false,
-  "version": "2.1.7",
+  "version": "2.1.8",
   "preview": false,
   "publishConfig": {
     "access": "public",

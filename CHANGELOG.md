@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.8](https://github.com/xpyjs/gantt/compare/v2.1.7...v2.1.8) (2024-06-14)
+
+
+### Bug Fixes
+
+* 调整锚点样式 ([9606c08](https://github.com/xpyjs/gantt/commit/9606c0840ebd44ae24fc62c6e7d851ec8724ef0a))
+* 修正表头事件被阻的问题 ([afde2a7](https://github.com/xpyjs/gantt/commit/afde2a78aadd3222aea8af991e6f4135ec904cf5)), closes [#100](https://github.com/xpyjs/gantt/issues/100)
+* 修正body样式不生效的问题 ([0d6b89c](https://github.com/xpyjs/gantt/commit/0d6b89c2b0ed97f70620f80e144b3761788b2fb7))
+
 ### [2.1.7](https://github.com/xpyjs/gantt/compare/v2.1.6...v2.1.7) (2024-06-13)
 
 
