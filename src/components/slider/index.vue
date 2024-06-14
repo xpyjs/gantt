@@ -496,6 +496,7 @@ const progressValue = computed(() => {
     width: 4px;
     height: 4px;
     border-radius: 50%;
+    box-sizing: content-box;
     background-color: #fff;
     border: 2px solid black;
     position: absolute;
