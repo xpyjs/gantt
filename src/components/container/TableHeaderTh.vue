@@ -1,12 +1,7 @@
 <template>
   <th
     ref="headerRef"
-    :class="[
-      'xg-table-header-cell',
-      {
-        'xg-table-header-cell-resizable': !column.isLast
-      }
-    ]"
+    class="xg-table-header-cell"
     :style="{ 'border-color': $styleBox.borderColor }"
     :colspan="column.colSpan"
     :rowspan="column.rowSpan"
@@ -17,6 +12,12 @@
       :__render-title-label="column.label"
       :__render-title-props="titleProps"
     />
+
+    <div
+      v-if="!column.isLast"
+      ref="resizeLineRef"
+      class="xg-table-header-cell-resizable"
+    ></div>
   </th>
 </template>
 
@@ -48,17 +49,21 @@ while (curColumn.value.children?.length > 0) {
 const index = curColumn.value.node.props.__index;
 
 const headerRef = ref(null) as Ref<HTMLElement | null>;
-onResizeTableColumn(headerRef, {
+const resizeLineRef = ref(null) as Ref<HTMLElement | null>;
+onResizeTableColumn(resizeLineRef, {
   onEnd: x => {
+    const headerLeft = headerRef.value?.offsetLeft ?? 0;
+
     $slotsBox.tableHeaders.leafs[index].width = Math.max(
-      $slotsBox.tableHeaders.leafs[index].width + x,
+      $slotsBox.tableHeaders.leafs[index].width + x - headerLeft,
       Variables.size.minTableColumnWidth
     );
   },
 
   preMove: x => {
+    const headerLeft = headerRef.value?.offsetLeft ?? 0;
     if (
-      $slotsBox.tableHeaders.leafs[index].width + x <
+      $slotsBox.tableHeaders.leafs[index].width + x - headerLeft <
       Variables.size.minTableColumnWidth
     )
       return false;
@@ -90,7 +95,6 @@ const titleProps = props.column.isLeaf
   border-right: 1px solid #e5e5e5;
   padding: 0 12px;
   font-size: 14px;
-  pointer-events: none;
 }
 
 .xg-table-header-cell-resizable {
@@ -102,7 +106,6 @@ const titleProps = props.column.isLeaf
     bottom: 0;
     width: 10px;
     cursor: col-resize;
-    pointer-events: auto;
   }
 }
 </style>
