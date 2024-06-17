@@ -4,6 +4,7 @@ on:
     branches: [master]
     paths:
       - 'docs/**'
+      - '.github/workflows/gh-pages.yml'
 
 jobs:
   create-gh-pages:
@@ -23,7 +24,7 @@ jobs:
         run: yarn && cd docs && yarn
 
       - name: 4. 构建文档和 Demo 页面
-        run: yarn vite build --config ./sundry/demo.config.ts && cd docs && yarn docs:build && mv ./docs/.vuepress/dist/ ../gh-pages/docs/
+        run: yarn vite build --config ./sundry/demo.config.ts && cd docs && yarn docs:build && mv ./docs/.vitepress/dist/ ../gh-pages/docs/
 
       - name: 5. 保存并发布文档
         uses: peaceiris/actions-gh-pages@v3
