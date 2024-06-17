@@ -36,8 +36,9 @@ export default defineConfig(async () => ({
     minify: true,
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'index',
-      fileName: format => `index.${format}.js`
+      name: 'XGantt',
+      fileName: 'index'
+      // fileName: format => `index.${format}.js`
     },
     rollupOptions: {
       external: ['vue'],

@@ -80,7 +80,7 @@ yarn add @xpyjs/gantt
 
 ```js
 import XGantt from "@xpyjs/gantt";
-import "@xpyjs/gantt/dist/index.css";
+import "@xpyjs/gantt/index.css";
 
 createApp(App).use(XGantt).mount('#app')
 ```

@@ -79,7 +79,7 @@ yarn add @xpyjs/gantt  // 推荐
 
 ```js
 import Gantt from "@xpyjs/gantt";
-import "@xpyjs/gantt/dist/index.css";
+import "@xpyjs/gantt/index.css";
 
 createApp(App).use(Gantt).mount("#app");
 ```
