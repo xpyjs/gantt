@@ -36,7 +36,13 @@
         label="优先级"
         width="150"
       ></x-gantt-column>
-      <x-gantt-slider move linked-resize resize-left resize-right />
+      <x-gantt-slider
+        move
+        move-by-unit
+        linked-resize
+        resize-left
+        resize-right
+      />
     </x-gantt>
   </div>
 </template>
@@ -79,15 +85,15 @@ const onAdd = () => {
     status: 'status1',
     priority: 'priority1',
     startDate: new Date(2024, 2, 1),
-    endDate: new Date(2024, 2, 6),
+    endDate: new Date(2024, 2, 6, 23, 59, 59),
     children: [
       {
         index: 11,
         name: 'task11',
         status: 'status11',
         priority: 'priority11',
-        startDate: new Date(2024, 2, 1),
-        endDate: new Date(2024, 2, 3)
+        startDate: new Date(2024, 2, 1, 12, 0, 0),
+        endDate: new Date(2024, 2, 3, 11, 59, 59)
       },
       {
         index: 12,
@@ -95,7 +101,7 @@ const onAdd = () => {
         status: 'status12',
         priority: 'priority12',
         startDate: new Date(2024, 2, 4),
-        endDate: new Date(2024, 2, 6)
+        endDate: new Date(2024, 2, 6, 23, 59, 59)
       }
     ]
   });
@@ -106,7 +112,7 @@ const onAdd = () => {
     status: 'status2',
     priority: 'priority2',
     startDate: new Date(2024, 2, 2),
-    endDate: new Date(2024, 2, 7),
+    endDate: new Date(2024, 2, 7, 23, 59, 59),
     children: [
       {
         index: 21,
@@ -114,7 +120,7 @@ const onAdd = () => {
         status: 'status21',
         priority: 'priority21',
         startDate: new Date(2024, 2, 2),
-        endDate: new Date(2024, 2, 4)
+        endDate: new Date(2024, 2, 4, 23, 59, 59)
       },
       {
         index: 22,
@@ -122,7 +128,7 @@ const onAdd = () => {
         status: 'status22',
         priority: 'priority22',
         startDate: new Date(2024, 2, 5),
-        endDate: new Date(2024, 2, 7)
+        endDate: new Date(2024, 2, 7, 23, 59, 59)
       },
       {
         index: 23,
@@ -130,7 +136,7 @@ const onAdd = () => {
         status: 'status23',
         priority: 'priority23',
         startDate: new Date(2024, 2, 6),
-        endDate: new Date(2024, 2, 7),
+        endDate: new Date(2024, 2, 7, 23, 59, 59),
         children: [
           {
             index: 231,
@@ -138,7 +144,7 @@ const onAdd = () => {
             status: 'status231',
             priority: 'priority231',
             startDate: new Date(2024, 2, 6),
-            endDate: new Date(2024, 2, 7)
+            endDate: new Date(2024, 2, 7, 23, 59, 59)
           },
           {
             index: 232,
@@ -146,7 +152,7 @@ const onAdd = () => {
             status: 'status232',
             priority: 'priority232',
             startDate: new Date(2024, 2, 6),
-            endDate: new Date(2024, 2, 7)
+            endDate: new Date(2024, 2, 7, 23, 59, 59)
           }
         ]
       }

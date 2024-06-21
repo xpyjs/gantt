@@ -127,8 +127,8 @@ import useGanttWidth from '@/composables/useGanttWidth';
 import useDrag from '@/composables/useDrag';
 import useParam from '@/composables/useParam';
 import useStyle from '@/composables/useStyle';
-import { baseUnit, day } from '@/utils/date';
-import { flow, isBoolean, isFunction, isNumber } from 'lodash';
+import { day } from '@/utils/date';
+import { isBoolean, isFunction, isNumber } from 'lodash';
 import useEvent from '@/composables/useEvent';
 import { MoveSliderInternalData } from '@/typings/data';
 import useLinks from '@/composables/useLinks';
@@ -226,43 +226,12 @@ function EmitMove() {
   movedData = [];
 }
 
+const checkMoveValid = (x: number) =>
+  Math.abs(x / currentMillisecond.value) * ganttColumnWidth.value >=
+  ganttColumnWidth.value;
+
 let startDate = props.data?.start.clone();
-const setStart = (x: number) => {
-  const d = startDate!.getOffset(
-    (x / ganttColumnWidth.value) * currentMillisecond.value
-  );
-
-  if (props.moveByUnit) d.startOf(baseUnit(ganttHeader.unit), startDate!);
-
-  if (
-    !props.moveByUnit ||
-    Math.abs(props.data!.start.intervalTo(d) / currentMillisecond.value) *
-      ganttColumnWidth.value >=
-      ganttColumnWidth.value
-  ) {
-    props.data?.setStart(d, ganttHeader.unit, props.linkedResize, movedData);
-  }
-
-  return x;
-};
-
 let endDate = props.data?.end.clone();
-const setEnd = (x: number) => {
-  const d = endDate!.getOffset(
-    (x / ganttColumnWidth.value) * currentMillisecond.value
-  );
-
-  if (props.moveByUnit) d.endOf(baseUnit(ganttHeader.unit), endDate!);
-
-  if (
-    !props.moveByUnit ||
-    Math.abs(props.data!.end.intervalTo(d) / currentMillisecond.value) *
-      ganttColumnWidth.value >=
-      ganttColumnWidth.value
-  ) {
-    props.data?.setEnd(d, ganttHeader.unit, props.linkedResize, movedData);
-  }
-};
 
 const sliderRef = ref(null) as Ref<HTMLElement | null>;
 const { onDrag } = useDrag();
@@ -275,7 +244,19 @@ onDrag(sliderRef, {
     endDate = props.data?.end.clone();
   },
 
-  onMove: flow(setStart, setEnd),
+  onMove: x => {
+    const sd = startDate!.getOffset(
+      (x / ganttColumnWidth.value) * currentMillisecond.value
+    );
+    const ed = endDate!.getOffset(
+      (x / ganttColumnWidth.value) * currentMillisecond.value
+    );
+
+    if (!props.moveByUnit || checkMoveValid(props.data!.start.intervalTo(sd))) {
+      props.data?.setStart(sd, ganttHeader.unit, props.linkedResize, movedData);
+      props.data?.setEnd(ed, ganttHeader.unit, props.linkedResize, movedData);
+    }
+  },
   onEnd: EmitMove
 });
 // #endregion
@@ -295,7 +276,15 @@ onDrag(resizeLeftRef, {
     startDate = props.data?.start.clone();
   },
 
-  onMove: setStart,
+  onMove: x => {
+    const d = startDate!.getOffset(
+      (x / ganttColumnWidth.value) * currentMillisecond.value
+    );
+
+    if (!props.moveByUnit || checkMoveValid(props.data!.start.intervalTo(d))) {
+      props.data?.setStart(d, ganttHeader.unit, props.linkedResize, movedData);
+    }
+  },
   onEnd: EmitMove
 });
 // #endregion
@@ -315,7 +304,15 @@ onDrag(resizeRightRef, {
     endDate = props.data?.end.clone();
   },
 
-  onMove: setEnd,
+  onMove: x => {
+    const d = endDate!.getOffset(
+      (x / ganttColumnWidth.value) * currentMillisecond.value
+    );
+
+    if (!props.moveByUnit || checkMoveValid(props.data!.end.intervalTo(d))) {
+      props.data?.setEnd(d, ganttHeader.unit, props.linkedResize, movedData);
+    }
+  },
   onEnd: EmitMove
 });
 // #endregion
