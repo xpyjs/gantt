@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.10](https://github.com/xpyjs/gantt/compare/v2.1.9...v2.1.10) (2024-06-21)
+
+
+### Bug Fixes
+
+* 修复滑块移动会增删日期的问题 ([40ff1ad](https://github.com/xpyjs/gantt/commit/40ff1adfac31520d4871002cb0185bbc24ea6480)), closes [#101](https://github.com/xpyjs/gantt/issues/101)
+
 ### [2.1.9](https://github.com/xpyjs/gantt/compare/v2.1.8...v2.1.9) (2024-06-17)
 
 ### [2.1.8](https://github.com/xpyjs/gantt/compare/v2.1.7...v2.1.8) (2024-06-14)

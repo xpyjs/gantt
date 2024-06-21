@@ -53,7 +53,7 @@ export default class AllLinks {
           return null;
         }
       })
-      .filter(link => link !== null) as LinkItem[];
+      .filter(link => link !== null);
   }
 
   /**
