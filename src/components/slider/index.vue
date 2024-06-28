@@ -226,10 +226,6 @@ function EmitMove() {
   movedData = [];
 }
 
-const checkMoveValid = (x: number) =>
-  Math.abs(x / currentMillisecond.value) * ganttColumnWidth.value >=
-  ganttColumnWidth.value;
-
 let startDate = props.data?.start.clone();
 let endDate = props.data?.end.clone();
 
@@ -245,17 +241,15 @@ onDrag(sliderRef, {
   },
 
   onMove: x => {
-    const sd = startDate!.getOffset(
-      (x / ganttColumnWidth.value) * currentMillisecond.value
-    );
-    const ed = endDate!.getOffset(
-      (x / ganttColumnWidth.value) * currentMillisecond.value
-    );
+    const w = props.moveByUnit
+      ? Number.parseInt(x / ganttColumnWidth.value)
+      : x / ganttColumnWidth.value;
 
-    if (!props.moveByUnit || checkMoveValid(props.data!.start.intervalTo(sd))) {
-      props.data?.setStart(sd, ganttHeader.unit, props.linkedResize, movedData);
-      props.data?.setEnd(ed, ganttHeader.unit, props.linkedResize, movedData);
-    }
+    const sd = startDate!.getOffset(w * currentMillisecond.value);
+    const ed = endDate!.getOffset(w * currentMillisecond.value);
+
+    props.data?.setStart(sd, ganttHeader.unit, props.linkedResize, movedData);
+    props.data?.setEnd(ed, ganttHeader.unit, props.linkedResize, movedData);
   },
   onEnd: EmitMove
 });
@@ -277,13 +271,13 @@ onDrag(resizeLeftRef, {
   },
 
   onMove: x => {
-    const d = startDate!.getOffset(
-      (x / ganttColumnWidth.value) * currentMillisecond.value
-    );
+    const w = props.moveByUnit
+      ? Number.parseInt(x / ganttColumnWidth.value)
+      : x / ganttColumnWidth.value;
 
-    if (!props.moveByUnit || checkMoveValid(props.data!.start.intervalTo(d))) {
-      props.data?.setStart(d, ganttHeader.unit, props.linkedResize, movedData);
-    }
+    const d = startDate!.getOffset(w * currentMillisecond.value);
+
+    props.data?.setStart(d, ganttHeader.unit, props.linkedResize, movedData);
   },
   onEnd: EmitMove
 });
@@ -305,13 +299,13 @@ onDrag(resizeRightRef, {
   },
 
   onMove: x => {
-    const d = endDate!.getOffset(
-      (x / ganttColumnWidth.value) * currentMillisecond.value
-    );
+    const w = props.moveByUnit
+      ? Number.parseInt(x / ganttColumnWidth.value)
+      : x / ganttColumnWidth.value;
 
-    if (!props.moveByUnit || checkMoveValid(props.data!.end.intervalTo(d))) {
-      props.data?.setEnd(d, ganttHeader.unit, props.linkedResize, movedData);
-    }
+    const d = endDate!.getOffset(w * currentMillisecond.value);
+
+    props.data?.setEnd(d, ganttHeader.unit, props.linkedResize, movedData);
   },
   onEnd: EmitMove
 });
