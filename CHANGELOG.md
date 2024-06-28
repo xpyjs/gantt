@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.11](https://github.com/xpyjs/gantt/compare/v2.1.10...v2.1.11) (2024-06-28)
+
+
+### Bug Fixes
+
+* 修复按单位移动后时间精度被改变的问题 ([192e734](https://github.com/xpyjs/gantt/commit/192e734534628a5c35679ba6713a86c3207b0701)), closes [#104](https://github.com/xpyjs/gantt/issues/104)
+* 修复节假日超出渲染 ([69c6229](https://github.com/xpyjs/gantt/commit/69c6229b8898b5f05f6eab6166ae60925b4fe662)), closes [#105](https://github.com/xpyjs/gantt/issues/105)
+
 ### [2.1.10](https://github.com/xpyjs/gantt/compare/v2.1.9...v2.1.10) (2024-06-21)
 
 
