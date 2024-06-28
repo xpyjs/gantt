@@ -51,7 +51,11 @@
     <!-- 节假日 -->
     <template v-for="holidays in $styleBox.holidays">
       <div
-        v-for="date in holidays.date"
+        v-for="date in holidays.date.filter(
+          d =>
+            d.compareTo(ganttHeader.start) === 'r' &&
+            d.compareTo(ganttHeader.end) === 'l'
+        )"
         :key="date.toString()"
         class="xg-gantt-body-date-line holiday"
         :style="{
