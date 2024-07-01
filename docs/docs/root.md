@@ -201,6 +201,14 @@ outline: [2, 4]
 
 **请注意**，当且仅当属性 [`show-expand`](#show-expand) 为真时，该属性才会生效，否则所有数据一定会被全部展开渲染。
 
+### format-gantt-header <Badge text="新增v2.1.12+" type="tip" />
+
+<DataParameter t="String" d="undefined" />
+
+在某些情况下，您可能需要自定义甘特图的表头内容，这时您可以使用该属性。它接收一个字符串，用于自定义表头内容。
+
+这个字符串应该是 `dayjs` 的格式化字符串，例如：`YYYY-MM-DD`，`YYYY-MM-DD HH:mm:ss` 等，包括高级格式化均可使用。详细请看 [dayjs](https://day.js.org/docs/zh-CN/display/format) 文档。
+
 ### header-height
 
 <DataParameter t="Number | String" d="80" />
