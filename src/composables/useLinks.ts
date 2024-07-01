@@ -1,19 +1,33 @@
 import type RowItem from '@/models/data/row';
 import { useStore } from '@/store';
 import { type LinkProps } from '@/typings/link';
-import { isBoolean } from 'lodash';
-import { type Ref, watchEffect } from 'vue';
+import { debounce, isBoolean } from 'lodash';
+import { type Ref, watch } from 'vue';
+import useInView from './useInView';
 
 export default () => {
-  const { linking, $links, $data } = useStore();
+  const { linking, $links } = useStore();
+  const { inView } = useInView();
 
   function initLinks(links: Ref<LinkProps[]>) {
-    $links.init($data.flatData, links.value);
+    $links.init(inView, links.value);
 
-    watchEffect(() => {
-      // 更新数据
-      $links.update($data.flatData, links.value);
-    });
+    const debouncedUpdate = debounce($inView => {
+      $links.update($inView, links.value);
+    }, 100);
+
+    watch(
+      () => inView,
+      () => {
+        // 更新数据
+
+        debouncedUpdate(inView);
+      },
+      {
+        immediate: true,
+        deep: true
+      }
+    );
   }
 
   function setLinking(params: {
