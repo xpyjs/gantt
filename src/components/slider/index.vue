@@ -242,7 +242,7 @@ onDrag(sliderRef, {
 
   onMove: x => {
     const w = props.moveByUnit
-      ? Number.parseInt(x / ganttColumnWidth.value)
+      ? Number.parseInt(`${x / ganttColumnWidth.value}`)
       : x / ganttColumnWidth.value;
 
     const sd = startDate!.getOffset(w * currentMillisecond.value);
@@ -272,7 +272,7 @@ onDrag(resizeLeftRef, {
 
   onMove: x => {
     const w = props.moveByUnit
-      ? Number.parseInt(x / ganttColumnWidth.value)
+      ? Number.parseInt(`${x / ganttColumnWidth.value}`)
       : x / ganttColumnWidth.value;
 
     const d = startDate!.getOffset(w * currentMillisecond.value);
@@ -300,7 +300,7 @@ onDrag(resizeRightRef, {
 
   onMove: x => {
     const w = props.moveByUnit
-      ? Number.parseInt(x / ganttColumnWidth.value)
+      ? Number.parseInt(`${x / ganttColumnWidth.value}`)
       : x / ganttColumnWidth.value;
 
     const d = endDate!.getOffset(w * currentMillisecond.value);
