@@ -36,7 +36,7 @@ export default () => {
           inView[i].hide ||
           inView[i].flatIndex <= top.value ||
           inView[i].flatIndex >= bottom.value ||
-          store.$data.flatData[inView[i].flatIndex].id !== inView[i].id
+          !store.$data.flatData[inView[i].flatIndex].isSame(inView[i].data)
         ) {
           inView.splice(i, 1);
         }

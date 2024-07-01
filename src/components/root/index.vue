@@ -151,9 +151,9 @@ onMounted(() => {
     () => props.data,
     val => {
       if (val.length !== store.$data.length) {
-        $param.rootHeight = getHeight();
         nextTick(() => {
           separateLineHeight.value = getHeight();
+          $param.rootHeight = getHeight();
         });
       }
     }
