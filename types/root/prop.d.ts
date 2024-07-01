@@ -274,6 +274,15 @@ export declare const props: {
    * @see https://docs.xiaopangying.com/gantt/root.html#holidays
    */
   holidays: PropType<Array<{ date: LikeDate | LikeDate[]; color?: string }>>;
+
+  /**
+   * 自定义甘特图头部格式化
+   *
+   * @description 它采用 dayjs 的格式化，并且包含所有高级格式化内容。详细 @see https://day.js.org/docs/en/display/format
+   *
+   * @see https://docs.xiaopangying.com/gantt/root.html#format-gantt-header
+   */
+  formatGanttHeader: string;
 };
 
 export type RootProps = ExtractPropTypes<typeof props>;

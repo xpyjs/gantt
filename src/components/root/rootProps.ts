@@ -254,5 +254,12 @@ export default {
       Array<{ date: LikeDate | LikeDate[]; color?: string }>
     >,
     default: () => []
+  },
+
+  /**
+   * 自定义日期头格式化
+   */
+  formatGanttHeader: {
+    type: String
   }
 };

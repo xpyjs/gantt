@@ -59,11 +59,11 @@ class GanttColumn extends Column {
   label: string;
   uuid: string = uuid();
 
-  constructor(date: XDate, unit: DateUnit) {
+  constructor(date: XDate, unit: DateUnit, format?: string) {
     super();
 
     this.date = date;
-    this.label = this.date.getString(unit);
+    this.label = this.date.getString(unit, format);
   }
 }
 
@@ -218,6 +218,7 @@ class GanttHeader extends Header {
   end: XDate = new XDate().getOffset(Variables.time.millisecondOf.day);
   unit: HeaderDateUnit = 'day';
   minLength: number = 0;
+  customFormatter?: string; // 自定义格式化。它只自定义下面日期一层，不能自定义上面范围
 
   /**
    * 设置日期
@@ -226,7 +227,8 @@ class GanttHeader extends Header {
     minLen: number,
     start?: XDate,
     end?: XDate,
-    unit: HeaderDateUnit = 'day'
+    unit: HeaderDateUnit = 'day',
+    customFormatter?: string // dayjs format || advancedFormat
   ) {
     let step = -Variables.time.millisecondOf.day;
     if (unit === 'hour') {
@@ -252,6 +254,7 @@ class GanttHeader extends Header {
     this.start = _start ?? new XDate();
     this.end = _end ?? new XDate().getOffset(Variables.time.millisecondOf.day);
     this.minLength = minLen;
+    this.customFormatter = customFormatter;
 
     this.generate();
   }
@@ -302,7 +305,9 @@ class GanttHeader extends Header {
         columns[i].children = [];
       }
 
-      columns[i].children?.push(new GanttColumn(date, this.unit));
+      columns[i].children?.push(
+        new GanttColumn(date, this.unit, this.customFormatter)
+      );
     });
 
     this.headers = this.convertToRows(columns, this.getAllColumns(columns));

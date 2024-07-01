@@ -176,4 +176,13 @@ export default class StyleBox {
 
     this._holidays = h;
   }
+
+  private _formatGanttHeader?: string;
+  public get formatGanttHeader() {
+    return this._formatGanttHeader;
+  }
+
+  public set formatGanttHeader(v: string | undefined) {
+    this._formatGanttHeader = v;
+  }
 }

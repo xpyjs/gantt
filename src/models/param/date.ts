@@ -31,7 +31,9 @@ export class XDate {
   /**
    * 基于单位获取当前日期的格式化字符
    */
-  getString(unit: DateUnit) {
+  getString(unit: DateUnit, format?: string) {
+    if (format) return day(this.date).format(format);
+
     switch (unit) {
       case 'year':
         return day(this.date).format('YYYY');

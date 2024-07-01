@@ -19,11 +19,15 @@ export default () => {
       ),
       store.$data.start,
       store.$data.end,
-      store.$styleBox.unit
+      store.$styleBox.unit,
+      store.$styleBox.formatGanttHeader
     );
   }
 
-  watch(() => store.$styleBox.unit, setGanttHeaders);
+  watch(
+    () => [store.$styleBox.unit, store.$styleBox.formatGanttHeader],
+    setGanttHeaders
+  );
 
   return {
     setGanttHeaders,

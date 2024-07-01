@@ -12,8 +12,12 @@
       :level-color="['#ffffff']"
       locale="zh-cn"
       primary-color="#F1F2FF"
-      row-height="46"
+      row-height="40"
       show-today
+      format-gantt-header="Q Do"
+      :gantt-column-size="{
+        day: 100
+      }"
     >
       <x-gantt-column prop="index">
         <template #title>
