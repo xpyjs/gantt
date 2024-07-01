@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.12](https://github.com/xpyjs/gantt/compare/v2.1.11...v2.1.12) (2024-07-01)
+
+
+### Features
+
+* 自定义头部日期格式化 ([1c2a3e8](https://github.com/xpyjs/gantt/commit/1c2a3e878f5c16441f8415f4b25f3608941cfef7)), closes [#106](https://github.com/xpyjs/gantt/issues/106)
+
+
+### Bug Fixes
+
+* 连线缺失监听 ([8ece20a](https://github.com/xpyjs/gantt/commit/8ece20add6b1290a3f10f5495e326b5530f2b291)), closes [#102](https://github.com/xpyjs/gantt/issues/102) [#108](https://github.com/xpyjs/gantt/issues/108)
+* 修复数据重新赋值部分无效的问题 ([3ad16b3](https://github.com/xpyjs/gantt/commit/3ad16b30b4be7121c446d8b0e63c1c5b36eef98c)), closes [#108](https://github.com/xpyjs/gantt/issues/108)
+* 修复中线高度问题 ([2e5e7f5](https://github.com/xpyjs/gantt/commit/2e5e7f54c6c1e51373fe808c6e3b0fef8d50aef2))
+* 优化连线的性能 ([f83ed29](https://github.com/xpyjs/gantt/commit/f83ed29fc3988a7ef2720f2fd7a5d229797efb75))
+* 语言设置响应式 ([a2ac28b](https://github.com/xpyjs/gantt/commit/a2ac28b1cdb32a4bd2a6043238767bb36dbcc767))
+
 ### [2.1.11](https://github.com/xpyjs/gantt/compare/v2.1.10...v2.1.11) (2024-06-28)
 
 
