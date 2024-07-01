@@ -71,7 +71,15 @@ import GanttBody from '@/components/container/GanttBody.vue';
 import useSlotsBox from '@/composables/useSlotsBox';
 import useTableWidth from '@/composables/useTableWidth';
 import { uuid } from '@/utils/common';
-import { DefineComponent, onMounted, onUpdated, Ref, ref, toRefs } from 'vue';
+import {
+  DefineComponent,
+  onMounted,
+  onUpdated,
+  Ref,
+  ref,
+  toRefs,
+  watch
+} from 'vue';
 import rootProps from './rootProps';
 import useData from '@/composables/useData';
 import useStyle from '@/composables/useStyle';
@@ -90,7 +98,14 @@ const containerId = uuid(10);
 const props = defineProps(rootProps);
 
 // 本地化
-setLocale(props.locale);
+watch(
+  () => props.locale,
+  () => setLocale(props.locale),
+  {
+    immediate: true
+  }
+);
+// setLocale(props.locale);
 
 // #region 挂载实例
 const { rootRef } = useRoot();
