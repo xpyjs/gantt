@@ -94,6 +94,7 @@ import Variables from '@/constants/vars';
 import useExport from '@/composables/useExport';
 import useElement from '@/composables/useElement';
 import { setLocale } from '@/utils/date';
+import useStore from '@/store';
 
 const containerId = uuid(10);
 const props = defineProps(rootProps);
@@ -133,6 +134,7 @@ onUpdated(getScrollGapSize);
 
 // #region 得到组件高度，并保存
 const { $param } = useParam();
+const store = useStore();
 const separateLineHeight = ref(0);
 onMounted(() => {
   const getHeight = () =>
@@ -147,11 +149,13 @@ onMounted(() => {
   // 切换数据时，如果没有固定高度，那么整个高度应该随之变化。rootHeight 会决定渲染行数
   watch(
     () => props.data,
-    () => {
-      $param.rootHeight = getHeight();
-      nextTick(() => {
-        separateLineHeight.value = getHeight();
-      });
+    val => {
+      if (val.length !== store.$data.length) {
+        $param.rootHeight = getHeight();
+        nextTick(() => {
+          separateLineHeight.value = getHeight();
+        });
+      }
     }
   );
 });
