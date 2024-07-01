@@ -75,6 +75,14 @@ outline: [2, 4]
 
 如上，`from` 和 `to` 属性是必须的，这两个字段的值应当对应 `data` 中的 `data-id` 值。`color` 是可选的，可以设置连线的颜色。
 
+::: tip 提示
+
+在 `v2.1.12` 中优化了渲染过程
+
+为了提高性能，在页面滚动期间，使用了 `debounce` 函数减少不必要的刷新，所以连线相比 slider 会有一定延迟，当页面停止滚动后，会自动更新，这并不影响使用。
+
+:::
+
 ### start-key
 
 <DataParameter t="String" d="startDate" />
