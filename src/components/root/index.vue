@@ -35,7 +35,7 @@
         'xg-mid-separate-line',
         { 'xg-mid-separate-line__dark': isDark }
       ]"
-      :style="{ height: $param.rootHeight + 'px' }"
+      :style="{ height: separateLineHeight + 'px' }"
     />
     <!-- 移动示意线 -->
     <div
@@ -73,6 +73,7 @@ import useTableWidth from '@/composables/useTableWidth';
 import { uuid } from '@/utils/common';
 import {
   DefineComponent,
+  nextTick,
   onMounted,
   onUpdated,
   Ref,
@@ -132,10 +133,26 @@ onUpdated(getScrollGapSize);
 
 // #region 得到组件高度，并保存
 const { $param } = useParam();
+const separateLineHeight = ref(0);
 onMounted(() => {
-  $param.rootHeight = Math.max(
-    ganttRef.value!.$el.offsetHeight,
-    ganttRef.value!.$el.clientHeight
+  const getHeight = () =>
+    Math.max(
+      ganttRef.value!.$el.offsetHeight,
+      ganttRef.value!.$el.clientHeight
+    );
+
+  $param.rootHeight = getHeight();
+  separateLineHeight.value = getHeight();
+
+  // 切换数据时，如果没有固定高度，那么整个高度应该随之变化。rootHeight 会决定渲染行数
+  watch(
+    () => props.data,
+    () => {
+      $param.rootHeight = getHeight();
+      nextTick(() => {
+        separateLineHeight.value = getHeight();
+      });
+    }
   );
 });
 // #endregion
