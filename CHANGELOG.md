@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.13](https://github.com/xpyjs/gantt/compare/v2.1.12...v2.1.13) (2024-08-16)
+
+
+### Bug Fixes
+
+* 表头高度属性不生效 ([8a2782d](https://github.com/xpyjs/gantt/commit/8a2782d8eda64650de6b2cb80b8bb3fbb90e3979)), closes [#127](https://github.com/xpyjs/gantt/issues/127)
+
 ### [2.1.12](https://github.com/xpyjs/gantt/compare/v2.1.11...v2.1.12) (2024-07-01)
 
 
