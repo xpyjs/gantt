@@ -50,6 +50,7 @@ export default () => {
       store.$styleBox.draggable = props.draggable;
       store.$styleBox.holidays = props.holidays;
       store.$styleBox.formatGanttHeader = props.formatGanttHeader;
+      store.$styleBox.headerHeight = props.headerHeight;
     };
 
     fn();

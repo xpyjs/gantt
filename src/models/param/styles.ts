@@ -54,6 +54,19 @@ export default class StyleBox {
     }
   }
 
+  private _headerHeight: number | undefined;
+  public get headerHeight(): number | undefined {
+    return this._headerHeight;
+  }
+
+  public set headerHeight(v: number | string) {
+    if (typeof v === 'string') {
+      this._headerHeight = parseInt(v);
+    } else {
+      this._headerHeight = v;
+    }
+  }
+
   private _showCheckbox: boolean = false;
   public get showCheckbox(): boolean {
     return this._showCheckbox;
