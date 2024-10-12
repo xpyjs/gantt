@@ -109,6 +109,14 @@ useSortable(tableBodyRef, [], {
   width: 100%;
   position: relative;
 
+  .xg-table-row {
+    display: flex;
+
+    .xg-table-cell {
+      flex-shrink: 0;
+    }
+  }
+
   .xg-table-row.xg-row.xg-row-dragging {
     background-color: var(--primary-color);
     border: 1px dashed #ccc;
