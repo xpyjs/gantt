@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.14](https://github.com/xpyjs/gantt/compare/v2.1.13...v2.1.14) (2024-10-12)
+
+
+### Bug Fixes
+
+* **Table:** 修复表格最后一列有时不显示的问题 ([4538956](https://github.com/xpyjs/gantt/commit/4538956d58f902c2284eb730acb6f0faaabf922f)), closes [#133](https://github.com/xpyjs/gantt/issues/133) [#123](https://github.com/xpyjs/gantt/issues/123)
+
 ### [2.1.13](https://github.com/xpyjs/gantt/compare/v2.1.12...v2.1.13) (2024-08-16)
 
 
