@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>X-Gantt Vanilla Example</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .gantt1-container {
+            width: 1200px;
+            height: 600px;
+            border: 1px solid #000;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            /* background-color: #123; */
+        }
+
+        .gantt1-container #gantt1 {
+            flex: 1;
+        }
+
+        .gantt2-container {
+            margin-top: 100px;
+            width: 800px;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gantt2-container #gantt2 {
+            flex: 1;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="gantt1-container">
+        <h4>Gantt Chart</h4>
+        <div id="gantt1">123</div>
+    </div>
+    <div id="btn-group"></div>
+
+    <div class="gantt2-container">
+        <h4>Gantt2 Chart</h4>
+        <div id="gantt2"></div>
+    </div>
+    <div id="btn-group2"></div>
+
+    <div>
+        <h4>Gantt3 Chart</h4>
+        <div id="gantt3-container"></div>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+
+</body>
+
+</html>
