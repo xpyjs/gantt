@@ -1,0 +1,27 @@
+# Source files
+src/
+test/
+coverage/
+scripts/
+
+# Development files
+*.tsbuildinfo
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies
+node_modules/
+
+# Build artifacts (keep only dist and types)
+*.temp
+*.tmp

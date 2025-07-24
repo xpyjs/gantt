@@ -1,0 +1,78 @@
+{
+  "name": "@xpyjs/gantt-core",
+  "private": false,
+  "version": "0.0.1-alpha.3",
+  "description": "A powerful and flexible Gantt chart component library for modern web applications with TypeScript support",
+  "type": "module",
+  "main": "./dist/x-gantt.umd.cjs",
+  "module": "./dist/x-gantt.js",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/x-gantt.js",
+      "require": "./dist/x-gantt.umd.cjs",
+      "types": "./types/index.d.ts"
+    },
+    "./style.css": "./dist/style.css",
+    "./dist/style.css": "./dist/style.css",
+    "./index.css": "./dist/style.css"
+  },
+  "files": [
+    "dist",
+    "types",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "npm run build:lib && npm run build:types",
+    "build:lib": "vite build",
+    "build:types": "rimraf types && tsc && npm run copy:types",
+    "copy:types": "node scripts/build-types.js",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "clean": "rimraf dist types",
+    "prepublishOnly": "npm run clean && npm run build && vitest --watch=false",
+    "release": "pnpm publish --access public"
+  },
+  "dependencies": {
+    "dayjs": "^1.11.11",
+    "konva": "^9.3.6",
+    "lodash-es": "^4.17.21"
+  },
+  "keywords": [
+    "gantt",
+    "gantt-chart",
+    "chart",
+    "schedule",
+    "project-management",
+    "typescript",
+    "javascript",
+    "timeline",
+    "calendar",
+    "task-management",
+    "visualization",
+    "canvas",
+    "konva"
+  ],
+  "author": "Jeremy Jone <jeremyjone@qq.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xpyjs/gantt.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/xpyjs/gantt#readme",
+  "bugs": {
+    "url": "https://github.com/xpyjs/gantt/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ]
+}

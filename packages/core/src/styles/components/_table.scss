@@ -1,0 +1,123 @@
+.x-gantt-table-container {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.x-gantt-table-header {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--x-gantt-border-color) !important;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  position: relative;
+  flex-wrap: nowrap;
+
+  .x-gantt-table-header-cell {
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    font-weight: var(--x-gantt-header-font-weight);
+    flex-shrink: 0;
+    padding: 0px 8px;
+
+    &.border {
+      border-right: 1px solid var(--x-gantt-border-color) !important;
+    }
+
+    .x-gantt-column-resize-handle {
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.1) !important;
+      }
+    }
+  }
+
+  & > div:last-child {
+    &.x-gantt-table-header-group.border {
+      & > .x-gantt-table-header-cell.border {
+        border-right: none;
+      }
+    }
+
+    .x-gantt-table-header-group.border {
+      & > .x-gantt-table-header-cell.border {
+        border-right: none;
+      }
+    }
+
+    &.x-gantt-table-header-cell.border {
+      border-right: none;
+    }
+  }
+}
+
+.x-gantt-table-header-group {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  & > .x-gantt-table-header-cell {
+    border-bottom: 1px solid var(--x-gantt-border-color) !important;
+
+    & > .x-gantt-table-header-title {
+      text-align: center;
+    }
+  }
+}
+
+.x-gantt-table-header-children {
+  display: flex;
+  flex-direction: row;
+}
+
+// 表格体样式
+.x-gantt-table-body {
+  flex: 1;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+// 表格行样式
+.x-gantt-table-row {
+  box-sizing: border-box;
+
+  &.hover > .x-gantt-table-cell {
+    background-color: var(
+      --x-gantt-row-hover-color,
+      rgba(0, 0, 0, 0.05)
+    ) !important;
+  }
+
+  &.selected > .x-gantt-table-cell {
+    background-color: var(
+      --x-gantt-row-selected-color,
+      rgba(0, 0, 0, 0.1)
+    ) !important;
+  }
+}
+
+// 表格单元格样式
+.x-gantt-table-cell {
+  box-sizing: border-box;
+  display: inline-block;
+  border-bottom: 1px solid var(--x-gantt-border-color) !important;
+  padding: var(--x-gantt-cell-padding, 4px 8px);
+
+  .x-gantt-table-cell__content {
+    box-sizing: border-box;
+  }
+
+  &.border {
+    border-right: 1px solid var(--x-gantt-border-color) !important;
+  }
+}

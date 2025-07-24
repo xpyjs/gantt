@@ -1,0 +1,59 @@
+// 辅助类，用于隐藏原生滚动条
+.x-gantt-content-wrapper {
+  width: 100%;
+  height: 100%;
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+}
+
+.gantt-scrollbar {
+  position: absolute;
+  z-index: 10; // 确保在内容之上
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out; // 平滑显隐过渡
+  pointer-events: none; // 默认不可交互，防止遮挡下方内容
+
+  // &.visible 类用于显示
+  &.visible {
+    opacity: 1;
+    pointer-events: auto; // 显示时允许交互
+  }
+}
+
+.gantt-scrollbar-thumb {
+  position: absolute;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, height 0.1s ease-out,
+    width 0.1s ease-out, transform 0.05s linear; // 平滑过渡, 位置变换要快
+
+  &:hover {
+    // background-color: rgba(0, 0, 0, 0.6); // 悬停时加深颜色，可配置
+  }
+}
+
+.gantt-scrollbar-vertical {
+  top: 0;
+  right: 0;
+  bottom: 0; // 会根据水平滚动条动态调整
+  .gantt-scrollbar-thumb-vertical {
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+}
+
+.gantt-scrollbar-horizontal {
+  left: 0;
+  bottom: 0;
+  right: 0; // 会根据垂直滚动条动态调整
+  .gantt-scrollbar-thumb-horizontal {
+    left: 0;
+    top: 0;
+    bottom: 0;
+  }
+}
+
+// 确保在 main.scss 中导入此文件
+// @import './components/scrollbar';
