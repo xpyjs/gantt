@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "version": "0.0.1-alpha.3",
+  "type": "module",
+  "scripts": {
+    "dev:core": "node scripts/dev.js core",
+    "dev:vue": "node scripts/dev.js vue",
+    "dev:react": "node scripts/dev.js react",
+    "test:core": "node scripts/test.js core",
+    "test:vue": "node scripts/test.js vue",
+    "test:react": "node scripts/test.js react",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "version": "node scripts/version.js"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20.12.12",
+    "@vitest/coverage-v8": "^3.2.3",
+    "conventional-changelog-cli": "^5.0.0",
+    "jsdom": "^26.1.0",
+    "rimraf": "^6.0.1",
+    "sass": "^1.77.2",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11",
+    "vite-plugin-dts": "^3.9.1",
+    "vitest": "^3.2.1"
+  },
+  "packageManager": "pnpm@9.1.1",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
