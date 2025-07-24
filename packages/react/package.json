@@ -1,0 +1,73 @@
+{
+  "name": "@xpyjs/gantt-react",
+  "version": "0.0.1-alpha.3",
+  "private": false,
+  "description": "React wrapper for x-gantt",
+  "author": "JeremyJone",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "dev": "tsc && vite build --watch",
+    "build": "tsc && vite build",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run build && vitest --watch=false",
+    "release": "pnpm publish --access public"
+  },
+  "dependencies": {
+    "@xpyjs/gantt-core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "jsdom": "^26.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11",
+    "vite-plugin-dts": "^3.9.1",
+    "vitest": "^3.2.1"
+  },
+  "keywords": [
+    "gantt",
+    "react",
+    "react-component",
+    "typescript",
+    "project-management",
+    "schedule",
+    "timeline"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xpyjs/gantt.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/xpyjs/gantt#readme",
+  "bugs": {
+    "url": "https://github.com/xpyjs/gantt/issues"
+  }
+}
