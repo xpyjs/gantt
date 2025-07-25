@@ -1,62 +1,146 @@
-# name: 发布 Release 包
-# on:
-#   push:
-#     tags:
-#       - 'v[0-9]+.[0-9]+.[0-9]+' # 仅发布正式版本
-# jobs:
-#   build-publish-release:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: 1. 检查分支
-#         uses: actions/checkout@v2
+name: 发布 Release 包
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+*'  # 当推送版本标签时触发 (如: v1.0.0, v1.0.0-alpha.1)
+  workflow_dispatch:  # 允许手动触发
 
-#       - name: 2. 设置 Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: 18
-#           registry-url: 'https://registry.npmjs.org'
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - name: 1. 检查分支
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-#       - name: 3. 安装依赖
-#         run: yarn
+      - name: 2. 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.1.1
 
-#       # - name: 4. 测试
-#       #   run: yarn test
+      - name: 3. 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
 
-#       - name: 5. 打包
-#         run: yarn build
+      - name: 4. 设置 pnpm 缓存
+        id: pnpm-cache
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-#       - name: 6. 发布 npm 包
-#         run: npm publish
-#         env:
-#           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: 5. 缓存 pnpm 存储
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-#       - name: 7. 读取当前版本号
-#         id: version
-#         uses: ashley-taylor/read-json-property-action@v1.0
-#         with:
-#           path: ./package.json
-#           property: version
+      - name: 6. 安装依赖
+        run: pnpm install --no-frozen-lockfile
 
-#       - name: 8. 生成描述文件
-#         run: node ./sundry/updateDoc.ts ${{ steps.version.outputs.value }} true
+      - name: 7. 构建所有包
+        run: |
+          cd packages/core && pnpm build
+          cd ../vue && pnpm build
+          cd ../react && pnpm build
 
-#       - name: 9. 读取描述文件
-#         id: description
-#         uses: juliangruber/read-file-action@v1
-#         with:
-#           path: ./desc.txt
+      - name: 8. 读取当前版本号
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-#       - name: 10. 生成 Release
-#         id: create_release
-#         uses: actions/create-release@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           tag_name: v${{steps.version.outputs.value}}
-#           release_name: v${{steps.version.outputs.value}}
-#           body: ${{steps.description.outputs.content}}
-#           draft: false
-#           prerelease: false
+      - name: 9. 提取 Changelog 内容
+        id: changelog
+        run: |
+          # 提取当前版本的 changelog 内容
+          VERSION="${{ steps.version.outputs.version }}"
 
-#       - name: 11. 删除临时文件
-#         run: rm -rf ./desc.txt
+          # 使用 awk 提取指定版本的内容
+          CHANGELOG_CONTENT=$(awk -v version="$VERSION" '
+            BEGIN { found = 0; content = "" }
+            /^## / {
+              if (found) exit
+              if (index($0, version)) {
+                found = 1
+                next
+              }
+            }
+            found && /^## / { exit }
+            found {
+              if (content != "") content = content "\n"
+              content = content $0
+            }
+            END { print content }
+          ' CHANGELOG.md)
+
+          # 如果没有找到对应版本的内容，使用默认内容
+          if [ -z "$CHANGELOG_CONTENT" ]; then
+            CHANGELOG_CONTENT="Release version $VERSION"
+          fi
+
+          # 保存到文件，处理多行内容
+          echo "$CHANGELOG_CONTENT" > release_notes.txt
+
+          # 设置输出（处理多行内容）
+          {
+            echo 'content<<EOF'
+            echo "$CHANGELOG_CONTENT"
+            echo 'EOF'
+          } >> $GITHUB_OUTPUT
+
+      - name: 10. 创建 Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          release_name: v${{ steps.version.outputs.version }}
+          body: ${{ steps.changelog.outputs.content }}
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.version, 'alpha') || contains(steps.version.outputs.version, 'beta') || contains(steps.version.outputs.version, 'rc') }}
+
+      - name: 11. 压缩构建产物
+        run: |
+          cd packages/core && zip -r ../../gantt-core-v${{ steps.version.outputs.version }}.zip dist types
+          cd ../vue && zip -r ../../gantt-vue-v${{ steps.version.outputs.version }}.zip dist types
+          cd ../react && zip -r ../../gantt-react-v${{ steps.version.outputs.version }}.zip dist
+
+      - name: 12. 上传 Core 包
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./gantt-core-v${{ steps.version.outputs.version }}.zip
+          asset_name: gantt-core-v${{ steps.version.outputs.version }}.zip
+          asset_content_type: application/zip
+
+      - name: 13. 上传 Vue 包
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./gantt-vue-v${{ steps.version.outputs.version }}.zip
+          asset_name: gantt-vue-v${{ steps.version.outputs.version }}.zip
+          asset_content_type: application/zip
+
+      - name: 14. 上传 React 包
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./gantt-react-v${{ steps.version.outputs.version }}.zip
+          asset_name: gantt-react-v${{ steps.version.outputs.version }}.zip
+          asset_content_type: application/zip
+
+      - name: 15. 清理临时文件
+        run: rm -f release_notes.txt *.zip
