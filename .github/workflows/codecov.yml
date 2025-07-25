@@ -3,8 +3,13 @@ name: 代码覆盖率检测
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'packages/**'
   pull_request:
     branches: [ master ]
+    paths:
+      - 'packages/**'
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
   test-coverage:
