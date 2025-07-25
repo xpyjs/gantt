@@ -3,7 +3,7 @@
 ![](./logo.png)
 
 [![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small) ![NPM Version](https://img.shields.io/npm/v/@xpyjs/gantt-core.svg) ![NPM Downloads](https://badgen.net/npm/dt/@xpyjs/gantt-core) [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@xpyjs/gantt-core)](https://bundlephobia.com/result?p=@xpyjs/gantt-core) [![TypeScript](https://img.shields.io/github/languages/top/xpyjs/gantt)](https://github.com/xpyjs/gantt) [![codecov](https://codecov.io/gh/xpyjs/gantt/graph/badge.svg?token=JBQD58RXZI)](https://codecov.io/gh/xpyjs/gantt) ![License](https://img.shields.io/npm/l/@xpyjs/gantt-core.svg)
-[![GitHub Release](https://img.shields.io/github/v/release/xpyjs/gantt)](https://github.com/xpyjs/gantt/releases) [![GitHub Pages](https://img.shields.io/github/deployments/xpyjs/gantt/github-pages?label=gh-pages)](https://xpyjs.github.io/gantt/) [![Last Commit](https://img.shields.io/github/last-commit/xpyjs/gantt)](https://github.com/xpyjs/gantt/commits/main) [![Node Version](https://img.shields.io/badge/node-%3E%3D%2018-brightgreen)](https://nodejs.org/) ![GitHub Stars](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![GitHub Forks](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
+[![GitHub Release](https://img.shields.io/github/v/release/xpyjs/gantt)](https://github.com/xpyjs/gantt/releases) [![GitHub Pages](https://img.shields.io/github/deployments/xpyjs/gantt/github-pages?label=gh-pages)](https://xpyjs.github.io/gantt/docs) [![Last Commit](https://img.shields.io/github/last-commit/xpyjs/gantt)](https://github.com/xpyjs/gantt/commits/master) [![Node Version](https://img.shields.io/badge/node-%3E%3D%2018-brightgreen)](https://nodejs.org/) ![GitHub Stars](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![GitHub Forks](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
 
 [[English](./README.md)] [[中文](./README_cn.md)]
 
@@ -277,6 +277,146 @@ const formatted = dayjs('2024-01-01').format('YYYY-MM-DD');
 const color = colorjs('#ff0000');
 const rgb = color.alpha(0.5).toRgb(); // 获取 RGB 颜色值 { r: 255, g: 0, b: 0, a: 0.5 }
 ```
+
+## 框架支持
+
+XGantt 本身可以适配多种前端框架。但是我仍然提供了 `Vue` 和 `React` 的适配包，方便在这些框架中使用。
+
+### Vue 版本
+
+`@xpyjs/gantt-vue` 是专为 Vue 3 设计的适配包，提供了更好的集成和使用体验。
+
+#### 安装
+
+```bash
+npm install @xpyjs/gantt-vue
+# or
+yarn add @xpyjs/gantt-vue
+# or
+pnpm add @xpyjs/gantt-vue
+```
+
+#### 使用
+
+```vue
+<template>
+  <XGanttVue :options="ganttOptions" />
+</template>
+
+<script lang="ts" setup>
+import { reactive } from 'vue';
+import XGanttVue from '@xpyjs/gantt-vue';
+import '@xpyjs/gantt-vue/style.css';
+
+const ganttOptions = reactive({
+  data: [
+    {
+      id: 1,
+      name: '项目启动',
+      startTime: '2024-01-01',
+      endTime: '2024-01-05',
+      progress: 100
+    },
+    {
+      id: 2,
+      name: '需求分析',
+      startTime: '2024-01-06',
+      endTime: '2024-01-15',
+      progress: 80
+    },
+    {
+      id: 3,
+      name: '系统设计',
+      startTime: '2024-01-16',
+      endTime: '2024-01-30',
+      progress: 50
+    }
+  ],
+  unit: 'day',
+  table: {
+    columns: [
+      { label: '任务名称', field: 'name' },
+      { label: '开始时间', field: 'startTime' },
+      { label: '结束时间', field: 'endTime' },
+    ]
+  }
+});
+</script>
+```
+
+`@xpyjs/gantt-vue` 已经适配了响应式，所以直接修改数据，就会触发视图自动更新。
+
+### React 版本
+
+`@xpyjs/gantt-react` 是专为 React 设计的适配包，提供了更好的集成和使用体验。
+
+#### 安装
+
+```bash
+npm install @xpyjs/gantt-react
+# or
+yarn add @xpyjs/gantt-react
+# or
+pnpm add @xpyjs/gantt-react
+```
+
+#### 使用
+
+```jsx
+import { useState, useCallback, useEffect } from 'react';
+import { XGanttReact, useXGantt } from '@xpyjs/gantt-react';
+import '@xpyjs/gantt-react/style.css';
+
+function App() {
+  const { ganttRef, jumpTo } = useXGantt();
+
+  const [ganttData, setGanttData] = useState([
+    {
+      id: 1,
+      name: '项目启动',
+      startTime: '2024-01-01',
+      endTime: '2024-01-05',
+      progress: 100
+    },
+    {
+      id: 2,
+      name: '需求分析',
+      startTime: '2024-01-06',
+      endTime: '2024-01-15',
+      progress: 80
+    },
+    {
+      id: 3,
+      name: '系统设计',
+      startTime: '2024-01-16',
+      endTime: '2024-01-30',
+      progress: 50
+    }
+  ]);
+
+  const ganttOptions: IOptions = {
+    data: ganttData,
+    table: {
+      columns: [
+        { label: '任务名称', field: 'name' },
+        { label: '开始时间', field: 'startTime' },
+        { label: '结束时间', field: 'endTime' },
+      ]
+    },
+    unit: 'day',
+  };
+
+  return (
+    <div className="app">
+      <XGanttReact ref={ganttRef} options={ganttOptions} />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`@xpyjs/gantt-react` 提供了一个 hooks：`useXGantt`，方便在函数组件中使用。
 
 ## 🔧 浏览器支持
 

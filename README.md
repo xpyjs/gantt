@@ -3,7 +3,7 @@
 ![](./logo.png)
 
 [![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small) ![NPM Version](https://img.shields.io/npm/v/@xpyjs/gantt-core.svg) ![NPM Downloads](https://badgen.net/npm/dt/@xpyjs/gantt-core) [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@xpyjs/gantt-core)](https://bundlephobia.com/result?p=@xpyjs/gantt-core) [![TypeScript](https://img.shields.io/github/languages/top/xpyjs/gantt)](https://github.com/xpyjs/gantt) [![codecov](https://codecov.io/gh/xpyjs/gantt/graph/badge.svg?token=JBQD58RXZI)](https://codecov.io/gh/xpyjs/gantt) ![License](https://img.shields.io/npm/l/@xpyjs/gantt-core.svg)
-[![GitHub Release](https://img.shields.io/github/v/release/xpyjs/gantt)](https://github.com/xpyjs/gantt/releases) [![GitHub Pages](https://img.shields.io/github/deployments/xpyjs/gantt/github-pages?label=gh-pages)](https://xpyjs.github.io/gantt/) [![Last Commit](https://img.shields.io/github/last-commit/xpyjs/gantt)](https://github.com/xpyjs/gantt/commits/main) [![Node Version](https://img.shields.io/badge/node-%3E%3D%2018-brightgreen)](https://nodejs.org/) ![GitHub Stars](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![GitHub Forks](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
+[![GitHub Release](https://img.shields.io/github/v/release/xpyjs/gantt)](https://github.com/xpyjs/gantt/releases) [![GitHub Pages](https://img.shields.io/github/deployments/xpyjs/gantt/github-pages?label=gh-pages)](https://xpyjs.github.io/gantt/docs) [![Last Commit](https://img.shields.io/github/last-commit/xpyjs/gantt)](https://github.com/xpyjs/gantt/commits/master) [![Node Version](https://img.shields.io/badge/node-%3E%3D%2018-brightgreen)](https://nodejs.org/) ![GitHub Stars](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![GitHub Forks](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
 
 [[English](./README.md)] [[中文](./README_cn.md)]
 
@@ -276,6 +276,146 @@ const formatted = dayjs('2024-01-01').format('YYYY-MM-DD');
 const color = colorjs('#ff0000');
 const rgb = color.alpha(0.5).toRgb(); // Get RGB color value { r: 255, g: 0, b: 0, a: 0.5 }
 ```
+
+## Framework Support
+
+XGantt can be adapted to various front-end frameworks. However, I also provide adaptation packages for `Vue` and `React` to facilitate usage within these frameworks.
+
+### Vue Version
+
+`@xpyjs/gantt-vue` is designed specifically for Vue 3, providing better integration and user experience.
+
+#### Installation
+
+```bash
+npm install @xpyjs/gantt-vue
+# or
+yarn add @xpyjs/gantt-vue
+# or
+pnpm add @xpyjs/gantt-vue
+```
+
+#### Usage
+
+```vue
+<template>
+  <XGanttVue :options="ganttOptions" />
+</template>
+
+<script lang="ts" setup>
+import { reactive } from 'vue';
+import XGanttVue from '@xpyjs/gantt-vue';
+import '@xpyjs/gantt-vue/style.css';
+
+const ganttOptions = reactive({
+  data: [
+    {
+      id: 1,
+      name: 'Project Start',
+      startTime: '2024-01-01',
+      endTime: '2024-01-05',
+      progress: 100
+    },
+    {
+      id: 2,
+      name: 'Requirements Analysis',
+      startTime: '2024-01-06',
+      endTime: '2024-01-15',
+      progress: 80
+    },
+    {
+      id: 3,
+      name: 'System Design',
+      startTime: '2024-01-16',
+      endTime: '2024-01-30',
+      progress: 50
+    }
+  ],
+  unit: 'day',
+  table: {
+    columns: [
+      { label: 'Task Name', field: 'name' },
+      { label: 'Start Time', field: 'startTime' },
+      { label: 'End Time', field: 'endTime' },
+    ]
+  }
+});
+</script>
+```
+
+`@xpyjs/gantt-vue` has been adapted for reactivity, so directly modifying the data will trigger automatic updates to the view.
+
+### React Version
+
+`@xpyjs/gantt-react` is designed specifically for React, providing better integration and user experience.
+
+#### Installation
+
+```bash
+npm install @xpyjs/gantt-react
+# or
+yarn add @xpyjs/gantt-react
+# or
+pnpm add @xpyjs/gantt-react
+```
+
+#### Usage
+
+```jsx
+import { useState, useCallback, useEffect } from 'react';
+import { XGanttReact, useXGantt } from '@xpyjs/gantt-react';
+import '@xpyjs/gantt-react/style.css';
+
+function App() {
+  const { ganttRef, jumpTo } = useXGantt();
+
+  const [ganttData, setGanttData] = useState([
+    {
+      id: 1,
+      name: 'Project Start',
+      startTime: '2024-01-01',
+      endTime: '2024-01-05',
+      progress: 100
+    },
+    {
+      id: 2,
+      name: 'Requirements Analysis',
+      startTime: '2024-01-06',
+      endTime: '2024-01-15',
+      progress: 80
+    },
+    {
+      id: 3,
+      name: 'System Design',
+      startTime: '2024-01-16',
+      endTime: '2024-01-30',
+      progress: 50
+    }
+  ]);
+
+  const ganttOptions: IOptions = {
+    data: ganttData,
+    table: {
+      columns: [
+        { label: 'Task Name', field: 'name' },
+        { label: 'Start Time', field: 'startTime' },
+        { label: 'End Time', field: 'endTime' },
+      ]
+    },
+    unit: 'day',
+  };
+
+  return (
+    <div className="app">
+      <XGanttReact ref={ganttRef} options={ganttOptions} />
+    </div>
+  );
+}
+
+export default App;
+```
+
+`@xpyjs/gantt-react` provides a hook: `useXGantt`, which makes it easy to use within function components.
 
 ## 🔧 Browser Support
 
