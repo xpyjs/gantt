@@ -1,4 +1,4 @@
-import{h as b,d as j,c as e,o as t,i as u,e as _,t as c,F as p,r as m,a,j as x,k as G,l as D,m as R,u as S,p as X,n as E,q as I,_ as F}from"./index-uvrMBXIy.js";const T=[{id:1,name:"项目规划",startTime:"2025-01-01",endTime:"2025-01-15",progress:100},{id:2,name:"开发阶段",startTime:"2025-01-16",endTime:"2025-02-28",progress:45}],L=`import { XGantt } from '@xpyjs/gantt-core'
+import{h as b,d as j,c as e,o as t,i as u,e as _,t as c,F as p,r as m,a,j as x,k as G,l as D,m as R,u as S,p as X,n as E,q as I,_ as F}from"./index-svQbZkWm.js";const T=[{id:1,name:"项目规划",startTime:"2025-01-01",endTime:"2025-01-15",progress:100},{id:2,name:"开发阶段",startTime:"2025-01-16",endTime:"2025-02-28",progress:45}],L=`import { XGantt } from '@xpyjs/gantt-core'
 
 // 创建甘特图实例
 const gantt = new XGantt({
