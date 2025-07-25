@@ -2,11 +2,17 @@
 
 ![](./logo.png)
 
-[![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small)  ![](https://img.shields.io/npm/v/@xpyjs/gantt-core.svg)  ![](https://badgen.net/npm/dt/@xpyjs/gantt-core) ![](https://img.shields.io/npm/l/@xpyjs/gantt-core.svg) ![](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
+[![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small) ![NPM Version](https://img.shields.io/npm/v/@xpyjs/gantt-core.svg) ![NPM Downloads](https://badgen.net/npm/dt/@xpyjs/gantt-core) [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@xpyjs/gantt-core)](https://bundlephobia.com/result?p=@xpyjs/gantt-core) [![TypeScript](https://img.shields.io/github/languages/top/xpyjs/gantt)](https://github.com/xpyjs/gantt) [![Coverage](https://codecov.io/gh/xpyjs/gantt/branch/main/graph/badge.svg)](https://codecov.io/gh/xpyjs/gantt) ![License](https://img.shields.io/npm/l/@xpyjs/gantt-core.svg)
+[![GitHub Release](https://img.shields.io/github/v/release/xpyjs/gantt)](https://github.com/xpyjs/gantt/releases) [![GitHub Pages](https://img.shields.io/github/deployments/xpyjs/gantt/github-pages?label=gh-pages)](https://xpyjs.github.io/gantt/) [![Last Commit](https://img.shields.io/github/last-commit/xpyjs/gantt)](https://github.com/xpyjs/gantt/commits/main) [![Node Version](https://img.shields.io/badge/node-%3E%3D%2018-brightgreen)](https://nodejs.org/) ![GitHub Stars](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![GitHub Forks](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
 
 [[English](./README.md)] [[中文](./README_cn.md)]
 
 一个功能强大且灵活的甘特图组件库，原生 JS + Canvas 编写，专为现代 Web 应用程序设计，支持 TypeScript。
+
+## 关于版本问题
+
+当前版本是全新开发的，如果您只想使用 `Vue` 版本，我强烈建议您升级到此版本（`@xpyjs/gantt-vue` 适用于 `Vue3`）。
+如果您正在寻找以前的版本，请参考 [origin-vue3 分支](https://github.com/xpyjs/gantt/tree/origin-vue3)。
 
 ## 📖 简介
 
@@ -28,6 +34,7 @@
 - 🛠️ **TypeScript 支持**：完整的类型定义，提供更好的开发体验
 - 📦 **多框架支持**：原生 JavaScript，开箱即用，适配所有框架
 - 🌐 **国际化支持**：支持多语言支持
+- 📚 **全新交互文档**：文档包含详细的教程、API和示例代码 [文档链接](https://docs.xiaopangying.com/gantt/)
 - 🔄 **持续更新**：不定期发布新版本，更新功能，修复已知问题，优化性能等
 
 ## 🎯 功能
@@ -294,7 +301,7 @@ MIT License
 ## 📞 支持
 
 - [GitHub Issues](https://github.com/xpyjs/gantt/issues)
-- [文档](https://github.com/xpyjs/gantt#readme)
+- [文档](https://docs.xiaopangying.com/gantt/)
 
 ---
 

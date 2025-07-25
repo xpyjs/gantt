@@ -2,11 +2,17 @@
 
 ![](./logo.png)
 
-[![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small)  ![](https://img.shields.io/npm/v/@xpyjs/gantt-core.svg)  ![](https://badgen.net/npm/dt/@xpyjs/gantt-core) ![](https://img.shields.io/npm/l/@xpyjs/gantt-core.svg) ![](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
+[![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small) ![NPM Version](https://img.shields.io/npm/v/@xpyjs/gantt-core.svg) ![NPM Downloads](https://badgen.net/npm/dt/@xpyjs/gantt-core) [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@xpyjs/gantt-core)](https://bundlephobia.com/result?p=@xpyjs/gantt-core) [![TypeScript](https://img.shields.io/github/languages/top/xpyjs/gantt)](https://github.com/xpyjs/gantt) [![Coverage](https://codecov.io/gh/xpyjs/gantt/branch/main/graph/badge.svg)](https://codecov.io/gh/xpyjs/gantt) ![License](https://img.shields.io/npm/l/@xpyjs/gantt-core.svg)
+[![GitHub Release](https://img.shields.io/github/v/release/xpyjs/gantt)](https://github.com/xpyjs/gantt/releases) [![GitHub Pages](https://img.shields.io/github/deployments/xpyjs/gantt/github-pages?label=gh-pages)](https://xpyjs.github.io/gantt/) [![Last Commit](https://img.shields.io/github/last-commit/xpyjs/gantt)](https://github.com/xpyjs/gantt/commits/main) [![Node Version](https://img.shields.io/badge/node-%3E%3D%2018-brightgreen)](https://nodejs.org/) ![GitHub Stars](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![GitHub Forks](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
 
 [[English](./README.md)] [[中文](./README_cn.md)]
 
 A powerful and flexible Gantt chart component library, written in native JS + Canvas, designed specifically for modern web applications, and supports TypeScript.
+
+## About Version
+
+This current version is fully newly developed. If you just want to use `Vue` version, I strongly recommend that you upgrade to this version(`@xpyjs/gantt-vue` is for `Vue3`).
+If you are looking for the previous version, please refer to the [origin-vue3 branch](https://github.com/xpyjs/gantt/tree/origin-vue3).
 
 ## 📖 Introduction
 
@@ -28,6 +34,7 @@ A Gantt chart is a project management tool used to display project progress, tas
 - 🛠️ **TypeScript Support**: Complete type definitions for better development experience
 - 📦 **Multi-Framework Support**: Native JavaScript, ready to use out-of-the-box, compatible with all frameworks
 - 🌐 **Internationalization Support**: Multi-language support
+- 📚 **New Interactive Documentation**: Documentation includes detailed tutorials, API references, and example code [Doc Link](https://docs.xiaopangying.com/gantt/)
 - 🔄 **Continuous Updates**: Regular releases with new features, bug fixes, and performance optimizations
 
 ## 🎯 Functionality
@@ -293,7 +300,7 @@ Contributions are welcome! Please read our contribution guidelines for more info
 ## 📞 Support
 
 - [GitHub Issues](https://github.com/xpyjs/gantt/issues)
-- [Documentation](https://github.com/xpyjs/gantt#readme)
+- [Documentation](https://docs.xiaopangying.com/gantt/)
 
 ---
 
