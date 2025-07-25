@@ -7,7 +7,7 @@ import "./styles/main.scss";
 
 // 路由配置
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(to, from, savedPosition) {
     // 如果有保存的位置（例如浏览器后退/前进），使用保存的位置
     if (savedPosition) {

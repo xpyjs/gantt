@@ -14,6 +14,7 @@ export default defineConfig({
       "@": resolve(__dirname, "src")
     }
   },
+  base: "/gantt/docs",
   build: {
     outDir: "dist"
   },
