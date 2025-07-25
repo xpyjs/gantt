@@ -27,7 +27,7 @@
     "build": "tsc && vite build",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "coverage": "vitest run --coverage",
+    "test:coverage": "vitest run --coverage",
     "prepublishOnly": "npm run build && vitest --watch=false",
     "release": "pnpm publish --access public"
   },

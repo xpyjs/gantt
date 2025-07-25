@@ -1,0 +1,71 @@
+name: 代码覆盖率检测
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [core, react] # vue 包暂时没有测试用例，注释掉
+        # package: [core, vue, react] # 未来添加 vue 测试时恢复此行
+
+    steps:
+      - name: 1. 检查分支
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 2. 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.1.1
+
+      - name: 3. 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: 4. 设置 pnpm 缓存
+        id: pnpm-cache
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: 5. 缓存 pnpm 存储
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 6. 安装依赖
+        run: pnpm install --no-frozen-lockfile
+
+      - name: 7. 构建依赖包
+        run: |
+          # 如果测试 vue 或 react，需要先构建 core 包
+          if [ "${{ matrix.package }}" != "core" ]; then
+            cd packages/core && pnpm build
+          fi
+
+      - name: 8. 运行测试覆盖率 - ${{ matrix.package }}
+        run: |
+          cd packages/${{ matrix.package }}
+          pnpm test:coverage
+
+      - name: 9. 上传覆盖率报告到 Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: xpyjs/gantt
+          files: ./packages/${{ matrix.package }}/coverage/lcov.info
+          flags: ${{ matrix.package }}
+          name: codecov-${{ matrix.package }}
+          fail_ci_if_error: false
+          verbose: true
