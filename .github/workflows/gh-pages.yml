@@ -17,35 +17,47 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 2. 设置 Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'pnpm'
-
-      - name: 3. 安装 pnpm
+      - name: 2. 安装 pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9.1.1
 
-      - name: 4. 安装依赖
-        run: pnpm install --frozen-lockfile
+      - name: 3. 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          registry-url: 'https://registry.npmjs.org'
 
-      - name: 5. 构建文档
+      - name: 4. 设置 pnpm 缓存
+        id: pnpm-cache
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: 5. 缓存 pnpm 存储
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: 6. 安装依赖
+        run: pnpm install --no-frozen-lockfile
+
+      - name: 7. 构建文档
         run: |
           cd docs
           pnpm build
 
-      - name: 6. 创建发布目录
+      - name: 8. 创建发布目录
         run: |
           mkdir -p gh-pages/docs
           cp -r docs/dist/* gh-pages/docs/
 
-      - name: 7. 保存并发布文档
+      - name: 9. 保存并发布文档
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.ref == 'refs/heads/master' }}
         with:
           publish_dir: ./gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           commit_message: 'docs: update documentation and demos'
