@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "serve": "vite preview --port 4173"
   },
@@ -14,9 +14,6 @@
     "@iconify/vue": "^5.0.0",
     "@stackblitz/sdk": "^1.11.0",
     "@webcontainer/api": "^1.6.1",
-    "@xpyjs/gantt-core": "workspace:*",
-    "@xpyjs/gantt-react": "workspace:*",
-    "@xpyjs/gantt-vue": "workspace:*",
     "highlight.js": "^11.11.1",
     "jszip": "^3.10.1",
     "lodash-es": "^4.17.21",

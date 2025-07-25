@@ -1,0 +1,51 @@
+name: 部署文档和 Demo
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/gh-pages.yml'
+
+jobs:
+  create-gh-pages:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - name: 1. 检查分支
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 2. 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: 3. 安装 pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.1.1
+
+      - name: 4. 安装依赖
+        run: pnpm install --frozen-lockfile
+
+      - name: 5. 构建文档
+        run: |
+          cd docs
+          pnpm build
+
+      - name: 6. 创建发布目录
+        run: |
+          mkdir -p gh-pages/docs
+          cp -r docs/dist/* gh-pages/docs/
+
+      - name: 7. 保存并发布文档
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/master' }}
+        with:
+          publish_dir: ./gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          commit_message: 'docs: update documentation and demos'

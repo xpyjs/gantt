@@ -1,0 +1,62 @@
+# name: 发布 Release 包
+# on:
+#   push:
+#     tags:
+#       - 'v[0-9]+.[0-9]+.[0-9]+' # 仅发布正式版本
+# jobs:
+#   build-publish-release:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: 1. 检查分支
+#         uses: actions/checkout@v2
+
+#       - name: 2. 设置 Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 18
+#           registry-url: 'https://registry.npmjs.org'
+
+#       - name: 3. 安装依赖
+#         run: yarn
+
+#       # - name: 4. 测试
+#       #   run: yarn test
+
+#       - name: 5. 打包
+#         run: yarn build
+
+#       - name: 6. 发布 npm 包
+#         run: npm publish
+#         env:
+#           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+#       - name: 7. 读取当前版本号
+#         id: version
+#         uses: ashley-taylor/read-json-property-action@v1.0
+#         with:
+#           path: ./package.json
+#           property: version
+
+#       - name: 8. 生成描述文件
+#         run: node ./sundry/updateDoc.ts ${{ steps.version.outputs.value }} true
+
+#       - name: 9. 读取描述文件
+#         id: description
+#         uses: juliangruber/read-file-action@v1
+#         with:
+#           path: ./desc.txt
+
+#       - name: 10. 生成 Release
+#         id: create_release
+#         uses: actions/create-release@v1
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         with:
+#           tag_name: v${{steps.version.outputs.value}}
+#           release_name: v${{steps.version.outputs.value}}
+#           body: ${{steps.description.outputs.content}}
+#           draft: false
+#           prerelease: false
+
+#       - name: 11. 删除临时文件
+#         run: rm -rf ./desc.txt
