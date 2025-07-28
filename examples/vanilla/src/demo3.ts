@@ -230,7 +230,10 @@ function deleteTaskById(id: string): boolean {
   return findAndDelete(ganttData!, id);
 }
 
-let links: ILink[] = [];
+let links: ILink[] = [
+  { id: 1, from: "1-1", to: "2-1", color: "#eca710" },
+  { id: 2, from: "2-1", to: "2-2", color: "#00bfff", width: 5, dash: [5, 0] }
+];
 
 // 创建筛选器组件
 function createFilterHeader() {
