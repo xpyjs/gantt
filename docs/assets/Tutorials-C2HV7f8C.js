@@ -1,10 +1,10 @@
-import{h as _,d as G,c as e,o as t,i as p,e as S,t as d,F as m,r as g,a as n,j as x,k as D,l as $,m as R,u as j,p as X,n as E,q as I,_ as F}from"./index-D0RkpfSo.js";const c="/gantt/docs",T=[{id:1,name:"项目规划",startTime:"2025-01-01",endTime:"2025-01-15",progress:100},{id:2,name:"开发阶段",startTime:"2025-01-16",endTime:"2025-02-28",progress:45}],L=`import { XGantt } from '@xpyjs/gantt-core'
+import{h as y,d as j,i as D,c as o,o as a,j as d,e as _,t as c,F as p,r as m,a as i,k as S,l as G,m as R,p as X,u as x,q as $,n as E,s as I,_ as L}from"./index-M84i8n36.js";const T=[{id:1,name:"项目规划",startTime:"2025-01-01",endTime:"2025-01-15",progress:100},{id:2,name:"开发阶段",startTime:"2025-01-16",endTime:"2025-02-28",progress:45}],A=`import { XGantt } from '@xpyjs/gantt-core'
 
 // 创建甘特图实例
 const gantt = new XGantt({
   container: '#gantt-container',
-  data: ${_(T,"  ")}
-})`,A=`<template>
+  data: ${y(T,"  ")}
+})`,F=`<template>
   <div>
     <XGanttVue :options="ganttOptions" />
   </div>
@@ -15,14 +15,14 @@ import { ref } from 'vue'
 import { XGanttVue } from '@xpyjs/gantt-vue'
 
 const ganttOptions = ref({
-  data: ${_(T,"  ")}
+  data: ${y(T,"  ")}
 })
 <\/script>`,O=`import React from 'react'
 import { XGanttReact } from '@xpyjs/gantt-react'
 
 function App() {
   const ganttOptions = {
-    data: ${_(T,"    ")}
+    data: ${y(T,"    ")}
   }
 
   return (
@@ -32,7 +32,7 @@ function App() {
   )
 }
 
-export default App`,C={jsCode:L,vueCode:A,reactCode:O},M=`<!-- Vue 组件中使用 -->
+export default App`,w={jsCode:A,vueCode:F,reactCode:O},M=`<!-- Vue 组件中使用 -->
 <template>
   <div>
     <XGanttVue
@@ -211,7 +211,7 @@ export class GanttComponent implements OnInit, OnDestroy {
     });
   }
 }
-`,y={vueCode:M,reactCode:V,angularCode:B},b=[{id:"quick-start",title:"快速入门",sections:[{id:"installation",title:"安装",description:"XGantt 支持多种安装方式，你可以根据项目需求选择合适的包。",subsections:[{title:"核心包",code:[{framework:"vue",code:"npm install @xpyjs/gantt-vue",language:"bash"},{framework:"react",code:"npm install @xpyjs/gantt-react",language:"bash"},{framework:"javascript",code:"npm install @xpyjs/gantt-core",language:"bash"}]}]},{id:"basic-usage",title:"基础用法",description:"以下是不同框架下的基础使用方法：",code:[{framework:"vue",code:C.vueCode,language:"vue"},{framework:"react",code:C.reactCode,language:"tsx"},{framework:"javascript",code:C.jsCode,language:"javascript"}],customContent:`这样在浏览器中就可以看到效果了。想要实践一下，去 <a href="${c}/demo/basic/simple">演示广场</a> 试试吧。`},{id:"data-structure",title:"数据结构",description:"数据结构应当保证有唯一 id。如果需要展示时间进度等信息，需要添加对应字段。这些字段都可以通过 fields 来自定义。",subsections:[{title:"基础数据结构",code:[{framework:"javascript",code:`const data = [
+`,C={vueCode:M,reactCode:V,angularCode:B},b=[{id:"quick-start",title:"快速入门",sections:[{id:"installation",title:"安装",description:"XGantt 支持多种安装方式，你可以根据项目需求选择合适的包。",subsections:[{title:"核心包",code:[{framework:"vue",code:"npm install @xpyjs/gantt-vue",language:"bash"},{framework:"react",code:"npm install @xpyjs/gantt-react",language:"bash"},{framework:"javascript",code:"npm install @xpyjs/gantt-core",language:"bash"}]}]},{id:"basic-usage",title:"基础用法",description:"以下是不同框架下的基础使用方法：",code:[{framework:"vue",code:w.vueCode,language:"vue"},{framework:"react",code:w.reactCode,language:"tsx"},{framework:"javascript",code:w.jsCode,language:"javascript"}],customContent:'这样在浏览器中就可以看到效果了。想要实践一下，去 <a href="/demo/basic/simple">演示广场</a> 试试吧。'},{id:"data-structure",title:"数据结构",description:"数据结构应当保证有唯一 id。如果需要展示时间进度等信息，需要添加对应字段。这些字段都可以通过 fields 来自定义。",subsections:[{title:"基础数据结构",code:[{framework:"javascript",code:`const data = [
   {
     id: '1',                    // 唯一标识
     name: '项目规划',            // 任务名称
@@ -228,7 +228,7 @@ export class GanttComponent implements OnInit, OnDestroy {
       }
     ]
   }
-]`,language:"javascript"}]}]},{id:"configuration",title:"配置选项",description:"XGantt 提供了丰富的配置选项来定制甘特图的外观和行为。",customContent:`可以参考 <a href="${c}/api">API Reference</a> 查看详细配置。`,subsections:[{table:{headers:["属性","类型","默认值","说明"],rows:[{property:"primaryColor",type:"String",default:'"#eca710"',description:"主色调"},{property:"unit",type:"String",default:'"day"',description:"时间刻度单位"},{property:"width",type:"Number",default:"undefined",description:"甘特图宽度"},{property:"height",type:"Number",default:"undefined",description:"甘特图高度"}]}}]}]},{id:"core-concepts",title:"核心概念",sections:[{id:"table",title:"表格",description:"表格是甘特图的重要组成部分，它在整个视图的左侧，用于展示任务的重要信息。",subsections:[{customContent:`<img src="${c}/tutorials-table.png" />`},{code:[{framework:"javascript",code:`const options = {
+]`,language:"javascript"}]}]},{id:"configuration",title:"配置选项",description:"XGantt 提供了丰富的配置选项来定制甘特图的外观和行为。",customContent:'可以参考 <a href="/api">API Reference</a> 查看详细配置。',subsections:[{table:{headers:["属性","类型","默认值","说明"],rows:[{property:"primaryColor",type:"String",default:'"#eca710"',description:"主色调"},{property:"unit",type:"String",default:'"day"',description:"时间刻度单位"},{property:"width",type:"Number",default:"undefined",description:"甘特图宽度"},{property:"height",type:"Number",default:"undefined",description:"甘特图高度"}]}}]}]},{id:"core-concepts",title:"核心概念",sections:[{id:"table",title:"表格",description:"表格是甘特图的重要组成部分，它在整个视图的左侧，用于展示任务的重要信息。",subsections:[{customContent:'<img src="/tutorials-table.png" />'},{code:[{framework:"javascript",code:`const options = {
   table: {
     columns: [
       { label: "Name", width: 150, field: "name" },
@@ -242,12 +242,12 @@ export class GanttComponent implements OnInit, OnDestroy {
       { label: "进度", field: "progress" }
     ]
   }
-}`,language:"javascript"}]}],customContent:`完整表格配置可以参考 <a href="${c}/api/options#table">Table API</a>`},{id:"time-axis",title:"时间轴",description:"时间轴是甘特图的核心概念，用于可视化任务的用时、进度等重要指标。 XGantt 支持多种时间单位和自定义格式。",subsections:[{customContent:`<img src="${c}/tutorials-axis.png" />`},{title:"时间单位",list:["`hour` - 小时","`day` - 天（默认）","`week` - 周","`month` - 月","`quarter` - 季度"]},{code:[{framework:"javascript",code:`const options = {
+}`,language:"javascript"}]}],customContent:'完整表格配置可以参考 <a href="/api/options#table">Table API</a>'},{id:"time-axis",title:"时间轴",description:"时间轴是甘特图的核心概念，用于可视化任务的用时、进度等重要指标。 XGantt 支持多种时间单位和自定义格式。",subsections:[{customContent:'<img src="/tutorials-axis.png" />'},{title:"时间单位",list:["`hour` - 小时","`day` - 天（默认）","`week` - 周","`month` - 月","`quarter` - 季度"]},{code:[{framework:"javascript",code:`const options = {
   unit: 'week',                    // 设置时间单位为周
   chart: {                         // chart 字段可以对时间轴区域进行各种配置
     cellWidth: 30
   }
-}`,language:"javascript"}]}],customContent:`完整时间轴的图表区域配置可以参考 <a href="${c}/api/options#chart">Chart API</a>`},{id:"task-bars",title:"任务条",description:"任务条是甘特图中 显示/操作 任务时间范围和进度的可视化元素。",code:[{framework:"javascript",code:`const options = {
+}`,language:"javascript"}]}],customContent:'完整时间轴的图表区域配置可以参考 <a href="/api/options#chart">Chart API</a>'},{id:"task-bars",title:"任务条",description:"任务条是甘特图中 显示/操作 任务时间范围和进度的可视化元素。",code:[{framework:"javascript",code:`const options = {
   bar: {
     height: 20,                     // 任务条高度
     backgroundColor: '#007acc',     // 背景颜色
@@ -262,7 +262,7 @@ export class GanttComponent implements OnInit, OnDestroy {
       backgroundColor: '#40a9ff'    // 进度条颜色
     }
   }
-}`,language:"javascript"}],customContent:`完整任务条配置可以参考 <a href="${c}/api/options#bar">Bar API</a>`},{id:"dependencies",title:"依赖关系",description:"XGantt 支持任务之间的依赖关系，包括创建、编辑和删除依赖线。",subsections:[{description:"现在的 XGantt 支持更多依赖关系：",list:["`FS` - 完成-开始（默认）","`FF` - 完成-完成","`SS` - 开始-开始","`SF` - 开始-完成"],customContent:`<img src="${c}/tutorials-link.png" />`},{description:"它们分别对应任务条的 左侧(开始)、右侧(完成) 的连线方式。"},{code:[{framework:"javascript",code:`const options = {
+}`,language:"javascript"}],customContent:'完整任务条配置可以参考 <a href="/api/options#bar">Bar API</a>'},{id:"dependencies",title:"依赖关系",description:"XGantt 支持任务之间的依赖关系，包括创建、编辑和删除依赖线。",subsections:[{description:"现在的 XGantt 支持更多依赖关系：",list:["`FS` - 完成-开始（默认）","`FF` - 完成-完成","`SS` - 开始-开始","`SF` - 开始-完成"],customContent:'<img src="/tutorials-link.png" />'},{description:"它们分别对应任务条的 左侧(开始)、右侧(完成) 的连线方式。"},{code:[{framework:"javascript",code:`const options = {
   links: {
     data: [
       {
@@ -278,7 +278,7 @@ export class GanttComponent implements OnInit, OnDestroy {
       mode: 'hover'               // 启用创建，则可以配置连接点的展示方式。 hover | always
     }
   }
-}`,language:"javascript"}]},{customContent:`完整关连线配置可以参考 <a href="${c}/api/options#links">Links API</a>`},{title:"依赖关系的使用",description:"依赖关系线的使用，需要配置、事件配合"},{description:"1、加载数据，并进行相关设置"},{code:[{framework:"javascript",language:"javascript",code:` const links = [
+}`,language:"javascript"}]},{customContent:'完整关连线配置可以参考 <a href="/api/options#links">Links API</a>'},{title:"依赖关系的使用",description:"依赖关系线的使用，需要配置、事件配合"},{description:"1、加载数据，并进行相关设置"},{code:[{framework:"javascript",language:"javascript",code:` const links = [
   { from: "1", to: "2", index: "111" },
   { from: "3", to: "4", index: "222", color: "green", type: "SF" },
   { from: "2-1", to: "2-2", index: "333", color: "red" },
@@ -354,7 +354,7 @@ gantt.on('click:row', (data) => {
 
 gantt.on('create:link', (data) => {
   console.log('创建依赖:', data);
-});`,language:"javascript"}],customContent:`完整的事件可以参考 <a href="${c}/api/events">Event API</a>`}]},{id:"advanced-features",title:"高级功能",sections:[{id:"custom-table",title:"定制表格",description:"表格支持丰富的自定义配置，包括多行表头、表格内容、以及自定义渲染等。",subsections:[{code:[{framework:"javascript",code:`const options = {
+});`,language:"javascript"}],customContent:'完整的事件可以参考 <a href="/api/events">Event API</a>'}]},{id:"advanced-features",title:"高级功能",sections:[{id:"custom-table",title:"定制表格",description:"表格支持丰富的自定义配置，包括多行表头、表格内容、以及自定义渲染等。",subsections:[{code:[{framework:"javascript",code:`const options = {
   table: {
     align: "left",           // 表格内容对齐方式
     ellipsis: true,          // 是否启用省略号
@@ -411,7 +411,7 @@ gantt.on('create:link', (data) => {
       }
     ]
   }
-}`,language:"javascript"}]},{description:"渲染的内容如下图，可以看到多级表头，合并的行列，以及自定义的表格内容："},{customContent:`<img src="${c}/tutorials-custom-table.png" />`}]},{id:"custom-chart",title:"定制时间轴",description:"时间轴支持丰富的自定义配置，包括颜色、样式等。",subsections:[{code:[{framework:"javascript",code:`const options = {
+}`,language:"javascript"}]},{description:"渲染的内容如下图，可以看到多级表头，合并的行列，以及自定义的表格内容："},{customContent:'<img src="/tutorials-custom-table.png" />'}]},{id:"custom-chart",title:"定制时间轴",description:"时间轴支持丰富的自定义配置，包括颜色、样式等。",subsections:[{code:[{framework:"javascript",code:`const options = {
   primaryColor: '#007acc',                  // 主色调
   chart: {
     startTime: '2025-01-01',                // 强制固定时间轴的起始时间
@@ -488,4 +488,4 @@ gantt.on('create:link', (data) => {
       }
     ]
   }
-}`,language:"javascript"}]},{description:"渲染的内容如下图，可以看到表头、任务条、周末、假期等自定义后的显示效果："},{customContent:`<img src="${c}/tutorials-custom-axis.png" />`}]},{id:"frameworks",title:"框架集成",description:"XGantt 可以很方便的集成到各种框架中。并且 XGantt 已经自带 vue 与 react 的框架",subsections:[{title:"Vue 集成",code:[{framework:"vue",language:"vue",code:y.vueCode},{framework:"react",language:"tsx",code:y.reactCode},{framework:"angular",language:"ts",code:y.angularCode}]}]},{id:"performance",title:"性能优化",description:"为了确保在大数据量下的流畅体验，XGantt 内置了多种性能优化策略。在多数情况，用户不用关心也不必担心性能问题，但是用户仍然可以通过编码使其更加优秀。",subsections:[{list:["**确保数据唯一键**：尽可能给每条数据添加唯一 ID，这会让 XGantt 处理数据更加高效","**只更新需要的内容**：尽可能不要每次全量更新 options，当数据没有变化时，不要传递它","**拖拽功能**：拖拽是一个耗时操作，非必要不开启，尽量启用按单位拖拽（byUnit）"]}]}]}],P=()=>{const v=[];return b.forEach(h=>{v.push({id:h.id,title:h.title,sections:h.sections.map(o=>({id:o.id,title:o.title}))})}),v},N={class:"tutorial-content"},U={key:0,class:"section-description"},H={key:0,class:"subsection-title"},z={key:1,class:"subsection-description"},q={key:2,class:"content-list"},J=["innerHTML"],W={key:3,class:"config-table"},K=["innerHTML"],Q=["innerHTML"],Y=G({__name:"TutorialSection",props:{section:{}},setup(v){const h=o=>{let f=o.replace(/`([^`]+)`/g,"<code>$1</code>");return f=f.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>"),f};return(o,f)=>(t(),e("div",N,[o.section.description?(t(),e("p",U,d(o.section.description),1)):p("",!0),o.section.subsections?(t(!0),e(m,{key:1},g(o.section.subsections,(r,k)=>(t(),e("div",{key:k,class:"subsection"},[r.title?(t(),e("h3",H,d(r.title),1)):p("",!0),r.description?(t(),e("p",z,d(r.description),1)):p("",!0),r.list?(t(),e("ul",q,[(t(!0),e(m,null,g(r.list,(l,s)=>(t(),e("li",{key:s,innerHTML:h(l)},null,8,J))),128))])):p("",!0),r.table?(t(),e("div",W,[n("table",null,[n("thead",null,[n("tr",null,[(t(!0),e(m,null,g(r.table.headers,l=>(t(),e("th",{key:l},d(l),1))),128))])]),n("tbody",null,[(t(!0),e(m,null,g(r.table.rows,l=>(t(),e("tr",{key:l.property},[n("td",null,[n("code",null,d(l.property),1)]),n("td",null,d(l.type),1),n("td",null,d(l.default),1),n("td",null,d(l.description),1)]))),128))])])])):p("",!0),r.code?(t(),S(x,{key:4,codeBlocks:r.code},null,8,["codeBlocks"])):p("",!0),r.customContent?(t(),e("div",{key:5,innerHTML:r.customContent,class:"custom-content"},null,8,K)):p("",!0)]))),128)):p("",!0),o.section.code?(t(),S(x,{key:2,codeBlocks:o.section.code},null,8,["codeBlocks"])):p("",!0),o.section.customContent?(t(),e("div",{key:3,innerHTML:o.section.customContent,class:"custom-content"},null,8,Q)):p("",!0)]))}}),Z={class:"tutorials-page"},tt={class:"tutorials-content"},et={class:"tutorials-sidebar"},nt={class:"tutorials-nav"},at=["href","onClick"],ot={class:"category-title"},it=["id"],rt=G({__name:"Tutorials",setup(v){const h=P(),o=D(""),f=(s,u)=>{let a;return(...i)=>{clearTimeout(a),a=setTimeout(()=>s.apply(null,i),u)}},r=()=>{const s=[];return b.forEach(u=>{u.sections.forEach(a=>{s.push(a.id)})}),s},k=f(()=>{const s=r(),u=150;for(let a=s.length-1;a>=0;a--){const i=document.getElementById(s[a]);if(i&&i.getBoundingClientRect().top<=u){o.value=s[a];break}}},100),l=s=>{const u=document.getElementById(s);if(u){const w=u.offsetTop-80;window.scrollTo({top:w,behavior:"smooth"}),o.value=s}};return $(()=>{window.addEventListener("scroll",k,{passive:!0}),k()}),R(()=>{window.removeEventListener("scroll",k)}),(s,u)=>(t(),e("div",Z,[u[0]||(u[0]=n("header",{class:"page-header"},[n("div",{class:"container"},[n("h1",null,"教程文档"),n("p",null,"深入学习 XGantt 的各种功能和 API")])],-1)),n("div",tt,[n("aside",et,[n("nav",nt,[(t(!0),e(m,null,g(j(h),a=>(t(),e("div",{key:a.id,class:"nav-section"},[n("h3",null,d(a.title),1),n("ul",null,[(t(!0),e(m,null,g(a.sections,i=>(t(),e("li",{key:i.id},[n("a",{href:`#${i.id}`,class:E({active:o.value===i.id}),onClick:X(w=>l(i.id),["prevent"])},d(i.title),11,at)]))),128))])]))),128))])]),n("main",null,[(t(!0),e(m,null,g(j(b),a=>(t(),e("section",{key:a.id,class:"tutorials-main"},[n("h1",ot,d(a.title),1),(t(!0),e(m,null,g(a.sections,i=>(t(),e("div",{key:i.id,id:i.id,class:"tutorial-section"},[n("h2",null,d(i.title),1),I(Y,{section:i},null,8,["section"])],8,it))),128))]))),128))])])]))}}),lt=F(rt,[["__scopeId","data-v-e21ab759"]]);export{lt as default};
+}`,language:"javascript"}]},{description:"渲染的内容如下图，可以看到表头、任务条、周末、假期等自定义后的显示效果："},{customContent:'<img src="/tutorials-custom-axis.png" />'}]},{id:"frameworks",title:"框架集成",description:"XGantt 可以很方便的集成到各种框架中。并且 XGantt 已经自带 vue 与 react 的框架",subsections:[{title:"Vue 集成",code:[{framework:"vue",language:"vue",code:C.vueCode},{framework:"react",language:"tsx",code:C.reactCode},{framework:"angular",language:"ts",code:C.angularCode}]}]},{id:"performance",title:"性能优化",description:"为了确保在大数据量下的流畅体验，XGantt 内置了多种性能优化策略。在多数情况，用户不用关心也不必担心性能问题，但是用户仍然可以通过编码使其更加优秀。",subsections:[{list:["**确保数据唯一键**：尽可能给每条数据添加唯一 ID，这会让 XGantt 处理数据更加高效","**只更新需要的内容**：尽可能不要每次全量更新 options，当数据没有变化时，不要传递它","**拖拽功能**：拖拽是一个耗时操作，非必要不开启，尽量启用按单位拖拽（byUnit）"]}]}]}],P=()=>{const f=[];return b.forEach(g=>{f.push({id:g.id,title:g.title,sections:g.sections.map(u=>({id:u.id,title:u.title}))})}),f},U={class:"tutorial-content"},N={key:0,class:"section-description"},H={key:0,class:"subsection-title"},z={key:1,class:"subsection-description"},W={key:2,class:"content-list"},q=["innerHTML"],J={key:3,class:"config-table"},K=["innerHTML"],Q=["innerHTML"],Y=j({__name:"TutorialSection",props:{section:{}},setup(f){const g=D(),u=r=>{let l=r.replace(/`([^`]+)`/g,"<code>$1</code>");return l=l.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>"),l},k=r=>{if(!r)return"";const l="/gantt/docs";let e=r.replace(/href="(\/[^"]*)"/g,(s,t)=>{const n=l.replace(/\/$/,""),h=t.startsWith("/")?t:`/${t}`;return`href="${n}${h}"`});return e=e.replace(/src="(\/[^"]*)"/g,(s,t)=>{const n=l.replace(/\/$/,""),h=t.startsWith("/")?t:`/${t}`;return`src="${n}${h}"`}),e},v=r=>{const l=r.target;if(l.tagName==="A"){const e=l.getAttribute("href");if(e){const s=new URL(e,window.location.origin);if(s.origin===window.location.origin){r.preventDefault();const t="/gantt/docs";let n=s.pathname;n.startsWith(t)&&(n=n.substring(t.length)),g.push(n+s.search+s.hash)}}}};return(r,l)=>(a(),o("div",U,[r.section.description?(a(),o("p",N,c(r.section.description),1)):d("",!0),r.section.subsections?(a(!0),o(p,{key:1},m(r.section.subsections,(e,s)=>(a(),o("div",{key:s,class:"subsection"},[e.title?(a(),o("h3",H,c(e.title),1)):d("",!0),e.description?(a(),o("p",z,c(e.description),1)):d("",!0),e.list?(a(),o("ul",W,[(a(!0),o(p,null,m(e.list,(t,n)=>(a(),o("li",{key:n,innerHTML:u(t)},null,8,q))),128))])):d("",!0),e.table?(a(),o("div",J,[i("table",null,[i("thead",null,[i("tr",null,[(a(!0),o(p,null,m(e.table.headers,t=>(a(),o("th",{key:t},c(t),1))),128))])]),i("tbody",null,[(a(!0),o(p,null,m(e.table.rows,t=>(a(),o("tr",{key:t.property},[i("td",null,[i("code",null,c(t.property),1)]),i("td",null,c(t.type),1),i("td",null,c(t.default),1),i("td",null,c(t.description),1)]))),128))])])])):d("",!0),e.code?(a(),_(S,{key:4,codeBlocks:e.code},null,8,["codeBlocks"])):d("",!0),e.customContent?(a(),o("div",{key:5,innerHTML:k(e.customContent),class:"custom-content",onClick:v},null,8,K)):d("",!0)]))),128)):d("",!0),r.section.code?(a(),_(S,{key:2,codeBlocks:r.section.code},null,8,["codeBlocks"])):d("",!0),r.section.customContent?(a(),o("div",{key:3,innerHTML:k(r.section.customContent),class:"custom-content",onClick:v},null,8,Q)):d("",!0)]))}}),Z={class:"tutorials-page"},tt={class:"tutorials-content"},et={class:"tutorials-sidebar"},nt={class:"tutorials-nav"},at=["href","onClick"],ot={class:"category-title"},it=["id"],rt=j({__name:"Tutorials",setup(f){const g=P(),u=G(""),k=(e,s)=>{let t;return(...n)=>{clearTimeout(t),t=setTimeout(()=>e.apply(null,n),s)}},v=()=>{const e=[];return b.forEach(s=>{s.sections.forEach(t=>{e.push(t.id)})}),e},r=k(()=>{const e=v(),s=150;for(let t=e.length-1;t>=0;t--){const n=document.getElementById(e[t]);if(n&&n.getBoundingClientRect().top<=s){u.value=e[t];break}}},100),l=e=>{const s=document.getElementById(e);if(s){const h=s.offsetTop-80;window.scrollTo({top:h,behavior:"smooth"}),u.value=e}};return R(()=>{window.addEventListener("scroll",r,{passive:!0}),r()}),X(()=>{window.removeEventListener("scroll",r)}),(e,s)=>(a(),o("div",Z,[s[0]||(s[0]=i("header",{class:"page-header"},[i("div",{class:"container"},[i("h1",null,"教程文档"),i("p",null,"深入学习 XGantt 的各种功能和 API")])],-1)),i("div",tt,[i("aside",et,[i("nav",nt,[(a(!0),o(p,null,m(x(g),t=>(a(),o("div",{key:t.id,class:"nav-section"},[i("h3",null,c(t.title),1),i("ul",null,[(a(!0),o(p,null,m(t.sections,n=>(a(),o("li",{key:n.id},[i("a",{href:`#${n.id}`,class:E({active:u.value===n.id}),onClick:$(h=>l(n.id),["prevent"])},c(n.title),11,at)]))),128))])]))),128))])]),i("main",null,[(a(!0),o(p,null,m(x(b),t=>(a(),o("section",{key:t.id,class:"tutorials-main"},[i("h1",ot,c(t.title),1),(a(!0),o(p,null,m(t.sections,n=>(a(),o("div",{key:n.id,id:n.id,class:"tutorial-section"},[i("h2",null,c(n.title),1),I(Y,{section:n},null,8,["section"])],8,it))),128))]))),128))])])]))}}),lt=L(rt,[["__scopeId","data-v-e21ab759"]]);export{lt as default};
