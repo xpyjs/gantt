@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-22 10:58:01
+ * @LastEditTime: 2025-07-28 16:31:22
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -449,7 +449,7 @@ export class LinkGroup {
               this.context.getOptions().links.color ||
               this.context.getOptions().primaryColor, // 箭头填充色
             lineJoin: "round",
-            dash: link.data || this.context.getOptions().links.dash,
+            dash: link.dash || this.context.getOptions().links.dash,
             hitStrokeWidth: 10 // 增加点击区域
           });
           group.add(arrow);
@@ -557,7 +557,7 @@ export class LinkGroup {
     // 起点
     const points: number[] = [
       fromEnd + gap,
-      y + rowHeight * fromTask.flatIndex
+      0.05 + y + rowHeight * fromTask.flatIndex
     ];
 
     // 过程点
@@ -616,7 +616,7 @@ export class LinkGroup {
     // 起点
     const points: number[] = [
       fromEnd + gap,
-      y + rowHeight * fromTask.flatIndex
+      0.05 + y + rowHeight * fromTask.flatIndex
     ];
 
     // 过程点
@@ -670,7 +670,10 @@ export class LinkGroup {
     const gap: number = link.gap || this.context.getOptions().links.gap;
 
     // 起点
-    const points: number[] = [fromX - gap, y + rowHeight * fromTask.flatIndex];
+    const points: number[] = [
+      fromX - gap,
+      0.05 + y + rowHeight * fromTask.flatIndex
+    ];
 
     // 过程点
     {
@@ -724,7 +727,10 @@ export class LinkGroup {
     const gap: number = link.gap || this.context.getOptions().links.gap;
 
     // 起点
-    const points: number[] = [fromX - gap, y + rowHeight * fromTask.flatIndex];
+    const points: number[] = [
+      fromX - gap,
+      0.05 + y + rowHeight * fromTask.flatIndex
+    ];
 
     // 过程点
     {

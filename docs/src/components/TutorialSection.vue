@@ -21,6 +21,7 @@
         <p v-if="subsection.description" class="subsection-description">
           {{ subsection.description }}
         </p>
+
         <!-- 列表 -->
         <ul v-if="subsection.list" class="content-list">
           <li
@@ -62,8 +63,9 @@
         <!-- 自定义内容 -->
         <div
           v-if="subsection.customContent"
-          v-html="subsection.customContent"
+          v-html="processCustomContent(subsection.customContent)"
           class="custom-content"
+          @click="handleLinkClick"
         />
       </div>
     </template>
@@ -74,14 +76,16 @@
     <!-- 自定义内容 -->
     <div
       v-if="section.customContent"
-      v-html="section.customContent"
+      v-html="processCustomContent(section.customContent)"
       class="custom-content"
+      @click="handleLinkClick"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { TutorialSection } from "../config/tutorials";
+import { useRouter } from 'vue-router';
 import FrameworkCodeBlock from "./FrameworkCodeBlock.vue";
 
 interface Props {
@@ -89,6 +93,8 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const router = useRouter();
 
 // 处理列表项中的markdown格式
 const formatListItem = (item: string): string => {
@@ -99,6 +105,57 @@ const formatListItem = (item: string): string => {
   formatted = formatted.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
 
   return formatted;
+};
+
+// 处理自定义内容中的链接和图片路径
+const processCustomContent = (content: string): string => {
+  if (!content) return '';
+
+  const baseUrl = import.meta.env.BASE_URL || '/';
+
+  // 处理链接：将以 / 开头的内部链接添加 base URL
+  let processedContent = content.replace(/href="(\/[^"]*)"/g, (match, href) => {
+    // 确保不会重复添加 baseUrl
+    const cleanBaseUrl = baseUrl.replace(/\/$/, '');
+    const cleanHref = href.startsWith('/') ? href : `/${href}`;
+    return `href="${cleanBaseUrl}${cleanHref}"`;
+  });
+
+  // 处理图片：将以 / 开头的图片路径添加 base URL
+  processedContent = processedContent.replace(/src="(\/[^"]*)"/g, (match, src) => {
+    const cleanBaseUrl = baseUrl.replace(/\/$/, '');
+    const cleanSrc = src.startsWith('/') ? src : `/${src}`;
+    return `src="${cleanBaseUrl}${cleanSrc}"`;
+  });
+
+  return processedContent;
+};
+
+// 处理链接点击事件，使用路由导航
+const handleLinkClick = (event: Event) => {
+  const target = event.target as HTMLElement;
+  if (target.tagName === 'A') {
+    const href = (target as HTMLAnchorElement).getAttribute('href');
+    if (href) {
+      const url = new URL(href, window.location.origin);
+
+      // 如果是内部链接（同源），使用路由导航
+      if (url.origin === window.location.origin) {
+        event.preventDefault();
+
+        // 移除 base URL 前缀，得到实际的路由路径
+        const baseUrl = import.meta.env.BASE_URL || '/';
+        let routePath = url.pathname;
+
+        if (baseUrl !== '/' && routePath.startsWith(baseUrl)) {
+          routePath = routePath.substring(baseUrl.length);
+        }
+
+        router.push(routePath + url.search + url.hash);
+      }
+      // 外部链接正常跳转
+    }
+  }
 };
 </script>
 

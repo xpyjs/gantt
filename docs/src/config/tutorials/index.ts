@@ -1,4 +1,3 @@
-import { BASE_URL } from "../path";
 import BasicUsage from "./codes/basic-usage";
 import FrameworksUsage from "./codes/frameworks-usage";
 
@@ -100,7 +99,7 @@ export const tutorialConfig: TutorialCategory[] = [
             language: "javascript"
           }
         ],
-        customContent: `这样在浏览器中就可以看到效果了。想要实践一下，去 <a href="${BASE_URL}/demo/basic/simple">演示广场</a> 试试吧。`
+        customContent: `这样在浏览器中就可以看到效果了。想要实践一下，去 <a href="/demo/basic/simple">演示广场</a> 试试吧。`
       },
       {
         id: "data-structure",
@@ -141,7 +140,7 @@ export const tutorialConfig: TutorialCategory[] = [
         id: "configuration",
         title: "配置选项",
         description: "XGantt 提供了丰富的配置选项来定制甘特图的外观和行为。",
-        customContent: `可以参考 <a href="${BASE_URL}/api">API Reference</a> 查看详细配置。`,
+        customContent: `可以参考 <a href="/api">API Reference</a> 查看详细配置。`,
         subsections: [
           {
             table: {
@@ -189,7 +188,7 @@ export const tutorialConfig: TutorialCategory[] = [
           "表格是甘特图的重要组成部分，它在整个视图的左侧，用于展示任务的重要信息。",
         subsections: [
           {
-            customContent: `<img src="${BASE_URL}/tutorials-table.png" />`
+            customContent: `<img src="/tutorials-table.png" />`
           },
           {
             code: [
@@ -215,7 +214,7 @@ export const tutorialConfig: TutorialCategory[] = [
             ]
           }
         ],
-        customContent: `完整表格配置可以参考 <a href="${BASE_URL}/api/options#table">Table API</a>`
+        customContent: `完整表格配置可以参考 <a href="/api/options#table">Table API</a>`
       },
       {
         id: "time-axis",
@@ -224,7 +223,7 @@ export const tutorialConfig: TutorialCategory[] = [
           "时间轴是甘特图的核心概念，用于可视化任务的用时、进度等重要指标。 XGantt 支持多种时间单位和自定义格式。",
         subsections: [
           {
-            customContent: `<img src="${BASE_URL}/tutorials-axis.png" />`
+            customContent: `<img src="/tutorials-axis.png" />`
           },
           {
             title: "时间单位",
@@ -251,7 +250,7 @@ export const tutorialConfig: TutorialCategory[] = [
             ]
           }
         ],
-        customContent: `完整时间轴的图表区域配置可以参考 <a href="${BASE_URL}/api/options#chart">Chart API</a>`
+        customContent: `完整时间轴的图表区域配置可以参考 <a href="/api/options#chart">Chart API</a>`
       },
       {
         id: "task-bars",
@@ -280,7 +279,7 @@ export const tutorialConfig: TutorialCategory[] = [
             language: "javascript"
           }
         ],
-        customContent: `完整任务条配置可以参考 <a href="${BASE_URL}/api/options#bar">Bar API</a>`
+        customContent: `完整任务条配置可以参考 <a href="/api/options#bar">Bar API</a>`
       },
       {
         id: "dependencies",
@@ -296,7 +295,7 @@ export const tutorialConfig: TutorialCategory[] = [
               "`SS` - 开始-开始",
               "`SF` - 开始-完成"
             ],
-            customContent: `<img src="${BASE_URL}/tutorials-link.png" />`
+            customContent: `<img src="/tutorials-link.png" />`
           },
           {
             description:
@@ -328,7 +327,7 @@ export const tutorialConfig: TutorialCategory[] = [
             ]
           },
           {
-            customContent: `完整关连线配置可以参考 <a href="${BASE_URL}/api/options#links">Links API</a>`
+            customContent: `完整关连线配置可以参考 <a href="/api/options#links">Links API</a>`
           },
           {
             title: "依赖关系的使用",
@@ -462,7 +461,7 @@ gantt.on('create:link', (data) => {
             language: "javascript"
           }
         ],
-        customContent: `完整的事件可以参考 <a href="${BASE_URL}/api/events">Event API</a>`
+        customContent: `完整的事件可以参考 <a href="/api/events">Event API</a>`
       }
     ]
   },
@@ -547,7 +546,7 @@ gantt.on('create:link', (data) => {
               "渲染的内容如下图，可以看到多级表头，合并的行列，以及自定义的表格内容："
           },
           {
-            customContent: `<img src="${BASE_URL}/tutorials-custom-table.png" />`
+            customContent: `<img src="/tutorials-custom-table.png" />`
           }
         ]
       },
@@ -647,7 +646,7 @@ gantt.on('create:link', (data) => {
               "渲染的内容如下图，可以看到表头、任务条、周末、假期等自定义后的显示效果："
           },
           {
-            customContent: `<img src="${BASE_URL}/tutorials-custom-axis.png" />`
+            customContent: `<img src="/tutorials-custom-axis.png" />`
           }
         ]
       },
