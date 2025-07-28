@@ -11,6 +11,7 @@ export interface EventMap {
     cancel: ILink | null,
     all: ILink[]
   ) => void;
+  "contextmenu:link": (e: MouseEvent, link: ILink) => void;
   select: (data: any[], checked: boolean, all: any[]) => void;
   "click:row": (e: MouseEvent, data: any) => void;
   "dblclick:row": (e: MouseEvent, data: any) => void;

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-28 16:31:22
+ * @LastEditTime: 2025-07-28 17:26:35
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -497,22 +497,28 @@ export class LinkGroup {
             this.isDragging = false;
             e.target.moveToTop();
 
-            if (this.selectedMap.has(id)) {
-              this.selectedMap.delete(id);
-              this.context.event.emit(
-                EventName.SELECT_LINK,
-                null,
-                link,
-                this.selectedMap.values().toArray()
-              );
-            } else {
-              this.selectedMap.set(id, link);
-              this.context.event.emit(
-                EventName.SELECT_LINK,
-                link,
-                null,
-                this.selectedMap.values().toArray()
-              );
+            if (e.evt.button === 0) {
+              // 左键点击
+              if (this.selectedMap.has(id)) {
+                this.selectedMap.delete(id);
+                this.context.event.emit(
+                  EventName.SELECT_LINK,
+                  null,
+                  link,
+                  this.selectedMap.values().toArray()
+                );
+              } else {
+                this.selectedMap.set(id, link);
+                this.context.event.emit(
+                  EventName.SELECT_LINK,
+                  link,
+                  null,
+                  this.selectedMap.values().toArray()
+                );
+              }
+            } else if (e.evt.button === 2) {
+              // 右键点击
+              this.context.event.emit(EventName.CONTEXT_LINK, e.evt, link);
             }
           });
 

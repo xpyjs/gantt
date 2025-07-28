@@ -74,6 +74,15 @@ export interface XGanttReactProps
   onSelectLink?: EventMap["select:link"];
 
   /**
+   * 关联线右键菜单事件回调
+   *
+   * @description 当在关联线上右键点击时触发
+   * @param e 鼠标事件对象
+   * @param link 被右键点击的关联线对象
+   */
+  onContextMenuLink?: EventMap["contextmenu:link"];
+
+  /**
    * 任务选择事件回调
    *
    * @description 当任务的选择状态发生变化时触发

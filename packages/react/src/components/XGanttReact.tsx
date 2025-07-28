@@ -72,6 +72,7 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onUpdateLink,
             onCreateLink,
             onSelectLink,
+            onContextMenuLink,
             onSelect,
             onClickRow,
             onDoubleClickRow,
@@ -110,6 +111,9 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             if (onSelectLink) {
                 instance.on("select:link", onSelectLink);
             }
+            if (onContextMenuLink) {
+                instance.on("contextmenu:link", onContextMenuLink);
+            }
             if (onSelect) {
                 instance.on("select", onSelect);
             }
@@ -140,6 +144,7 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onUpdateLink,
             onCreateLink,
             onSelectLink,
+            onContextMenuLink,
             onSelect,
             onClickRow,
             onDoubleClickRow,

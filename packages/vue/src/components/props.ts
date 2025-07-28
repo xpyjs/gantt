@@ -7,6 +7,7 @@ export type XGanttVueEmits = {
   "update:link": [link: ILink];
   "create:link": [link: ILink];
   "select:link": [add: ILink | null, cancel: ILink | null, all: ILink[]];
+  "contextmenu:link": [e: MouseEvent, link: ILink];
   select: [data: any[], checked: boolean, all: any[]];
   "click:row": [e: MouseEvent, data: any];
   "dblclick:row": [e: MouseEvent, data: any];

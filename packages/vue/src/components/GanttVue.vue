@@ -50,6 +50,7 @@ const registerEventListeners = () => {
     "update:link",
     "create:link",
     "select:link",
+    "contextmenu:link",
     "select",
     "click:row",
     "dblclick:row",

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:58:36
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-22 10:54:11
+ * @LastEditTime: 2025-07-28 17:20:39
  * @Description: 事件总线
  */
 
@@ -82,6 +82,7 @@ export enum EventName {
   TASK_UNSELECTED = "task_unselected",
   SELECT_LINK = "select_link",
   CHECK_TASK = "check_task",
+  CONTEXT_LINK = "context_link",
 
   ROW_CLICK = "row-click",
   ROW_DBL_CLICK = "row-dbl-click",

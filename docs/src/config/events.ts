@@ -298,6 +298,20 @@ gantt.on('click:row', (event, rowData) => {
   }
 });`,
 
+  // 依赖关系右键菜单事件
+  contextMenuLinkEvent: `gantt.on('contextmenu:link', (e, link) => {
+  console.log('右键点击依赖关系:', link);
+  // 显示自定义右键菜单
+  showLinkContextMenu({
+    x: e.clientX,
+    y: e.clientY,
+    items: [
+      { label: '编辑依赖关系', action: () => editLink(link) },
+      { label: '删除依赖关系', action: () => deleteLink(link) }
+    ]
+  });
+});`,
+
   // 错误处理事件
   errorEvent: `gantt.on('error', (error) => {
   console.error('甘特图错误:', error);
@@ -340,6 +354,7 @@ gantt.on('click:row', (event, rowData) => {
       @create:link="handleCreateLink"
       @update:link="handleUpdateLink"
       @select:link="handleSelectLink"
+      @contextmenu:link="handleContextMenuLink"
       @error="handleError"
       @loaded="handleLoaded"
     />
@@ -426,6 +441,7 @@ const GanttComponent: React.FC = () => {
       onCreateLink={handleCreateLink}
       onUpdateLink={handleUpdateLink}
       onSelectLink={handleSelectLink}
+      onContextMenuLink={handleContextMenuLink}
       onError={handleError}
       onLoaded={handleLoaded}
     />
@@ -456,6 +472,7 @@ class GanttEventManager {
     this.gantt.on('create:link', this.handleCreateLink.bind(this));
     this.gantt.on('update:link', this.handleUpdateLink.bind(this));
     this.gantt.on('select:link', this.handleSelectLink.bind(this));
+    this.gantt.on('contextmenu:link', this.handleContextMenuLink.bind(this));
 
     // 系统事件
     this.gantt.on('error', this.handleError.bind(this));
@@ -814,6 +831,32 @@ export const eventsPageConfig: EventsPageConfig = {
             {
               framework: "javascript",
               code: codeExamples.selectLinkEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
+          id: "contextmenu:link",
+          name: "contextmenu:link",
+          type: "依赖关系右键菜单",
+          description: "用户在依赖关系线上右键点击时触发",
+          trigger: "用户在依赖关系线上右键点击时",
+          parameters: [
+            {
+              name: "e",
+              type: "MouseEvent",
+              description: "鼠标事件对象"
+            },
+            {
+              name: "linkData",
+              type: "ILink",
+              description: "被右键点击的依赖关系数据"
+            }
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.contextMenuLinkEvent,
               language: "javascript"
             }
           ]

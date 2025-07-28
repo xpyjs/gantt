@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-07 09:18:29
+ * @LastEditTime: 2025-07-28 17:21:45
  * @Description: Facade Layer for Gantt Component
  */
 import { Logger } from "./utils/logger";
@@ -163,6 +163,10 @@ export class XGanttContext implements IContext {
         this._emit("select:link", add, cancel, all);
       }
     );
+
+    this.event.on(EventName.CONTEXT_LINK, (e: MouseEvent, link: ILink) => {
+      this._emit("contextmenu:link", e, link);
+    });
 
     this.event.on(EventName.ROW_CLICK, (e: MouseEvent, task: Task) => {
       this._emit("click:row", e, task.data);
