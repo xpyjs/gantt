@@ -62,6 +62,7 @@ export enum EventName {
   MOVE_GUIDELINE = "move-guideline",
   SHOW_GUIDELINE = "show-guideline",
   HIDE_GUIDELINE = "hide-guideline",
+  TOGGLE_COLLAPSE = "toggle-collapse",
 
   SCROLL = "scroll",
   CHART_OFFSET_CHANGE = "chart_offset_change",

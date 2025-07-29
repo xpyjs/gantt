@@ -2,17 +2,21 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 17:06:07
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-18 09:26:09
+ * @LastEditTime: 2025-07-29 11:18:34
  * @Description: 表格和图表中间的移动线
  */
 
 import { IContext } from "@/types/render";
 import { EventName } from "../../event";
 
+const leftIcon = '<svg style="transition: all 0.3s" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M8.293 12.707a1 1 0 0 1 0-1.414l5.657-5.657a1 1 0 1 1 1.414 1.414L10.414 12l4.95 4.95a1 1 0 0 1-1.414 1.414z"/></g></svg>';
+
 export class MiddleResizeLine {
   private line: HTMLDivElement;
   private initialX: number = 0;
   private initialWidth: number = 0;
+
+  private collapseButton: HTMLDivElement | null = null;
 
   constructor(private root: IContext, private container: HTMLElement) {
     // 创建一个用于包含表格组件的容器
@@ -30,6 +34,37 @@ export class MiddleResizeLine {
     );
     this.line.style.cursor = "col-resize";
 
+    // 添加收起按钮
+    // if (!!this.root.store.getOptionManager().getOptions().table.collapsible) {
+      this.collapseButton = document.createElement("div");
+      this.collapseButton.className = "x-gantt-collapse-button";
+      this.collapseButton.style.position = "absolute";
+      this.collapseButton.style.top = "50%";
+      this.collapseButton.style.left = "0";
+      this.collapseButton.style.transform = "translateY(-50%)";
+      this.collapseButton.style.cursor = "pointer";
+
+      // 设置折叠按钮的样式
+      this.collapseButton.style.width = "16px";
+      this.collapseButton.style.height = "30px";
+      this.collapseButton.style.backgroundColor = "#fff";
+      this.collapseButton.style.borderRadius = "0 6px 6px 0";
+      this.collapseButton.style.boxShadow = "0 0 2px rgba(0, 0, 0, 0.2)";
+      this.collapseButton.style.display = "flex";
+      this.collapseButton.style.alignItems = "center";
+      this.collapseButton.style.justifyContent = "center";
+      // 设置折叠按钮的图标
+      this.collapseButton.innerHTML = leftIcon;
+
+      // 点击折叠按钮时触发事件
+      this.collapseButton.addEventListener("click", e => {
+        e.stopPropagation();
+        this.root.store.getColumnManager().collapse();
+      });
+
+      this.line.appendChild(this.collapseButton);
+    // }
+
     this.container.appendChild(this.line);
 
     // 添加拖拽功能
@@ -39,6 +74,15 @@ export class MiddleResizeLine {
   public setOffset(x: number) {
     this.line.style.left = `${x - 2}px`;
     this.initialX = x;
+
+    // 更新图标
+    if (this.collapseButton) {
+      if (this.root.store.getColumnManager().isCollapsed()) {
+        this.collapseButton.querySelector('svg')!.style.transform = "rotate(180deg)";
+      } else {
+        this.collapseButton.querySelector('svg')!.style.transform = "rotate(0deg)";
+      }
+    }
   }
 
   /**

@@ -1194,6 +1194,14 @@ export const apiItems: ApiItem[] = [
         description: "统一设置列对齐方式。每列的对齐方式可以单独设置"
       },
       {
+        id: "table-collapsible",
+        key: "collapsible",
+        title: "收起/展开表格",
+        type: "boolean",
+        defaultValue: "false",
+        description: "允许收起表格。开启后，中线会显示一个折叠按钮，点击后可以收起表格"
+      },
+      {
         id: "table-columns",
         key: "columns",
         title: "列配置",
