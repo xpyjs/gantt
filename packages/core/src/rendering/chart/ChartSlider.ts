@@ -252,6 +252,12 @@ export class ChartSlider {
     this.sliderGroup.add(this.slider);
     this.leftHandler?.moveToTop();
     this.rightHandler?.moveToTop();
+
+    if (this.unpackFunc(this.context.getOptions().bar.show) === false) {
+      this.sliderGroup.hide();
+    } else {
+      this.sliderGroup.show();
+    }
   }
 
   private renderText(width: number, height: number) {

@@ -414,6 +414,9 @@ const ganttOptions: IOptions = {
     headerGroupFormat: 'MM月 (YYYY年)'
   },
   bar: {
+    show: row => {
+      return row.data.type !== 's'
+    },
     move: {
       enabled: row => row.level > 1,
       byUnit: true,
@@ -628,6 +631,7 @@ gantt.on("contextmenu:slider", (e, data) => {
           break;
         case 1: // 标记为完成
           data.progress = 100;
+          data.type = 's';
           updateData(data);
           gantt.update({ data: ganttData });
           toast(`标记任务 "${data.name}" 为完成`);

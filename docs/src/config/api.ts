@@ -337,6 +337,14 @@ export const apiItems: ApiItem[] = [
         description: "阴影偏移量"
       },
       {
+        id: "bar-show",
+        key: "show",
+        title: "显示任务条",
+        type: "boolean | ((row: EmitData) => boolean)",
+        defaultValue: "true",
+        description: "控制任务条的显隐。允许用户对任务条进行设置是否可见，如果隐藏它，意味着将无法在界面中操作它。"
+      },
+      {
         id: "bar-verticalAlign",
         key: "verticalAlign",
         title: "垂直对齐",

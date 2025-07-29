@@ -317,6 +317,13 @@ export interface IGanttOptions {
     height: number | string | ((row: EmitData) => string | number);
 
     /**
+     * 是否显示任务条
+     *
+     * @default true
+     */
+    show?: boolean | ((row: EmitData) => boolean);
+
+    /**
      * 显示在任务条上的字段内容。如果配置了 label，则会显示 label 的内容。支持点语法对嵌套字段进行访问
      */
     field?: string;
