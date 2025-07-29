@@ -314,7 +314,7 @@ export interface IGanttOptions {
      *
      * @default 20
      */
-    height: number | string;
+    height: number | string | ((row: EmitData) => string | number);
 
     /**
      * 显示在任务条上的字段内容。如果配置了 label，则会显示 label 的内容。支持点语法对嵌套字段进行访问
@@ -367,31 +367,31 @@ export interface IGanttOptions {
       };
     };
     /** 背景颜色 */
-    backgroundColor?: string;
+    backgroundColor?: string | ((row: EmitData) => string | undefined);
     /** 圆角 */
-    radius?: number | number[];
+    radius?: number | number[] | ((row: EmitData) => number | number[] | undefined);
     /** 阴影颜色 */
-    shadowColor?: string;
+    shadowColor?: string | ((row: EmitData) => string | undefined);
     /** 阴影模糊度 */
-    shadowBlur?: number;
+    shadowBlur?: number | ((row: EmitData) => number | undefined);
     /** 阴影偏移量 */
-    shadowOffsetX?: number;
+    shadowOffsetX?: number | ((row: EmitData) => number | undefined);
     /** 阴影偏移量 */
-    shadowOffsetY?: number;
+    shadowOffsetY?: number | ((row: EmitData) => number | undefined);
     /** 文字颜色 */
-    color?: string;
+    color?: string | ((row: EmitData) => string | undefined);
     /** 任务条的字体大小 */
-    fontSize?: number;
+    fontSize?: number | ((row: EmitData) => number | undefined);
     /** 任务条的字体 */
-    fontFamily?: string;
+    fontFamily?: string | ((row: EmitData) => string | undefined);
     /** 任务条的文本对齐方式 */
-    align?: "left" | "center" | "right";
+    align?: "left" | "center" | "right" | ((row: EmitData) => "left" | "center" | "right" | undefined);
     /** 任务条的文本垂直对齐方式 */
-    verticalAlign?: "top" | "middle" | "bottom";
+    verticalAlign?: "top" | "middle" | "bottom" | ((row: EmitData) => "top" | "middle" | "bottom" | undefined);
     /** 进度样式 */
     progress?: {
       /** 是否显示进度 */
-      show?: boolean;
+      show?: boolean | ((row: EmitData) => boolean);
       /**
        * 进度百分比的基准值。数据中的进度值将会以这个值作为 100% 的基准值
        *
@@ -401,9 +401,9 @@ export interface IGanttOptions {
        */
       targetVal?: number;
       /** 颜色 */
-      backgroundColor?: string;
+      backgroundColor?: string | ((row: EmitData) => string | undefined);
       /** 文本颜色 */
-      color?: string;
+      color?: string | ((row: EmitData) => string | undefined);
       /**
        * 基于任务条颜色的高亮百分比 0-100
        *
@@ -413,9 +413,9 @@ export interface IGanttOptions {
        */
       amount?: number;
       /** 透明度 */
-      opacity?: number;
+      opacity?: number | ((row: EmitData) => number | undefined);
       /** 圆角 */
-      radius?: number | number[];
+      radius?: number | number[] | ((row: EmitData) => number | number[] | undefined);
       /** 进度小数位 0-10 */
       decimal?: number;
       /**
@@ -425,11 +425,11 @@ export interface IGanttOptions {
        * - right 在进度条右侧外部
        * - inside 在进度条右侧内部
        */
-      textAlign?: "top" | "right" | "inside";
+      textAlign?: "top" | "right" | "inside" | ((row: EmitData) => "top" | "right" | "inside" | undefined);
       /** 字体大小。默认 10 */
-      fontSize?: number;
+      fontSize?: number | ((row: EmitData) => number | undefined);
       /** 字体样式。默认斜体 */
-      fontStyle?: string;
+      fontStyle?: string | ((row: EmitData) => string | undefined);
     };
   };
 

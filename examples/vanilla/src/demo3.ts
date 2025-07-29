@@ -410,13 +410,16 @@ const ganttOptions: IOptions = {
       }
     ]
   },
+  chart: {
+    headerGroupFormat: 'MM月 (YYYY年)'
+  },
   bar: {
     move: {
       enabled: row => row.level > 1,
       byUnit: true,
       single: {
-        left: true,
-        right: true
+        left: row => row.level > 1,
+        right: row => row.level > 1
       },
       link: {
         child: "scale",
@@ -424,11 +427,19 @@ const ganttOptions: IOptions = {
       }
     },
     progress: {
-      show: true,
+      show: row => row.level > 1,
       textAlign: "top"
     },
-    height: "40%",
-    radius: 6,
+    height: (row) => row.level === 1 ? '20%' : "40%",
+    backgroundColor: row => {
+      if (row.level === 1) {
+        return "#1890ff";
+      } else if (row.$index % 2 === 0) {
+        return "#52c41a";
+      }
+      return "#f5222d";
+    },
+    radius: row => row.level === 1 ? 0 : 6,
     shadowBlur: 2,
     shadowColor: "rgba(0, 0, 0, 0.1)",
     shadowOffsetX: 0,

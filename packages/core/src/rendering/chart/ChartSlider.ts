@@ -9,9 +9,10 @@ import {
 } from "../../utils/helpers";
 import { EventName } from "../../event";
 import { colorjs } from "../../utils/color";
-import { isBoolean, isFunction, isString } from "lodash-es";
+import { isFunction } from "lodash-es";
 import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
+import { EmitData } from "@/types";
 
 export class ChartSlider {
   private offsetX: number = 0;
@@ -72,39 +73,12 @@ export class ChartSlider {
     this.offsetY = y;
   }
 
-  private updateSize() {
-    const rowHeight = this.context.getOptions().row.height;
-    const height = parseNumberWithPercent(
-      this.context.getOptions().bar.height,
-      rowHeight
-    );
-    const y = (rowHeight - height) / 2;
-    const x = this.context.store
-      .getTimeAxis()
-      .getTimeLeft(this.task.startTime!);
-    const end = this.context.store
-      .getTimeAxis()
-      .getTimeLeft(this.task.endTime!);
-    const sliderWidth = end - x;
-
-    this.slider.position({ x, y });
-    this.slider.size({ width: sliderWidth, height });
-    this.sliderBg.size({ width: sliderWidth, height });
-
-    if (this.leftHandler) {
-      // this.leftHandler.position({ x: 0, y: 0 });
+  /** 太多需要 function 的判断，搞一个统一的转换 */
+  private unpackFunc<T>(val: T | ((data: EmitData) => T)) {
+    if (isFunction(val)) {
+      return val(this.task.getEmitData());
     }
-
-    if (this.rightHandler) {
-      this.rightHandler.x(sliderWidth - this.handlerWidth);
-      this.rightHandler.size({
-        width: this.handlerWidth,
-        height: height
-      });
-    }
-
-    this.renderProgress(sliderWidth, height);
-    this.renderText(sliderWidth, height);
+    return val;
   }
 
   private render() {
@@ -113,7 +87,7 @@ export class ChartSlider {
     // 计算位置
     const rowHeight = this.context.getOptions().row.height;
     const height = parseNumberWithPercent(
-      this.context.getOptions().bar.height,
+      this.unpackFunc(this.context.getOptions().bar.height),
       rowHeight
     );
 
@@ -123,11 +97,9 @@ export class ChartSlider {
     const sliderWidth = end - x;
 
     // 获取一些属性
-    const fill =
-      this.context.getOptions().bar.backgroundColor ||
-      this.context.getOptions().primaryColor;
+    const fill = this.unpackFunc(this.context.getOptions().bar.backgroundColor) || this.context.getOptions().primaryColor;
     const cornerRadius = getStandardCornerRadius(
-      this.context.getOptions().bar.radius
+      this.unpackFunc(this.context.getOptions().bar.radius)
     );
 
     // 生成任务条主体，并设置拖拽
@@ -164,13 +136,7 @@ export class ChartSlider {
     }
     this.slider.position({ x, y });
     this.slider.size({ width: sliderWidth, height });
-    const _enable = this.context.getOptions().bar.move.enabled;
-    let draggable = false;
-    if (isBoolean(_enable)) {
-      draggable = _enable;
-    } else if (isFunction(_enable)) {
-      draggable = _enable(this.task.getEmitData());
-    }
+    const draggable = !!this.unpackFunc(this.context.getOptions().bar.move.enabled);
     this.slider.draggable(draggable);
     if (draggable) {
       this.slider.on("pointerover", e => {
@@ -198,25 +164,19 @@ export class ChartSlider {
       height,
       fill,
       cornerRadius: cornerRadius,
-      shadowColor: this.context.getOptions().bar.shadowColor,
-      shadowBlur: this.context.getOptions().bar.shadowBlur,
-      shadowOffsetX: this.context.getOptions().bar.shadowOffsetX,
-      shadowOffsetY: this.context.getOptions().bar.shadowOffsetY
+      shadowColor: this.unpackFunc(this.context.getOptions().bar.shadowColor),
+      shadowBlur: this.unpackFunc(this.context.getOptions().bar.shadowBlur),
+      shadowOffsetX: this.unpackFunc(this.context.getOptions().bar.shadowOffsetX),
+      shadowOffsetY: this.unpackFunc(this.context.getOptions().bar.shadowOffsetY)
     });
 
     this.renderProgress(sliderWidth, height);
 
     const resizeColor = colorjs(fill)
-      .brighten(30 * (!!this.context.getOptions().bar.progress?.show ? -1 : 1))
+      .brighten(30 * (!!this.unpackFunc(this.context.getOptions().bar.progress?.show) ? -1 : 1))
       .toHex();
     // 渲染左右拖拽按钮
-    const _left = this.context.getOptions().bar.move.single?.left;
-    let moveLeft = false;
-    if (isBoolean(_left)) {
-      moveLeft = _left;
-    } else if (isFunction(_left)) {
-      moveLeft = _left(this.task.getEmitData());
-    }
+    const moveLeft = !!this.unpackFunc(this.context.getOptions().bar.move.single?.left);
     if (moveLeft) {
       if (!this.leftHandler) {
         this.leftHandler = new Konva.Rect({
@@ -252,13 +212,7 @@ export class ChartSlider {
     }
 
     // 右侧拖拽按钮
-    const _right = this.context.getOptions().bar.move.single?.right;
-    let moveRight = false;
-    if (isBoolean(_right)) {
-      moveRight = _right;
-    } else if (isFunction(_right)) {
-      moveRight = _right(this.task.getEmitData());
-    }
+    const moveRight = !!this.unpackFunc(this.context.getOptions().bar.move.single?.right);
     if (moveRight) {
       if (!this.rightHandler) {
         this.rightHandler = new Konva.Rect({
@@ -319,11 +273,7 @@ export class ChartSlider {
     const _label = this.context.getOptions().bar.label;
     let content = "";
     if (_label) {
-      if (isString(_label)) {
-        content = _label;
-      } else if (isFunction(_label)) {
-        content = _label(this.task.getEmitData());
-      }
+      content = this.unpackFunc(_label);
     } else if (this.context.getOptions().bar.field) {
       content = this.task.getField(this.context.getOptions().bar.field!);
     }
@@ -345,11 +295,11 @@ export class ChartSlider {
         height,
         padding: 10,
         text: content,
-        fill: this.context.getOptions().bar.color || "#000",
-        fontSize: this.context.getOptions().bar.fontSize || 12,
-        fontFamily: this.context.getOptions().bar.fontFamily || "Arial",
-        align: this.context.getOptions().bar.align,
-        verticalAlign: this.context.getOptions().bar.verticalAlign || "middle",
+        fill: this.unpackFunc(this.context.getOptions().bar.color) || "#000",
+        fontSize: this.unpackFunc(this.context.getOptions().bar.fontSize) || 12,
+        fontFamily: this.unpackFunc(this.context.getOptions().bar.fontFamily) || "Arial",
+        align: this.unpackFunc(this.context.getOptions().bar.align),
+        verticalAlign: this.unpackFunc(this.context.getOptions().bar.verticalAlign) || "middle",
         ellipsis: true
       });
       this.slider.add(text);
@@ -357,7 +307,7 @@ export class ChartSlider {
   }
 
   private renderProgress(width: number, height: number) {
-    if (!this.context.getOptions().bar.progress?.show) {
+    if (!this.unpackFunc(this.context.getOptions().bar.progress?.show)) {
       if (this.progressGroup) {
         this.progressGroup.destroy();
         this.progressGroup = null;
@@ -372,20 +322,22 @@ export class ChartSlider {
       );
       if (progressVal === 0) return;
 
+      const barBC = this.unpackFunc(
+        this.context.getOptions().bar.backgroundColor
+      ) || this.context.getOptions().primaryColor;
+
       const bg =
-        this.context.getOptions().bar.progress?.backgroundColor ||
-        colorjs(
-          this.context.getOptions().bar.backgroundColor ||
-            this.context.getOptions().primaryColor
-        )
+        this.unpackFunc(this.context.getOptions().bar.progress?.backgroundColor) ||
+        colorjs(barBC)
           .brighten(this.context.getOptions().bar.progress?.amount || 30)
           .toHex();
 
       const bgCornerRadius = getStandardCornerRadius(
-        this.context.getOptions().bar.radius
+        this.unpackFunc(this.context.getOptions().bar.radius)
       );
       const progressCornerRadius = getStandardCornerRadius(
-        this.context.getOptions().bar.progress?.radius
+        this.unpackFunc(this.context.getOptions().bar.progress?.radius),
+        2 // 默认 2
       );
       // 左侧永远继承背景圆角
       progressCornerRadius[0] = bgCornerRadius[0];
@@ -423,7 +375,7 @@ export class ChartSlider {
         height: height,
         fill: bg,
         cornerRadius: progressCornerRadius,
-        opacity: this.context.getOptions().bar.progress?.opacity
+        opacity: this.unpackFunc(this.context.getOptions().bar.progress?.opacity)
       });
       this.progressGroup.add(progress);
 
@@ -432,27 +384,27 @@ export class ChartSlider {
         this.context.getOptions().bar.progress?.decimal
       )}%`;
       const textWidth = new Konva.Text().measureSize(progressText).width;
+      const textAlign = this.unpackFunc(this.context.getOptions().bar.progress?.textAlign);
       const text = new Konva.Text({
         x: 0,
         y:
-          this.context.getOptions().bar.progress?.textAlign === "top"
+          textAlign === "top"
             ? -height
             : 0,
         width:
-          this.context.getOptions().bar.progress?.textAlign === "right"
+          textAlign === "right"
             ? progressWidth + textWidth
             : Math.max(progressWidth, textWidth),
         height: height,
         fill:
-          this.context.getOptions().bar.progress?.color ||
+          this.unpackFunc(this.context.getOptions().bar.progress?.color) ||
           colorjs("#000000").mix(bg, 50).alpha(0.7).toHex(),
         text: progressText,
-        fontSize: this.context.getOptions().bar.progress?.fontSize || 10,
-        fontStyle:
-          this.context.getOptions().bar.progress?.fontStyle || "italic",
+        fontSize: this.unpackFunc(this.context.getOptions().bar.progress?.fontSize) || 10,
+        fontStyle: this.unpackFunc(this.context.getOptions().bar.progress?.fontStyle) || "italic",
         fontFamily: "Arial",
         verticalAlign:
-          this.context.getOptions().bar.progress?.textAlign === "top"
+          textAlign === "top"
             ? "bottom"
             : "middle",
         align: "right"

@@ -77,21 +77,21 @@ export const apiItems: ApiItem[] = [
         id: "bar-align",
         key: "align",
         title: "文本对齐方式",
-        type: '"left" | "center" | "right"',
+        type: '"left" | "center" | "right" | ((row: EmitData) => "left" | "center" | "right")',
         description: "任务条的文本对齐方式"
       },
       {
         id: "bar-backgroundColor",
         key: "backgroundColor",
         title: "背景颜色",
-        type: "string",
+        type: "string | ((row: EmitData) => string)",
         description: "背景颜色"
       },
       {
         id: "bar-color",
         key: "color",
         title: "文字颜色",
-        type: "string",
+        type: "string | ((row: EmitData) => string)",
         description: "文字颜色"
       },
       {
@@ -105,21 +105,21 @@ export const apiItems: ApiItem[] = [
         id: "bar-fontFamily",
         key: "fontFamily",
         title: "字体",
-        type: "string",
+        type: "string | ((row: EmitData) => string)",
         description: "任务条的字体"
       },
       {
         id: "bar-fontSize",
         key: "fontSize",
         title: "字体大小",
-        type: "number",
+        type: "number | ((row: EmitData) => number)",
         description: "任务条的字体大小"
       },
       {
         id: "bar-height",
         key: "height",
         title: "任务条高度",
-        type: "number | string",
+        type: "number | string | ((row: EmitData) => number | string)",
         defaultValue: "20",
         description: "任务条高度。支持百分比，将按 row 的 height 计算"
       },
@@ -229,14 +229,14 @@ export const apiItems: ApiItem[] = [
             id: "bar-progress-backgroundColor",
             key: "backgroundColor",
             title: "背景颜色",
-            type: "string",
+            type: "string | ((row: EmitData) => string)",
             description: "颜色"
           },
           {
             id: "bar-progress-color",
             key: "color",
             title: "文本颜色",
-            type: "string",
+            type: "string | ((row: EmitData) => string)",
             description: "文本颜色"
           },
           {
@@ -250,7 +250,7 @@ export const apiItems: ApiItem[] = [
             id: "bar-progress-fontSize",
             key: "fontSize",
             title: "字体大小",
-            type: "number",
+            type: "number | ((row: EmitData) => number)",
             defaultValue: "10",
             description: "字体大小"
           },
@@ -258,28 +258,28 @@ export const apiItems: ApiItem[] = [
             id: "bar-progress-fontStyle",
             key: "fontStyle",
             title: "字体样式",
-            type: "string",
+            type: "string | ((row: EmitData) => string)",
             description: "字体样式。默认斜体"
           },
           {
             id: "bar-progress-opacity",
             key: "opacity",
             title: "透明度",
-            type: "number",
+            type: "number | ((row: EmitData) => number)",
             description: "透明度"
           },
           {
             id: "bar-progress-radius",
             key: "radius",
             title: "圆角",
-            type: "number | number[]",
+            type: "number | number[] | ((row: EmitData) => number | number[])",
             description: "圆角"
           },
           {
             id: "bar-progress-show",
             key: "show",
             title: "显示进度",
-            type: "boolean",
+            type: "boolean | ((row: EmitData) => boolean)",
             description: "是否显示进度"
           },
           {
@@ -295,7 +295,7 @@ export const apiItems: ApiItem[] = [
             id: "bar-progress-textAlign",
             key: "textAlign",
             title: "文本位置",
-            type: '"top" | "right" | "inside"',
+            type: '"top" | "right" | "inside" | ((row: EmitData) => "top" | "right" | "inside")',
             description:
               "文本显示位置。top: 在进度条上方; right: 在进度条右侧外部; inside: 在进度条右侧内部"
           }
@@ -305,42 +305,42 @@ export const apiItems: ApiItem[] = [
         id: "bar-radius",
         key: "radius",
         title: "圆角",
-        type: "number | number[]",
+        type: "number | number[] | ((row: EmitData) => number | number[])",
         description: "圆角"
       },
       {
         id: "bar-shadowBlur",
         key: "shadowBlur",
         title: "阴影模糊度",
-        type: "number",
+        type: "number | ((row: EmitData) => number)",
         description: "阴影模糊度"
       },
       {
         id: "bar-shadowColor",
         key: "shadowColor",
         title: "阴影颜色",
-        type: "string",
+        type: "string | ((row: EmitData) => string)",
         description: "阴影颜色"
       },
       {
         id: "bar-shadowOffsetX",
         key: "shadowOffsetX",
         title: "阴影X偏移",
-        type: "number",
+        type: "number | ((row: EmitData) => number)",
         description: "阴影偏移量"
       },
       {
         id: "bar-shadowOffsetY",
         key: "shadowOffsetY",
         title: "阴影Y偏移",
-        type: "number",
+        type: "number | ((row: EmitData) => number)",
         description: "阴影偏移量"
       },
       {
         id: "bar-verticalAlign",
         key: "verticalAlign",
         title: "垂直对齐",
-        type: '"top" | "middle" | "bottom"',
+        type: '"top" | "middle" | "bottom" | ((row: EmitData) => "top" | "middle" | "bottom")',
         description: "任务条的文本垂直对齐方式"
       }
     ]
