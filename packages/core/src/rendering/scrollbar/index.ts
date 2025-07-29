@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-23 14:54:51
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-18 09:25:52
+ * @LastEditTime: 2025-07-29 14:49:04
  * @Description: 自定义滚动区域。为了优化滚动样式
  */
 
@@ -11,6 +11,7 @@ import { Logger } from "../../utils/logger";
 import { EventName } from "../../event"; // 使用实际的事件管理器类型
 import { IGanttOptions } from "@/types/options";
 import { IContext } from "@/types/render";
+import { clamp } from "../../utils/helpers";
 
 type ScrollbarOptions = NonNullable<IGanttOptions["scrollbar"]>;
 
@@ -341,6 +342,18 @@ export class Scrollbar {
 
   // --- 事件处理 ---
 
+  private emit(source: string, x: number, y: number) {
+    this.scrollLeft = clamp(x, 0, this.contentWidth - this.viewportWidth);
+    this.scrollTop = clamp(y, 0, this.contentHeight - this.viewportHeight);
+    this.updateThumbStyles();
+
+    this.root.event.emit(EventName.SCROLL, {
+      x: this.scrollLeft,
+      y: this.scrollTop,
+      source
+    });
+  }
+
   private handleRootMouseMove = (): void => {
     // 鼠标在根元素内移动，如果滚动条不可见，则计划显示
     if (!this.isVisible && this.isMouseOverRoot) {
@@ -555,14 +568,7 @@ export class Scrollbar {
 
     // TODO 动画待优化，先不用动画了。
     // ↑↑↑↑↑ 主要问题：滚动后，不够丝滑，尤其是横向滚动。感觉上滚动有迟滞
-    this.scrollLeft = newScrollLeft;
-    this.scrollTop = newScrollTop;
-    this.updateThumbStyles();
-    this.root.event.emit(EventName.SCROLL, {
-      x: this.scrollLeft,
-      y: this.scrollTop,
-      source: "wheel"
-    });
+    this.emit("wheel", newScrollLeft, newScrollTop);
   }
 
   // 处理滚轮滚动的平滑动画
@@ -619,14 +625,7 @@ export class Scrollbar {
       const changedY = this.scrollTop !== newScrollTop;
 
       if (changedX || changedY) {
-        this.scrollLeft = newScrollLeft;
-        this.scrollTop = newScrollTop;
-        this.updateThumbStyles();
-        this.root.event.emit(EventName.SCROLL, {
-          x: this.scrollLeft,
-          y: this.scrollTop,
-          source: "wheel"
-        });
+        this.emit("wheel", newScrollLeft, newScrollTop);
       }
 
       // 检查动画是否完成
@@ -642,14 +641,7 @@ export class Scrollbar {
           this.scrollLeft !== this.animationTargetScrollLeft ||
           this.scrollTop !== this.animationTargetScrollTop
         ) {
-          this.scrollLeft = this.animationTargetScrollLeft;
-          this.scrollTop = this.animationTargetScrollTop;
-          this.updateThumbStyles();
-          this.root.event.emit(EventName.SCROLL, {
-            x: this.scrollLeft,
-            y: this.scrollTop,
-            source: "wheel"
-          });
+          this.emit("wheel", this.animationTargetScrollLeft, this.animationTargetScrollTop);
         }
 
         // 动画结束，重新计划隐藏
@@ -865,15 +857,8 @@ export class Scrollbar {
       clampedScroll.x !== this.scrollLeft ||
       clampedScroll.y !== this.scrollTop
     ) {
-      this.scrollLeft = clampedScroll.x;
-      this.scrollTop = clampedScroll.y;
-      this.updateThumbStyles(); // 更新滑块位置
-      this.root.event.emit(EventName.SCROLL, {
-        // 触发一次校准事件
-        x: this.scrollLeft,
-        y: this.scrollTop,
-        source: "api"
-      });
+      // 触发一次校准事件
+      this.emit("api", clampedScroll.x, clampedScroll.y);
     }
 
     // 根据新尺寸决定是否显示滚动条
@@ -1021,15 +1006,8 @@ export class Scrollbar {
       const changedY = this.scrollTop !== clampedPos.y;
 
       if (changedX || changedY) {
-        this.scrollLeft = clampedPos.x;
-        this.scrollTop = clampedPos.y;
-        this.updateThumbStyles(); // 立即更新滑块
-        this.root.event.emit(EventName.SCROLL, {
-          // 触发滚动事件
-          x: this.scrollLeft,
-          y: this.scrollTop,
-          source
-        });
+        // 触发滚动事件
+        this.emit(source,  clampedPos.x, clampedPos.y);
       }
     }
   }
@@ -1059,15 +1037,8 @@ export class Scrollbar {
     const changedY = this.scrollTop !== newScrollTop;
 
     if (changedX || changedY) {
-      this.scrollLeft = newScrollLeft;
-      this.scrollTop = newScrollTop;
-      this.updateThumbStyles(); // 更新滑块位置以匹配动画
-      this.root.event.emit(EventName.SCROLL, {
-        // 触发滚动事件
-        x: this.scrollLeft,
-        y: this.scrollTop,
-        source: this.animationSource // 使用动画触发源
-      });
+      // 触发滚动事件
+      this.emit(this.animationSource, newScrollLeft, newScrollTop);
     }
 
     // 检查动画是否结束
@@ -1081,14 +1052,7 @@ export class Scrollbar {
         this.scrollLeft !== this.animationTargetScrollLeft ||
         this.scrollTop !== this.animationTargetScrollTop
       ) {
-        this.scrollLeft = this.animationTargetScrollLeft;
-        this.scrollTop = this.animationTargetScrollTop;
-        this.updateThumbStyles();
-        this.root.event.emit(EventName.SCROLL, {
-          x: this.scrollLeft,
-          y: this.scrollTop,
-          source: this.animationSource
-        });
+        this.emit(this.animationSource, this.animationTargetScrollLeft, this.animationTargetScrollTop);
       }
       // 动画结束，重新计划隐藏
       this.scheduleHide();
