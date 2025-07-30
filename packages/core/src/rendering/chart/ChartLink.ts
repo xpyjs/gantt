@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-28 17:26:35
+ * @LastEditTime: 2025-07-30 11:00:45
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -146,7 +146,7 @@ export class LinkGroup {
     this.tasks = tasks;
 
     // 使用批量绘制，减少重绘次数
-    this.layer.batchDraw();
+    this.update();
   }
 
   /**
@@ -157,6 +157,13 @@ export class LinkGroup {
     this.pointGroup.destroy();
     this.templateArrow.destroy();
     this.selectedMap.clear();
+  }
+
+  private unpackFunc<T>(value: T | ((data: any) => T), task: Task): T {
+    if (isFunction(value)) {
+      return value(task.getEmitData());
+    }
+    return value;
   }
 
   /**
@@ -187,6 +194,7 @@ export class LinkGroup {
 
     this.tasks.forEach(task => {
       if (
+        this.unpackFunc(this.context.getOptions().bar.show, task) &&
         this.context.store.getDataManager().isTaskVisible(task) &&
         task.startTime &&
         task.endTime
@@ -203,10 +211,7 @@ export class LinkGroup {
         // 检测是否允许创建左侧连接点
         let allowLeft = true;
         let allowRight = true;
-        let _from = this.context.getOptions().links.create.from;
-        if (isFunction(_from)) {
-          _from = _from(task.getEmitData());
-        }
+        let _from = this.unpackFunc(this.context.getOptions().links.create.from, task);
 
         if (isBoolean(_from)) {
           allowLeft = allowRight = _from;
@@ -326,10 +331,12 @@ export class LinkGroup {
 
       if (
         fromTask &&
+        this.unpackFunc(this.context.getOptions().bar.show, fromTask) &&
         this.context.store.getDataManager().isTaskVisible(fromTask) &&
         fromTask.startTime &&
         fromTask.endTime &&
         toTask &&
+        this.unpackFunc(this.context.getOptions().bar.show, toTask) &&
         this.context.store.getDataManager().isTaskVisible(toTask) &&
         toTask.startTime &&
         toTask.endTime
