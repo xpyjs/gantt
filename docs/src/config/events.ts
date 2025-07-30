@@ -227,6 +227,24 @@ gantt.on('click:row', (event, rowData) => {
   updateRelatedTasks(data);
 });`,
 
+  // 任务条悬停事件
+  hoverSliderEvent: `gantt.on('hover:slider', (e, data) => {
+  console.log('鼠标悬停在任务条:', data.name);
+  // 显示任务信息
+  const taskInfoDialog = showTaskBarInfo({
+    x: e.clientX,
+    y: e.clientY,
+    data
+  });
+});`,
+
+  // 任务条离开事件
+  leaveSliderEvent: `gantt.on('leave:slider', (e, data) => {
+  console.log('鼠标离开任务条:', data.name);
+  // 隐藏任务条信息
+  taskInfoDialog.hide();
+});`,
+
   // 创建依赖关系事件
   createLinkEvent: `gantt.on('create:link', (link) => {
   console.log("创建依赖关系", link);
@@ -747,6 +765,48 @@ export const eventsPageConfig: EventsPageConfig = {
             {
               framework: "javascript",
               code: codeExamples.moveEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
+          id: "hover:slider",
+          name: "hover:slider",
+          type: "任务条悬停",
+          description: "鼠标悬停在任务条上时触发",
+          trigger: "鼠标悬停在任务条上时",
+          parameters: [
+            {
+              name: "data",
+              type: "any",
+              description: "悬停的任务数据"
+            }
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.hoverSliderEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
+          id: "leave:slider",
+          name: "leave:slider",
+          type: "任务条离开",
+          description: "鼠标离开任务条时触发",
+          trigger: "鼠标离开任务条时",
+          parameters: [
+            {
+              name: "data",
+              type: "any",
+              description: "离开的任务数据"
+            }
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.leaveSliderEvent,
               language: "javascript"
             }
           ]

@@ -92,6 +92,8 @@ export enum EventName {
   SLIDER_DBL_CLICK = "slider-dbl-click",
   SLIDER_CONTEXTMENU = "slider-contextmenu",
   SLIDER_MOVING = "slider-moving",
+  SLIDER_HOVER = "slider-hover",
+  SLIDER_LEAVE = "slider-leave",
 
   // 行高亮相关事件
   ROW_HIGHLIGHT = "row-highlight",

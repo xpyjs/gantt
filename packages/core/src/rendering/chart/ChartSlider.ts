@@ -1,4 +1,5 @@
 import Konva from "konva";
+import type { TweenConfig } from "konva/lib/Tween";
 import {
   clamp,
   formatNumber,
@@ -105,6 +106,10 @@ export class ChartSlider {
     const cornerRadius = getStandardCornerRadius(
       this.unpackFunc(this.context.getOptions().bar.radius)
     );
+    const shadowColor = this.unpackFunc(this.context.getOptions().bar.shadowColor) || "rgba(0, 0, 0, 0.2)";
+    const shadowBlur = this.unpackFunc(this.context.getOptions().bar.shadowBlur) || 0;
+    const shadowOffsetX = this.unpackFunc(this.context.getOptions().bar.shadowOffsetX) || 0;
+    const shadowOffsetY = this.unpackFunc(this.context.getOptions().bar.shadowOffsetY) || 0;
 
     // 生成任务条主体，并设置拖拽
     if (!this.slider) {
@@ -142,18 +147,32 @@ export class ChartSlider {
     this.slider.size({ width: sliderWidth, height });
     const draggable = !!this.unpackFunc(this.context.getOptions().bar.move.enabled);
     this.slider.draggable(draggable);
-    if (draggable) {
-      this.slider.on("pointerover", e => {
-        if (!this.isDragging) {
-          e.target.getStage()!.container().style.cursor = "grab";
-        }
+    this.slider.on("mouseover", e => {
+      if (draggable && !this.isDragging) {
+        e.target.getStage()!.container().style.cursor = "grab";
+      }
+
+      this.handleBarHighlight({
+        shadowColor: colorjs(shadowColor).alpha(colorjs(shadowColor).alpha() + 0.1).toHex(),
+        shadowBlur: Math.max((shadowBlur || 1) * 2, 4),
+        shadowOffsetX: Math.max((shadowOffsetX || 1), 2),
+        shadowOffsetY: Math.max((shadowOffsetY || 1) * 1.5, 4),
       });
-      this.slider.on("pointerout", e => {
-        if (!this.isDragging) {
-          e.target.getStage()!.container().style.cursor = "default";
-        }
+      this.context.event.emit(EventName.SLIDER_HOVER, e.evt, this.task);
+    });
+    this.slider.on("mouseout", e => {
+      if (draggable && !this.isDragging) {
+        e.target.getStage()!.container().style.cursor = "default";
+      }
+
+      this.handleBarHighlight({
+        shadowColor,
+        shadowBlur,
+        shadowOffsetX,
+        shadowOffsetY
       });
-    }
+      this.context.event.emit(EventName.SLIDER_LEAVE, e.evt, this.task);
+    });
 
     // 滑块背景
     if (!this.sliderBg) {
@@ -168,11 +187,16 @@ export class ChartSlider {
       height,
       fill,
       cornerRadius: cornerRadius,
-      shadowColor: this.unpackFunc(this.context.getOptions().bar.shadowColor),
-      shadowBlur: this.unpackFunc(this.context.getOptions().bar.shadowBlur),
-      shadowOffsetX: this.unpackFunc(this.context.getOptions().bar.shadowOffsetX),
-      shadowOffsetY: this.unpackFunc(this.context.getOptions().bar.shadowOffsetY)
     });
+    // 拖拽时，需要保持阴影突出效果
+    if (!this.isDragging) {
+      this.sliderBg.setAttrs({
+        shadowColor,
+        shadowBlur,
+        shadowOffsetX,
+        shadowOffsetY
+      });
+    }
 
     this.renderProgress(sliderWidth, height);
 
@@ -197,12 +221,12 @@ export class ChartSlider {
         this.leftHandleGroup.on("mousedown", e => {
           this.resizeMove(e, "left");
         });
-        this.leftHandleGroup.on("pointerover", e => {
+        this.leftHandleGroup.on("mouseover", e => {
           setTimeout(() => {
             e.target.getStage()!.container().style.cursor = "ew-resize";
           }, 0);
         });
-        this.leftHandleGroup.on("pointerout", e => {
+        this.leftHandleGroup.on("mouseout", e => {
           if (!this.isDragging) {
             e.target.getStage()!.container().style.cursor = "default";
           }
@@ -259,12 +283,12 @@ export class ChartSlider {
         this.rightHandleGroup.on("mousedown", e => {
           this.resizeMove(e, "right");
         });
-        this.rightHandleGroup.on("pointerover", e => {
+        this.rightHandleGroup.on("mouseover", e => {
           setTimeout(() => {
             e.target.getStage()!.container().style.cursor = "ew-resize";
           }, 0);
         });
-        this.rightHandleGroup.on("pointerout", e => {
+        this.rightHandleGroup.on("mouseout", e => {
           if (!this.isDragging) {
             e.target.getStage()!.container().style.cursor = "default";
           }
@@ -489,8 +513,8 @@ export class ChartSlider {
     this.slider.on("dragend", e => this.handleDragEnd(e));
     this.slider.on("dragmove", e => this.handleDragMove(e));
 
-    this.slider.on("pointerover", () => this.handleMouseEnter());
-    this.slider.on("pointerout", () => this.handleMouseLeave());
+    this.slider.on("mouseover", () => this.handleMouseEnter());
+    this.slider.on("mouseout", () => this.handleMouseLeave());
 
     this.slider.on("click", e => {
       if (e.evt.button !== 0) return; // 只处理左键点击
@@ -949,5 +973,14 @@ export class ChartSlider {
         duration: 0.2
       }).play();
     }
+  }
+
+  /** 鼠标移入高亮 */
+  private handleBarHighlight(attrs: Omit<TweenConfig, 'node'>) {
+    new Konva.Tween({
+      ...attrs,
+      node: this.sliderBg,
+      duration: 0.2
+    }).play();
   }
 }

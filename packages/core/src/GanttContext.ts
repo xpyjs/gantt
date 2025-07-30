@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-28 17:21:45
+ * @LastEditTime: 2025-07-30 14:19:23
  * @Description: Facade Layer for Gantt Component
  */
 import { Logger } from "./utils/logger";
@@ -190,6 +190,14 @@ export class XGanttContext implements IContext {
 
     this.event.on(EventName.SLIDER_CONTEXTMENU, (e: MouseEvent, task: Task) => {
       this._emit("contextmenu:slider", e, task.data);
+    });
+
+    this.event.on(EventName.SLIDER_HOVER, (e: MouseEvent, task: Task) => {
+      this._emit("hover:slider", e, task.data);
+    });
+
+    this.event.on(EventName.SLIDER_LEAVE, (e: MouseEvent, task: Task) => {
+      this._emit("leave:slider", e, task.data);
     });
   }
 }

@@ -58,7 +58,9 @@ const registerEventListeners = () => {
     "click:slider",
     "dblclick:slider",
     "contextmenu:slider",
-    "move"
+    "move",
+    "hover:slider",
+    "leave:slider"
   ];
 
   // 遍历注册

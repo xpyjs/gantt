@@ -81,6 +81,8 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onDoubleClickSlider,
             onContextMenuSlider,
             onMove,
+            onHoverSlider,
+            onLeaveSlider,
             ...restProps
         } = props;
 
@@ -138,6 +140,12 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             if (onMove) {
                 instance.on("move", onMove);
             }
+            if (onHoverSlider) {
+                instance.on("hover:slider", onHoverSlider);
+            }
+            if (onLeaveSlider) {
+                instance.on("leave:slider", onLeaveSlider);
+            }
         }, [
             onLoaded,
             onError,
@@ -152,7 +160,9 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onClickSlider,
             onDoubleClickSlider,
             onContextMenuSlider,
-            onMove
+            onMove,
+            onHoverSlider,
+            onLeaveSlider
         ]);
 
         // 初始化甘特图

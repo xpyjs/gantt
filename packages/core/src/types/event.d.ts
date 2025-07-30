@@ -20,4 +20,6 @@ export interface EventMap {
   "dblclick:slider": (e: MouseEvent, data: any) => void;
   "contextmenu:slider": (e: MouseEvent, data: any) => void;
   move: (data: { row: any; old: any }[]) => void;
+  "hover:slider": (e: MouseEvent, data: any) => void;
+  "leave:slider": (e: MouseEvent, data: any) => void;
 }

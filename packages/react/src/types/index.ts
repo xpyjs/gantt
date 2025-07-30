@@ -153,6 +153,22 @@ export interface XGanttReactProps
    * @param data 移动的任务信息数组，包含新旧位置信息
    */
   onMove?: EventMap["move"];
+
+  /**
+   * 鼠标悬停在任务条的事件回调
+   *
+   * @description 当鼠标悬停在任务条上时触发
+   * @param data 悬停的任务数据
+   */
+  onHoverSlider?: EventMap["hover:slider"];
+
+  /**
+   * 鼠标离开任务条的事件回调
+   *
+   * @description 当鼠标离开任务条时触发
+   * @param data 离开的任务数据
+   */
+  onLeaveSlider?: EventMap["leave:slider"];
 }
 
 /**

@@ -16,6 +16,8 @@ export type XGanttVueEmits = {
   "dblclick:slider": [e: MouseEvent, data: any];
   "contextmenu:slider": [e: MouseEvent, data: any];
   move: [data: { row: any; old: any }[]];
+  "hover:slider": [e: MouseEvent, data: any];
+  "leave:slider": [e: MouseEvent, data: any];
 };
 
 export interface XGanttVueProps {
