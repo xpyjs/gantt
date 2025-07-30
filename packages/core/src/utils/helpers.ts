@@ -150,3 +150,71 @@ export function formatNumber(
 
   return v.replace(/\.?0+$/, "");
 }
+
+/**
+ * svg to image - 简化版本，通过正则表达式处理 SVG
+ */
+export function svgToImage(
+  svg: string,
+  width: number = 16,
+  height: number = 16
+): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    // 使用正则表达式处理 SVG 尺寸
+    let processedSvg = svg;
+
+    // 检查是否已经有 viewBox
+    const hasViewBox = /viewBox\s*=\s*["'][^"']*["']/.test(processedSvg);
+
+    if (!hasViewBox) {
+      // 提取原始宽高来创建 viewBox
+      const widthMatch = processedSvg.match(/width\s*=\s*["']([^"']*)["']/);
+      const heightMatch = processedSvg.match(/height\s*=\s*["']([^"']*)["']/);
+
+      const originalWidth = widthMatch ? parseFloat(widthMatch[1]) : width;
+      const originalHeight = heightMatch ? parseFloat(heightMatch[1]) : height;
+
+      // 在 <svg 标签中添加 viewBox
+      processedSvg = processedSvg.replace(
+        /<svg([^>]*)>/,
+        `<svg$1 viewBox="0 0 ${originalWidth} ${originalHeight}">`
+      );
+    }
+
+    // 替换或添加 width 和 height 属性
+    processedSvg = processedSvg.replace(/width\s*=\s*["'][^"']*["']/, `width="${width}"`);
+    processedSvg = processedSvg.replace(/height\s*=\s*["'][^"']*["']/, `height="${height}"`);
+
+    // 如果没有 width 或 height 属性，添加它们
+    if (!/width\s*=/.test(processedSvg)) {
+      processedSvg = processedSvg.replace(/<svg/, `<svg width="${width}"`);
+    }
+    if (!/height\s*=/.test(processedSvg)) {
+      processedSvg = processedSvg.replace(/<svg/, `<svg height="${height}"`);
+    }
+
+    // 确保有 preserveAspectRatio 属性
+    if (!/preserveAspectRatio\s*=/.test(processedSvg)) {
+      processedSvg = processedSvg.replace(
+        /<svg([^>]*)>/,
+        '<svg$1 preserveAspectRatio="xMidYMid meet">'
+      );
+    }
+
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(img.src);
+      resolve(img);
+    };
+    img.onerror = (error) => {
+      URL.revokeObjectURL(img.src);
+      reject(error);
+    };
+
+    // 创建一个 Blob 对象
+    const blob = new Blob([processedSvg], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+
+    img.src = url;
+  });
+}

@@ -192,11 +192,33 @@ export const apiItems: ApiItem[] = [
             description: "是否允许左右分别单独移动。移动规则同整体效果",
             children: [
               {
+                id: "bar-move-single-backgroundColor",
+                key: "backgroundColor",
+                title: "背景颜色",
+                type: "string",
+                description: "左右移动手柄的背景颜色"
+              },
+              {
+                id: "bar-move-single-icon",
+                key: "icon",
+                title: "图标",
+                type: "string",
+                description:
+                  "允许给手柄设置一个 svg 图标，设为 null 可以置空。仅支持 svg 图标，`<svg>...</svg>` 的字符串形式"
+              },
+              {
                 id: "bar-move-single-left",
                 key: "left",
                 title: "允许左移",
                 type: "boolean | ((row: EmitData) => boolean)",
                 description: "是否允许左移"
+              },
+              {
+                id: "bar-move-single-opacity",
+                key: "opacity",
+                title: "透明度",
+                type: "number | ((row: EmitData) => number)",
+                description: "左右移动手柄的透明度"
               },
               {
                 id: "bar-move-single-right",

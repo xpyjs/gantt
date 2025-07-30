@@ -347,6 +347,20 @@ export interface IGanttOptions {
         left?: boolean | ((row: EmitData) => boolean);
         /** 是否允许右移 */
         right?: boolean | ((row: EmitData) => boolean);
+        /**
+         * 左右移动手柄的背景颜色
+         *
+         * @default bar.backgroundColor.brighten(30)
+         */
+        backgroundColor?: string;
+        /** 左右移动手柄的透明度 */
+        opacity?: number;
+        /**
+         * 允许给手柄设置一个 svg 图标。设为 null 可以置空。
+         *
+         * @description 仅支持 svg 图标，`<svg>...</svg>` 的字符串形式。
+         */
+        icon?: string | null;
       };
       /**
        * 是否按单位移动

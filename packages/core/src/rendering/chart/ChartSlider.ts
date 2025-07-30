@@ -5,7 +5,8 @@ import {
   getStandardCornerRadius,
   getStandardPercent,
   getStandardValue,
-  parseNumberWithPercent
+  parseNumberWithPercent,
+  svgToImage
 } from "../../utils/helpers";
 import { EventName } from "../../event";
 import { colorjs } from "../../utils/color";
@@ -14,6 +15,8 @@ import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
 import { EmitData } from "@/types";
 
+const HandlerIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path fill="currentColor" fill-rule="evenodd" d="M5.5 4.625a1.125 1.125 0 1 0 0-2.25a1.125 1.125 0 0 0 0 2.25m4 0a1.125 1.125 0 1 0 0-2.25a1.125 1.125 0 0 0 0 2.25M10.625 7.5a1.125 1.125 0 1 1-2.25 0a1.125 1.125 0 0 1 2.25 0M5.5 8.625a1.125 1.125 0 1 0 0-2.25a1.125 1.125 0 0 0 0 2.25m5.125 2.875a1.125 1.125 0 1 1-2.25 0a1.125 1.125 0 0 1 2.25 0M5.5 12.625a1.125 1.125 0 1 0 0-2.25a1.125 1.125 0 0 0 0 2.25" clip-rule="evenodd"/></svg>';
+
 export class ChartSlider {
   private offsetX: number = 0;
   private offsetY: number = 0;
@@ -21,8 +24,9 @@ export class ChartSlider {
   public sliderGroup: Konva.Group;
   private slider!: Konva.Group;
   private sliderBg!: Konva.Rect;
-  private leftHandler: Konva.Rect | null = null;
-  private rightHandler: Konva.Rect | null = null;
+
+  private leftHandleGroup: Konva.Group | null = null;
+  private rightHandleGroup: Konva.Group | null = null;
   private progressGroup: Konva.Group | null = null;
 
   private handlerWidth = 10;
@@ -172,86 +176,143 @@ export class ChartSlider {
 
     this.renderProgress(sliderWidth, height);
 
-    const resizeColor = colorjs(fill)
-      .brighten(30 * (!!this.unpackFunc(this.context.getOptions().bar.progress?.show) ? -1 : 1))
-      .toHex();
+    const resizeIcon = this.context.getOptions().bar.move.single?.icon;
+    const singleColor = this.context.getOptions().bar.move.single?.backgroundColor;
+    const resizeColor = singleColor ?
+      colorjs(singleColor).alpha(this.context.getOptions().bar.move.single?.opacity ?? 1).toHex() :
+      colorjs(fill)
+        .brighten(30 * (!!this.unpackFunc(this.context.getOptions().bar.progress?.show) ? -1 : 1))
+        .alpha(this.context.getOptions().bar.move.single?.opacity ?? 1)
+        .toHex();
     // 渲染左右拖拽按钮
     const moveLeft = !!this.unpackFunc(this.context.getOptions().bar.move.single?.left);
     if (moveLeft) {
-      if (!this.leftHandler) {
-        this.leftHandler = new Konva.Rect({
+      if (!this.leftHandleGroup) {
+        this.leftHandleGroup = new Konva.Group({
           x: 0,
           y: 0,
           opacity: 0
         });
-        this.slider.add(this.leftHandler);
-        this.leftHandler.on("mousedown", e => {
+        this.slider.add(this.leftHandleGroup);
+        this.leftHandleGroup.on("mousedown", e => {
           this.resizeMove(e, "left");
         });
-        this.leftHandler.on("pointerover", e => {
+        this.leftHandleGroup.on("pointerover", e => {
           setTimeout(() => {
             e.target.getStage()!.container().style.cursor = "ew-resize";
           }, 0);
         });
-        this.leftHandler.on("pointerout", e => {
+        this.leftHandleGroup.on("pointerout", e => {
           if (!this.isDragging) {
             e.target.getStage()!.container().style.cursor = "default";
           }
         });
+
+        const leftHandler = new Konva.Rect({
+          x: 0,
+          y: 0,
+        });
+        this.leftHandleGroup.add(leftHandler);
+
+        if (resizeIcon !== null) {
+          svgToImage(resizeIcon || HandlerIcon, this.handlerWidth, height).then(image => {
+            const icon = new Konva.Image({
+              image,
+              x: 0,
+              y: (height - this.handlerWidth) / 2,
+              width: this.handlerWidth,
+              height: this.handlerWidth
+            });
+            this.leftHandleGroup?.add(icon);
+          })
+        }
       }
-      this.leftHandler.setAttrs({
+
+      this.leftHandleGroup.findOne("Rect")?.setAttrs({
         width: this.handlerWidth,
         height: height,
         fill: resizeColor,
         cornerRadius: [cornerRadius[0], 0, 0, cornerRadius[3]]
       });
-    } else if (this.leftHandler) {
+      this.leftHandleGroup.findOne("Image")?.setAttrs({
+        x: 0,
+        y: (height - this.handlerWidth) / 2,
+        width: this.handlerWidth,
+        height: this.handlerWidth
+      });
+    } else if (this.leftHandleGroup) {
       // 如果不需要左侧拖拽按钮，移除它
-      this.leftHandler.remove();
-      this.leftHandler = null;
+      this.leftHandleGroup.remove();
+      this.leftHandleGroup = null;
     }
 
     // 右侧拖拽按钮
     const moveRight = !!this.unpackFunc(this.context.getOptions().bar.move.single?.right);
     if (moveRight) {
-      if (!this.rightHandler) {
-        this.rightHandler = new Konva.Rect({
+      if (!this.rightHandleGroup) {
+        this.rightHandleGroup = new Konva.Group({
+          x: 0,
           y: 0,
           opacity: 0
         });
-        this.slider.add(this.rightHandler);
-        this.rightHandler.on("mousedown", e => {
+        this.slider.add(this.rightHandleGroup);
+        this.rightHandleGroup.on("mousedown", e => {
           this.resizeMove(e, "right");
         });
-        this.rightHandler.on("pointerover", e => {
+        this.rightHandleGroup.on("pointerover", e => {
           setTimeout(() => {
             e.target.getStage()!.container().style.cursor = "ew-resize";
           }, 0);
         });
-        this.rightHandler.on("pointerout", e => {
+        this.rightHandleGroup.on("pointerout", e => {
           if (!this.isDragging) {
             e.target.getStage()!.container().style.cursor = "default";
           }
         });
+
+        const rightHandler = new Konva.Rect({
+          x: 0,
+          y: 0,
+        });
+        this.rightHandleGroup.add(rightHandler);
+
+        if (resizeIcon !== null) {
+          svgToImage(resizeIcon || HandlerIcon, this.handlerWidth, height).then(image => {
+            const icon = new Konva.Image({
+              image,
+              x: sliderWidth - this.handlerWidth,
+              y: (height - this.handlerWidth) / 2,
+              width: this.handlerWidth,
+              height: this.handlerWidth
+            });
+            this.rightHandleGroup?.add(icon);
+          })
+        }
       }
-      this.rightHandler.setAttrs({
+      this.rightHandleGroup.findOne("Rect")?.setAttrs({
         x: sliderWidth - this.handlerWidth,
         width: this.handlerWidth,
         height: height,
         fill: resizeColor,
         cornerRadius: [0, cornerRadius[1], cornerRadius[2], 0]
       });
-    } else if (this.rightHandler) {
+      this.rightHandleGroup.findOne("Image")?.setAttrs({
+        x: sliderWidth - this.handlerWidth,
+        y: (height - this.handlerWidth) / 2,
+        width: this.handlerWidth,
+        height: this.handlerWidth
+      });
+    } else if (this.rightHandleGroup) {
       // 如果不需要右侧拖拽按钮，移除它
-      this.rightHandler.remove();
-      this.rightHandler = null;
+      this.rightHandleGroup.remove();
+      this.rightHandleGroup = null;
     }
 
     this.renderText(sliderWidth, height);
 
     this.sliderGroup.add(this.slider);
-    this.leftHandler?.moveToTop();
-    this.rightHandler?.moveToTop();
+    this.leftHandleGroup?.moveToTop();
+    this.rightHandleGroup?.moveToTop();
 
     if (this.unpackFunc(this.context.getOptions().bar.show) === false) {
       this.sliderGroup.hide();
@@ -289,13 +350,13 @@ export class ChartSlider {
     // 渲染文本
     const textWidth =
       width -
-      (this.leftHandler ? this.handlerWidth : 0) -
-      (this.rightHandler ? this.handlerWidth : 0);
+      (this.leftHandleGroup ? this.handlerWidth : 0) -
+      (this.rightHandleGroup ? this.handlerWidth : 0);
     if (textWidth > 20) {
       // 太短不展示文本
       const text = new Konva.Text({
         id: id,
-        x: this.leftHandler ? 10 : 0,
+        x: this.leftHandleGroup ? 10 : 0,
         y: 0,
         width: textWidth,
         height,
@@ -874,16 +935,16 @@ export class ChartSlider {
 
   // 拖拽块的高亮动画
   private handleResizeHighlight(opacity: number) {
-    if (this.leftHandler) {
+    if (this.leftHandleGroup) {
       new Konva.Tween({
-        node: this.leftHandler,
+        node: this.leftHandleGroup,
         opacity,
         duration: 0.2
       }).play();
     }
-    if (this.rightHandler) {
+    if (this.rightHandleGroup) {
       new Konva.Tween({
-        node: this.rightHandler,
+        node: this.rightHandleGroup,
         opacity,
         duration: 0.2
       }).play();
