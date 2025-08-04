@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-22 09:41:43
+ * @LastEditTime: 2025-08-01 17:13:33
  * @Description: 数据管理器
  */
 
@@ -10,6 +10,7 @@ import type { Dayjs } from "dayjs";
 import { EventName, type EventBus } from "../event";
 import { Task } from "../models/Task";
 import type { Store } from ".";
+import { Baseline } from "../models/Baseline";
 
 export class DataManager {
   /**
@@ -40,10 +41,17 @@ export class DataManager {
   /** 选中列表 */
   private checkedList: Task[] = [];
 
+  /** 基线数据 */
+  private baselines: Baseline[] = [];
+  /** 基线映射，使用ID作为键 */
+  private baselineMap: Map<string, Baseline> = new Map();
+  /** 任务与基线映射，使用任务ID作为键。 一个任务可以对应多条基线 */
+  private baselineTaskMap: Map<string, Baseline[]> = new Map();
+
   /** 数据最大层级。 0 开始 */
   dataLevel: number = 0;
 
-  constructor(private store: Store, private event: EventBus) {}
+  constructor(private store: Store, private event: EventBus) { }
 
   /**
    * 设置源数据并初始化任务
@@ -685,5 +693,44 @@ export class DataManager {
       oldTasks.push(task.clone());
     }
     task.updateTime(st, et);
+  }
+
+  //** 基线数据操作 */
+
+  setBaselines(baselines: any[]) {
+    this.baselines = [];
+    this.baselineMap.clear();
+    this.baselineTaskMap.clear();
+
+    baselines.forEach(baseline => {
+      const bl = new Baseline(this.store, this.event, baseline);
+      this.baselines.push(bl);
+      this.baselineMap.set(bl.id, bl);
+
+      if (!this.baselineTaskMap.has(bl.taskId)) {
+        this.baselineTaskMap.set(bl.taskId, []);
+      }
+
+      // 如果有设定 target，要放在前面。这样渲染时，就可以直接使用第一个来对比
+      if (bl.target) {
+        this.baselineTaskMap.get(bl.taskId)?.unshift(bl);
+      } else {
+        this.baselineTaskMap.get(bl.taskId)?.push(bl);
+      }
+    });
+  }
+
+  getBaselines(): Baseline[] {
+    return this.baselines;
+  }
+
+  /** 根据ID获取基线 */
+  getBaselineById(id: string): Baseline | undefined {
+    return this.baselineMap.get(id);
+  }
+
+  /** 根据任务ID获取基线 */
+  getBaselinesByTaskId(taskId: string): Baseline[] {
+    return this.baselineTaskMap.get(taskId) || [];
   }
 }

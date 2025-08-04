@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-30 11:00:45
+ * @LastEditTime: 2025-07-31 11:04:54
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -159,13 +159,6 @@ export class LinkGroup {
     this.selectedMap.clear();
   }
 
-  private unpackFunc<T>(value: T | ((data: any) => T), task: Task): T {
-    if (isFunction(value)) {
-      return value(task.getEmitData());
-    }
-    return value;
-  }
-
   /**
    * 计算点组位置
    */
@@ -194,7 +187,7 @@ export class LinkGroup {
 
     this.tasks.forEach(task => {
       if (
-        this.unpackFunc(this.context.getOptions().bar.show, task) &&
+        this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, task) &&
         this.context.store.getDataManager().isTaskVisible(task) &&
         task.startTime &&
         task.endTime
@@ -211,7 +204,7 @@ export class LinkGroup {
         // 检测是否允许创建左侧连接点
         let allowLeft = true;
         let allowRight = true;
-        let _from = this.unpackFunc(this.context.getOptions().links.create.from, task);
+        let _from = this.context.store.getOptionManager().unpackFunc(this.context.getOptions().links.create.from, task);
 
         if (isBoolean(_from)) {
           allowLeft = allowRight = _from;
@@ -331,12 +324,12 @@ export class LinkGroup {
 
       if (
         fromTask &&
-        this.unpackFunc(this.context.getOptions().bar.show, fromTask) &&
+        this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, fromTask) &&
         this.context.store.getDataManager().isTaskVisible(fromTask) &&
         fromTask.startTime &&
         fromTask.endTime &&
         toTask &&
-        this.unpackFunc(this.context.getOptions().bar.show, toTask) &&
+        this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, toTask) &&
         this.context.store.getDataManager().isTaskVisible(toTask) &&
         toTask.startTime &&
         toTask.endTime
@@ -547,9 +540,8 @@ export class LinkGroup {
   }
 
   private createId(link: ILink) {
-    return `link-group-${link[this.context.getOptions().links.key]}-${
-      link.from
-    }-${link.to}-${link.type || "FS"}`;
+    return `link-group-${link[this.context.getOptions().links.key]}-${link.from
+      }-${link.to}-${link.type || "FS"}`;
   }
 
   /** 生成 FS 连线 */

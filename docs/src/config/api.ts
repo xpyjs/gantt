@@ -376,6 +376,462 @@ export const apiItems: ApiItem[] = [
     ]
   },
   {
+    id: "baselines",
+    key: "baselines",
+    title: "基线配置",
+    type: "object",
+    description: "基线数据配置，用于显示计划与实际进度的对比分析",
+    category: "data",
+    children: [
+      {
+        id: "baselines-data",
+        key: "data",
+        title: "基线数据",
+        type: "any[]",
+        description: "基线数据集合。每条基线数据需要包含对应任务的关联ID，基线数据应包含开始时间、结束时间等信息，支持多条基线数据对应同一个任务",
+        required: true
+      },
+      {
+        id: "baselines-show",
+        key: "show",
+        title: "显示基线",
+        type: "boolean",
+        description: "是否展示基线"
+      },
+      {
+        id: "baselines-taskKey",
+        key: "taskKey",
+        title: "任务关联字段",
+        type: "string",
+        defaultValue: '"taskId"',
+        description: "指定关联任务 id 的字段"
+      },
+      {
+        id: "baselines-fields",
+        key: "fields",
+        title: "字段映射",
+        type: "object",
+        description: "数据字段支持单独配置。默认与 data 保持一致，共享 fields 配置",
+        children: [
+          {
+            id: "baselines-fields-startTime",
+            key: "startTime",
+            title: "开始时间字段",
+            type: "string",
+            description: "开始时间字段名"
+          },
+          {
+            id: "baselines-fields-endTime",
+            key: "endTime",
+            title: "结束时间字段",
+            type: "string",
+            description: "结束时间字段名"
+          },
+          {
+            id: "baselines-fields-name",
+            key: "name",
+            title: "名称字段",
+            type: "string",
+            description: "基线名称字段名"
+          },
+          {
+            id: "baselines-fields-id",
+            key: "id",
+            title: "ID字段",
+            type: "string",
+            description: "基线数据 id 字段名"
+          },
+          {
+            id: "baselines-fields-highlight",
+            key: "highlight",
+            title: "高亮字段",
+            type: "string",
+            description: "禁用高亮对比的字段。该字段默认值为 true"
+          },
+          {
+            id: "baselines-fields-target",
+            key: "target",
+            title: "指示器字段",
+            type: "string",
+            description: "指定指示器的字段名"
+          }
+        ]
+      },
+      {
+        id: "baselines-mode",
+        key: "mode",
+        title: "展示形式",
+        type: '"shadow" | "line"',
+        defaultValue: '"line"',
+        description: "基线展示形式。shadow: 以阴影形式展示基线; line: 以线条形式展示基线",
+      },
+      {
+        id: "baselines-height",
+        key: "height",
+        title: "基线高度",
+        type: "number | string",
+        description: "基线条高度。当 mode 为 'shadow' 时，默认与 bar 的高度一致；当 mode 为 'line' 时，默认 5px"
+      },
+      {
+        id: "baselines-offset",
+        key: "offset",
+        title: "偏移量",
+        type: "number",
+        description: "与 bar 的偏移展示量。为保证可视化的时间不会出现偏移，只在 y 轴上做偏移。正数向下偏移，负数向上偏移。在 'line' 模式下使用 offset，会影响 position 的最终位置"
+      },
+      {
+        id: "baselines-position",
+        key: "position",
+        title: "相对位置",
+        type: '"top" | "bottom" | "center"',
+        defaultValue: '"bottom"',
+        description: "基线条相对任务条的位置。仅当 mode 为 'line' 时有效",
+      },
+      {
+        id: "baselines-backgroundColor",
+        key: "backgroundColor",
+        title: "背景颜色",
+        type: "string",
+        defaultValue: '"#999"',
+        description: "基线条背景颜色"
+      },
+      {
+        id: "baselines-opacity",
+        key: "opacity",
+        title: "透明度",
+        type: "number",
+        defaultValue: "0.6",
+        description: "基线条透明度"
+      },
+      {
+        id: "baselines-radius",
+        key: "radius",
+        title: "圆角",
+        type: "number | number[]",
+        defaultValue: "2",
+        description: "基线条圆角设置"
+      },
+      {
+        id: "baselines-label",
+        key: "label",
+        title: "标签配置",
+        type: "object",
+        description: "基线标签显示配置",
+        children: [
+          {
+            id: "baselines-label-show",
+            key: "show",
+            title: "显示标签",
+            type: "boolean",
+            defaultValue: "false",
+            description: "是否显示标签"
+          },
+          {
+            id: "baselines-label-field",
+            key: "field",
+            title: "标签字段",
+            type: "string",
+            description: "标签内容字段。默认使用 name 字段"
+          },
+          {
+            id: "baselines-label-forceDisplay",
+            key: "forceDisplay",
+            title: "强制显示",
+            type: "boolean",
+            description: "强制显示标签。当基线过小时，系统会自动隐藏。如果你需要强制显示标签，可以设置为 true，不过可能文本显示会很奇怪，建议配合 fontSize 使用"
+          },
+          {
+            id: "baselines-label-color",
+            key: "color",
+            title: "文字颜色",
+            type: "string",
+            defaultValue: '"#666"',
+            description: "标签文字颜色"
+          },
+          {
+            id: "baselines-label-fontSize",
+            key: "fontSize",
+            title: "字体大小",
+            type: "number",
+            defaultValue: "10",
+            description: "标签字体大小"
+          },
+          {
+            id: "baselines-label-fontFamily",
+            key: "fontFamily",
+            title: "字体",
+            type: "string",
+            defaultValue: '"Arial"',
+            description: "标签字体"
+          },
+          {
+            id: "baselines-label-position",
+            key: "position",
+            title: "标签位置",
+            type: '"left" | "right" | "center"',
+            defaultValue: '"right"',
+            description: "标签位置",
+          }
+        ]
+      },
+      {
+        id: "baselines-compare",
+        key: "compare",
+        title: "对比分析配置",
+        type: "object",
+        description: "基线对比分析配置。如果一个任务配置了多个基线，默认情况下：高亮状态是和所有基线匹配，如果不希望某条基线进行对比，请在基线数据中添加 `highlight: false` 字段；指示器只会和第一个基线进行匹配，如果需要指定对比基线，请在基线数据中添加 `target: true` 字段",
+        children: [
+          {
+            id: "baselines-compare-enabled",
+            key: "enabled",
+            title: "启用对比",
+            type: "boolean",
+            defaultValue: "false",
+            description: "是否启用对比功能"
+          },
+          {
+            id: "baselines-compare-tolerance",
+            key: "tolerance",
+            title: "时间容差",
+            type: "number",
+            defaultValue: "0.5",
+            description: "时间容差（天）。在此范围内认为是准时完成"
+          },
+          {
+            id: "baselines-compare-mode",
+            key: "mode",
+            title: "显示模式",
+            type: '"highlight" | "indicator" | "both"',
+            description: "差异显示模式。highlight: 高亮显示; indicator: 指示器显示; both: 同时显示",
+          },
+          {
+            id: "baselines-compare-target",
+            key: "target",
+            title: "对比基准",
+            type: '"start" | "end"',
+            defaultValue: '"end"',
+            description: "以何种基准展示对比。基线高亮只会以一种（起始/结束）基线进行对比。默认以结束时间为基准",
+          },
+          {
+            id: "baselines-compare-delayed",
+            key: "delayed",
+            title: "超期配置",
+            type: "object",
+            description: "超期任务的高亮配置",
+            children: [
+              {
+                id: "baselines-compare-delayed-backgroundColor",
+                key: "backgroundColor",
+                title: "高亮颜色",
+                type: "string",
+                defaultValue: '"#ff4444"',
+                description: "超期任务的高亮颜色"
+              },
+              {
+                id: "baselines-compare-delayed-opacity",
+                key: "opacity",
+                title: "透明度",
+                type: "number",
+                defaultValue: "0.8",
+                description: "超期任务高亮颜色的透明度"
+              }
+            ]
+          },
+          {
+            id: "baselines-compare-ahead",
+            key: "ahead",
+            title: "提前配置",
+            type: "object",
+            description: "提前完成任务的高亮配置",
+            children: [
+              {
+                id: "baselines-compare-ahead-backgroundColor",
+                key: "backgroundColor",
+                title: "高亮颜色",
+                type: "string",
+                defaultValue: '"#44ff44"',
+                description: "提前完成任务的高亮颜色"
+              },
+              {
+                id: "baselines-compare-ahead-opacity",
+                key: "opacity",
+                title: "透明度",
+                type: "number",
+                defaultValue: "0.8",
+                description: "提前完成任务高亮颜色的透明度"
+              }
+            ]
+          },
+          {
+            id: "baselines-compare-indicator",
+            key: "indicator",
+            title: "指示器配置",
+            type: "object",
+            description: "差异指示器配置。展示在任务条左右两侧，用于显示与基线时间差异的内容",
+            children: [
+              {
+                id: "baselines-compare-indicator-show",
+                key: "show",
+                title: "显示指示器",
+                type: 'boolean | "start" | "end" | "both"',
+                defaultValue: "true",
+                description: "是否展示指示器。可以配置展示起始、结束，或者同时展示。true 与 'both' 效果一致，两侧都会展示"
+              },
+              {
+                id: "baselines-compare-indicator-position",
+                key: "position",
+                title: "显示位置",
+                type: '"top" | "bottom"',
+                description: "显示位置。当前支持任务条两侧的上端或者下端",
+              },
+              {
+                id: "baselines-compare-indicator-size",
+                key: "size",
+                title: "指示器大小",
+                type: "number",
+                defaultValue: "6",
+                description: "指示器大小"
+              },
+              {
+                id: "baselines-compare-indicator-fontSize",
+                key: "fontSize",
+                title: "字体大小",
+                type: "number",
+                defaultValue: "10",
+                description: "标签字体大小"
+              },
+              {
+                id: "baselines-compare-indicator-fontFamily",
+                key: "fontFamily",
+                title: "字体",
+                type: "string",
+                defaultValue: '"Arial"',
+                description: "标签字体"
+              },
+              {
+                id: "baselines-compare-indicator-ahead",
+                key: "ahead",
+                title: "提前指示器",
+                type: "object",
+                description: "提前任务指示器配置",
+                children: [
+                  {
+                    id: "baselines-compare-indicator-ahead-show",
+                    key: "show",
+                    title: "显示提前指示器",
+                    type: "boolean",
+                    defaultValue: "true",
+                    description: "任务提前，是否显示指示器"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ahead-text",
+                    key: "text",
+                    title: "显示文本",
+                    type: "string | ((diff: number, row: EmitBaseline) => string)",
+                    description: "显示文本。如果不需要展示文本，请设置为空字符"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ahead-color",
+                    key: "color",
+                    title: "指示器颜色",
+                    type: "string",
+                    defaultValue: '"#1baf1b"',
+                    description: "提前指示器颜色"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ahead-opacity",
+                    key: "opacity",
+                    title: "透明度",
+                    type: "number",
+                    description: "提前指示器透明度"
+                  }
+                ]
+              },
+              {
+                id: "baselines-compare-indicator-delayed",
+                key: "delayed",
+                title: "超期指示器",
+                type: "object",
+                description: "超期任务指示器配置",
+                children: [
+                  {
+                    id: "baselines-compare-indicator-delayed-show",
+                    key: "show",
+                    title: "显示超期指示器",
+                    type: "boolean",
+                    defaultValue: "true",
+                    description: "任务超期，是否显示指示器"
+                  },
+                  {
+                    id: "baselines-compare-indicator-delayed-text",
+                    key: "text",
+                    title: "显示文本",
+                    type: "string | ((diff: number, row: EmitBaseline) => string)",
+                    description: "显示文本。如果不需要展示文本，请设置为空字符"
+                  },
+                  {
+                    id: "baselines-compare-indicator-delayed-color",
+                    key: "color",
+                    title: "指示器颜色",
+                    type: "string",
+                    defaultValue: '"#af1b1b"',
+                    description: "超期指示器颜色"
+                  },
+                  {
+                    id: "baselines-compare-indicator-delayed-opacity",
+                    key: "opacity",
+                    title: "透明度",
+                    type: "number",
+                    description: "超期指示器透明度"
+                  }
+                ]
+              },
+              {
+                id: "baselines-compare-indicator-ontime",
+                key: "ontime",
+                title: "按时指示器",
+                type: "object",
+                description: "按时任务指示器配置",
+                children: [
+                  {
+                    id: "baselines-compare-indicator-ontime-show",
+                    key: "show",
+                    title: "显示按时指示器",
+                    type: "boolean",
+                    defaultValue: "false",
+                    description: "任务正常，是否显示指示器"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ontime-text",
+                    key: "text",
+                    title: "显示文本",
+                    type: "string | ((diff: number, row: EmitBaseline) => string)",
+                    description: "显示文本。如果不需要展示文本，请设置为空字符"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ontime-color",
+                    key: "color",
+                    title: "指示器颜色",
+                    type: "string",
+                    defaultValue: '"#999"',
+                    description: "按时指示器颜色"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ontime-opacity",
+                    key: "opacity",
+                    title: "透明度",
+                    type: "number",
+                    description: "按时指示器透明度"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
     id: "border",
     key: "border",
     title: "边框样式",

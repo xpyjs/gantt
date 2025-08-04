@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:31
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-25 15:11:19
+ * @LastEditTime: 2025-07-30 17:23:51
  * @Description: Store
  */
 import { OptionManager } from "./OptionManager";
@@ -50,6 +50,9 @@ export class Store {
     if (data) {
       this.dataManager.setData(data, true);
     }
+    if (options?.baselines?.data) {
+      this.dataManager.setBaselines(options.baselines.data);
+    }
   }
 
   getOptionManager() {
@@ -73,6 +76,9 @@ export class Store {
     const data = options?.data;
     if (isArray(data)) {
       this.dataManager.setData(data, false);
+    }
+    if (isArray(options.baselines?.data)) {
+      this.dataManager.setBaselines(options.baselines.data);
     }
 
     this.optionManager.setOptions(_options, config);

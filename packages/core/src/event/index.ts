@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:58:36
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-28 17:20:39
+ * @LastEditTime: 2025-07-31 17:36:36
  * @Description: 事件总线
  */
 
@@ -103,6 +103,12 @@ export enum EventName {
   TASK_DRAG_START = "task-drag-start",
   TASK_DRAG_MOVE = "task-drag-move",
   TASK_DRAG_END = "task-drag-end",
+
+  // 基线事件
+  BASELINE_CLICK = "baseline-click",
+  BASELINE_CONTEXTMENU = "baseline-contextmenu",
+  BASELINE_MOUSEOVER = "baseline-mouseover",
+  BASELINE_MOUSEOUT = "baseline-mouseout",
 
   // 抛出异常事件
   ERROR = "error"

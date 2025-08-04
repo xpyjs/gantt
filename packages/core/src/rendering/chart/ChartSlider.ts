@@ -11,7 +11,6 @@ import {
 } from "../../utils/helpers";
 import { EventName } from "../../event";
 import { colorjs } from "../../utils/color";
-import { isFunction } from "lodash-es";
 import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
 import { EmitData } from "@/types";
@@ -80,10 +79,7 @@ export class ChartSlider {
 
   /** 太多需要 function 的判断，搞一个统一的转换 */
   private unpackFunc<T>(val: T | ((data: EmitData) => T)) {
-    if (isFunction(val)) {
-      return val(this.task.getEmitData());
-    }
-    return val;
+    return this.context.store.getOptionManager().unpackFunc(val, this.task);
   }
 
   private render() {

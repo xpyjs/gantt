@@ -245,6 +245,41 @@ gantt.on('click:row', (event, rowData) => {
   taskInfoDialog.hide();
 });`,
 
+  // 点击基线的事件
+  clickBaselineEvent: `gantt.on('click:baseline', (e, task, baseline) => {
+  console.log('点击基线:', task, baseline);
+  // 获取基线详情
+  showBaselineDetail(baseline);
+});`,
+
+  // 基线右键菜单事件
+  contextmenuBaselineEvent: `gantt.on('contextmenu:baseline', (e, task, baseline) => {
+  console.log('右键点击基线:', task, baseline);
+  // 显示自定义右键菜单
+  showContextMenu({
+    x: e.clientX,
+    y: e.clientY,
+    items: [
+      { label: '编辑基线', action: () => editBaseline(baseline) },
+      { label: '删除基线', action: () => deleteBaseline(baseline) }
+    ]
+  });
+});`,
+
+  // 基线悬停事件
+  hoverBaselineEvent: `gantt.on('hover:baseline', (e, task, baseline) => {
+  console.log('鼠标悬停在基线:', task, baseline);
+  // 显示基线信息
+  showBaselineInfo(baseline);
+});`,
+
+  // 基线离开事件
+  leaveBaselineEvent: `gantt.on('leave:baseline', (e, task, baseline) => {
+  console.log('鼠标离开基线:', task, baseline);
+  // 隐藏基线信息
+  hideBaselineInfo(baseline);
+});`,
+
   // 创建依赖关系事件
   createLinkEvent: `gantt.on('create:link', (link) => {
   console.log("创建依赖关系", link);
@@ -777,6 +812,11 @@ export const eventsPageConfig: EventsPageConfig = {
           trigger: "鼠标悬停在任务条上时",
           parameters: [
             {
+              name: "e",
+              type: "MouseEvent",
+              description: "鼠标事件对象"
+            },
+            {
               name: "data",
               type: "any",
               description: "悬停的任务数据"
@@ -798,6 +838,11 @@ export const eventsPageConfig: EventsPageConfig = {
           trigger: "鼠标离开任务条时",
           parameters: [
             {
+              name: "e",
+              type: "MouseEvent",
+              description: "鼠标事件对象"
+            },
+            {
               name: "data",
               type: "any",
               description: "离开的任务数据"
@@ -807,6 +852,130 @@ export const eventsPageConfig: EventsPageConfig = {
             {
               framework: "javascript",
               code: codeExamples.leaveSliderEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
+          id: "click:baseline",
+          name: "click:baseline",
+          type: "基线点击",
+          description: "用户单击基线时触发",
+          trigger: "用户单击基线时",
+          parameters: [
+            {
+              name: "e",
+              type: "MouseEvent",
+              description: "鼠标事件对象"
+            },
+            {
+              name: "task",
+              type: "any",
+              description: "任务数据"
+            },
+            {
+              name: "baseline",
+              type: "any",
+              description: "基线数据"
+            }
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.clickBaselineEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
+          id: "contextmenu:baseline",
+          name: "contextmenu:baseline",
+          type: "基线右键菜单",
+          description: "用户在基线上右键点击时触发",
+          trigger: "用户在基线上右键点击时",
+          parameters: [
+            {
+              name: "e",
+              type: "MouseEvent",
+              description: "鼠标事件对象"
+            },
+            {
+              name: "task",
+              type: "any",
+              description: "任务数据"
+            },
+            {
+              name: "baseline",
+              type: "any",
+              description: "基线数据"
+            }
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.contextmenuBaselineEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
+          id: "hover:baseline",
+          name: "hover:baseline",
+          type: "基线悬停",
+          description: "鼠标悬停在基线上时触发",
+          trigger: "鼠标悬停在基线上时",
+          parameters: [
+            {
+              name: "e",
+              type: "MouseEvent",
+              description: "鼠标事件对象"
+            },
+            {
+              name: "task",
+              type: "any",
+              description: "任务数据"
+            },
+            {
+              name: "baseline",
+              type: "any",
+              description: "基线数据"
+            }
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.hoverBaselineEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
+          id: "leave:baseline",
+          name: "leave:baseline",
+          type: "基线离开",
+          description: "用户离开基线时触发",
+          trigger: "用户离开基线时",
+          parameters: [
+            {
+              name: "e",
+              type: "MouseEvent",
+              description: "鼠标事件对象"
+            },
+            {
+              name: "task",
+              type: "any",
+              description: "任务数据"
+            },
+            {
+              name: "baseline",
+              type: "any",
+              description: "基线数据"
+            }
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.leaveBaselineEvent,
               language: "javascript"
             }
           ]

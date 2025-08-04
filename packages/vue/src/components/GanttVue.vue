@@ -60,7 +60,11 @@ const registerEventListeners = () => {
     "contextmenu:slider",
     "move",
     "hover:slider",
-    "leave:slider"
+    "leave:slider",
+    "click:baseline",
+    "contextmenu:baseline",
+    "hover:baseline",
+    "leave:baseline"
   ];
 
   // 遍历注册

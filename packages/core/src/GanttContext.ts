@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-30 14:19:23
+ * @LastEditTime: 2025-07-31 17:51:30
  * @Description: Facade Layer for Gantt Component
  */
 import { Logger } from "./utils/logger";
@@ -16,6 +16,7 @@ import { EventMap } from "./types/event";
 import type { ILink } from "./types/link";
 import { IContext } from "./types/render";
 import { Task } from "./models/Task";
+import { Baseline } from "./models/Baseline";
 
 export class XGanttContext implements IContext {
   private _id = generateId();
@@ -198,6 +199,22 @@ export class XGanttContext implements IContext {
 
     this.event.on(EventName.SLIDER_LEAVE, (e: MouseEvent, task: Task) => {
       this._emit("leave:slider", e, task.data);
+    });
+
+    this.event.on(EventName.BASELINE_CLICK, (e: MouseEvent, task: Task, baseline: Baseline) => {
+      this._emit("click:baseline", e, task.data, baseline.data);
+    });
+
+    this.event.on(EventName.BASELINE_CONTEXTMENU, (e: MouseEvent, task: Task, baseline: Baseline) => {
+      this._emit("contextmenu:baseline", e, task.data, baseline.data);
+    });
+
+    this.event.on(EventName.BASELINE_MOUSEOVER, (e: MouseEvent, task: Task, baseline: Baseline) => {
+      this._emit("hover:baseline", e, task.data, baseline.data);
+    });
+
+    this.event.on(EventName.BASELINE_MOUSEOUT, (e: MouseEvent, task: Task, baseline: Baseline) => {
+      this._emit("leave:baseline", e, task.data, baseline.data);
     });
   }
 }

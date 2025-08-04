@@ -83,6 +83,10 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onMove,
             onHoverSlider,
             onLeaveSlider,
+            onClickBaseline,
+            onContextMenuBaseline,
+            onHoverBaseline,
+            onLeaveBaseline,
             ...restProps
         } = props;
 
@@ -146,6 +150,18 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             if (onLeaveSlider) {
                 instance.on("leave:slider", onLeaveSlider);
             }
+            if (onClickBaseline) {
+                instance.on("click:baseline", onClickBaseline);
+            }
+            if (onContextMenuBaseline) {
+                instance.on("contextmenu:baseline", onContextMenuBaseline);
+            }
+            if (onHoverBaseline) {
+                instance.on("hover:baseline", onHoverBaseline);
+            }
+            if (onLeaveBaseline) {
+                instance.on("leave:baseline", onLeaveBaseline);
+            }
         }, [
             onLoaded,
             onError,
@@ -162,7 +178,11 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onContextMenuSlider,
             onMove,
             onHoverSlider,
-            onLeaveSlider
+            onLeaveSlider,
+            onClickBaseline,
+            onContextMenuBaseline,
+            onHoverBaseline,
+            onLeaveBaseline
         ]);
 
         // 初始化甘特图

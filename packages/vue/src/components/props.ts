@@ -18,6 +18,10 @@ export type XGanttVueEmits = {
   move: [data: { row: any; old: any }[]];
   "hover:slider": [e: MouseEvent, data: any];
   "leave:slider": [e: MouseEvent, data: any];
+  "click:baseline": [e: MouseEvent, data: any, baseline: any];
+  "contextmenu:baseline": [e: MouseEvent, data: any, baseline: any];
+  "hover:baseline": [e: MouseEvent, data: any, baseline: any];
+  "leave:baseline": [e: MouseEvent, data: any, baseline: any];
 };
 
 export interface XGanttVueProps {

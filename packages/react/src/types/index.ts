@@ -169,6 +169,46 @@ export interface XGanttReactProps
    * @param data 离开的任务数据
    */
   onLeaveSlider?: EventMap["leave:slider"];
+
+  /**
+   * 基线点击事件回调
+   *
+   * @description 当点击基线时触发
+   * @param e 鼠标事件对象
+   * @param data 点击基线对应的任务数据
+   * @param baseline 点击的基线数据
+   */
+  onClickBaseline?: EventMap["click:baseline"];
+
+  /**
+   * 基线右键菜单事件回调
+   *
+   * @description 当在基线上右键点击时触发
+   * @param e 鼠标事件对象
+   * @param data 右键基线对应的任务数据
+   * @param baseline 右键的基线数据
+   */
+  onContextMenuBaseline?: EventMap["contextmenu:baseline"];
+
+  /**
+   * 基线悬停事件回调
+   *
+   * @description 当鼠标悬停在基线上时触发
+   * @param e 鼠标事件对象
+   * @param data 悬停的任务数据
+   * @param baseline 悬停的基线数据
+   */
+  onHoverBaseline?: EventMap["hover:baseline"];
+
+  /**
+   * 鼠标移出基线事件回调
+   *
+   * @description 当鼠标离开基线时触发
+   * @param e 鼠标事件对象
+   * @param data 离开的任务数据
+   * @param baseline 离开的基线数据
+   */
+  onLeaveBaseline?: EventMap["leave:baseline"];
 }
 
 /**

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-19 15:55:31
+ * @LastEditTime: 2025-08-04 10:47:30
  * @Description: 配置项管理器
  */
 
@@ -33,6 +33,68 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
       width: 2,
       from: true,
       to: true
+    }
+  },
+  baselines: {
+    data: [],
+    taskKey: "taskId",
+    show: false,
+    fields: {
+      startTime: 'startTime',
+      endTime: 'endTime',
+      name: 'name',
+      id: 'id',
+      target: 'target',
+      highlight: 'highlight'
+    },
+    mode: 'line',
+    position: "bottom",
+    backgroundColor: "#999",
+    opacity: 0.6,
+    radius: 2,
+    label: {
+      show: false,
+      forceDisplay: false,
+      color: "#666",
+      fontSize: 10,
+      position: 'right',
+      fontFamily: "Arial"
+    },
+    compare: {
+      enabled: false,
+      tolerance: 0.5,
+      mode: 'both',
+      target: 'end',
+      delayed: {
+        backgroundColor: "#ff4444",
+        opacity: 0.8,
+      },
+      ahead: {
+        backgroundColor: "#44ff44",
+        opacity: 0.8,
+      },
+      indicator: {
+        show: true,
+        position: 'top',
+        fontFamily: "Arial",
+        fontSize: 10,
+        size: 6,
+        delayed: {
+          show: true,
+          color: "#af1b1b",
+          opacity: 1,
+        },
+        ahead: {
+          show: true,
+          color: "#1baf1b",
+          opacity: 1,
+        },
+        ontime: {
+          show: false,
+          color: '#999',
+          opacity: 1,
+        }
+      }
     }
   },
   fields: {
@@ -90,6 +152,7 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
   },
   bar: {
     height: 20,
+    show: true,
     move: {
       byUnit: false,
       link: {
@@ -118,7 +181,7 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
 export class OptionManager {
   private options: IGanttOptions = DEFAULT_OPTIONS();
 
-  constructor() {}
+  constructor() { }
 
   getOptions(): IGanttOptions {
     return this.options;
@@ -128,6 +191,7 @@ export class OptionManager {
     this.options = config.merge
       ? merge(DEFAULT_OPTIONS(), this.options, options)
       : merge(DEFAULT_OPTIONS(), options);
+
     if (isArray(options.links?.data)) {
       this.options.links.data = options.links.data as any;
     }
@@ -149,5 +213,12 @@ export class OptionManager {
     }
 
     return fill;
+  }
+
+  unpackFunc<T>(value: T | ((data: any) => T), task: Task): T {
+    if (isFunction(value)) {
+      return value(task.getEmitData());
+    }
+    return value;
   }
 }

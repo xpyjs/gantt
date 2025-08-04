@@ -61,7 +61,23 @@ const gantt = new XGantt(ganttContainer, {
       name: "测试阶段",
       start: "2025-01-28",
       end: "2025-02-05",
-      progress: 50
+      progress: 50,
+      subtask: [
+        {
+          id: "3-1",
+          name: "功能测试",
+          start: "2025-01-28",
+          end: "2025-02-02",
+          progress: 60
+        },
+        {
+          id: "3-2",
+          name: "性能测试",
+          start: "2025-02-03",
+          end: "2025-02-05",
+          progress: 40
+        }
+      ]
     }
   ],
   table: {
@@ -125,6 +141,63 @@ const gantt = new XGantt(ganttContainer, {
     show: true,
     backgroundColor: "#007acc",
     opacity: 0.05
+  },
+  baselines: {
+    show: true,
+    offset: 0,
+    backgroundColor: '#999',
+    data: [
+      {
+        id: "baseline1",
+        taskId: "1",
+        startTime: "2025-01-01",
+        endTime: "2025-01-15",
+        name: "Baseline 1",
+        highlight: false
+      },
+      {
+        id: "baseline1-1",
+        taskId: "1",
+        startTime: "2025-01-16",
+        endTime: "2025-01-18",
+        name: "Baseline 1-1",
+        target: true
+      },
+      {
+        id: "baseline2",
+        taskId: "2",
+        startTime: "2025-01-16",
+        endTime: "2025-01-28",
+        name: "Baseline 2"
+      },
+      {
+        id: "baseline3",
+        taskId: "3-2",
+        startTime: "2025-02-03",
+        endTime: "2025-02-05",
+        name: "Baseline 3"
+      }
+    ],
+    mode: 'shadow',
+    label: {
+      show: true,
+      position: 'left'
+    },
+    compare: {
+      enabled: true,
+      indicator: {
+        show: true,
+        ahead: {
+          opacity: 0.5,
+          text: (diff, row) => `领先 ${diff} 天`
+        },
+        delayed: {
+          text: (diff, row) => {
+            return `超期 ${-diff} 天`;
+          }
+        },
+      }
+    }
   }
 });
 
@@ -132,4 +205,16 @@ console.log("Gantt chart initialized:", performance.now(), gantt);
 
 gantt.on("loaded", () => {
   console.log("Gantt chart loaded successfully", performance.now());
+});
+gantt.on('click:baseline', (e, task, baseline) => {
+  console.log('点击基线:', task, baseline);
+});
+gantt.on('contextmenu:baseline', (e, task, baseline) => {
+  console.log('右键菜单基线:', task, baseline);
+});
+gantt.on('hover:baseline', (e, task, baseline) => {
+  console.log('悬停基线:', task, baseline);
+});
+gantt.on('leave:baseline', (e, task, baseline) => {
+  console.log('离开基线:', task, baseline);
 });

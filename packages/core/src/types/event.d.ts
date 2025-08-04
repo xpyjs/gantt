@@ -22,4 +22,8 @@ export interface EventMap {
   move: (data: { row: any; old: any }[]) => void;
   "hover:slider": (e: MouseEvent, data: any) => void;
   "leave:slider": (e: MouseEvent, data: any) => void;
+  "click:baseline": (e: MouseEvent, data: any, baseline: any) => void;
+  "contextmenu:baseline": (e: MouseEvent, data: any, baseline: any) => void;
+  "hover:baseline": (e: MouseEvent, data: any, baseline: any) => void;
+  "leave:baseline": (e: MouseEvent, data: any, baseline: any) => void;
 }
