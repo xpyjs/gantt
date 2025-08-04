@@ -204,7 +204,7 @@ export const apiItems: ApiItem[] = [
                 title: "图标",
                 type: "string",
                 description:
-                  "允许给手柄设置一个 svg 图标，设为 null 可以置空。仅支持 svg 图标，`<svg>...</svg>` 的字符串形式"
+                  "允许给手柄设置一个 svg 图标，设为 null 可以置空。仅支持 svg 图标，&lt;svg&gt;...&lt;/svg&gt; 的字符串形式"
               },
               {
                 id: "bar-move-single-left",
