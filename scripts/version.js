@@ -304,7 +304,7 @@ async function main() {
 
         // 5. 更新文档的模板版本
         const templateList = ['./vue/index.ts', './react/index.ts', './vanilla/index.ts']
-        const path = resolve(__dirname, '..', 'demo', 'src', 'template');
+        const path = resolve(__dirname, '..', 'docs', 'src', 'template');
         templateList.forEach(template => {
             const templatePath = join(path, template);
             if (existsSync(templatePath)) {
