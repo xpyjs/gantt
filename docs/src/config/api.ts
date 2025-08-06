@@ -869,45 +869,50 @@ export const apiItems: ApiItem[] = [
         key: "autoCellWidth",
         title: "自适应单元格宽度",
         type: "boolean",
-        description:
-          "自适应 cell 宽度。允许右侧部分基于当前宽度，自适应自定义的起止时间"
+        description: `自适应 cell 宽度，所有 cell 会自动计算宽度。允许整个右侧部分基于当前宽度，自适应自定义的起止时间。当起止日期区间过短，会自动撑满整个区域。当日期区间过长，会以 cellWidth 的值作为最小值，绘制整个区域。\n
+此功能需要自定义起止时间，必须设定 startTime 和 endTime。
+此功能会导致 cellWidth 失效`
       },
       {
         id: "chart-cellWidth",
         key: "cellWidth",
         title: "单元格宽度",
         type: 'number | "small" | "normal" | "large" | Partial<Record<XGanttUnit, number>>',
-        description: "时间单元格宽度设置"
+        description: `时间单元格宽度。内置预设了三种不同宽度：small | normal | large 会根据当前展示单位，自动计算宽度。或者直接给对象，指定具体每一个单位下 cell 的宽度值。
+如果同时给定了起止时间，则图表则只会渲染给定的时间区间，并且指定宽度将失效。
+如果只给了一个数字，则在任何时间单位下，每一个 cell 都是固定宽度。`
       },
       {
         id: "chart-endTime",
         key: "endTime",
         title: "结束时间",
         type: "Date | string",
-        description: "强制设置结束时间，覆盖数据中的结束时间"
+        description: "强制设置结束时间，覆盖数据中的结束时间。给定结束时间后，图表将使用该日期作为结束，而不是数据的结束时间"
       },
       {
         id: "chart-headerCellFormat",
         key: "headerCellFormat",
         title: "表头单元格格式化",
         type: "string | ((date: Date, unit: XGanttUnit) => string)",
-        description:
-          "表头单元格格式化配置。字符串使用 dayjs 格式化参数，函数可返回自定义格式"
+        description: `表头单元格格式化。
+字符串：使用 dayjs 的格式化功能参数，支持默认占位符以及所有 AdvancedFormat 的占位符。
+函数：可以根据当前日期和单位，返回自定义的格式化字符串。如果函数返回为空，则回退到默认格式化`
       },
       {
         id: "chart-headerGroupFormat",
         key: "headerGroupFormat",
         title: "表头组格式化",
         type: "string | ((date: Date, unit: XGanttUnit) => string)",
-        description:
-          "表头组（上层）格式化配置。字符串使用 dayjs 格式化参数，函数可返回自定义格式"
+        description: `表头组（上层）格式化。
+字符串：使用 dayjs 的格式化功能参数，支持默认占位符以及所有 AdvancedFormat 的占位符。
+函数：可以根据当前日期和单位，返回自定义的格式化字符串。如果函数返回为空，则回退到默认格式化`
       },
       {
         id: "chart-startTime",
         key: "startTime",
         title: "开始时间",
         type: "Date | string",
-        description: "强制设置开始时间，覆盖数据中的开始时间"
+        description: "强制设置开始时间，覆盖数据中的开始时间。给定开始时间后，图表将使用该日期作为起始，而不是数据的起始时间"
       }
     ]
   },
@@ -1416,6 +1421,124 @@ export const apiItems: ApiItem[] = [
     description: "日志级别，控制控制台输出的日志详细程度",
     options: ["debug", "info", "warn", "error", "none"],
     category: "advanced"
+  },
+  {
+    id: "milestone",
+    key: "milestone",
+    title: "里程碑配置",
+    type: "object",
+    description: "里程碑是一个特殊的任务类型，通常用于标记项目中的重要节点或事件。它没有持续时间，默认只会使用开始时间",
+    category: "style",
+    children: [
+      {
+        id: "milestone-border",
+        key: "border",
+        title: "边框样式",
+        type: "object",
+        description: "边框样式配置",
+        children: [
+          {
+            id: "milestone-border-color",
+            key: "color",
+            title: "边框颜色",
+            type: "string | ((row: EmitData) => string | undefined)",
+            description: "边框颜色"
+          },
+          {
+            id: "milestone-border-width",
+            key: "width",
+            title: "边框宽度",
+            type: "number | ((row: EmitData) => number | undefined)",
+            description: "边框宽度"
+          }
+        ]
+      },
+      {
+        id: "milestone-color",
+        key: "color",
+        title: "里程碑颜色",
+        type: "string | ((row: EmitData) => string | undefined)",
+        description: "里程碑颜色。默认与 bar 颜色保持一致"
+      },
+      {
+        id: "milestone-label",
+        key: "label",
+        title: "标签配置",
+        type: "object",
+        description: "里程碑标签配置",
+        children: [
+          {
+            id: "milestone-label-color",
+            key: "color",
+            title: "标签颜色",
+            type: "string | ((row: EmitData) => string | undefined)",
+            description: "标签颜色。默认与里程碑的颜色保持一致"
+          },
+          {
+            id: "milestone-label-fontFamily",
+            key: "fontFamily",
+            title: "标签字体",
+            type: "string | ((row: EmitData) => string)",
+            description: "配置标签字体"
+          },
+          {
+            id: "milestone-label-fontSize",
+            key: "fontSize",
+            title: "标签字体大小",
+            type: "number | ((row: EmitData) => number)",
+            defaultValue: "12",
+            description: "标签字体大小"
+          },
+          {
+            id: "milestone-label-position",
+            key: "position",
+            title: "标签位置",
+            type: `"top-left" | "top-right" | "bottom-left" | "bottom-right" |
+((row: EmitData) => "top-left" | "top-right" | "bottom-left" | "bottom-right")`,
+            defaultValue: '"top-right"',
+            description: "标签位置"
+          },
+          {
+            id: "milestone-label-show",
+            key: "show",
+            title: "显示标签",
+            type: "boolean | ((row: EmitData) => boolean)",
+            defaultValue: "false",
+            description: "是否显示里程碑标签"
+          },
+          {
+            id: "milestone-label-text",
+            key: "text",
+            title: "标签文本",
+            type: "string | ((row: EmitData) => string)",
+            description: "标签文本"
+          }
+        ]
+      },
+      {
+        id: "milestone-shape",
+        key: "shape",
+        title: "里程碑形状",
+        type: `"diamond" | "star" | "triangle" | "circle" |
+((row: EmitData) => "diamond" | "star" | "triangle" | "circle")`,
+        defaultValue: '"diamond"',
+        description: "里程碑形状"
+      },
+      {
+        id: "milestone-show",
+        key: "show",
+        title: "启用里程碑",
+        type: "boolean",
+        description: "启用里程碑模式。启用后，会将标记为里程碑的任务展示为特殊形状"
+      },
+      {
+        id: "milestone-size",
+        key: "size",
+        title: "形状大小",
+        type: "number | ((row: EmitData) => number | undefined)",
+        description: "形状大小。默认形状半径与 bar 大小一致。但最大不会超过整行高度"
+      }
+    ]
   },
   {
     id: "primaryColor",

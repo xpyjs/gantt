@@ -67,13 +67,13 @@ const hasChildren = computed(() => {
 // 高亮搜索词
 const highlightSearchTerm = (text: string) => {
   if (!props.searchQuery) {
-    return text.replace(/\n/, "<br>");
+    return text.replace(/\n/g, "<br>");
   }
 
   const regex = new RegExp(`(${props.searchQuery})`, "gi");
   return text
     .replace(regex, '<span class="search-highlight">$1</span>')
-    .replace(/\n/, "<br>");
+    .replace(/\n/g, "<br>");
 };
 </script>
 
