@@ -20,13 +20,7 @@ export interface EmitData {
   level: number;
 }
 
-export interface EmitBaseline {
-  /** 原始数据 */
-  data: any;
+export interface EmitBaseline extends EmitData {
   /** 基线数据 */
   baseline: any;
-  /** 当前数据的索引 */
-  $index: number;
-  /** 当前数据的层级。 1 开始 */
-  level: number;
 }

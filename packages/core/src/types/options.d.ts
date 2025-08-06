@@ -5,6 +5,7 @@ import { IPattern } from "./styles";
 import { ITableOptions } from "./table";
 
 export type XGanttUnit = "hour" | "day" | "week" | "month" | "quarter";
+export type TaskType = "task" | "milestone" | "summary";
 
 export interface IGanttOptions {
   /** 日志 level。 默认 info */
@@ -12,6 +13,30 @@ export interface IGanttOptions {
 
   /** 源数据 */
   data: any[];
+
+  /** 字段映射配置 */
+  fields: {
+    /** ID字段 */
+    id: string;
+
+    /** 开始时间字段 */
+    startTime: string;
+
+    /** 结束时间字段 */
+    endTime: string;
+
+    /** 名称字段 */
+    name: string;
+
+    /** 进度字段 */
+    progress: string;
+
+    /** 子项字段 */
+    children: string;
+
+    /** 任务类型字段 */
+    type: string;
+  };
 
   /** 关联配置 */
   links: {
@@ -321,6 +346,47 @@ export interface IGanttOptions {
     };
   };
 
+  /**
+   * 里程碑配置
+   *
+   * @description 里程碑是一个特殊的任务类型，通常用于标记项目中的重要节点或事件。它没有持续时间，默认只会使用开始时间
+   */
+  milestone: {
+    /**
+     * 启用里程碑模式
+     *
+     * @description 默认情况下，所有任务都是普通任务模式。启用里程碑模式后，会将标记为里程碑的任务展示为特殊形状。
+     */
+    show: boolean;
+    /** 里程碑形状。默认 'diamond' */
+    shape: 'diamond' | 'star' | 'triangle' | 'circle' | ((row: EmitData) => 'diamond' | 'star' | 'triangle' | 'circle');
+    /** 形状大小。默认形状半径与 bar 大小一致。但最大不会超过整行高度 */
+    size?: number | ((row: EmitData) => number | undefined);
+    /** 里程碑颜色。默认与 bar 颜色保持一致 */
+    color?: string | ((row: EmitData) => string | undefined);
+    /** 边框样式配置 */
+    border: {
+      width?: number | ((row: EmitData) => number | undefined);
+      color?: string | ((row: EmitData) => string | undefined);
+    };
+
+    /** 里程碑标签配置 */
+    label: {
+      /** 是否显示里程碑标签。默认 false */
+      show: boolean | ((row: EmitData) => boolean);
+      /** 标签文本 */
+      text: string | ((row: EmitData) => string);
+      /** 标签位置。默认 'top-right' */
+      position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | ((row: EmitData) => 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right');
+      /** 标签字体大小。默认 12 */
+      fontSize: number | ((row: EmitData) => number);
+      /** 标签字体粗细 */
+      fontFamily: string | ((row: EmitData) => string);
+      /** 标签颜色。默认与里程碑的颜色保持一致 */
+      color?: string | ((row: EmitData) => string | undefined);
+    };
+  };
+
   /** 主色调。默认 #eca710 */
   primaryColor: string;
 
@@ -393,27 +459,6 @@ export interface IGanttOptions {
    * @description 仅针对单位为 `day` 时生效
    */
   highlight?: boolean;
-
-  /** 字段映射配置 */
-  fields: {
-    /** ID字段 */
-    id: string;
-
-    /** 开始时间字段 */
-    startTime: string;
-
-    /** 结束时间字段 */
-    endTime: string;
-
-    /** 名称字段 */
-    name: string;
-
-    /** 进度字段 */
-    progress: string;
-
-    /** 子项字段 */
-    children: string;
-  };
 
   /** 表格配置 */
   table: ITableOptions;

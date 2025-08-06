@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-04 10:47:30
+ * @LastEditTime: 2025-08-06 10:59:13
  * @Description: 配置项管理器
  */
 
@@ -97,13 +97,28 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
       }
     }
   },
+  milestone: {
+    show: false,
+    shape: 'diamond',
+    border: {
+      width: 1
+    },
+    label: {
+      show: true,
+      text: "",
+      fontSize: 10,
+      fontFamily: "Arial",
+      position: "top-right"
+    }
+  },
   fields: {
     id: "id",
     startTime: "startTime",
     endTime: "endTime",
     name: "name",
     progress: "progress",
-    children: "children"
+    children: "children",
+    type: "type"
   },
   selection: {
     enabled: false,

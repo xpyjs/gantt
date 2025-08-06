@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-31 11:04:54
+ * @LastEditTime: 2025-08-06 09:22:44
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -13,6 +13,7 @@ import { colorjs } from "../../utils/color";
 import { ILink } from "@/types/link";
 import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
+import { parseNumberWithPercent } from "../../utils/helpers";
 
 export class LinkGroup {
   private tasks: Task[] = [];
@@ -173,7 +174,6 @@ export class LinkGroup {
     const headerHeight = this.context.getOptions().header.height;
     const rowHeight = this.context.getOptions().row.height;
     const height = rowHeight / 2 + headerHeight;
-    const gap: number = this.context.getOptions().links.gap;
     const radius = this.context.getOptions().links.create.radius;
     const opacity =
       this.context.getOptions().links.create.mode === "always" ? 0.5 : 0;
@@ -198,6 +198,11 @@ export class LinkGroup {
         const right = this.context.store
           .getTimeAxis()
           .getTimeLeft(task.endTime);
+
+        let gap = this.context.getOptions().links.gap;
+        if (task.isMilestone()) {
+          gap += rowHeight / 2;
+        }
 
         const y = height + rowHeight * task.flatIndex;
 
@@ -286,6 +291,7 @@ export class LinkGroup {
 
     // 获取数据
     const links = this.context.getOptions().links.data;
+    const rowHeight = this.context.getOptions().row.height;
 
     // 先清除已不存在但选中的内容
     const exists: string[] = [];
@@ -303,9 +309,7 @@ export class LinkGroup {
 
     // 然后重新创建 links
     links.forEach(link => {
-      const fromTask = this.context.store
-        .getDataManager()
-        .getTaskById(link.from);
+      const fromTask = this.context.store.getDataManager().getTaskById(link.from);
       const toTask = this.context.store.getDataManager().getTaskById(link.to);
 
       if (!fromTask) {
@@ -334,19 +338,21 @@ export class LinkGroup {
         toTask.startTime &&
         toTask.endTime
       ) {
+        const fromGap = fromTask.isMilestone() ? rowHeight / 2 : 0;
         const fromX = this.context.store
           .getTimeAxis()
-          .getTimeLeft(fromTask.startTime);
+          .getTimeLeft(fromTask.startTime) - fromGap;
         const fromEnd = this.context.store
           .getTimeAxis()
-          .getTimeLeft(fromTask.endTime);
+          .getTimeLeft(fromTask.endTime) + fromGap;
 
+        const toGap = toTask.isMilestone() ? rowHeight / 2 : 0;
         const toX = this.context.store
           .getTimeAxis()
-          .getTimeLeft(toTask.startTime);
+          .getTimeLeft(toTask.startTime) - toGap;
         const toEnd = this.context.store
           .getTimeAxis()
-          .getTimeLeft(toTask.endTime);
+          .getTimeLeft(toTask.endTime) + toGap;
 
         let points: number[] = [];
         const type = link.type || "FS";
