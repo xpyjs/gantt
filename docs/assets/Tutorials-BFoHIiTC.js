@@ -1,4 +1,4 @@
-import{h as y,d as j,i as D,c as o,o as a,j as d,e as _,t as c,F as p,r as m,a as i,k as S,l as G,m as R,p as X,u as x,q as $,n as E,s as I,_ as L}from"./index-M84i8n36.js";const T=[{id:1,name:"项目规划",startTime:"2025-01-01",endTime:"2025-01-15",progress:100},{id:2,name:"开发阶段",startTime:"2025-01-16",endTime:"2025-02-28",progress:45}],A=`import { XGantt } from '@xpyjs/gantt-core'
+import{h as y,d as j,i as D,c as o,o as a,j as d,e as _,t as c,F as p,r as m,a as i,k as S,l as G,m as R,p as X,u as x,q as $,n as E,s as I,_ as L}from"./index-B_FzLpAg.js";const T=[{id:1,name:"项目规划",startTime:"2025-01-01",endTime:"2025-01-15",progress:100},{id:2,name:"开发阶段",startTime:"2025-01-16",endTime:"2025-02-28",progress:45}],A=`import { XGantt } from '@xpyjs/gantt-core'
 
 // 创建甘特图实例
 const gantt = new XGantt({
@@ -247,7 +247,7 @@ export class GanttComponent implements OnInit, OnDestroy {
   chart: {                         // chart 字段可以对时间轴区域进行各种配置
     cellWidth: 30
   }
-}`,language:"javascript"}]}],customContent:'完整时间轴的图表区域配置可以参考 <a href="/api/options#chart">Chart API</a>'},{id:"task-bars",title:"任务条",description:"任务条是甘特图中 显示/操作 任务时间范围和进度的可视化元素。",code:[{framework:"javascript",code:`const options = {
+}`,language:"javascript"}]}],customContent:'完整时间轴的图表区域配置可以参考 <a href="/api/options#chart">Chart API</a>'},{id:"task-bars",title:"任务条",description:"任务条是甘特图中 显示/操作 任务时间范围和进度的可视化元素。只要当前任务数据中包含起止时间，那么默认就会渲染对应的任务条。甘特图中的所有操作都是基于任务条的，所以它是甘特图的核心内容。",code:[{framework:"javascript",code:`const options = {
   bar: {
     height: 20,                     // 任务条高度
     backgroundColor: '#007acc',     // 背景颜色
