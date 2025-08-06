@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-28 16:31:22
+ * @LastEditTime: 2025-08-06 09:22:44
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -13,6 +13,7 @@ import { colorjs } from "../../utils/color";
 import { ILink } from "@/types/link";
 import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
+import { parseNumberWithPercent } from "../../utils/helpers";
 
 export class LinkGroup {
   private tasks: Task[] = [];
@@ -146,7 +147,7 @@ export class LinkGroup {
     this.tasks = tasks;
 
     // 使用批量绘制，减少重绘次数
-    this.layer.batchDraw();
+    this.update();
   }
 
   /**
@@ -173,7 +174,6 @@ export class LinkGroup {
     const headerHeight = this.context.getOptions().header.height;
     const rowHeight = this.context.getOptions().row.height;
     const height = rowHeight / 2 + headerHeight;
-    const gap: number = this.context.getOptions().links.gap;
     const radius = this.context.getOptions().links.create.radius;
     const opacity =
       this.context.getOptions().links.create.mode === "always" ? 0.5 : 0;
@@ -187,6 +187,7 @@ export class LinkGroup {
 
     this.tasks.forEach(task => {
       if (
+        this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, task) &&
         this.context.store.getDataManager().isTaskVisible(task) &&
         task.startTime &&
         task.endTime
@@ -198,15 +199,17 @@ export class LinkGroup {
           .getTimeAxis()
           .getTimeLeft(task.endTime);
 
+        let gap = this.context.getOptions().links.gap;
+        if (task.isMilestone()) {
+          gap += rowHeight / 2;
+        }
+
         const y = height + rowHeight * task.flatIndex;
 
         // 检测是否允许创建左侧连接点
         let allowLeft = true;
         let allowRight = true;
-        let _from = this.context.getOptions().links.create.from;
-        if (isFunction(_from)) {
-          _from = _from(task.getEmitData());
-        }
+        let _from = this.context.store.getOptionManager().unpackFunc(this.context.getOptions().links.create.from, task);
 
         if (isBoolean(_from)) {
           allowLeft = allowRight = _from;
@@ -288,6 +291,7 @@ export class LinkGroup {
 
     // 获取数据
     const links = this.context.getOptions().links.data;
+    const rowHeight = this.context.getOptions().row.height;
 
     // 先清除已不存在但选中的内容
     const exists: string[] = [];
@@ -305,9 +309,7 @@ export class LinkGroup {
 
     // 然后重新创建 links
     links.forEach(link => {
-      const fromTask = this.context.store
-        .getDataManager()
-        .getTaskById(link.from);
+      const fromTask = this.context.store.getDataManager().getTaskById(link.from);
       const toTask = this.context.store.getDataManager().getTaskById(link.to);
 
       if (!fromTask) {
@@ -326,27 +328,31 @@ export class LinkGroup {
 
       if (
         fromTask &&
+        this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, fromTask) &&
         this.context.store.getDataManager().isTaskVisible(fromTask) &&
         fromTask.startTime &&
         fromTask.endTime &&
         toTask &&
+        this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, toTask) &&
         this.context.store.getDataManager().isTaskVisible(toTask) &&
         toTask.startTime &&
         toTask.endTime
       ) {
+        const fromGap = fromTask.isMilestone() ? rowHeight / 2 : 0;
         const fromX = this.context.store
           .getTimeAxis()
-          .getTimeLeft(fromTask.startTime);
+          .getTimeLeft(fromTask.startTime) - fromGap;
         const fromEnd = this.context.store
           .getTimeAxis()
-          .getTimeLeft(fromTask.endTime);
+          .getTimeLeft(fromTask.endTime) + fromGap;
 
+        const toGap = toTask.isMilestone() ? rowHeight / 2 : 0;
         const toX = this.context.store
           .getTimeAxis()
-          .getTimeLeft(toTask.startTime);
+          .getTimeLeft(toTask.startTime) - toGap;
         const toEnd = this.context.store
           .getTimeAxis()
-          .getTimeLeft(toTask.endTime);
+          .getTimeLeft(toTask.endTime) + toGap;
 
         let points: number[] = [];
         const type = link.type || "FS";
@@ -497,22 +503,28 @@ export class LinkGroup {
             this.isDragging = false;
             e.target.moveToTop();
 
-            if (this.selectedMap.has(id)) {
-              this.selectedMap.delete(id);
-              this.context.event.emit(
-                EventName.SELECT_LINK,
-                null,
-                link,
-                this.selectedMap.values().toArray()
-              );
-            } else {
-              this.selectedMap.set(id, link);
-              this.context.event.emit(
-                EventName.SELECT_LINK,
-                link,
-                null,
-                this.selectedMap.values().toArray()
-              );
+            if (e.evt.button === 0) {
+              // 左键点击
+              if (this.selectedMap.has(id)) {
+                this.selectedMap.delete(id);
+                this.context.event.emit(
+                  EventName.SELECT_LINK,
+                  null,
+                  link,
+                  this.selectedMap.values().toArray()
+                );
+              } else {
+                this.selectedMap.set(id, link);
+                this.context.event.emit(
+                  EventName.SELECT_LINK,
+                  link,
+                  null,
+                  this.selectedMap.values().toArray()
+                );
+              }
+            } else if (e.evt.button === 2) {
+              // 右键点击
+              this.context.event.emit(EventName.CONTEXT_LINK, e.evt, link);
             }
           });
 
@@ -534,9 +546,8 @@ export class LinkGroup {
   }
 
   private createId(link: ILink) {
-    return `link-group-${link[this.context.getOptions().links.key]}-${
-      link.from
-    }-${link.to}-${link.type || "FS"}`;
+    return `link-group-${link[this.context.getOptions().links.key]}-${link.from
+      }-${link.to}-${link.type || "FS"}`;
   }
 
   /** 生成 FS 连线 */

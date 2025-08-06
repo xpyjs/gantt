@@ -72,6 +72,7 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onUpdateLink,
             onCreateLink,
             onSelectLink,
+            onContextMenuLink,
             onSelect,
             onClickRow,
             onDoubleClickRow,
@@ -80,6 +81,12 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onDoubleClickSlider,
             onContextMenuSlider,
             onMove,
+            onHoverSlider,
+            onLeaveSlider,
+            onClickBaseline,
+            onContextMenuBaseline,
+            onHoverBaseline,
+            onLeaveBaseline,
             ...restProps
         } = props;
 
@@ -110,6 +117,9 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             if (onSelectLink) {
                 instance.on("select:link", onSelectLink);
             }
+            if (onContextMenuLink) {
+                instance.on("contextmenu:link", onContextMenuLink);
+            }
             if (onSelect) {
                 instance.on("select", onSelect);
             }
@@ -134,12 +144,31 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             if (onMove) {
                 instance.on("move", onMove);
             }
+            if (onHoverSlider) {
+                instance.on("hover:slider", onHoverSlider);
+            }
+            if (onLeaveSlider) {
+                instance.on("leave:slider", onLeaveSlider);
+            }
+            if (onClickBaseline) {
+                instance.on("click:baseline", onClickBaseline);
+            }
+            if (onContextMenuBaseline) {
+                instance.on("contextmenu:baseline", onContextMenuBaseline);
+            }
+            if (onHoverBaseline) {
+                instance.on("hover:baseline", onHoverBaseline);
+            }
+            if (onLeaveBaseline) {
+                instance.on("leave:baseline", onLeaveBaseline);
+            }
         }, [
             onLoaded,
             onError,
             onUpdateLink,
             onCreateLink,
             onSelectLink,
+            onContextMenuLink,
             onSelect,
             onClickRow,
             onDoubleClickRow,
@@ -147,7 +176,13 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onClickSlider,
             onDoubleClickSlider,
             onContextMenuSlider,
-            onMove
+            onMove,
+            onHoverSlider,
+            onLeaveSlider,
+            onClickBaseline,
+            onContextMenuBaseline,
+            onHoverBaseline,
+            onLeaveBaseline
         ]);
 
         // 初始化甘特图

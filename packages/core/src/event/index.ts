@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:58:36
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-22 10:54:11
+ * @LastEditTime: 2025-07-31 17:36:36
  * @Description: 事件总线
  */
 
@@ -62,6 +62,7 @@ export enum EventName {
   MOVE_GUIDELINE = "move-guideline",
   SHOW_GUIDELINE = "show-guideline",
   HIDE_GUIDELINE = "hide-guideline",
+  TOGGLE_COLLAPSE = "toggle-collapse",
 
   SCROLL = "scroll",
   CHART_OFFSET_CHANGE = "chart_offset_change",
@@ -82,6 +83,7 @@ export enum EventName {
   TASK_UNSELECTED = "task_unselected",
   SELECT_LINK = "select_link",
   CHECK_TASK = "check_task",
+  CONTEXT_LINK = "context_link",
 
   ROW_CLICK = "row-click",
   ROW_DBL_CLICK = "row-dbl-click",
@@ -90,6 +92,8 @@ export enum EventName {
   SLIDER_DBL_CLICK = "slider-dbl-click",
   SLIDER_CONTEXTMENU = "slider-contextmenu",
   SLIDER_MOVING = "slider-moving",
+  SLIDER_HOVER = "slider-hover",
+  SLIDER_LEAVE = "slider-leave",
 
   // 行高亮相关事件
   ROW_HIGHLIGHT = "row-highlight",
@@ -99,6 +103,12 @@ export enum EventName {
   TASK_DRAG_START = "task-drag-start",
   TASK_DRAG_MOVE = "task-drag-move",
   TASK_DRAG_END = "task-drag-end",
+
+  // 基线事件
+  BASELINE_CLICK = "baseline-click",
+  BASELINE_CONTEXTMENU = "baseline-contextmenu",
+  BASELINE_MOUSEOVER = "baseline-mouseover",
+  BASELINE_MOUSEOUT = "baseline-mouseout",
 
   // 抛出异常事件
   ERROR = "error"

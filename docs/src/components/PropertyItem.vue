@@ -67,13 +67,13 @@ const hasChildren = computed(() => {
 // 高亮搜索词
 const highlightSearchTerm = (text: string) => {
   if (!props.searchQuery) {
-    return text.replace(/\n/, "<br>");
+    return text.replace(/\n/g, "<br>");
   }
 
   const regex = new RegExp(`(${props.searchQuery})`, "gi");
   return text
     .replace(regex, '<span class="search-highlight">$1</span>')
-    .replace(/\n/, "<br>");
+    .replace(/\n/g, "<br>");
 };
 </script>
 
@@ -90,20 +90,25 @@ const highlightSearchTerm = (text: string) => {
 }
 
 .property-item.level-2 {
-  border-left: 3px solid var(--border-color);
+  border-left: 3px solid var(--warning-color);
   padding-left: 1.25rem;
   margin-bottom: 2.5rem;
 }
 
 .property-item.level-3 {
-  border-left: 2px solid var(--border-color);
+  border-left: 2px solid var(--success-color);
   padding-left: 1rem;
   margin-bottom: 2rem;
 }
 
-.property-item.level-4,
+.property-item.level-4 {
+  border-left: 1px solid var(--error-color);
+  padding-left: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
 .property-item.level-5 {
-  border-left: 1px solid var(--border-color);
+  border-left: 1px solid var(--accent-hover);
   padding-left: 0.75rem;
   margin-bottom: 1.5rem;
 }
@@ -121,6 +126,12 @@ const highlightSearchTerm = (text: string) => {
 .property-name {
   font-family: "Fira Code", "Monaco", "Consolas", monospace;
   font-weight: 600;
+}
+
+h5,h6 {
+  .property-name {
+    font-size: 14px;
+  }
 }
 
 .required {

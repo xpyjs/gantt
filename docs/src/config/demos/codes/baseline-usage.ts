@@ -1,12 +1,11 @@
-import { XGantt } from "@xpyjs/gantt-core";
+const jsCode = `import { XGantt } from "@xpyjs/gantt-core";
 import "@xpyjs/gantt-core/style.css";
 
-const ganttContainer = document.getElementById("gantt1");
+const ganttContainer = document.getElementById("gantt-container");
 if (!ganttContainer) {
   throw new Error("Gantt container not found");
 }
 
-console.log("initializing gantt chart", performance.now());
 
 const gantt = new XGantt(ganttContainer, {
   data: [
@@ -144,7 +143,7 @@ const gantt = new XGantt(ganttContainer, {
   },
   baselines: {
     show: true,
-    offset: 0,
+    offset: -5,
     backgroundColor: '#999',
     data: [
       {
@@ -189,11 +188,11 @@ const gantt = new XGantt(ganttContainer, {
         show: true,
         ahead: {
           opacity: 0.5,
-          text: (diff, row) => `领先 ${diff} 天`
+          text: (diff, row) => \`领先 \${diff} 天\`
         },
         delayed: {
           text: (diff, row) => {
-            return `超期 ${-diff} 天`;
+            return \`超期 \${-diff} 天\`;
           }
         },
       }
@@ -201,11 +200,6 @@ const gantt = new XGantt(ganttContainer, {
   }
 });
 
-console.log("Gantt chart initialized:", performance.now(), gantt);
-
-gantt.on("loaded", () => {
-  console.log("Gantt chart loaded successfully", performance.now());
-});
 gantt.on('click:baseline', (e, task, baseline) => {
   console.log('点击基线:', task, baseline);
 });
@@ -218,3 +212,8 @@ gantt.on('hover:baseline', (e, task, baseline) => {
 gantt.on('leave:baseline', (e, task, baseline) => {
   console.log('离开基线:', task, baseline);
 });
+`;
+
+export default {
+  jsCode
+};

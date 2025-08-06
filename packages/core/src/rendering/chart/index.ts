@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:00:12
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-19 15:42:35
+ * @LastEditTime: 2025-07-30 18:13:35
  * @Description: 图表渲染管理器
  */
 import Konva from "konva";
@@ -13,6 +13,7 @@ import { WeekendGroup } from "./ChartWeekend";
 import { ChartToday } from "./ChartToday";
 import { HolidayGroup } from "./ChartHoliday";
 import { LinkGroup } from "./ChartLink";
+import { ChartBaseline } from "./ChartBaseline";
 import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
 
@@ -26,6 +27,7 @@ export class Chart {
   private holidayGroup: HolidayGroup;
   private todayLayer: ChartToday;
   private linkGroup: LinkGroup;
+  private baselineGroup: ChartBaseline;
 
   private bgLayer: Konva.Layer;
   private bodyLayer: Konva.Layer;
@@ -57,6 +59,7 @@ export class Chart {
 
     this.bodyLayer = new Konva.Layer();
     this.linkGroup = new LinkGroup(this.context, this.stage, this.bodyLayer);
+    this.baselineGroup = new ChartBaseline(this.context, this.stage, this.bodyLayer);
     this.bodyGroup = new BodyGroup(
       this.context,
       this.stage,
@@ -84,6 +87,7 @@ export class Chart {
     this.headerLayer.resize(width);
     this.gridGroup.resize(width, height);
     this.linkGroup.resize(width, height);
+    this.baselineGroup.resize(width, height);
     this.holidayGroup.resize(width, height);
     this.weekendGroup.resize(width, height);
     this.bodyGroup.resize(width, height);
@@ -94,6 +98,7 @@ export class Chart {
     this.headerLayer.setOffset(-x, 0); // 表头只横向移动
     this.gridGroup.setOffset(-x, -y);
     this.linkGroup.setOffset(-x, -y);
+    this.baselineGroup.setOffset(-x, -y);
     this.weekendGroup.setOffset(-x, -y);
     this.holidayGroup.setOffset(-x, -y);
     this.bodyGroup.setOffset(-x, -y);
@@ -104,6 +109,7 @@ export class Chart {
     this.holidayGroup.render();
     this.weekendGroup.render();
     this.linkGroup.render(tasks);
+    this.baselineGroup.render(tasks);
     this.bodyGroup.render(tasks);
     this.headerLayer.render();
     this.todayLayer.render();
@@ -122,6 +128,7 @@ export class Chart {
   public updateTask(task: Task) {
     this.bodyGroup.updateTask(task);
     this.linkGroup.update();
+    this.baselineGroup.update();
   }
 
   public destroy() {
@@ -133,6 +140,7 @@ export class Chart {
     this.holidayGroup.destroy();
     this.weekendGroup.destroy();
     this.linkGroup.destroy();
+    this.baselineGroup.destroy();
 
     this.bgLayer.destroy();
     this.stage.destroy();

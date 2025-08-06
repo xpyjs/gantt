@@ -256,7 +256,7 @@ export const tutorialConfig: TutorialCategory[] = [
         id: "task-bars",
         title: "任务条",
         description:
-          "任务条是甘特图中 显示/操作 任务时间范围和进度的可视化元素。",
+          "任务条是甘特图中 显示/操作 任务时间范围和进度的可视化元素。只要当前任务数据中包含起止时间，那么默认就会渲染对应的任务条。甘特图中的所有操作都是基于任务条的，所以它是甘特图的核心内容。",
         code: [
           {
             framework: "javascript",

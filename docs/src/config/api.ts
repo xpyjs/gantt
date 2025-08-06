@@ -77,21 +77,21 @@ export const apiItems: ApiItem[] = [
         id: "bar-align",
         key: "align",
         title: "文本对齐方式",
-        type: '"left" | "center" | "right"',
+        type: '"left" | "center" | "right" | ((row: EmitData) => "left" | "center" | "right")',
         description: "任务条的文本对齐方式"
       },
       {
         id: "bar-backgroundColor",
         key: "backgroundColor",
         title: "背景颜色",
-        type: "string",
+        type: "string | ((row: EmitData) => string)",
         description: "背景颜色"
       },
       {
         id: "bar-color",
         key: "color",
         title: "文字颜色",
-        type: "string",
+        type: "string | ((row: EmitData) => string)",
         description: "文字颜色"
       },
       {
@@ -105,21 +105,21 @@ export const apiItems: ApiItem[] = [
         id: "bar-fontFamily",
         key: "fontFamily",
         title: "字体",
-        type: "string",
+        type: "string | ((row: EmitData) => string)",
         description: "任务条的字体"
       },
       {
         id: "bar-fontSize",
         key: "fontSize",
         title: "字体大小",
-        type: "number",
+        type: "number | ((row: EmitData) => number)",
         description: "任务条的字体大小"
       },
       {
         id: "bar-height",
         key: "height",
         title: "任务条高度",
-        type: "number | string",
+        type: "number | string | ((row: EmitData) => number | string)",
         defaultValue: "20",
         description: "任务条高度。支持百分比，将按 row 的 height 计算"
       },
@@ -192,11 +192,33 @@ export const apiItems: ApiItem[] = [
             description: "是否允许左右分别单独移动。移动规则同整体效果",
             children: [
               {
+                id: "bar-move-single-backgroundColor",
+                key: "backgroundColor",
+                title: "背景颜色",
+                type: "string",
+                description: "左右移动手柄的背景颜色"
+              },
+              {
+                id: "bar-move-single-icon",
+                key: "icon",
+                title: "图标",
+                type: "string",
+                description:
+                  "允许给手柄设置一个 svg 图标，设为 null 可以置空。仅支持 svg 图标，&lt;svg&gt;...&lt;/svg&gt; 的字符串形式"
+              },
+              {
                 id: "bar-move-single-left",
                 key: "left",
                 title: "允许左移",
                 type: "boolean | ((row: EmitData) => boolean)",
                 description: "是否允许左移"
+              },
+              {
+                id: "bar-move-single-opacity",
+                key: "opacity",
+                title: "透明度",
+                type: "number | ((row: EmitData) => number)",
+                description: "左右移动手柄的透明度"
               },
               {
                 id: "bar-move-single-right",
@@ -229,14 +251,14 @@ export const apiItems: ApiItem[] = [
             id: "bar-progress-backgroundColor",
             key: "backgroundColor",
             title: "背景颜色",
-            type: "string",
+            type: "string | ((row: EmitData) => string)",
             description: "颜色"
           },
           {
             id: "bar-progress-color",
             key: "color",
             title: "文本颜色",
-            type: "string",
+            type: "string | ((row: EmitData) => string)",
             description: "文本颜色"
           },
           {
@@ -250,7 +272,7 @@ export const apiItems: ApiItem[] = [
             id: "bar-progress-fontSize",
             key: "fontSize",
             title: "字体大小",
-            type: "number",
+            type: "number | ((row: EmitData) => number)",
             defaultValue: "10",
             description: "字体大小"
           },
@@ -258,28 +280,28 @@ export const apiItems: ApiItem[] = [
             id: "bar-progress-fontStyle",
             key: "fontStyle",
             title: "字体样式",
-            type: "string",
+            type: "string | ((row: EmitData) => string)",
             description: "字体样式。默认斜体"
           },
           {
             id: "bar-progress-opacity",
             key: "opacity",
             title: "透明度",
-            type: "number",
+            type: "number | ((row: EmitData) => number)",
             description: "透明度"
           },
           {
             id: "bar-progress-radius",
             key: "radius",
             title: "圆角",
-            type: "number | number[]",
+            type: "number | number[] | ((row: EmitData) => number | number[])",
             description: "圆角"
           },
           {
             id: "bar-progress-show",
             key: "show",
             title: "显示进度",
-            type: "boolean",
+            type: "boolean | ((row: EmitData) => boolean)",
             description: "是否显示进度"
           },
           {
@@ -295,7 +317,7 @@ export const apiItems: ApiItem[] = [
             id: "bar-progress-textAlign",
             key: "textAlign",
             title: "文本位置",
-            type: '"top" | "right" | "inside"',
+            type: '"top" | "right" | "inside" | ((row: EmitData) => "top" | "right" | "inside")',
             description:
               "文本显示位置。top: 在进度条上方; right: 在进度条右侧外部; inside: 在进度条右侧内部"
           }
@@ -305,43 +327,507 @@ export const apiItems: ApiItem[] = [
         id: "bar-radius",
         key: "radius",
         title: "圆角",
-        type: "number | number[]",
+        type: "number | number[] | ((row: EmitData) => number | number[])",
         description: "圆角"
       },
       {
         id: "bar-shadowBlur",
         key: "shadowBlur",
         title: "阴影模糊度",
-        type: "number",
+        type: "number | ((row: EmitData) => number)",
         description: "阴影模糊度"
       },
       {
         id: "bar-shadowColor",
         key: "shadowColor",
         title: "阴影颜色",
-        type: "string",
+        type: "string | ((row: EmitData) => string)",
         description: "阴影颜色"
       },
       {
         id: "bar-shadowOffsetX",
         key: "shadowOffsetX",
         title: "阴影X偏移",
-        type: "number",
+        type: "number | ((row: EmitData) => number)",
         description: "阴影偏移量"
       },
       {
         id: "bar-shadowOffsetY",
         key: "shadowOffsetY",
         title: "阴影Y偏移",
-        type: "number",
+        type: "number | ((row: EmitData) => number)",
         description: "阴影偏移量"
+      },
+      {
+        id: "bar-show",
+        key: "show",
+        title: "显示任务条",
+        type: "boolean | ((row: EmitData) => boolean)",
+        defaultValue: "true",
+        description: "控制任务条的显隐。允许用户对任务条进行设置是否可见，如果隐藏它，意味着将无法在界面中操作它。"
       },
       {
         id: "bar-verticalAlign",
         key: "verticalAlign",
         title: "垂直对齐",
-        type: '"top" | "middle" | "bottom"',
+        type: '"top" | "middle" | "bottom" | ((row: EmitData) => "top" | "middle" | "bottom")',
         description: "任务条的文本垂直对齐方式"
+      }
+    ]
+  },
+  {
+    id: "baselines",
+    key: "baselines",
+    title: "基线配置",
+    type: "object",
+    description: "基线数据配置，用于显示计划与实际进度的对比分析",
+    category: "data",
+    children: [
+      {
+        id: "baselines-data",
+        key: "data",
+        title: "基线数据",
+        type: "any[]",
+        description: "基线数据集合。每条基线数据需要包含对应任务的关联ID，基线数据应包含开始时间、结束时间等信息，支持多条基线数据对应同一个任务",
+        required: true
+      },
+      {
+        id: "baselines-show",
+        key: "show",
+        title: "显示基线",
+        type: "boolean",
+        description: "是否展示基线"
+      },
+      {
+        id: "baselines-taskKey",
+        key: "taskKey",
+        title: "任务关联字段",
+        type: "string",
+        defaultValue: '"taskId"',
+        description: "指定关联任务 id 的字段"
+      },
+      {
+        id: "baselines-fields",
+        key: "fields",
+        title: "字段映射",
+        type: "object",
+        description: "数据字段支持单独配置。默认与 data 保持一致，共享 fields 配置",
+        children: [
+          {
+            id: "baselines-fields-startTime",
+            key: "startTime",
+            title: "开始时间字段",
+            type: "string",
+            description: "开始时间字段名"
+          },
+          {
+            id: "baselines-fields-endTime",
+            key: "endTime",
+            title: "结束时间字段",
+            type: "string",
+            description: "结束时间字段名"
+          },
+          {
+            id: "baselines-fields-name",
+            key: "name",
+            title: "名称字段",
+            type: "string",
+            description: "基线名称字段名"
+          },
+          {
+            id: "baselines-fields-id",
+            key: "id",
+            title: "ID字段",
+            type: "string",
+            description: "基线数据 id 字段名"
+          },
+          {
+            id: "baselines-fields-highlight",
+            key: "highlight",
+            title: "高亮字段",
+            type: "string",
+            description: "禁用高亮对比的字段。该字段默认值为 true"
+          },
+          {
+            id: "baselines-fields-target",
+            key: "target",
+            title: "指示器字段",
+            type: "string",
+            description: "指定指示器的字段名"
+          }
+        ]
+      },
+      {
+        id: "baselines-mode",
+        key: "mode",
+        title: "展示形式",
+        type: '"shadow" | "line"',
+        defaultValue: '"line"',
+        description: "基线展示形式。shadow: 以阴影形式展示基线; line: 以线条形式展示基线",
+      },
+      {
+        id: "baselines-height",
+        key: "height",
+        title: "基线高度",
+        type: "number | string",
+        description: "基线条高度。当 mode 为 'shadow' 时，默认与 bar 的高度一致；当 mode 为 'line' 时，默认 5px"
+      },
+      {
+        id: "baselines-offset",
+        key: "offset",
+        title: "偏移量",
+        type: "number",
+        description: "与 bar 的偏移展示量。为保证可视化的时间不会出现偏移，只在 y 轴上做偏移。正数向下偏移，负数向上偏移。在 'line' 模式下使用 offset，会影响 position 的最终位置"
+      },
+      {
+        id: "baselines-position",
+        key: "position",
+        title: "相对位置",
+        type: '"top" | "bottom" | "center"',
+        defaultValue: '"bottom"',
+        description: "基线条相对任务条的位置。仅当 mode 为 'line' 时有效",
+      },
+      {
+        id: "baselines-backgroundColor",
+        key: "backgroundColor",
+        title: "背景颜色",
+        type: "string",
+        defaultValue: '"#999"',
+        description: "基线条背景颜色"
+      },
+      {
+        id: "baselines-opacity",
+        key: "opacity",
+        title: "透明度",
+        type: "number",
+        defaultValue: "0.6",
+        description: "基线条透明度"
+      },
+      {
+        id: "baselines-radius",
+        key: "radius",
+        title: "圆角",
+        type: "number | number[]",
+        defaultValue: "2",
+        description: "基线条圆角设置"
+      },
+      {
+        id: "baselines-label",
+        key: "label",
+        title: "标签配置",
+        type: "object",
+        description: "基线标签显示配置",
+        children: [
+          {
+            id: "baselines-label-show",
+            key: "show",
+            title: "显示标签",
+            type: "boolean",
+            defaultValue: "false",
+            description: "是否显示标签"
+          },
+          {
+            id: "baselines-label-field",
+            key: "field",
+            title: "标签字段",
+            type: "string",
+            description: "标签内容字段。默认使用 name 字段"
+          },
+          {
+            id: "baselines-label-forceDisplay",
+            key: "forceDisplay",
+            title: "强制显示",
+            type: "boolean",
+            description: "强制显示标签。当基线过小时，系统会自动隐藏。如果你需要强制显示标签，可以设置为 true，不过可能文本显示会很奇怪，建议配合 fontSize 使用"
+          },
+          {
+            id: "baselines-label-color",
+            key: "color",
+            title: "文字颜色",
+            type: "string",
+            defaultValue: '"#666"',
+            description: "标签文字颜色"
+          },
+          {
+            id: "baselines-label-fontSize",
+            key: "fontSize",
+            title: "字体大小",
+            type: "number",
+            defaultValue: "10",
+            description: "标签字体大小"
+          },
+          {
+            id: "baselines-label-fontFamily",
+            key: "fontFamily",
+            title: "字体",
+            type: "string",
+            defaultValue: '"Arial"',
+            description: "标签字体"
+          },
+          {
+            id: "baselines-label-position",
+            key: "position",
+            title: "标签位置",
+            type: '"left" | "right" | "center"',
+            defaultValue: '"right"',
+            description: "标签位置",
+          }
+        ]
+      },
+      {
+        id: "baselines-compare",
+        key: "compare",
+        title: "对比分析配置",
+        type: "object",
+        description: "基线对比分析配置。如果一个任务配置了多个基线，默认情况下：高亮状态是和所有基线匹配，如果不希望某条基线进行对比，请在基线数据中添加 `highlight: false` 字段；指示器只会和第一个基线进行匹配，如果需要指定对比基线，请在基线数据中添加 `target: true` 字段",
+        children: [
+          {
+            id: "baselines-compare-enabled",
+            key: "enabled",
+            title: "启用对比",
+            type: "boolean",
+            defaultValue: "false",
+            description: "是否启用对比功能"
+          },
+          {
+            id: "baselines-compare-tolerance",
+            key: "tolerance",
+            title: "时间容差",
+            type: "number",
+            defaultValue: "0.5",
+            description: "时间容差（天）。在此范围内认为是准时完成"
+          },
+          {
+            id: "baselines-compare-mode",
+            key: "mode",
+            title: "显示模式",
+            type: '"highlight" | "indicator" | "both"',
+            description: "差异显示模式。highlight: 高亮显示; indicator: 指示器显示; both: 同时显示",
+          },
+          {
+            id: "baselines-compare-target",
+            key: "target",
+            title: "对比基准",
+            type: '"start" | "end"',
+            defaultValue: '"end"',
+            description: "以何种基准展示对比。基线高亮只会以一种（起始/结束）基线进行对比。默认以结束时间为基准",
+          },
+          {
+            id: "baselines-compare-delayed",
+            key: "delayed",
+            title: "超期配置",
+            type: "object",
+            description: "超期任务的高亮配置",
+            children: [
+              {
+                id: "baselines-compare-delayed-backgroundColor",
+                key: "backgroundColor",
+                title: "高亮颜色",
+                type: "string",
+                defaultValue: '"#ff4444"',
+                description: "超期任务的高亮颜色"
+              },
+              {
+                id: "baselines-compare-delayed-opacity",
+                key: "opacity",
+                title: "透明度",
+                type: "number",
+                defaultValue: "0.8",
+                description: "超期任务高亮颜色的透明度"
+              }
+            ]
+          },
+          {
+            id: "baselines-compare-ahead",
+            key: "ahead",
+            title: "提前配置",
+            type: "object",
+            description: "提前完成任务的高亮配置",
+            children: [
+              {
+                id: "baselines-compare-ahead-backgroundColor",
+                key: "backgroundColor",
+                title: "高亮颜色",
+                type: "string",
+                defaultValue: '"#44ff44"',
+                description: "提前完成任务的高亮颜色"
+              },
+              {
+                id: "baselines-compare-ahead-opacity",
+                key: "opacity",
+                title: "透明度",
+                type: "number",
+                defaultValue: "0.8",
+                description: "提前完成任务高亮颜色的透明度"
+              }
+            ]
+          },
+          {
+            id: "baselines-compare-indicator",
+            key: "indicator",
+            title: "指示器配置",
+            type: "object",
+            description: "差异指示器配置。展示在任务条左右两侧，用于显示与基线时间差异的内容",
+            children: [
+              {
+                id: "baselines-compare-indicator-show",
+                key: "show",
+                title: "显示指示器",
+                type: 'boolean | "start" | "end" | "both"',
+                defaultValue: "true",
+                description: "是否展示指示器。可以配置展示起始、结束，或者同时展示。true 与 'both' 效果一致，两侧都会展示"
+              },
+              {
+                id: "baselines-compare-indicator-position",
+                key: "position",
+                title: "显示位置",
+                type: '"top" | "bottom"',
+                description: "显示位置。当前支持任务条两侧的上端或者下端",
+              },
+              {
+                id: "baselines-compare-indicator-size",
+                key: "size",
+                title: "指示器大小",
+                type: "number",
+                defaultValue: "6",
+                description: "指示器大小"
+              },
+              {
+                id: "baselines-compare-indicator-fontSize",
+                key: "fontSize",
+                title: "字体大小",
+                type: "number",
+                defaultValue: "10",
+                description: "标签字体大小"
+              },
+              {
+                id: "baselines-compare-indicator-fontFamily",
+                key: "fontFamily",
+                title: "字体",
+                type: "string",
+                defaultValue: '"Arial"',
+                description: "标签字体"
+              },
+              {
+                id: "baselines-compare-indicator-ahead",
+                key: "ahead",
+                title: "提前指示器",
+                type: "object",
+                description: "提前任务指示器配置",
+                children: [
+                  {
+                    id: "baselines-compare-indicator-ahead-show",
+                    key: "show",
+                    title: "显示提前指示器",
+                    type: "boolean",
+                    defaultValue: "true",
+                    description: "任务提前，是否显示指示器"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ahead-text",
+                    key: "text",
+                    title: "显示文本",
+                    type: "string | ((diff: number, row: EmitBaseline) => string)",
+                    description: "显示文本。如果不需要展示文本，请设置为空字符"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ahead-color",
+                    key: "color",
+                    title: "指示器颜色",
+                    type: "string",
+                    defaultValue: '"#1baf1b"',
+                    description: "提前指示器颜色"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ahead-opacity",
+                    key: "opacity",
+                    title: "透明度",
+                    type: "number",
+                    description: "提前指示器透明度"
+                  }
+                ]
+              },
+              {
+                id: "baselines-compare-indicator-delayed",
+                key: "delayed",
+                title: "超期指示器",
+                type: "object",
+                description: "超期任务指示器配置",
+                children: [
+                  {
+                    id: "baselines-compare-indicator-delayed-show",
+                    key: "show",
+                    title: "显示超期指示器",
+                    type: "boolean",
+                    defaultValue: "true",
+                    description: "任务超期，是否显示指示器"
+                  },
+                  {
+                    id: "baselines-compare-indicator-delayed-text",
+                    key: "text",
+                    title: "显示文本",
+                    type: "string | ((diff: number, row: EmitBaseline) => string)",
+                    description: "显示文本。如果不需要展示文本，请设置为空字符"
+                  },
+                  {
+                    id: "baselines-compare-indicator-delayed-color",
+                    key: "color",
+                    title: "指示器颜色",
+                    type: "string",
+                    defaultValue: '"#af1b1b"',
+                    description: "超期指示器颜色"
+                  },
+                  {
+                    id: "baselines-compare-indicator-delayed-opacity",
+                    key: "opacity",
+                    title: "透明度",
+                    type: "number",
+                    description: "超期指示器透明度"
+                  }
+                ]
+              },
+              {
+                id: "baselines-compare-indicator-ontime",
+                key: "ontime",
+                title: "按时指示器",
+                type: "object",
+                description: "按时任务指示器配置",
+                children: [
+                  {
+                    id: "baselines-compare-indicator-ontime-show",
+                    key: "show",
+                    title: "显示按时指示器",
+                    type: "boolean",
+                    defaultValue: "false",
+                    description: "任务正常，是否显示指示器"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ontime-text",
+                    key: "text",
+                    title: "显示文本",
+                    type: "string | ((diff: number, row: EmitBaseline) => string)",
+                    description: "显示文本。如果不需要展示文本，请设置为空字符"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ontime-color",
+                    key: "color",
+                    title: "指示器颜色",
+                    type: "string",
+                    defaultValue: '"#999"',
+                    description: "按时指示器颜色"
+                  },
+                  {
+                    id: "baselines-compare-indicator-ontime-opacity",
+                    key: "opacity",
+                    title: "透明度",
+                    type: "number",
+                    description: "按时指示器透明度"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -383,45 +869,50 @@ export const apiItems: ApiItem[] = [
         key: "autoCellWidth",
         title: "自适应单元格宽度",
         type: "boolean",
-        description:
-          "自适应 cell 宽度。允许右侧部分基于当前宽度，自适应自定义的起止时间"
+        description: `自适应 cell 宽度，所有 cell 会自动计算宽度。允许整个右侧部分基于当前宽度，自适应自定义的起止时间。当起止日期区间过短，会自动撑满整个区域。当日期区间过长，会以 cellWidth 的值作为最小值，绘制整个区域。\n
+此功能需要自定义起止时间，必须设定 startTime 和 endTime。
+此功能会导致 cellWidth 失效`
       },
       {
         id: "chart-cellWidth",
         key: "cellWidth",
         title: "单元格宽度",
         type: 'number | "small" | "normal" | "large" | Partial<Record<XGanttUnit, number>>',
-        description: "时间单元格宽度设置"
+        description: `时间单元格宽度。内置预设了三种不同宽度：small | normal | large 会根据当前展示单位，自动计算宽度。或者直接给对象，指定具体每一个单位下 cell 的宽度值。
+如果同时给定了起止时间，则图表则只会渲染给定的时间区间，并且指定宽度将失效。
+如果只给了一个数字，则在任何时间单位下，每一个 cell 都是固定宽度。`
       },
       {
         id: "chart-endTime",
         key: "endTime",
         title: "结束时间",
         type: "Date | string",
-        description: "强制设置结束时间，覆盖数据中的结束时间"
+        description: "强制设置结束时间，覆盖数据中的结束时间。给定结束时间后，图表将使用该日期作为结束，而不是数据的结束时间"
       },
       {
         id: "chart-headerCellFormat",
         key: "headerCellFormat",
         title: "表头单元格格式化",
         type: "string | ((date: Date, unit: XGanttUnit) => string)",
-        description:
-          "表头单元格格式化配置。字符串使用 dayjs 格式化参数，函数可返回自定义格式"
+        description: `表头单元格格式化。
+字符串：使用 dayjs 的格式化功能参数，支持默认占位符以及所有 AdvancedFormat 的占位符。
+函数：可以根据当前日期和单位，返回自定义的格式化字符串。如果函数返回为空，则回退到默认格式化`
       },
       {
         id: "chart-headerGroupFormat",
         key: "headerGroupFormat",
         title: "表头组格式化",
         type: "string | ((date: Date, unit: XGanttUnit) => string)",
-        description:
-          "表头组（上层）格式化配置。字符串使用 dayjs 格式化参数，函数可返回自定义格式"
+        description: `表头组（上层）格式化。
+字符串：使用 dayjs 的格式化功能参数，支持默认占位符以及所有 AdvancedFormat 的占位符。
+函数：可以根据当前日期和单位，返回自定义的格式化字符串。如果函数返回为空，则回退到默认格式化`
       },
       {
         id: "chart-startTime",
         key: "startTime",
         title: "开始时间",
         type: "Date | string",
-        description: "强制设置开始时间，覆盖数据中的开始时间"
+        description: "强制设置开始时间，覆盖数据中的开始时间。给定开始时间后，图表将使用该日期作为起始，而不是数据的起始时间"
       }
     ]
   },
@@ -932,6 +1423,124 @@ export const apiItems: ApiItem[] = [
     category: "advanced"
   },
   {
+    id: "milestone",
+    key: "milestone",
+    title: "里程碑配置",
+    type: "object",
+    description: "里程碑是一个特殊的任务类型，通常用于标记项目中的重要节点或事件。它没有持续时间，默认只会使用开始时间",
+    category: "style",
+    children: [
+      {
+        id: "milestone-border",
+        key: "border",
+        title: "边框样式",
+        type: "object",
+        description: "边框样式配置",
+        children: [
+          {
+            id: "milestone-border-color",
+            key: "color",
+            title: "边框颜色",
+            type: "string | ((row: EmitData) => string | undefined)",
+            description: "边框颜色"
+          },
+          {
+            id: "milestone-border-width",
+            key: "width",
+            title: "边框宽度",
+            type: "number | ((row: EmitData) => number | undefined)",
+            description: "边框宽度"
+          }
+        ]
+      },
+      {
+        id: "milestone-color",
+        key: "color",
+        title: "里程碑颜色",
+        type: "string | ((row: EmitData) => string | undefined)",
+        description: "里程碑颜色。默认与 bar 颜色保持一致"
+      },
+      {
+        id: "milestone-label",
+        key: "label",
+        title: "标签配置",
+        type: "object",
+        description: "里程碑标签配置",
+        children: [
+          {
+            id: "milestone-label-color",
+            key: "color",
+            title: "标签颜色",
+            type: "string | ((row: EmitData) => string | undefined)",
+            description: "标签颜色。默认与里程碑的颜色保持一致"
+          },
+          {
+            id: "milestone-label-fontFamily",
+            key: "fontFamily",
+            title: "标签字体",
+            type: "string | ((row: EmitData) => string)",
+            description: "配置标签字体"
+          },
+          {
+            id: "milestone-label-fontSize",
+            key: "fontSize",
+            title: "标签字体大小",
+            type: "number | ((row: EmitData) => number)",
+            defaultValue: "12",
+            description: "标签字体大小"
+          },
+          {
+            id: "milestone-label-position",
+            key: "position",
+            title: "标签位置",
+            type: `"top-left" | "top-right" | "bottom-left" | "bottom-right" |
+((row: EmitData) => "top-left" | "top-right" | "bottom-left" | "bottom-right")`,
+            defaultValue: '"top-right"',
+            description: "标签位置"
+          },
+          {
+            id: "milestone-label-show",
+            key: "show",
+            title: "显示标签",
+            type: "boolean | ((row: EmitData) => boolean)",
+            defaultValue: "false",
+            description: "是否显示里程碑标签"
+          },
+          {
+            id: "milestone-label-text",
+            key: "text",
+            title: "标签文本",
+            type: "string | ((row: EmitData) => string)",
+            description: "标签文本"
+          }
+        ]
+      },
+      {
+        id: "milestone-shape",
+        key: "shape",
+        title: "里程碑形状",
+        type: `"diamond" | "star" | "triangle" | "circle" |
+((row: EmitData) => "diamond" | "star" | "triangle" | "circle")`,
+        defaultValue: '"diamond"',
+        description: "里程碑形状"
+      },
+      {
+        id: "milestone-show",
+        key: "show",
+        title: "启用里程碑",
+        type: "boolean",
+        description: "启用里程碑模式。启用后，会将标记为里程碑的任务展示为特殊形状"
+      },
+      {
+        id: "milestone-size",
+        key: "size",
+        title: "形状大小",
+        type: "number | ((row: EmitData) => number | undefined)",
+        description: "形状大小。默认形状半径与 bar 大小一致。但最大不会超过整行高度"
+      }
+    ]
+  },
+  {
     id: "primaryColor",
     key: "primaryColor",
     title: "主色调",
@@ -1192,6 +1801,14 @@ export const apiItems: ApiItem[] = [
         type: '"left" | "center" | "right"',
         defaultValue: '"center"',
         description: "统一设置列对齐方式。每列的对齐方式可以单独设置"
+      },
+      {
+        id: "table-collapsible",
+        key: "collapsible",
+        title: "收起/展开表格",
+        type: "boolean",
+        defaultValue: "false",
+        description: "允许收起表格。开启后，中线会显示一个折叠按钮，点击后可以收起表格"
       },
       {
         id: "table-columns",

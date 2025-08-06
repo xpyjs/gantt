@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:31
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-25 15:11:19
+ * @LastEditTime: 2025-08-06 10:39:15
  * @Description: Store
  */
 import { OptionManager } from "./OptionManager";
@@ -50,6 +50,9 @@ export class Store {
     if (data) {
       this.dataManager.setData(data, true);
     }
+    if (options?.baselines?.data) {
+      this.dataManager.setBaselines(options.baselines.data);
+    }
   }
 
   getOptionManager() {
@@ -71,11 +74,21 @@ export class Store {
   setOption(options: IOptions, config: IOptionConfig = { merge: true }) {
     const _options = omit(options, ["data"]);
     const data = options?.data;
+
+    this.optionManager.setOptions(_options, config);
+
+    if (_options.milestone?.show !== undefined) {
+      this.dataManager.getVisibleTasks().forEach((task) => {
+        task.updateMode();
+      });
+    }
+
     if (isArray(data)) {
       this.dataManager.setData(data, false);
     }
-
-    this.optionManager.setOptions(_options, config);
+    if (isArray(options.baselines?.data)) {
+      this.dataManager.setBaselines(options.baselines.data);
+    }
 
     if (_options.locale) {
       setLocale(_options.locale);

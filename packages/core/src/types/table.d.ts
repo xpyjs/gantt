@@ -128,6 +128,11 @@ export interface ITableOptions {
   emptyText: string;
 
   /**
+   * 允许收起表格。开启后，中线会显示一个折叠按钮，点击后可以收起表格
+   */
+  collapsible?: boolean;
+
+  /**
    * 列配置
    */
   columns?: ITableColumn[];

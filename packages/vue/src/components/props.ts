@@ -7,6 +7,7 @@ export type XGanttVueEmits = {
   "update:link": [link: ILink];
   "create:link": [link: ILink];
   "select:link": [add: ILink | null, cancel: ILink | null, all: ILink[]];
+  "contextmenu:link": [e: MouseEvent, link: ILink];
   select: [data: any[], checked: boolean, all: any[]];
   "click:row": [e: MouseEvent, data: any];
   "dblclick:row": [e: MouseEvent, data: any];
@@ -15,6 +16,12 @@ export type XGanttVueEmits = {
   "dblclick:slider": [e: MouseEvent, data: any];
   "contextmenu:slider": [e: MouseEvent, data: any];
   move: [data: { row: any; old: any }[]];
+  "hover:slider": [e: MouseEvent, data: any];
+  "leave:slider": [e: MouseEvent, data: any];
+  "click:baseline": [e: MouseEvent, data: any, baseline: any];
+  "contextmenu:baseline": [e: MouseEvent, data: any, baseline: any];
+  "hover:baseline": [e: MouseEvent, data: any, baseline: any];
+  "leave:baseline": [e: MouseEvent, data: any, baseline: any];
 };
 
 export interface XGanttVueProps {

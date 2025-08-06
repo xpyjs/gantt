@@ -493,6 +493,113 @@ if (ganttContainer) {
       };
       document.addEventListener("keydown", handleKeydown);
     });
+    gantt.on("contextmenu:link", (e: MouseEvent, link: ILink) => {
+      console.log("link context menu", e, link);
+
+      // 阻止默认的右键菜单
+      e.preventDefault();
+
+      // 移除已存在的右键菜单
+      const existingMenu = document.getElementById("gantt-context-menu");
+      if (existingMenu) {
+        existingMenu.remove();
+      }
+
+      // 创建右键菜单
+      const contextMenu = document.createElement("div");
+      contextMenu.id = "gantt-context-menu";
+      contextMenu.style.cssText = `
+        position: fixed;
+        top: ${e.clientY}px;
+        left: ${e.clientX}px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        z-index: 9999;
+        min-width: 150px;
+        padding: 4px 0;
+        font-size: 14px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      `;
+      // 菜单项数据
+      const menuItems = [
+        {
+          text: `编辑链接: ${link.from} -> ${link.to}`,
+          action: () => console.log("编辑链接", link)
+        },
+        { text: "删除链接", action: () => {
+          console.log("删除链接", link);
+          links.splice(links.findIndex(l => l.index === link.index), 1);
+          gantt.update({ links: { data: links } });
+        }},
+        { text: "复制链接", action: () => console.log("复制链接", link) }
+      ];
+
+      // 创建菜单项
+      menuItems.forEach((item, index) => {
+        const menuItem = document.createElement("div");
+        menuItem.style.cssText = `
+          padding: 8px 16px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          ${index > 0 ? "border-top: 1px solid #f0f0f0;" : ""}
+        `;
+        menuItem.textContent = item.text;
+
+        // 鼠标悬停效果
+        menuItem.addEventListener("mouseenter", () => {
+          menuItem.style.backgroundColor = "#f5f5f5";
+        });
+
+        menuItem.addEventListener("mouseleave", () => {
+          menuItem.style.backgroundColor = "transparent";
+        });
+
+        // 点击事件
+        menuItem.addEventListener("click", () => {
+          item.action();
+          contextMenu.remove();
+        });
+
+        contextMenu.appendChild(menuItem);
+      });
+
+      document.body.appendChild(contextMenu);
+
+      // 检查菜单是否超出视窗边界并调整位置
+      const rect = contextMenu.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      if (rect.right > viewportWidth) {
+        contextMenu.style.left = `${e.clientX - rect.width}px`;
+      }
+      if (rect.bottom > viewportHeight) {
+        contextMenu.style.top = `${e.clientY - rect.height}px`;
+      }
+
+      // 点击其他地方关闭菜单
+      const closeMenu = (event: MouseEvent) => {
+        if (!contextMenu.contains(event.target as Node)) {
+          contextMenu.remove();
+          document.removeEventListener("click", closeMenu);
+        }
+      };
+
+      // 延迟添加全局点击监听，避免立即触发
+      setTimeout(() => {
+        document.addEventListener("click", closeMenu);
+      }, 100);
+
+      // ESC 键关闭菜单
+      const handleKeydown = (event: KeyboardEvent) => {
+        if (event.key === "Escape") {
+          contextMenu.remove();
+          document.removeEventListener("keydown", handleKeydown);
+        }
+      };
+      document.addEventListener("keydown", handleKeydown);
+    });
 
     // 添加按钮
     const btnGroup = document.getElementById("btn-group");

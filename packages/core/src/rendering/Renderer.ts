@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-18 15:09:20
+ * @LastEditTime: 2025-07-29 11:09:20
  * @Description: 界面渲染器
  */
 
@@ -165,6 +165,10 @@ export class Renderer {
     this.context.event.on(EventName.CHART_OFFSET_CHANGE, () => {
       this.renderScheduler.scheduleTask("CHART_OFFSET_CHANGE", [false]);
     });
+
+    this.context.event.on(EventName.TOGGLE_COLLAPSE, () => {
+      this.renderScheduler.scheduleTask("CHART_OFFSET_CHANGE", [false]);
+    });
   }
 
   /**
@@ -200,6 +204,8 @@ export class Renderer {
       .getVisibleTasks()
       .slice(startIndex, startIndex + count);
 
+    this.updateSize();
+
     if (refresh) {
       this.table.refresh(y, tasks);
       this.chart.refresh(x, y, tasks);
@@ -208,7 +214,6 @@ export class Renderer {
       this.chart.render(x, y, tasks);
     }
 
-    this.updateSize();
 
     // 初始化，第一次渲染后发送一个加载完成事件
     if (this.isInitialized) {

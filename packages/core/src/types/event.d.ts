@@ -11,6 +11,7 @@ export interface EventMap {
     cancel: ILink | null,
     all: ILink[]
   ) => void;
+  "contextmenu:link": (e: MouseEvent, link: ILink) => void;
   select: (data: any[], checked: boolean, all: any[]) => void;
   "click:row": (e: MouseEvent, data: any) => void;
   "dblclick:row": (e: MouseEvent, data: any) => void;
@@ -19,4 +20,10 @@ export interface EventMap {
   "dblclick:slider": (e: MouseEvent, data: any) => void;
   "contextmenu:slider": (e: MouseEvent, data: any) => void;
   move: (data: { row: any; old: any }[]) => void;
+  "hover:slider": (e: MouseEvent, data: any) => void;
+  "leave:slider": (e: MouseEvent, data: any) => void;
+  "click:baseline": (e: MouseEvent, data: any, baseline: any) => void;
+  "contextmenu:baseline": (e: MouseEvent, data: any, baseline: any) => void;
+  "hover:baseline": (e: MouseEvent, data: any, baseline: any) => void;
+  "leave:baseline": (e: MouseEvent, data: any, baseline: any) => void;
 }

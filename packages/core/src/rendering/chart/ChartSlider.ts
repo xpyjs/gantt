@@ -1,17 +1,22 @@
 import Konva from "konva";
+import type { TweenConfig } from "konva/lib/Tween";
 import {
   clamp,
   formatNumber,
   getStandardCornerRadius,
   getStandardPercent,
   getStandardValue,
-  parseNumberWithPercent
+  parseNumberWithPercent,
+  svgToImage
 } from "../../utils/helpers";
 import { EventName } from "../../event";
 import { colorjs } from "../../utils/color";
-import { isBoolean, isFunction, isString } from "lodash-es";
 import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
+import { EmitData } from "@/types";
+import { Logger } from "../../utils/logger";
+
+const HandlerIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path fill="currentColor" fill-rule="evenodd" d="M5.5 4.625a1.125 1.125 0 1 0 0-2.25a1.125 1.125 0 0 0 0 2.25m4 0a1.125 1.125 0 1 0 0-2.25a1.125 1.125 0 0 0 0 2.25M10.625 7.5a1.125 1.125 0 1 1-2.25 0a1.125 1.125 0 0 1 2.25 0M5.5 8.625a1.125 1.125 0 1 0 0-2.25a1.125 1.125 0 0 0 0 2.25m5.125 2.875a1.125 1.125 0 1 1-2.25 0a1.125 1.125 0 0 1 2.25 0M5.5 12.625a1.125 1.125 0 1 0 0-2.25a1.125 1.125 0 0 0 0 2.25" clip-rule="evenodd"/></svg>';
 
 export class ChartSlider {
   private offsetX: number = 0;
@@ -19,9 +24,12 @@ export class ChartSlider {
 
   public sliderGroup: Konva.Group;
   private slider!: Konva.Group;
-  private sliderBg!: Konva.Rect;
-  private leftHandler: Konva.Rect | null = null;
-  private rightHandler: Konva.Rect | null = null;
+  private sliderBar: Konva.Shape | null = null;
+
+  private sliderType: string = '';
+
+  private leftHandleGroup: Konva.Group | null = null;
+  private rightHandleGroup: Konva.Group | null = null;
   private progressGroup: Konva.Group | null = null;
 
   private handlerWidth = 10;
@@ -72,48 +80,22 @@ export class ChartSlider {
     this.offsetY = y;
   }
 
-  private updateSize() {
-    const rowHeight = this.context.getOptions().row.height;
-    const height = parseNumberWithPercent(
-      this.context.getOptions().bar.height,
-      rowHeight
-    );
-    const y = (rowHeight - height) / 2;
-    const x = this.context.store
-      .getTimeAxis()
-      .getTimeLeft(this.task.startTime!);
-    const end = this.context.store
-      .getTimeAxis()
-      .getTimeLeft(this.task.endTime!);
-    const sliderWidth = end - x;
-
-    this.slider.position({ x, y });
-    this.slider.size({ width: sliderWidth, height });
-    this.sliderBg.size({ width: sliderWidth, height });
-
-    if (this.leftHandler) {
-      // this.leftHandler.position({ x: 0, y: 0 });
-    }
-
-    if (this.rightHandler) {
-      this.rightHandler.x(sliderWidth - this.handlerWidth);
-      this.rightHandler.size({
-        width: this.handlerWidth,
-        height: height
-      });
-    }
-
-    this.renderProgress(sliderWidth, height);
-    this.renderText(sliderWidth, height);
+  /** 太多需要 function 的判断，搞一个统一的转换 */
+  private unpackFunc<T>(val: T | ((data: EmitData) => T)) {
+    return this.context.store.getOptionManager().unpackFunc(val, this.task);
   }
 
   private render() {
     if (!this.task.startTime || !this.task.endTime) return;
+    if (this.task.endTime.isBefore(this.task.startTime)) {
+      Logger.error('The endTime of the current task is earlier than the startTime.', this.task)
+      return;
+    }
 
     // 计算位置
     const rowHeight = this.context.getOptions().row.height;
     const height = parseNumberWithPercent(
-      this.context.getOptions().bar.height,
+      this.unpackFunc(this.context.getOptions().bar.height),
       rowHeight
     );
 
@@ -123,14 +105,16 @@ export class ChartSlider {
     const sliderWidth = end - x;
 
     // 获取一些属性
-    const fill =
-      this.context.getOptions().bar.backgroundColor ||
-      this.context.getOptions().primaryColor;
+    const fill = this.unpackFunc(this.context.getOptions().bar.backgroundColor) || this.context.getOptions().primaryColor;
     const cornerRadius = getStandardCornerRadius(
-      this.context.getOptions().bar.radius
+      this.unpackFunc(this.context.getOptions().bar.radius)
     );
+    const shadowColor = this.unpackFunc(this.context.getOptions().bar.shadowColor) || "rgba(0, 0, 0, 0.2)";
+    const shadowBlur = this.unpackFunc(this.context.getOptions().bar.shadowBlur) || 0;
+    const shadowOffsetX = this.unpackFunc(this.context.getOptions().bar.shadowOffsetX) || 0;
+    const shadowOffsetY = this.unpackFunc(this.context.getOptions().bar.shadowOffsetY) || 0;
 
-    // 生成任务条主体，并设置拖拽
+    // 生成任务条，并设置拖拽
     if (!this.slider) {
       this.slider = new Konva.Group({
         dragBoundFunc: pos => {
@@ -164,140 +148,327 @@ export class ChartSlider {
     }
     this.slider.position({ x, y });
     this.slider.size({ width: sliderWidth, height });
-    const _enable = this.context.getOptions().bar.move.enabled;
-    let draggable = false;
-    if (isBoolean(_enable)) {
-      draggable = _enable;
-    } else if (isFunction(_enable)) {
-      draggable = _enable(this.task.getEmitData());
-    }
+    const draggable = !!this.unpackFunc(this.context.getOptions().bar.move.enabled);
     this.slider.draggable(draggable);
-    if (draggable) {
-      this.slider.on("pointerover", e => {
-        if (!this.isDragging) {
-          e.target.getStage()!.container().style.cursor = "grab";
-        }
-      });
-      this.slider.on("pointerout", e => {
-        if (!this.isDragging) {
-          e.target.getStage()!.container().style.cursor = "default";
-        }
-      });
-    }
+    this.slider.on("mouseover", e => {
+      if (draggable && !this.isDragging) {
+        e.target.getStage()!.container().style.cursor = "grab";
+      }
 
-    // 滑块背景
-    if (!this.sliderBg) {
-      this.sliderBg = new Konva.Rect({
-        x: 0,
-        y: 0
+      this.handleBarHighlight({
+        shadowColor: colorjs(shadowColor).alpha(colorjs(shadowColor).alpha() + 0.1).toHex(),
+        shadowBlur: Math.max((shadowBlur || 1) * 2, 4),
+        shadowOffsetX: Math.max((shadowOffsetX || 1), 2),
+        shadowOffsetY: Math.max((shadowOffsetY || 1) * 1.5, 4),
       });
-      this.slider.add(this.sliderBg);
-    }
-    this.sliderBg.setAttrs({
-      width: sliderWidth,
-      height,
-      fill,
-      cornerRadius: cornerRadius,
-      shadowColor: this.context.getOptions().bar.shadowColor,
-      shadowBlur: this.context.getOptions().bar.shadowBlur,
-      shadowOffsetX: this.context.getOptions().bar.shadowOffsetX,
-      shadowOffsetY: this.context.getOptions().bar.shadowOffsetY
+      this.context.event.emit(EventName.SLIDER_HOVER, e.evt, this.task);
+    });
+    this.slider.on("mouseout", e => {
+      if (draggable && !this.isDragging) {
+        e.target.getStage()!.container().style.cursor = "default";
+      }
+
+      this.handleBarHighlight({
+        shadowColor,
+        shadowBlur,
+        shadowOffsetX,
+        shadowOffsetY
+      });
+      this.context.event.emit(EventName.SLIDER_LEAVE, e.evt, this.task);
     });
 
-    this.renderProgress(sliderWidth, height);
+    if (this.task.isMilestone()) {
+      // 里程碑类型的任务条
+      if (this.sliderBar && !this.sliderType.startsWith('milestone')) {
+        this.slider.destroyChildren();
+        this.sliderBar = null;
+        this.progressGroup = null;
+        this.leftHandleGroup = null;
+        this.rightHandleGroup = null;
+      }
 
-    const resizeColor = colorjs(fill)
-      .brighten(30 * (!!this.context.getOptions().bar.progress?.show ? -1 : 1))
-      .toHex();
-    // 渲染左右拖拽按钮
-    const _left = this.context.getOptions().bar.move.single?.left;
-    let moveLeft = false;
-    if (isBoolean(_left)) {
-      moveLeft = _left;
-    } else if (isFunction(_left)) {
-      moveLeft = _left(this.task.getEmitData());
-    }
-    if (moveLeft) {
-      if (!this.leftHandler) {
-        this.leftHandler = new Konva.Rect({
+      const msSize = this.unpackFunc(this.context.getOptions().milestone.size);
+      const r = Math.min(msSize || height, rowHeight / 2);
+      const msColor = this.unpackFunc(this.context.getOptions().milestone.color) || fill;
+      const msBorderColor = this.unpackFunc(this.context.getOptions().milestone.border.color);
+      const msBorderWidth = this.unpackFunc(this.context.getOptions().milestone.border.width);
+      const shape = this.unpackFunc(this.context.getOptions().milestone.shape);
+      if (!this.sliderBar) {
+        switch (shape) {
+          case 'triangle':
+            this.sliderBar = new Konva.RegularPolygon({
+              sides: 3,
+              radius: r,
+              rotation: 0,
+              fill: msColor,
+              stroke: msBorderColor,
+              strokeWidth: msBorderWidth,
+              y: (r / 3) * 2 // 居中
+            });
+            break;
+          case 'circle':
+            this.sliderBar = new Konva.Circle({
+              radius: r,
+              fill: msColor,
+              stroke: msBorderColor,
+              strokeWidth: msBorderWidth,
+              y: r / 2 // 居中
+            });
+            break;
+          case 'star':
+            this.sliderBar = new Konva.Star({
+              numPoints: 5,
+              innerRadius: r / 2,
+              outerRadius: r,
+              fill: msColor,
+              stroke: msBorderColor,
+              strokeWidth: msBorderWidth,
+              y: r / 2 // 居中
+            });
+            break;
+          case 'diamond':
+          default:
+            this.sliderBar = new Konva.RegularPolygon({
+              sides: 4,
+              radius: r,
+              rotation: 0,
+              fill: msColor,
+              stroke: msBorderColor,
+              strokeWidth: msBorderWidth,
+              y: r / 2 // 居中
+            });
+        }
+
+        this.slider.add(this.sliderBar);
+
+        // 添加标签
+        if (this.unpackFunc(this.context.getOptions().milestone.label.show)) {
+          const content = this.unpackFunc(this.context.getOptions().milestone.label.text);
+          const position = this.unpackFunc(this.context.getOptions().milestone.label.position);
+          const fontSize = this.unpackFunc(this.context.getOptions().milestone.label.fontSize);
+          const fontFamily = this.unpackFunc(this.context.getOptions().milestone.label.fontFamily);
+          const color = this.unpackFunc(this.context.getOptions().milestone.label.color);
+
+          const text = new Konva.Text({
+            height,
+            text: content,
+            fill: color || msColor,
+            fontSize: fontSize,
+            fontFamily: fontFamily
+          });
+
+          const contentWidth = text.measureSize(content);
+          text.width(contentWidth.width);
+
+          const pos = { x: 0, y: 0 };
+          switch (position) {
+            case 'top-left':
+              pos.x = -(12 + contentWidth.width);
+              pos.y = -8;
+              break;
+            case 'bottom-left':
+              pos.x = -(12 + contentWidth.width);
+              pos.y = 10;
+              break;
+            case 'bottom-right':
+              pos.x = 12;
+              pos.y = 10;
+              break;
+            case 'top-right':
+            default:
+              pos.x = 12;
+              pos.y = -8;
+              break;
+          }
+
+          text.setAttrs(pos);
+
+          this.slider.add(text);
+        }
+      }
+
+      this.sliderType = 'milestone';
+    } else {
+      // 只要没有特殊类型，全部渲染为普通 bar
+      if (this.sliderBar && this.sliderType !== 'bar') {
+        this.slider.destroyChildren();
+        this.sliderBar = null;
+      }
+
+
+      // 滑块主体背景
+      if (!this.sliderBar) {
+        this.sliderBar = new Konva.Rect({
           x: 0,
-          y: 0,
-          opacity: 0
+          y: 0
         });
-        this.slider.add(this.leftHandler);
-        this.leftHandler.on("mousedown", e => {
-          this.resizeMove(e, "left");
-        });
-        this.leftHandler.on("pointerover", e => {
-          setTimeout(() => {
-            e.target.getStage()!.container().style.cursor = "ew-resize";
-          }, 0);
-        });
-        this.leftHandler.on("pointerout", e => {
-          if (!this.isDragging) {
-            e.target.getStage()!.container().style.cursor = "default";
-          }
-        });
+        this.slider.add(this.sliderBar);
+        this.sliderType = 'bar';
       }
-      this.leftHandler.setAttrs({
-        width: this.handlerWidth,
-        height: height,
-        fill: resizeColor,
-        cornerRadius: [cornerRadius[0], 0, 0, cornerRadius[3]]
+      this.sliderBar.setAttrs({
+        width: sliderWidth,
+        height,
+        fill,
+        cornerRadius: cornerRadius,
       });
-    } else if (this.leftHandler) {
-      // 如果不需要左侧拖拽按钮，移除它
-      this.leftHandler.remove();
-      this.leftHandler = null;
+
+      this.renderProgress(sliderWidth, height);
+
+      const resizeIcon = this.context.getOptions().bar.move.single?.icon;
+      const singleColor = this.context.getOptions().bar.move.single?.backgroundColor;
+      const resizeColor = singleColor ?
+        colorjs(singleColor).alpha(this.context.getOptions().bar.move.single?.opacity ?? 1).toHex() :
+        colorjs(fill)
+          .brighten(30 * (!!this.unpackFunc(this.context.getOptions().bar.progress?.show) ? -1 : 1))
+          .alpha(this.context.getOptions().bar.move.single?.opacity ?? 1)
+          .toHex();
+      // 渲染左右拖拽按钮
+      const moveLeft = !!this.unpackFunc(this.context.getOptions().bar.move.single?.left);
+      if (moveLeft) {
+        if (!this.leftHandleGroup) {
+          this.leftHandleGroup = new Konva.Group({
+            x: 0,
+            y: 0,
+            opacity: 0
+          });
+          this.slider.add(this.leftHandleGroup);
+          this.leftHandleGroup.on("mousedown", e => {
+            this.resizeMove(e, "left");
+          });
+          this.leftHandleGroup.on("mouseover", e => {
+            setTimeout(() => {
+              e.target.getStage()!.container().style.cursor = "ew-resize";
+            }, 0);
+          });
+          this.leftHandleGroup.on("mouseout", e => {
+            if (!this.isDragging) {
+              e.target.getStage()!.container().style.cursor = "default";
+            }
+          });
+
+          const leftHandler = new Konva.Rect({
+            x: 0,
+            y: 0,
+          });
+          this.leftHandleGroup.add(leftHandler);
+
+          if (resizeIcon !== null) {
+            svgToImage(resizeIcon || HandlerIcon, this.handlerWidth, height).then(image => {
+              const icon = new Konva.Image({
+                image,
+                x: 0,
+                y: (height - this.handlerWidth) / 2,
+                width: this.handlerWidth,
+                height: this.handlerWidth
+              });
+              this.leftHandleGroup?.add(icon);
+            })
+          }
+        }
+
+        this.leftHandleGroup.findOne("Rect")?.setAttrs({
+          width: this.handlerWidth,
+          height: height,
+          fill: resizeColor,
+          cornerRadius: [cornerRadius[0], 0, 0, cornerRadius[3]]
+        });
+        this.leftHandleGroup.findOne("Image")?.setAttrs({
+          x: 0,
+          y: (height - this.handlerWidth) / 2,
+          width: this.handlerWidth,
+          height: this.handlerWidth
+        });
+      } else if (this.leftHandleGroup) {
+        // 如果不需要左侧拖拽按钮，移除它
+        this.leftHandleGroup.remove();
+        this.leftHandleGroup = null;
+      }
+
+      // 右侧拖拽按钮
+      const moveRight = !!this.unpackFunc(this.context.getOptions().bar.move.single?.right);
+      if (moveRight) {
+        if (!this.rightHandleGroup) {
+          this.rightHandleGroup = new Konva.Group({
+            x: 0,
+            y: 0,
+            opacity: 0
+          });
+          this.slider.add(this.rightHandleGroup);
+          this.rightHandleGroup.on("mousedown", e => {
+            this.resizeMove(e, "right");
+          });
+          this.rightHandleGroup.on("mouseover", e => {
+            setTimeout(() => {
+              e.target.getStage()!.container().style.cursor = "ew-resize";
+            }, 0);
+          });
+          this.rightHandleGroup.on("mouseout", e => {
+            if (!this.isDragging) {
+              e.target.getStage()!.container().style.cursor = "default";
+            }
+          });
+
+          const rightHandler = new Konva.Rect({
+            x: 0,
+            y: 0,
+          });
+          this.rightHandleGroup.add(rightHandler);
+
+          if (resizeIcon !== null) {
+            svgToImage(resizeIcon || HandlerIcon, this.handlerWidth, height).then(image => {
+              const icon = new Konva.Image({
+                image,
+                x: sliderWidth - this.handlerWidth,
+                y: (height - this.handlerWidth) / 2,
+                width: this.handlerWidth,
+                height: this.handlerWidth
+              });
+              this.rightHandleGroup?.add(icon);
+            })
+          }
+        }
+        this.rightHandleGroup.findOne("Rect")?.setAttrs({
+          x: sliderWidth - this.handlerWidth,
+          width: this.handlerWidth,
+          height: height,
+          fill: resizeColor,
+          cornerRadius: [0, cornerRadius[1], cornerRadius[2], 0]
+        });
+        this.rightHandleGroup.findOne("Image")?.setAttrs({
+          x: sliderWidth - this.handlerWidth,
+          y: (height - this.handlerWidth) / 2,
+          width: this.handlerWidth,
+          height: this.handlerWidth
+        });
+      } else if (this.rightHandleGroup) {
+        // 如果不需要右侧拖拽按钮，移除它
+        this.rightHandleGroup.remove();
+        this.rightHandleGroup = null;
+      }
+
+      this.renderText(sliderWidth, height);
+
+      this.leftHandleGroup?.moveToTop();
+      this.rightHandleGroup?.moveToTop();
     }
 
-    // 右侧拖拽按钮
-    const _right = this.context.getOptions().bar.move.single?.right;
-    let moveRight = false;
-    if (isBoolean(_right)) {
-      moveRight = _right;
-    } else if (isFunction(_right)) {
-      moveRight = _right(this.task.getEmitData());
-    }
-    if (moveRight) {
-      if (!this.rightHandler) {
-        this.rightHandler = new Konva.Rect({
-          y: 0,
-          opacity: 0
-        });
-        this.slider.add(this.rightHandler);
-        this.rightHandler.on("mousedown", e => {
-          this.resizeMove(e, "right");
-        });
-        this.rightHandler.on("pointerover", e => {
-          setTimeout(() => {
-            e.target.getStage()!.container().style.cursor = "ew-resize";
-          }, 0);
-        });
-        this.rightHandler.on("pointerout", e => {
-          if (!this.isDragging) {
-            e.target.getStage()!.container().style.cursor = "default";
-          }
-        });
-      }
-      this.rightHandler.setAttrs({
-        x: sliderWidth - this.handlerWidth,
-        width: this.handlerWidth,
-        height: height,
-        fill: resizeColor,
-        cornerRadius: [0, cornerRadius[1], cornerRadius[2], 0]
+    // 拖拽时，需要保持阴影突出效果
+    if (!this.isDragging) {
+      this.sliderBar.setAttrs({
+        shadowColor,
+        shadowBlur,
+        shadowOffsetX,
+        shadowOffsetY
       });
-    } else if (this.rightHandler) {
-      // 如果不需要右侧拖拽按钮，移除它
-      this.rightHandler.remove();
-      this.rightHandler = null;
     }
-
-    this.renderText(sliderWidth, height);
 
     this.sliderGroup.add(this.slider);
-    this.leftHandler?.moveToTop();
-    this.rightHandler?.moveToTop();
+
+    if (this.unpackFunc(this.context.getOptions().bar.show) === false) {
+      this.sliderGroup.hide();
+    } else {
+      this.sliderGroup.show();
+    }
   }
 
   private renderText(width: number, height: number) {
@@ -319,11 +490,7 @@ export class ChartSlider {
     const _label = this.context.getOptions().bar.label;
     let content = "";
     if (_label) {
-      if (isString(_label)) {
-        content = _label;
-      } else if (isFunction(_label)) {
-        content = _label(this.task.getEmitData());
-      }
+      content = this.unpackFunc(_label);
     } else if (this.context.getOptions().bar.field) {
       content = this.task.getField(this.context.getOptions().bar.field!);
     }
@@ -333,23 +500,23 @@ export class ChartSlider {
     // 渲染文本
     const textWidth =
       width -
-      (this.leftHandler ? this.handlerWidth : 0) -
-      (this.rightHandler ? this.handlerWidth : 0);
+      (this.leftHandleGroup ? this.handlerWidth : 0) -
+      (this.rightHandleGroup ? this.handlerWidth : 0);
     if (textWidth > 20) {
       // 太短不展示文本
       const text = new Konva.Text({
         id: id,
-        x: this.leftHandler ? 10 : 0,
+        x: this.leftHandleGroup ? 10 : 0,
         y: 0,
         width: textWidth,
         height,
         padding: 10,
         text: content,
-        fill: this.context.getOptions().bar.color || "#000",
-        fontSize: this.context.getOptions().bar.fontSize || 12,
-        fontFamily: this.context.getOptions().bar.fontFamily || "Arial",
-        align: this.context.getOptions().bar.align,
-        verticalAlign: this.context.getOptions().bar.verticalAlign || "middle",
+        fill: this.unpackFunc(this.context.getOptions().bar.color) || "#000",
+        fontSize: this.unpackFunc(this.context.getOptions().bar.fontSize) || 12,
+        fontFamily: this.unpackFunc(this.context.getOptions().bar.fontFamily) || "Arial",
+        align: this.unpackFunc(this.context.getOptions().bar.align),
+        verticalAlign: this.unpackFunc(this.context.getOptions().bar.verticalAlign) || "middle",
         ellipsis: true
       });
       this.slider.add(text);
@@ -357,7 +524,7 @@ export class ChartSlider {
   }
 
   private renderProgress(width: number, height: number) {
-    if (!this.context.getOptions().bar.progress?.show) {
+    if (!this.unpackFunc(this.context.getOptions().bar.progress?.show)) {
       if (this.progressGroup) {
         this.progressGroup.destroy();
         this.progressGroup = null;
@@ -372,20 +539,22 @@ export class ChartSlider {
       );
       if (progressVal === 0) return;
 
+      const barBC = this.unpackFunc(
+        this.context.getOptions().bar.backgroundColor
+      ) || this.context.getOptions().primaryColor;
+
       const bg =
-        this.context.getOptions().bar.progress?.backgroundColor ||
-        colorjs(
-          this.context.getOptions().bar.backgroundColor ||
-            this.context.getOptions().primaryColor
-        )
+        this.unpackFunc(this.context.getOptions().bar.progress?.backgroundColor) ||
+        colorjs(barBC)
           .brighten(this.context.getOptions().bar.progress?.amount || 30)
           .toHex();
 
       const bgCornerRadius = getStandardCornerRadius(
-        this.context.getOptions().bar.radius
+        this.unpackFunc(this.context.getOptions().bar.radius)
       );
       const progressCornerRadius = getStandardCornerRadius(
-        this.context.getOptions().bar.progress?.radius
+        this.unpackFunc(this.context.getOptions().bar.progress?.radius),
+        2 // 默认 2
       );
       // 左侧永远继承背景圆角
       progressCornerRadius[0] = bgCornerRadius[0];
@@ -423,7 +592,7 @@ export class ChartSlider {
         height: height,
         fill: bg,
         cornerRadius: progressCornerRadius,
-        opacity: this.context.getOptions().bar.progress?.opacity
+        opacity: this.unpackFunc(this.context.getOptions().bar.progress?.opacity)
       });
       this.progressGroup.add(progress);
 
@@ -432,27 +601,27 @@ export class ChartSlider {
         this.context.getOptions().bar.progress?.decimal
       )}%`;
       const textWidth = new Konva.Text().measureSize(progressText).width;
+      const textAlign = this.unpackFunc(this.context.getOptions().bar.progress?.textAlign);
       const text = new Konva.Text({
         x: 0,
         y:
-          this.context.getOptions().bar.progress?.textAlign === "top"
+          textAlign === "top"
             ? -height
             : 0,
         width:
-          this.context.getOptions().bar.progress?.textAlign === "right"
+          textAlign === "right"
             ? progressWidth + textWidth
             : Math.max(progressWidth, textWidth),
         height: height,
         fill:
-          this.context.getOptions().bar.progress?.color ||
+          this.unpackFunc(this.context.getOptions().bar.progress?.color) ||
           colorjs("#000000").mix(bg, 50).alpha(0.7).toHex(),
         text: progressText,
-        fontSize: this.context.getOptions().bar.progress?.fontSize || 10,
-        fontStyle:
-          this.context.getOptions().bar.progress?.fontStyle || "italic",
+        fontSize: this.unpackFunc(this.context.getOptions().bar.progress?.fontSize) || 10,
+        fontStyle: this.unpackFunc(this.context.getOptions().bar.progress?.fontStyle) || "italic",
         fontFamily: "Arial",
         verticalAlign:
-          this.context.getOptions().bar.progress?.textAlign === "top"
+          textAlign === "top"
             ? "bottom"
             : "middle",
         align: "right"
@@ -470,8 +639,20 @@ export class ChartSlider {
     this.slider.on("dragend", e => this.handleDragEnd(e));
     this.slider.on("dragmove", e => this.handleDragMove(e));
 
-    this.slider.on("pointerover", () => this.handleMouseEnter());
-    this.slider.on("pointerout", () => this.handleMouseLeave());
+    this.slider.on("mouseover", () => this.handleMouseEnter());
+    this.slider.on("mouseout", () => this.handleMouseLeave());
+    this.slider.on("mousedown", (e) => {
+      if (e.evt.button !== 0) return; // 只处理左键点击
+      const stage = e.target.getStage();
+      if (!stage) return;
+      stage.container().style.cursor = "grabbing";
+    })
+    this.slider.on("mouseup", (e) => {
+      if (e.evt.button !== 0) return; // 只处理左键点击
+      const stage = e.target.getStage();
+      if (!stage) return;
+      stage.container().style.cursor = "grab";
+    });
 
     this.slider.on("click", e => {
       if (e.evt.button !== 0) return; // 只处理左键点击
@@ -557,7 +738,6 @@ export class ChartSlider {
     this.stopAutoExpand();
     this.isDragging = false;
     this.draggingDirection = "none"; // 重置拖拽方向
-    e.target.getStage()!.container().style.cursor = "default";
 
     if (this.oldTasks.length > 0) {
       this.context.event.emit(
@@ -916,17 +1096,28 @@ export class ChartSlider {
 
   // 拖拽块的高亮动画
   private handleResizeHighlight(opacity: number) {
-    if (this.leftHandler) {
+    if (this.leftHandleGroup) {
       new Konva.Tween({
-        node: this.leftHandler,
+        node: this.leftHandleGroup,
         opacity,
         duration: 0.2
       }).play();
     }
-    if (this.rightHandler) {
+    if (this.rightHandleGroup) {
       new Konva.Tween({
-        node: this.rightHandler,
+        node: this.rightHandleGroup,
         opacity,
+        duration: 0.2
+      }).play();
+    }
+  }
+
+  /** 鼠标移入高亮 */
+  private handleBarHighlight(attrs: Omit<TweenConfig, 'node'>) {
+    if (this.sliderBar) {
+      new Konva.Tween({
+        ...attrs,
+        node: this.sliderBar,
         duration: 0.2
       }).play();
     }

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:59:03
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-24 15:55:42
+ * @LastEditTime: 2025-08-06 15:26:40
  * @Description:任务数据模型
  */
 
@@ -11,7 +11,7 @@ import { generateId } from "../utils/id";
 import dayjs from "dayjs";
 import { type EventBus, EventName } from "../event";
 import { cloneDeep, isArray, isObject, isString } from "lodash-es";
-import { IGanttOptions } from "@/types/options";
+import { IGanttOptions, TaskType } from "../types/options";
 import { EmitData } from "@/types";
 import { Store } from "@/store";
 
@@ -40,6 +40,8 @@ export class Task {
    * 任务进度
    */
   progress?: number;
+  /** 任务类型 */
+  type: TaskType;
   /**
    * 是否展开
    * 如果没有提供，则默认为 true
@@ -64,6 +66,10 @@ export class Task {
    */
   flatIndex: number;
   /**
+   * 时间持续间隔
+   */
+  private duration: number = 0;
+  /**
    * 原始数据
    */
   data: any;
@@ -83,11 +89,9 @@ export class Task {
     this.data = data;
 
     this.name = data[this.fields.name] || "";
+    this.type = data[this.fields.type] || "task"
 
-    const _startTime = data[this.fields.startTime];
-    this.startTime = _startTime ? dayjs(_startTime) : undefined;
-    const _endTime = data[this.fields.endTime];
-    this.endTime = _endTime ? dayjs(_endTime) : undefined;
+    this.updateMode();
 
     this.progress = data[this.fields.progress];
     this.expanded = this.store.getOptionManager().getOptions().expand.show
@@ -147,6 +151,28 @@ export class Task {
     return isObject(current) ? cloneDeep(current) : current;
   }
 
+  /** 切换展示模式时，需要调整时间 */
+  updateMode() {
+    // 更新开始时间
+    if (this.data[this.fields.startTime]) {
+      this.startTime = dayjs(this.data[this.fields.startTime]);
+    }
+
+    // 更新结束时间
+    if (this.data[this.fields.endTime]) {
+      this.endTime = dayjs(this.data[this.fields.endTime]);
+    }
+
+    // 更新持续时间
+    if (this.startTime && this.endTime) {
+      this.duration = this.endTime.diff(this.startTime);
+    }
+
+    if (this.isMilestone()) {
+      this.endTime = this.startTime;
+    }
+  }
+
   updateData(data: any): void {
     // 替换数据
     this.data = data;
@@ -156,20 +182,17 @@ export class Task {
       this.name = data[this.fields.name];
     }
 
-    // 更新开始时间
-    if (data[this.fields.startTime]) {
-      this.startTime = dayjs(data[this.fields.startTime]);
+    if (data[this.fields.type]) {
+      this.type = data[this.fields.type];
     }
 
-    // 更新结束时间
-    if (data[this.fields.endTime]) {
-      this.endTime = dayjs(data[this.fields.endTime]);
-    }
+    this.updateMode();
 
     // 更新进度
     if (data[this.fields.progress] !== undefined) {
       this.progress = data[this.fields.progress];
     }
+
 
     // 触发更新事件
     this.event.emit(EventName.UPDATE_TASK, this);
@@ -177,13 +200,19 @@ export class Task {
 
   updateTime(startTime: Dayjs, endTime: Dayjs): void {
     this.startTime = startTime;
-    this.endTime = endTime;
+    this.endTime = this.isMilestone() ? startTime : endTime;
 
     const format = this.store?.getOptionManager().getOptions()?.dateFormat;
 
     this.data[this.fields.startTime || "startTime"] =
       this.startTime.format(format);
-    this.data[this.fields.endTime || "endTime"] = this.endTime.format(format);
+
+    if (!this.isMilestone()) {
+      this.data[this.fields.endTime || "endTime"] = this.endTime.format(format);
+    } else {
+      // 里程碑模式下，要保持起止时间的间距，需要使用 duration
+      this.data[this.fields.endTime || "endTime"] = this.startTime.add(this.duration).format(format);
+    }
 
     this.event.emit(EventName.UPDATE_TASK, this);
   }
@@ -218,5 +247,12 @@ export class Task {
     };
     traverse(this.children);
     return allChildren;
+  }
+
+  public isMilestone() {
+    if (this.store.getOptionManager().getOptions().milestone.show)
+      return this.type === 'milestone';
+
+    return false;
   }
 }

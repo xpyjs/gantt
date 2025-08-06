@@ -28,6 +28,8 @@ A Gantt chart is a project management tool used to display project progress, tas
 - 🔗 **Task Dependency Management**: Complete task dependency creation, editing, and visualization
 - 🎯 **Rich Interactions**: Drag & drop, zoom, selection, context menus, and other interactive features
 - 📅 **Multi-Level Linkage**: Supports data linkage between different levels
+- 📏 **Baseline Support**: Provides baseline functionality for tracking project progress
+- 🏁 **Milestones**: Supports milestone markers for tracking key points
 - 📊 **Virtual Scrolling**: Supports virtual scrolling for large datasets to ensure performance
 - 🔄 **Event System**: Comprehensive event listening mechanism for business logic integration
 - 🖌️ **Custom Styling**: Rich styling and theme configuration options

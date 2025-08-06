@@ -74,6 +74,15 @@ export interface XGanttReactProps
   onSelectLink?: EventMap["select:link"];
 
   /**
+   * 关联线右键菜单事件回调
+   *
+   * @description 当在关联线上右键点击时触发
+   * @param e 鼠标事件对象
+   * @param link 被右键点击的关联线对象
+   */
+  onContextMenuLink?: EventMap["contextmenu:link"];
+
+  /**
    * 任务选择事件回调
    *
    * @description 当任务的选择状态发生变化时触发
@@ -144,6 +153,62 @@ export interface XGanttReactProps
    * @param data 移动的任务信息数组，包含新旧位置信息
    */
   onMove?: EventMap["move"];
+
+  /**
+   * 鼠标悬停在任务条的事件回调
+   *
+   * @description 当鼠标悬停在任务条上时触发
+   * @param data 悬停的任务数据
+   */
+  onHoverSlider?: EventMap["hover:slider"];
+
+  /**
+   * 鼠标离开任务条的事件回调
+   *
+   * @description 当鼠标离开任务条时触发
+   * @param data 离开的任务数据
+   */
+  onLeaveSlider?: EventMap["leave:slider"];
+
+  /**
+   * 基线点击事件回调
+   *
+   * @description 当点击基线时触发
+   * @param e 鼠标事件对象
+   * @param data 点击基线对应的任务数据
+   * @param baseline 点击的基线数据
+   */
+  onClickBaseline?: EventMap["click:baseline"];
+
+  /**
+   * 基线右键菜单事件回调
+   *
+   * @description 当在基线上右键点击时触发
+   * @param e 鼠标事件对象
+   * @param data 右键基线对应的任务数据
+   * @param baseline 右键的基线数据
+   */
+  onContextMenuBaseline?: EventMap["contextmenu:baseline"];
+
+  /**
+   * 基线悬停事件回调
+   *
+   * @description 当鼠标悬停在基线上时触发
+   * @param e 鼠标事件对象
+   * @param data 悬停的任务数据
+   * @param baseline 悬停的基线数据
+   */
+  onHoverBaseline?: EventMap["hover:baseline"];
+
+  /**
+   * 鼠标移出基线事件回调
+   *
+   * @description 当鼠标离开基线时触发
+   * @param e 鼠标事件对象
+   * @param data 离开的任务数据
+   * @param baseline 离开的基线数据
+   */
+  onLeaveBaseline?: EventMap["leave:baseline"];
 }
 
 /**

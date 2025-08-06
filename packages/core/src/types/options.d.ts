@@ -1,10 +1,11 @@
-import { EmitData } from ".";
+import { EmitData, EmitBaseline } from ".";
 import { IChartOptions } from "./chart";
 import { ILink } from "./link";
 import { IPattern } from "./styles";
 import { ITableOptions } from "./table";
 
 export type XGanttUnit = "hour" | "day" | "week" | "month" | "quarter";
+export type TaskType = "task" | "milestone" | "summary";
 
 export interface IGanttOptions {
   /** 日志 level。 默认 info */
@@ -12,6 +13,30 @@ export interface IGanttOptions {
 
   /** 源数据 */
   data: any[];
+
+  /** 字段映射配置 */
+  fields: {
+    /** ID字段 */
+    id: string;
+
+    /** 开始时间字段 */
+    startTime: string;
+
+    /** 结束时间字段 */
+    endTime: string;
+
+    /** 名称字段 */
+    name: string;
+
+    /** 进度字段 */
+    progress: string;
+
+    /** 子项字段 */
+    children: string;
+
+    /** 任务类型字段 */
+    type: string;
+  };
 
   /** 关联配置 */
   links: {
@@ -87,10 +112,10 @@ export interface IGanttOptions {
        * @argument {"F"} - 允许以 F，也就是右侧结束点作为终点创建连线
        */
       to:
-        | boolean
-        | "S"
-        | "F"
-        | ((row: EmitData, from: EmitData) => boolean | "S" | "F");
+      | boolean
+      | "S"
+      | "F"
+      | ((row: EmitData, from: EmitData) => boolean | "S" | "F");
     };
     /** 默认关连线的颜色。每一条线可以单独配置后覆盖当前颜色。默认主色 */
     color?: string;
@@ -117,6 +142,249 @@ export interface IGanttOptions {
     };
     /** 原点大小。 默认 3 */
     radius: number;
+  };
+
+  /** 基线配置 */
+  baselines: {
+    /**
+     * 基线数据集合
+     *
+     * - 每条基线数据需要包含对应任务的关联ID
+     * - 基线数据应包含开始时间、结束时间等信息
+     * - 支持多条基线数据对应同一个任务
+     *
+     * @example
+     * const baselines = [
+     *   {
+     *     id: 'baseline_1',
+     *     taskId: 'task_1', // 对应任务的ID
+     *     startTime: '2024-01-01',
+     *     endTime: '2024-01-15',
+     *     name: '原计划'
+     *   }
+     * ]
+     */
+    data: any[];
+
+    /** 是否展示基线 */
+    show: boolean;
+
+    /** 指定关联任务 id 的字段。默认 'taskId' */
+    taskKey: string;
+
+    /** 数据字段支持单独配置。默认与 data 保持一致，共享 fields 配置。 */
+    fields: {
+      /** 开始时间字段 */
+      startTime: string;
+      /** 结束时间字段 */
+      endTime: string;
+      /** 名称字段 */
+      name: string;
+      /** 基线数据 id */
+      id: string;
+      /** 禁用高亮对比的字段。该字段默认值为 true */
+      highlight: string;
+      /** 指定指示器的字段 */
+      target: string;
+    };
+
+    /**
+     * 基线展示形式
+     *
+     * @param shadow - 以阴影形式展示基线
+     * @param line - 以线条形式展示基线
+     *
+     * @description 'line'
+     */
+    mode: 'shadow' | 'line';
+
+    /**
+     * 基线条高度
+     *
+     * @description 当 mode 为 'shadow' 时，默认与 bar 的高度一致；
+     * @description 当 mode 为 'line' 时，默认 5px
+     */
+    height?: number | string;
+
+    /**
+     * 与 bar 的偏移展示量。
+     *
+     * @description 为保证可视化的时间不会出现偏移，只在 y 轴上做偏移
+     * @description 正数向下偏移，负数向上偏移
+     * @description 在 'line' 模式下使用 offset，会影响 position 的最终位置
+     */
+    offset?: number;
+
+    /**
+     * 基线条相对任务条的位置。默认 'bottom'
+     *
+     * @description 仅当 mode 为 'line' 时有效。
+     */
+    position: 'top' | 'bottom' | 'center';
+
+    /** 基线条背景颜色。默认 #999 */
+    backgroundColor: string;
+
+    /** 基线条透明度。默认 0.6 */
+    opacity: number;
+
+    /** 基线条圆角。默认 2 */
+    radius: number | number[];
+
+    /** 基线标签配置 */
+    label: {
+      /** 是否显示标签。默认 false */
+      show: boolean;
+      /** 标签内容。默认使用 name 字段 */
+      field?: string;
+      /** 强制显示标签
+       *
+       * @description 当基线过小时，系统会自动隐藏。如果你需要强制显示标签，可以设置为 true，不过可能文本显示会很奇怪，建议配合 fontSize 使用。
+       */
+      forceDisplay?: boolean;
+      /** 标签文字颜色。默认 #666 */
+      color: string;
+      /** 标签字体大小。默认 10 */
+      fontSize: number;
+      /** 标签字体。默认 'Arial' */
+      fontFamily: string;
+      /** 标签位置。默认 'right' */
+      position: 'left' | 'right' | 'center';
+    };
+
+    /**
+     * 基线对比分析配置
+     *
+     * @description 如果一个任务配置了多个基线，默认情况下：
+     *  - 1、 高亮状态是和所有基线匹配。如果不希望某条基线进行对比，请在基线数据中添加 `highlight: false` 字段。
+     *  - 2、 指示器只会和第一个基线进行匹配。如果需要指定对比基线，请在基线数据中添加 `target: true` 字段。
+     */
+    compare: {
+      /** 是否启用对比功能。默认 false */
+      enabled: boolean;
+      /** 时间容差（天）。在此范围内认为是准时完成。默认 0.5 */
+      tolerance: number;
+      /** 差异显示模式 */
+      mode: 'highlight' | 'indicator' | 'both';
+      /** 以何种基准展示对比。基线高亮只会以一种（起始/结束）基线进行对比。默认以结束时间为基准（'end'） */
+      target: 'start' | 'end'
+
+      /** 超期任务的高亮配置 */
+      delayed: {
+        /** 高亮颜色。默认 #ff4444 */
+        backgroundColor: string;
+        /** 高亮颜色的透明度。默认 0.8 */
+        opacity: number;
+      };
+
+      /** 提前完成任务的高亮配置 */
+      ahead: {
+        /** 高亮颜色。默认 #44ff44 */
+        backgroundColor: string;
+        /** 高亮颜色透明度。默认 0.8 */
+        opacity: number;
+      };
+
+      /**
+       * 差异指示器配置
+       *
+       * @description 展示在任务条左右两侧，用于显示与基线时间差异的内容
+       */
+      indicator: {
+        /**
+         * 是否展示指示器
+         *
+         * @default true
+         *
+         * @description 可以配置展示起始、结束，或者同时展示。
+         * @description true 与 'both' 效果一致，两侧都会展示。
+         */
+        show: boolean | 'start' | 'end' | 'both';
+        /** 显示位置。当前支持任务条两侧的上端或者下端 */
+        position: 'top' | 'bottom';
+        /** 超期指示器大小。默认 6 */
+        size: number;
+        /** 标签字体大小。默认 10 */
+        fontSize: number;
+        /** 标签字体。默认 'Arial' */
+        fontFamily: string;
+
+        /** 提前任务指示器配置 */
+        ahead: {
+          /** 任务提前，是否显示指示器。默认展示 */
+          show: boolean;
+          /** 显示文本。如果不需要展示文本，请设置为空字符 */
+          text?: string | ((diff: number, row: EmitBaseline) => string);
+          /** 提前指示器颜色。默认 #1baf1b */
+          color: string;
+          /** 高亮颜色透明度 */
+          opacity: number;
+        };
+        /** 超期任务指示器配置 */
+        delayed: {
+          /** 任务超期，是否显示指示器。默认展示 */
+          show: boolean;
+          /** 显示文本。如果不需要展示文本，请设置为空字符 */
+          text?: string | ((diff: number, row: EmitBaseline) => string);
+          /** 超期指示器颜色。默认 #af1b1b */
+          color: string;
+          /** 高亮颜色透明度 */
+          opacity: number;
+        };
+        /** 按时任务指示器配置 */
+        ontime: {
+          /** 任务正常，是否显示指示器。默认不展示 */
+          show: boolean;
+          /** 显示文本。如果不需要展示文本，请设置为空字符 */
+          text?: string | ((diff: number, row: EmitBaseline) => string);
+          /** 按时的指示器颜色。默认 #999 */
+          color: string;
+          /** 高亮颜色透明度 */
+          opacity: number;
+        };
+      };
+    };
+  };
+
+  /**
+   * 里程碑配置
+   *
+   * @description 里程碑是一个特殊的任务类型，通常用于标记项目中的重要节点或事件。它没有持续时间，默认只会使用开始时间
+   */
+  milestone: {
+    /**
+     * 启用里程碑模式
+     *
+     * @description 默认情况下，所有任务都是普通任务模式。启用里程碑模式后，会将标记为里程碑的任务展示为特殊形状。
+     */
+    show: boolean;
+    /** 里程碑形状。默认 'diamond' */
+    shape: 'diamond' | 'star' | 'triangle' | 'circle' | ((row: EmitData) => 'diamond' | 'star' | 'triangle' | 'circle');
+    /** 形状大小。默认形状半径与 bar 大小一致。但最大不会超过整行高度 */
+    size?: number | ((row: EmitData) => number | undefined);
+    /** 里程碑颜色。默认与 bar 颜色保持一致 */
+    color?: string | ((row: EmitData) => string | undefined);
+    /** 边框样式配置 */
+    border: {
+      width?: number | ((row: EmitData) => number | undefined);
+      color?: string | ((row: EmitData) => string | undefined);
+    };
+
+    /** 里程碑标签配置 */
+    label: {
+      /** 是否显示里程碑标签。默认 false */
+      show: boolean | ((row: EmitData) => boolean);
+      /** 标签文本 */
+      text: string | ((row: EmitData) => string);
+      /** 标签位置。默认 'top-right' */
+      position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | ((row: EmitData) => 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right');
+      /** 标签字体大小。默认 12 */
+      fontSize: number | ((row: EmitData) => number);
+      /** 标签字体粗细 */
+      fontFamily: string | ((row: EmitData) => string);
+      /** 标签颜色。默认与里程碑的颜色保持一致 */
+      color?: string | ((row: EmitData) => string | undefined);
+    };
   };
 
   /** 主色调。默认 #eca710 */
@@ -191,27 +459,6 @@ export interface IGanttOptions {
    * @description 仅针对单位为 `day` 时生效
    */
   highlight?: boolean;
-
-  /** 字段映射配置 */
-  fields: {
-    /** ID字段 */
-    id: string;
-
-    /** 开始时间字段 */
-    startTime: string;
-
-    /** 结束时间字段 */
-    endTime: string;
-
-    /** 名称字段 */
-    name: string;
-
-    /** 进度字段 */
-    progress: string;
-
-    /** 子项字段 */
-    children: string;
-  };
 
   /** 表格配置 */
   table: ITableOptions;
@@ -314,7 +561,14 @@ export interface IGanttOptions {
      *
      * @default 20
      */
-    height: number | string;
+    height: number | string | ((row: EmitData) => string | number);
+
+    /**
+     * 是否显示任务条
+     *
+     * @default true
+     */
+    show?: boolean | ((row: EmitData) => boolean);
 
     /**
      * 显示在任务条上的字段内容。如果配置了 label，则会显示 label 的内容。支持点语法对嵌套字段进行访问
@@ -340,6 +594,20 @@ export interface IGanttOptions {
         left?: boolean | ((row: EmitData) => boolean);
         /** 是否允许右移 */
         right?: boolean | ((row: EmitData) => boolean);
+        /**
+         * 左右移动手柄的背景颜色
+         *
+         * @default bar.backgroundColor.brighten(30)
+         */
+        backgroundColor?: string;
+        /** 左右移动手柄的透明度 */
+        opacity?: number;
+        /**
+         * 允许给手柄设置一个 svg 图标。设为 null 可以置空。
+         *
+         * @description 仅支持 svg 图标，`<svg>...</svg>` 的字符串形式。
+         */
+        icon?: string | null;
       };
       /**
        * 是否按单位移动
@@ -367,31 +635,31 @@ export interface IGanttOptions {
       };
     };
     /** 背景颜色 */
-    backgroundColor?: string;
+    backgroundColor?: string | ((row: EmitData) => string | undefined);
     /** 圆角 */
-    radius?: number | number[];
+    radius?: number | number[] | ((row: EmitData) => number | number[] | undefined);
     /** 阴影颜色 */
-    shadowColor?: string;
+    shadowColor?: string | ((row: EmitData) => string | undefined);
     /** 阴影模糊度 */
-    shadowBlur?: number;
+    shadowBlur?: number | ((row: EmitData) => number | undefined);
     /** 阴影偏移量 */
-    shadowOffsetX?: number;
+    shadowOffsetX?: number | ((row: EmitData) => number | undefined);
     /** 阴影偏移量 */
-    shadowOffsetY?: number;
+    shadowOffsetY?: number | ((row: EmitData) => number | undefined);
     /** 文字颜色 */
-    color?: string;
+    color?: string | ((row: EmitData) => string | undefined);
     /** 任务条的字体大小 */
-    fontSize?: number;
+    fontSize?: number | ((row: EmitData) => number | undefined);
     /** 任务条的字体 */
-    fontFamily?: string;
+    fontFamily?: string | ((row: EmitData) => string | undefined);
     /** 任务条的文本对齐方式 */
-    align?: "left" | "center" | "right";
+    align?: "left" | "center" | "right" | ((row: EmitData) => "left" | "center" | "right" | undefined);
     /** 任务条的文本垂直对齐方式 */
-    verticalAlign?: "top" | "middle" | "bottom";
+    verticalAlign?: "top" | "middle" | "bottom" | ((row: EmitData) => "top" | "middle" | "bottom" | undefined);
     /** 进度样式 */
     progress?: {
       /** 是否显示进度 */
-      show?: boolean;
+      show?: boolean | ((row: EmitData) => boolean);
       /**
        * 进度百分比的基准值。数据中的进度值将会以这个值作为 100% 的基准值
        *
@@ -401,9 +669,9 @@ export interface IGanttOptions {
        */
       targetVal?: number;
       /** 颜色 */
-      backgroundColor?: string;
+      backgroundColor?: string | ((row: EmitData) => string | undefined);
       /** 文本颜色 */
-      color?: string;
+      color?: string | ((row: EmitData) => string | undefined);
       /**
        * 基于任务条颜色的高亮百分比 0-100
        *
@@ -413,9 +681,9 @@ export interface IGanttOptions {
        */
       amount?: number;
       /** 透明度 */
-      opacity?: number;
+      opacity?: number | ((row: EmitData) => number | undefined);
       /** 圆角 */
-      radius?: number | number[];
+      radius?: number | number[] | ((row: EmitData) => number | number[] | undefined);
       /** 进度小数位 0-10 */
       decimal?: number;
       /**
@@ -425,11 +693,11 @@ export interface IGanttOptions {
        * - right 在进度条右侧外部
        * - inside 在进度条右侧内部
        */
-      textAlign?: "top" | "right" | "inside";
+      textAlign?: "top" | "right" | "inside" | ((row: EmitData) => "top" | "right" | "inside" | undefined);
       /** 字体大小。默认 10 */
-      fontSize?: number;
+      fontSize?: number | ((row: EmitData) => number | undefined);
       /** 字体样式。默认斜体 */
-      fontStyle?: string;
+      fontStyle?: string | ((row: EmitData) => string | undefined);
     };
   };
 

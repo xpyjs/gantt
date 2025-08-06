@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-25 17:23:34
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-18 15:49:39
+ * @LastEditTime: 2025-07-29 11:10:39
  * @Description: 列管理器
  */
 
@@ -67,6 +67,11 @@ export class ColumnManager {
    * Map<task_id, Map<col_index, object>>
    */
   private mergeInfo: Map<string, Map<number, MergeInfo>> = new Map();
+
+  /**
+   * 收起表格
+   */
+  private collapseTable = false;
 
   constructor(private context: IContext) {}
 
@@ -197,6 +202,8 @@ export class ColumnManager {
     return this.leafColumns;
   }
   getTotalWidth(): number {
+    if (this.isCollapsed()) return 0;
+
     return this.leafColumns.reduce((total, column) => {
       return total + (column.width as number);
     }, this.getHandlerColumn().width as number);
@@ -283,5 +290,14 @@ export class ColumnManager {
 
   isMultiHeader() {
     return this.columns.some(c => c.maxLevel > 1);
+  }
+
+  collapse() {
+    this.collapseTable = !this.collapseTable;
+    this.context.event.emit(EventName.TOGGLE_COLLAPSE);
+  }
+
+  isCollapsed() {
+    return this.collapseTable;
   }
 }

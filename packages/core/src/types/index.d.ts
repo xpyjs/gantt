@@ -19,3 +19,8 @@ export interface EmitData {
   /** 当前数据的层级。 1 开始 */
   level: number;
 }
+
+export interface EmitBaseline extends EmitData {
+  /** 基线数据 */
+  baseline: any;
+}

@@ -50,6 +50,7 @@ const registerEventListeners = () => {
     "update:link",
     "create:link",
     "select:link",
+    "contextmenu:link",
     "select",
     "click:row",
     "dblclick:row",
@@ -57,7 +58,13 @@ const registerEventListeners = () => {
     "click:slider",
     "dblclick:slider",
     "contextmenu:slider",
-    "move"
+    "move",
+    "hover:slider",
+    "leave:slider",
+    "click:baseline",
+    "contextmenu:baseline",
+    "hover:baseline",
+    "leave:baseline"
   ];
 
   // 遍历注册

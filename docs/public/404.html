@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>XGantt - 演示与文档</title>
+    <script type="text/javascript">
+        // GitHub Pages 路由重定向解决方案
+        // 将当前路径存储到 sessionStorage，然后重定向到根路径
+        var pathSegmentsToKeep = 1; // 根据你的 GitHub Pages 配置调整，通常为 1
+
+        var l = window.location;
+        l.replace(
+            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+            l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+            l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+            l.hash
+        );
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
