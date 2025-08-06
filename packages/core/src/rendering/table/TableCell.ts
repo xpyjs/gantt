@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-25 10:30:00
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-24 11:04:37
+ * @LastEditTime: 2025-08-06 17:40:31
  * @Description: 表格单元格渲染，使用td元素支持合并
  */
 
@@ -99,8 +99,8 @@ export class TableCell {
     cellContent.style.overflow = "hidden";
     if (
       this.column.column.ellipsis ??
-      true ??
-      this.context.getOptions().table.ellipsis
+      this.context.getOptions().table.ellipsis ??
+      true
     ) {
       cellContent.style.textOverflow = "ellipsis";
     }

@@ -35,8 +35,8 @@ export class TableHeaderCell {
       this.context.getOptions().table.headerAlign;
     const ellipsis =
       this.column.column.ellipsis ??
-      true ??
-      this.context.getOptions().table.ellipsis;
+      this.context.getOptions().table.ellipsis ??
+      true
 
     this.columnElement.className = "x-gantt-table-header-cell";
     if (
