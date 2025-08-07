@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:01:19
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-21 14:46:44
+ * @LastEditTime: 2025-08-07 16:56:40
  * @Description: 表格行渲染管理器
  */
 
@@ -288,41 +288,44 @@ export class TableRow {
         );
         // 将单元格添加到单元格集合
         this.cells.push(cell);
-      } else if (mergeInfo.task.id !== this.task.id) {
-        // 创建单元格
-        const cell = new TableCell(
-          this.context,
-          this.element,
-          column,
-          this.task,
-          this.task.flatIndex,
-          colIndex,
-          1,
-          1,
-          "empty"
-        );
-
-        // 将被合并行的背景色置为空
-        this.element.style.backgroundColor = "transparent";
-        this.raise();
-
-        // 将单元格添加到单元格集合
-        this.cells.push(cell);
       } else {
-        // 如果是合并行，直接使用合并行的任务数据
-        const cell = new TableCell(
-          this.context,
-          this.element,
-          column,
-          mergeInfo.task,
-          mergeInfo.task.flatIndex,
-          colIndex,
-          mergeInfo.colspan,
-          mergeInfo.rowspan
-        );
+        if (mergeInfo.task.id !== this.task.id) {
+          // 创建被合并的空白单元格。占位用，否则后面的单元格会补位。
+          const cell = new TableCell(
+            this.context,
+            this.element,
+            column,
+            this.task,
+            this.task.flatIndex,
+            colIndex,
+            1,
+            1,
+            "empty"
+          );
 
-        // 将单元格添加到单元格集合
-        this.cells.push(cell);
+          // 将被合并行的背景色置为空
+          this.element.style.backgroundColor = "transparent";
+          this.raise();
+
+          // 将单元格添加到单元格集合
+          this.cells.push(cell);
+        } else if (mergeInfo.originColumnIndex === colIndex) {
+          // 如果是合并行，直接使用合并行的任务数据，只渲染不一样的列，被合并的列需要空过去
+          // 为什么需要渲染合并行？纵向滚动时，原始行可能会移出可视区域，此时需要通过合并数据来补位渲染剩余被合并的区域
+          const cell = new TableCell(
+            this.context,
+            this.element,
+            column,
+            mergeInfo.task,
+            mergeInfo.task.flatIndex,
+            colIndex,
+            mergeInfo.colspan,
+            mergeInfo.rowspan
+          );
+
+          // 将单元格添加到单元格集合
+          this.cells.push(cell);
+        }
       }
     }
 

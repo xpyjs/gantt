@@ -73,7 +73,7 @@ export class ColumnManager {
    */
   private collapseTable = false;
 
-  constructor(private context: IContext) {}
+  constructor(private context: IContext) { }
 
   /**
    * 初始化列数据
@@ -132,8 +132,8 @@ export class ColumnManager {
       // 获取列宽度。分组列的宽度会自动撑开。更新数据的话，会优先调取旧数据中的宽度
       const width = isLeaf
         ? this.temporaryLeafColumns.find(c => c.key === key)?.width ||
-          (column as ITableColumnStandard).width ||
-          100
+        (column as ITableColumnStandard).width ||
+        100
         : "auto";
 
       // 创建内部列数据

@@ -48,7 +48,7 @@ export class Table {
   }
 
   public refresh(top: number, tasks: Task[]) {
-    this.context.store.getColumnManager().clearMergeInfo();
+    // this.context.store.getColumnManager().clearMergeInfo();
     this.tableBody.render(top, tasks);
   }
 
