@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-06 10:59:13
+ * @LastEditTime: 2025-08-07 11:24:56
  * @Description: 配置项管理器
  */
 
@@ -33,6 +33,9 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
       width: 2,
       from: true,
       to: true
+    },
+    move: {
+      enabled: false
     }
   },
   baselines: {

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-06 09:22:44
+ * @LastEditTime: 2025-08-07 14:17:44
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -468,7 +468,11 @@ export class LinkGroup {
 
           group.on("mouseover", e => {
             e.target.moveToTop();
-            this.stage.container().style.cursor = "pointer";
+
+            if (this.context.getOptions().links.move.enabled === true) {
+              this.stage.container().style.cursor = "pointer";
+            }
+
             if (!this.selectedMap.has(id)) {
               this.handleHighlight(
                 group,
@@ -792,6 +796,7 @@ export class LinkGroup {
     id: string
   ) {
     if (!this.isDragging) return;
+    if (this.context.getOptions().links.move.enabled !== true) return;
 
     this.stage.container().style.cursor = "pointer";
     const group = this.linksGroup.findOne(`#${id}`);
@@ -914,17 +919,17 @@ export class LinkGroup {
           this.context.event.emit(EventName.UPDATE_LINK, _link);
         } else {
           this.context.event.emit(EventName.ERROR, ErrorType.LINK_NOT_ALLOWED);
-          this.calculateLinks();
         }
       } else {
         this.context.event.emit(EventName.ERROR, ErrorType.LINK_SAME);
-        this.calculateLinks();
       }
 
       this.templateArrow.visible(false);
 
       this.stage.container().style.cursor = "default";
       this.isDragging = false;
+
+      this.calculateLinks();
 
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
@@ -1057,6 +1062,8 @@ export class LinkGroup {
 
       this.stage.container().style.cursor = "default";
       this.isDragging = false;
+
+      this.calculateLinks();
 
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);

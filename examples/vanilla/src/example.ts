@@ -169,6 +169,9 @@ if (ganttContainer) {
           from: (row: any) => {
             return row.level === 1 ? "F" : "S";
           }
+        },
+        move: {
+          enabled: true
         }
       },
       fields: {
@@ -340,14 +343,13 @@ if (ganttContainer) {
       const index = links.findIndex(l => l.index === link.index);
       if (index !== -1) {
         links.splice(index, 1, link);
-        gantt.update({ links: { data: links } });
       }
     });
 
     gantt.on("create:link", (link: any) => {
       console.log("link is created", link);
       links.push({ ...link, index: `${Date.now()}` });
-      gantt.update({ links: { data: links } });
+      // gantt.update({ links: { data: links } });
     });
 
     gantt.on("select:link", (add, cancel, all) => {
@@ -528,11 +530,13 @@ if (ganttContainer) {
           text: `编辑链接: ${link.from} -> ${link.to}`,
           action: () => console.log("编辑链接", link)
         },
-        { text: "删除链接", action: () => {
-          console.log("删除链接", link);
-          links.splice(links.findIndex(l => l.index === link.index), 1);
-          gantt.update({ links: { data: links } });
-        }},
+        {
+          text: "删除链接", action: () => {
+            console.log("删除链接", link);
+            links.splice(links.findIndex(l => l.index === link.index), 1);
+            gantt.update({ links: { data: links } });
+          }
+        },
         { text: "复制链接", action: () => console.log("复制链接", link) }
       ];
 

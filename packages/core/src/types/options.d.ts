@@ -63,6 +63,18 @@ export interface IGanttOptions {
     key: string;
     /** 是否展示关联线。不支持单独配置 */
     show: boolean;
+    /** 移动相关设置 */
+    move: {
+      /**
+       * 是否允许移动连线到新节点。
+       *
+       * @default false
+       *
+       * @description 开启时，所有连线将按照 from 与 to 属性规则允许移动
+       * @description 需要注意的是，开启移动后，需要主动添加对应接收事件，否则会导致显示异常
+       */
+      enabled: boolean;
+    };
     /** 创建相关设置 */
     create: {
       /**

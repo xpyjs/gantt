@@ -101,7 +101,6 @@ gantt.on('create:link', (link) => {
   link.id = \`link-\${links.length + 1}\`; // *必须* 新建连线需要自行添加唯一键
   link.color = 'lightblue'; //（可选项）重置连线颜色
   links.push(link);
-  gantt.update({ links: { data: links } }); // 连线需要手动更新视图
 });
 
 // 添加一个用于删除连接线的按钮
@@ -114,9 +113,6 @@ btn.addEventListener('click', () => {
   } else {
     // 移除选择线
     links = links.filter((l) => !selectedLinks.find((s) => s.id === l.id));
-    // 更新视图
-    gantt.update({ links: { data: links } });
-
     btn.textContent = '删除';
   }
 });

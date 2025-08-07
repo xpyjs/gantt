@@ -290,9 +290,6 @@ gantt.on('click:row', (event, rowData) => {
     const linkWithId = { ...link, id: \`link_\${Date.now()}\` };
     links.push(linkWithId);
 
-    // 更新甘特图数据
-    gantt.update({ links: { data: links } });
-
     // 保存到服务器
     saveLinkToServer(linkWithId);
 
@@ -1001,7 +998,6 @@ export const eventsPageConfig: EventsPageConfig = {
               description: "新创建的依赖关系数据"
             }
           ],
-          notes: ["依赖关系需要手动更新数据"],
           examples: [
             {
               framework: "javascript",
@@ -1023,7 +1019,6 @@ export const eventsPageConfig: EventsPageConfig = {
               description: "更新后的依赖关系数据"
             }
           ],
-          notes: ["依赖关系需要手动更新数据"],
           examples: [
             {
               framework: "javascript",
@@ -1055,7 +1050,6 @@ export const eventsPageConfig: EventsPageConfig = {
               description: "当前所有选中的依赖关系数组"
             }
           ],
-          notes: ["依赖关系需要手动更新数据"],
           examples: [
             {
               framework: "javascript",

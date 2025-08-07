@@ -170,6 +170,9 @@ const gantt = new XGantt(ganttContainer, {
     show: true,
     create: {
       enabled: true
+    },
+    move: {
+      enabled: true
     }
   },
   weekend: {

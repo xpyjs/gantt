@@ -385,21 +385,18 @@ gantt.on("update:link", link => {
   const index = links.findIndex(l => l.index === link.index);
   if (index !== -1) {
     links.splice(index, 1, link);
-    gantt.update({ links: { data: links } });
   }
 });
 
 // 添加连线
 gantt.on("create:link", link => {
   links.push({ ...link, index: \`\${Date.now()}\` });   // 需要保证每一个添加的依赖关系都有唯一字段值
-  gantt.update({ links: { data: links } });
 });
 
 // 选中连线
 gantt.on("select:link", (add, cancel, all) => {
   if (add?.index === "555") {
     links.splice(links.findIndex(l => l.index === add.index), 1);  // 模拟选中删除
-    gantt.update({ links: { data: links } });
   }
 });`
               }
@@ -407,7 +404,7 @@ gantt.on("select:link", (add, cancel, all) => {
           },
           {
             description:
-              "为保证数据的准确，所有数据需要用户手动操作，然后通知 XGantt 更新界面。"
+              "操作完关连线，不需要做额外的操作，界面会自动更新。如果在操作方法中使用了异步方法或者其他影响执行的操作，为保证数据的准确，请手动更新界面。"
           }
         ]
       },
