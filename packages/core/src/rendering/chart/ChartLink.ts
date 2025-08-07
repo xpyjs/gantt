@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-07 14:19:50
+ * @LastEditTime: 2025-08-07 15:45:17
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -291,7 +291,6 @@ export class LinkGroup {
 
     // 获取数据
     const links = this.context.getOptions().links.data;
-    const rowHeight = this.context.getOptions().row.height;
 
     // 先清除已不存在但选中的内容
     const exists: string[] = [];
@@ -330,78 +329,11 @@ export class LinkGroup {
         fromTask &&
         this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, fromTask) &&
         this.context.store.getDataManager().isTaskVisible(fromTask) &&
-        fromTask.startTime &&
-        fromTask.endTime &&
         toTask &&
         this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, toTask) &&
-        this.context.store.getDataManager().isTaskVisible(toTask) &&
-        toTask.startTime &&
-        toTask.endTime
+        this.context.store.getDataManager().isTaskVisible(toTask)
       ) {
-        const fromGap = fromTask.isMilestone() ? rowHeight / 2 : 0;
-        const fromX = this.context.store
-          .getTimeAxis()
-          .getTimeLeft(fromTask.startTime) - fromGap;
-        const fromEnd = this.context.store
-          .getTimeAxis()
-          .getTimeLeft(fromTask.endTime) + fromGap;
-
-        const toGap = toTask.isMilestone() ? rowHeight / 2 : 0;
-        const toX = this.context.store
-          .getTimeAxis()
-          .getTimeLeft(toTask.startTime) - toGap;
-        const toEnd = this.context.store
-          .getTimeAxis()
-          .getTimeLeft(toTask.endTime) + toGap;
-
-        let points: number[] = [];
-        const type = link.type || "FS";
-        switch (type) {
-          case "FF":
-            points = this.createFF(
-              link,
-              fromTask,
-              toTask,
-              fromX,
-              fromEnd,
-              toX,
-              toEnd
-            );
-            break;
-          case "SS":
-            points = this.createSS(
-              link,
-              fromTask,
-              toTask,
-              fromX,
-              fromEnd,
-              toX,
-              toEnd
-            );
-            break;
-          case "SF":
-            points = this.createSF(
-              link,
-              fromTask,
-              toTask,
-              fromX,
-              fromEnd,
-              toX,
-              toEnd
-            );
-            break;
-          case "FS":
-          default:
-            points = this.createFS(
-              link,
-              fromTask,
-              toTask,
-              fromX,
-              fromEnd,
-              toX,
-              toEnd
-            );
-        }
+        const points = this.getPoints(fromTask, toTask, link);
 
         if (points.length <= 2) {
           Logger.warn(`The link position has some error.`, link);
@@ -429,7 +361,33 @@ export class LinkGroup {
           });
           group.add(circle);
 
-          circle.on("mousedown", e => {
+          // 更新拖拽时间的主体
+          // 整条箭头线的前半段可以拖拽起始点
+          // 箭头线的后半段可以拖拽结束点
+          // 上面的圆点不再响应事件，仅仅表示一个起点。 PS:我还在考虑去掉圆点...
+          const midPoint = Math.floor(points.length / 2);
+          const actualMidIndex = midPoint % 2 === 0 ? midPoint : midPoint - 1;
+          // 分割数组
+          const startPoints = points.slice(0, actualMidIndex + 2);
+          const endPoints = points.slice(actualMidIndex);
+
+          const line = new Konva.Line({
+            points: startPoints,
+            stroke:
+              link.color ||
+              this.context.getOptions().links.color ||
+              this.context.getOptions().primaryColor,
+            strokeWidth,
+            lineCap: "round",
+            lineJoin: "round",
+            dash: link.dash || this.context.getOptions().links.dash,
+            hitStrokeWidth: 10, // 增加点击区域
+            draggable: true,
+            dragBoundFunc: pos => ({ x: 0, y: 0 })
+          });
+          group.add(line);
+
+          line.on("dragstart", e => {
             this.handleDrag(
               e,
               link,
@@ -440,7 +398,7 @@ export class LinkGroup {
           });
 
           const arrow = new Konva.Arrow({
-            points,
+            points: endPoints,
             stroke:
               link.color ||
               this.context.getOptions().links.color ||
@@ -456,11 +414,13 @@ export class LinkGroup {
               this.context.getOptions().primaryColor, // 箭头填充色
             lineJoin: "round",
             dash: link.dash || this.context.getOptions().links.dash,
-            hitStrokeWidth: 10 // 增加点击区域
+            hitStrokeWidth: 10, // 增加点击区域
+            draggable: true,
+            dragBoundFunc: pos => ({ x: 0, y: 0 })
           });
           group.add(arrow);
 
-          arrow.on("mousedown", e => {
+          arrow.on("dragstart", e => {
             this.handleDrag(e, link, "F", [points[0], points[1]], id);
           });
 
@@ -505,7 +465,7 @@ export class LinkGroup {
           group.on("click", e => {
             e.cancelBubble = true; // 阻止事件冒泡
             this.isDragging = false;
-            e.target.moveToTop();
+            group.moveToTop();
 
             if (e.evt.button === 0) {
               // 左键点击
@@ -552,6 +512,48 @@ export class LinkGroup {
   private createId(link: ILink) {
     return `link-group-${link[this.context.getOptions().links.key]}-${link.from
       }-${link.to}-${link.type || "FS"}`;
+  }
+
+  private getPoints(fromTask: Task, toTask: Task, link: ILink) {
+    if (fromTask.startTime && fromTask.endTime && toTask.startTime && toTask.endTime) {
+      const rowHeight = this.context.getOptions().row.height;
+      const fromGap = fromTask.isMilestone() ? rowHeight / 2 : 0;
+      const fromX = this.context.store
+        .getTimeAxis()
+        .getTimeLeft(fromTask.startTime) - fromGap;
+      const fromEnd = this.context.store
+        .getTimeAxis()
+        .getTimeLeft(fromTask.endTime) + fromGap;
+
+      const toGap = toTask.isMilestone() ? rowHeight / 2 : 0;
+      const toX = this.context.store
+        .getTimeAxis()
+        .getTimeLeft(toTask.startTime) - toGap;
+      const toEnd = this.context.store
+        .getTimeAxis()
+        .getTimeLeft(toTask.endTime) + toGap;
+
+      let points: number[] = [];
+      const type = link.type || "FS";
+      switch (type) {
+        case "FF":
+          points = this.createFF(link, fromTask, toTask, fromX, fromEnd, toX, toEnd);
+          break;
+        case "SS":
+          points = this.createSS(link, fromTask, toTask, fromX, fromEnd, toX, toEnd);
+          break;
+        case "SF":
+          points = this.createSF(link, fromTask, toTask, fromX, fromEnd, toX, toEnd);
+          break;
+        case "FS":
+        default:
+          points = this.createFS(link, fromTask, toTask, fromX, fromEnd, toX, toEnd);
+      }
+
+      return points;
+    }
+
+    return [];
   }
 
   /** 生成 FS 连线 */
@@ -1159,6 +1161,7 @@ export class LinkGroup {
   ) {
     const circle: Konva.Circle | undefined = group.findOne("Circle");
     const arrow: Konva.Arrow | undefined = group.findOne("Arrow");
+    const line: Konva.Line | undefined = group.findOne("Line");
 
     if (circle) {
       new Konva.Tween({
@@ -1173,6 +1176,14 @@ export class LinkGroup {
         node: arrow,
         pointerWidth: pointerWidth + highlight,
         pointerLength: pointerLength + highlight,
+        strokeWidth: strokeWidth + highlight,
+        duration: immediate ? 0 : 0.1
+      }).play();
+    }
+
+    if (line) {
+      new Konva.Tween({
+        node: line,
         strokeWidth: strokeWidth + highlight,
         duration: immediate ? 0 : 0.1
       }).play();
