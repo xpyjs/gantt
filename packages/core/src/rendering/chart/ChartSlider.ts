@@ -168,12 +168,15 @@ export class ChartSlider {
         e.target.getStage()!.container().style.cursor = "default";
       }
 
-      this.handleBarHighlight({
-        shadowColor,
-        shadowBlur,
-        shadowOffsetX,
-        shadowOffsetY
-      });
+      if (!this.isDragging) {
+        this.handleBarHighlight({
+          shadowColor,
+          shadowBlur,
+          shadowOffsetX,
+          shadowOffsetY
+        });
+      }
+
       this.context.event.emit(EventName.SLIDER_LEAVE, e.evt, this.task);
     });
 
@@ -748,6 +751,40 @@ export class ChartSlider {
       this.oldTasks = [];
     }
 
+    // 判断当前鼠标是否在当前行，如果不在当前行，重置所有样式
+    const stage = e.target.getStage();
+    if (stage) {
+      const mousePos = stage.getPointerPosition();
+
+      if (mousePos) {
+        const rowHeight = this.context.getOptions().row.height;
+        const rowTop = this.y + this.offsetY;
+        const rowBottom = rowTop + rowHeight;
+
+        if (mousePos.y < rowTop || mousePos.y > rowBottom) {
+          // 鼠标不在当前行，重置样式
+          const shadowColor = this.unpackFunc(this.context.getOptions().bar.shadowColor) || "rgba(0, 0, 0, 0.2)";
+          const shadowBlur = this.unpackFunc(this.context.getOptions().bar.shadowBlur) || 0;
+          const shadowOffsetX = this.unpackFunc(this.context.getOptions().bar.shadowOffsetX) || 0;
+          const shadowOffsetY = this.unpackFunc(this.context.getOptions().bar.shadowOffsetY) || 0;
+          this.handleBarHighlight({
+            shadowColor,
+            shadowBlur,
+            shadowOffsetX,
+            shadowOffsetY
+          });
+
+          this.handleResizeHighlight(0);
+
+          // 重置鼠标
+          stage.container().style.cursor = "default";
+        }
+
+
+      }
+    }
+
+
     this.context.event.emit(EventName.SLIDER_MOVING, false);
   }
 
@@ -1091,6 +1128,7 @@ export class ChartSlider {
 
   // 鼠标离开
   private handleMouseLeave() {
+    if (this.isDragging) return;
     this.handleResizeHighlight(0);
   }
 
