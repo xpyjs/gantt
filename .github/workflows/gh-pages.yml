@@ -50,10 +50,22 @@ jobs:
           cd docs
           pnpm build
 
-      - name: 8. 创建发布目录
+      - name: 8. 创建发布目录并确保 404.html 在根目录
         run: |
           mkdir -p gh-pages/
           cp -r docs/dist/* gh-pages/
+          # 确保 404.html 在根目录
+          if [ -f "docs/public/404.html" ]; then
+            cp docs/public/404.html gh-pages/404.html
+          fi
+          # 验证文件结构
+          echo "Generated files:"
+          ls -la gh-pages/
+          if [ -f "gh-pages/404.html" ]; then
+            echo "✅ 404.html found in root"
+          else
+            echo "❌ 404.html NOT found in root"
+          fi
 
       - name: 9. 保存并发布文档
         uses: peaceiris/actions-gh-pages@v3
