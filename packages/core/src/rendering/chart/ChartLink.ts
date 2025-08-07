@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-07 14:17:44
+ * @LastEditTime: 2025-08-07 14:19:50
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -935,8 +935,24 @@ export class LinkGroup {
       document.removeEventListener("mouseup", handleMouseUp);
     };
 
+    const handleKeyEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        this.templateArrow.visible(false);
+        this.stage.container().style.cursor = "default";
+        this.isDragging = false;
+
+        // 恢复原来的连线
+        group?.visible(true);
+
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener("keydown", handleKeyEscape);
+      }
+    }
+
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("keydown", handleKeyEscape);
   }
 
   /**
@@ -1069,8 +1085,21 @@ export class LinkGroup {
       document.removeEventListener("mouseup", handleMouseUp);
     };
 
+    const handleKeyEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        this.templateArrow.visible(false);
+        this.stage.container().style.cursor = "default";
+        this.isDragging = false;
+
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener("keydown", handleKeyEscape);
+      }
+    }
+
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener("keydown", handleKeyEscape);
   }
 
   /**
