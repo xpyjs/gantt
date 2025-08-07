@@ -52,8 +52,8 @@ jobs:
 
       - name: 8. 创建发布目录
         run: |
-          mkdir -p gh-pages/docs
-          cp -r docs/dist/* gh-pages/docs/
+          mkdir -p gh-pages/
+          cp -r docs/dist/* gh-pages/
 
       - name: 9. 保存并发布文档
         uses: peaceiris/actions-gh-pages@v3
