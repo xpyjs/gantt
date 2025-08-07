@@ -5,6 +5,7 @@ on:
     paths:
       - 'docs/**'
       - '.github/workflows/gh-pages.yml'
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
   create-gh-pages:
