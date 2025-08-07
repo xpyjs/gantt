@@ -1379,6 +1379,24 @@ export const apiItems: ApiItem[] = [
           "指定唯一 id 的字段。默认 'id'。如果没有找到对应字段，可能会导致关联线无法查找/更新/删除"
       },
       {
+        id: "links-move",
+        key: "move",
+        title: "移动设置",
+        type: "object",
+        description: "移动关连线的相关设置",
+        children: [
+          {
+            id: "links-move-enabled",
+            key: "enabled",
+            title: "允许移动连线",
+            type: "boolean",
+            defaultValue: "false",
+            description:
+              "是否允许移动连线。开启时，所有连线将按照 from 与 to 属性规则允许移动。\n需要注意的是，开启移动后，需要主动添加 'update:link' 事件，否则会导致显示异常。"
+          }
+        ]
+      },
+      {
         id: "links-radius",
         key: "radius",
         title: "原点大小",

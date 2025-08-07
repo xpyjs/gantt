@@ -71,7 +71,7 @@ export interface IGanttOptions {
        * @default false
        *
        * @description 开启时，所有连线将按照 from 与 to 属性规则允许移动
-       * @description 需要注意的是，开启移动后，需要主动添加对应接收事件，否则会导致显示异常
+       * @description 需要注意的是，开启移动后，需要主动添加对应 'update:link' 事件，否则会导致显示异常
        */
       enabled: boolean;
     };
