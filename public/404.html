@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <title>XGantt - 页面重定向中...</title>
+    <meta name="robots" content="noindex">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+    </style>
+    <script type="text/javascript">
+        // 添加调试日志
+        console.log('404.html loaded');
+        console.log('Current URL:', window.location.href);
+        console.log('Pathname:', window.location.pathname);
+        console.log('Search:', window.location.search);
+        console.log('Hash:', window.location.hash);
+
+        // GitHub Pages SPA 路由重定向解决方案
+        (function () {
+            var pathSegmentsToKeep = 1;
+            var l = window.location;
+
+            // 构建重定向URL
+            var redirect = l.protocol + '//' + l.hostname +
+                (l.port ? ':' + l.port : '') +
+                l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') +
+                '/?/' +
+                l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+                (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+                l.hash;
+
+            console.log('Redirecting to:', redirect);
+
+            // 使用 replace 避免在浏览器历史中留下记录
+            setTimeout(function () {
+                l.replace(redirect);
+            }, 100); // 稍微延迟以便看到调试信息
+        })();
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h2>页面加载中...</h2>
+        <div class="spinner"></div>
+        <p>正在为您跳转到正确的页面，请稍候...</p>
+        <p>如果页面没有自动跳转，请 <a href="/gantt/">点击这里</a> 返回首页</p>
+    </div>
+</body>
+
+</html>
