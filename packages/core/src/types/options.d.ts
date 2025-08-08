@@ -399,6 +399,34 @@ export interface IGanttOptions {
     };
   };
 
+  /** 汇总集合配置 */
+  summary: {
+    /**
+     * 是否启用汇总集合
+     *
+     * @default false
+     *
+     * @description 启用后，所有标记为汇总集合的任务将会被特殊处理。
+     */
+    show: boolean;
+    /** 汇总集合的颜色。默认与 bar 颜色保持一致 */
+    color?: string | ((row: EmitData) => string | undefined);
+    /** 移动相关配置 */
+    move: {
+      /** 是否启用移动。默认情况，汇总是不允许主动移动的 */
+      enabled: boolean;
+    };
+    /**
+     * 展示模式
+     *
+     * @default 'expand'
+     *
+     * - 'always' 永远展示为汇总集合形式
+     * - 'expand' 展开时展示为汇总集合形式，当任务收起后，展示为普通类型
+     */
+    mode: "always" | "expand"
+  };
+
   /** 主色调。默认 #eca710 */
   primaryColor: string;
 

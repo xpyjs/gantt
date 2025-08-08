@@ -31,6 +31,7 @@ if (ganttContainer) {
       field1: "field1",
       field2: "field2",
       field3: "field3",
+      type: "summary",
       progress: 0.8,
       id: "2",
       children: [
@@ -86,7 +87,8 @@ if (ganttContainer) {
               field1: "field1",
               field2: "field2",
               field3: "field3",
-              id: "3-3"
+              id: "3-3",
+              type: "milestone"
             }
           ]
         },
@@ -107,7 +109,8 @@ if (ganttContainer) {
       endDate: "2024-01-15",
       field1: "field1",
       field2: "field2",
-      field3: "field3"
+      field3: "field3",
+      type: "summary"
     },
     {
       id: "4",
@@ -117,6 +120,7 @@ if (ganttContainer) {
       field1: "field1",
       field2: "field2",
       field3: "field3",
+      type: "summary",
       children: [
         {
           name: "Subtask 4",
@@ -178,6 +182,12 @@ if (ganttContainer) {
         name: "name",
         startTime: "startDate",
         endTime: "endDate"
+      },
+      milestone: {
+        show: true,
+      },
+      summary: {
+        show: true,
       },
       // primaryColor: "#406cff",
       highlight: true,
@@ -264,7 +274,7 @@ if (ganttContainer) {
         // backgroundColor: ["red", "green"]
       },
       bar: {
-        // height: "30%",
+        height: "50%",
         field: "name",
         move: {
           enabled: true,

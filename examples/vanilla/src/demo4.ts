@@ -183,14 +183,14 @@ const gantt = new XGantt(ganttContainer, {
   milestone: {
     show: true,
     size: 10,
-    shape: 'star',
-    color: row => row.data.name === '设计定稿' ? 'red' : 'green',
+    // shape: 'star',
+    color: 'red',
     border: {
       width: 1
     },
     label: {
       show: true,
-      position: 'top-left',
+      // position: 'top-left',
       text: '测试标签',
     }
   }

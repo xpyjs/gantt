@@ -255,4 +255,11 @@ export class Task {
 
     return false;
   }
+
+  public isSummary() {
+    if (this.store.getOptionManager().getOptions().summary.show)
+      return this.type === 'summary';
+
+    return false;
+  }
 }

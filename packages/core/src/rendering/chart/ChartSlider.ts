@@ -148,7 +148,8 @@ export class ChartSlider {
     }
     this.slider.position({ x, y });
     this.slider.size({ width: sliderWidth, height });
-    const draggable = !!this.unpackFunc(this.context.getOptions().bar.move.enabled);
+    const draggable = !!this.unpackFunc(this.context.getOptions().bar.move.enabled) &&
+      (this.task.isSummary() ? this.context.getOptions().summary.move.enabled : true);
     this.slider.draggable(draggable);
     this.slider.on("mouseover", e => {
       if (draggable && !this.isDragging) {
@@ -291,6 +292,76 @@ export class ChartSlider {
       }
 
       this.sliderType = 'milestone';
+    } else if (this.task.isSummary() &&
+      (this.context.getOptions().summary.mode === 'always' || this.task.expanded)) {
+      // 里程碑类型的任务条
+      if (this.sliderBar && this.sliderType !== 'summary') {
+        this.slider.destroyChildren();
+        this.sliderBar = null;
+        this.progressGroup = null;
+        this.leftHandleGroup = null;
+        this.rightHandleGroup = null;
+      }
+
+      const color = this.unpackFunc(this.context.getOptions().summary.color) || fill;
+      const summaryHeight = rowHeight * 0.2; // 汇总任务高度稍小
+      const capHeight = rowHeight * 0.3; // 端点高度
+
+      const createSummary = (width: number) => {
+        return new Konva.Shape({
+          sceneFunc: (context, shape) => {
+            const earWidth = capHeight * 0.5; // 端点宽度
+
+            context.beginPath();
+
+            // 左端点
+            context.moveTo(0, (rowHeight - summaryHeight) / 2);
+            context.lineTo(earWidth, (rowHeight - summaryHeight) / 2);
+            context.lineTo(earWidth, (rowHeight - summaryHeight) / 2 + summaryHeight);
+            context.lineTo(0, (rowHeight - summaryHeight) / 2 + summaryHeight + capHeight);
+            context.lineTo(0, (rowHeight - summaryHeight) / 2);
+
+            // 主体横条
+            context.rect(earWidth, (rowHeight - summaryHeight) / 2, width - 2 * earWidth, summaryHeight);
+
+            // 右端点
+            context.moveTo(width - earWidth, (rowHeight - summaryHeight) / 2);
+            context.lineTo(width, (rowHeight - summaryHeight) / 2);
+            context.lineTo(width, (rowHeight - summaryHeight) / 2 + summaryHeight + capHeight);
+            context.lineTo(width - earWidth, (rowHeight - summaryHeight) / 2 + summaryHeight);
+            context.lineTo(width - earWidth, (rowHeight - summaryHeight) / 2);
+
+            context.fillStrokeShape(shape);
+          },
+          width: width,
+          fill: color,
+          shadowColor: shadowColor,
+          shadowBlur: shadowBlur,
+          shadowOffsetX: shadowOffsetX,
+          shadowOffsetY: shadowOffsetY,
+          y: -(capHeight + summaryHeight) / 2 - y / 2
+        });
+      }
+
+      // 如果宽度发生变化，重新创建 Shape
+      if (!this.sliderBar || this.sliderBar.width() !== sliderWidth) {
+        if (this.sliderBar) {
+          this.sliderBar.destroy();
+        }
+        this.sliderBar = createSummary(sliderWidth);
+        this.slider.add(this.sliderBar);
+      } else {
+        // 只更新颜色和阴影属性
+        this.sliderBar.setAttrs({
+          fill: color,
+          shadowColor: shadowColor,
+          shadowBlur: shadowBlur,
+          shadowOffsetX: shadowOffsetX,
+          shadowOffsetY: shadowOffsetY
+        });
+      }
+
+      this.sliderType = 'summary';
     } else {
       // 只要没有特殊类型，全部渲染为普通 bar
       if (this.sliderBar && this.sliderType !== 'bar') {
@@ -648,13 +719,19 @@ export class ChartSlider {
       if (e.evt.button !== 0) return; // 只处理左键点击
       const stage = e.target.getStage();
       if (!stage) return;
-      stage.container().style.cursor = "grabbing";
+
+      if (this.slider.draggable()) {
+        stage.container().style.cursor = "grabbing";
+      }
     })
     this.slider.on("mouseup", (e) => {
       if (e.evt.button !== 0) return; // 只处理左键点击
       const stage = e.target.getStage();
       if (!stage) return;
-      stage.container().style.cursor = "grab";
+
+      if (this.slider.draggable()) {
+        stage.container().style.cursor = "grab";
+      }
     });
 
     this.slider.on("click", e => {

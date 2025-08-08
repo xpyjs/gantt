@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-07 11:24:56
+ * @LastEditTime: 2025-08-08 15:38:40
  * @Description: 配置项管理器
  */
 
@@ -112,6 +112,13 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
       fontSize: 10,
       fontFamily: "Arial",
       position: "top-right"
+    }
+  },
+  summary: {
+    show: false,
+    mode: 'expand',
+    move: {
+      enabled: false
     }
   },
   fields: {

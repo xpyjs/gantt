@@ -282,6 +282,176 @@ export const tutorialConfig: TutorialCategory[] = [
         customContent: `完整任务条配置可以参考 <a href="/api/options#bar">Bar API</a>`
       },
       {
+        id: "task-milestone",
+        title: "里程碑",
+        description:
+          "里程碑是甘特图中一个特殊任务节点。它通常用于标记重要的时间节点或事件。里程碑没有持续时间，通常只显示一个点或图标。在 XGantt 中，里程碑默认情况下是使用一个菱形块来展示。",
+        subsections: [
+          {
+            description: "里程碑本身也是一条 task 数据，可以通过数据中 type 字段设置为 `milestone` 来实现。"
+          },
+          {
+            customContent: `<img src="/tutorials-milestone.png" />`
+          },
+          {
+            code: [
+              {
+                framework: "javascript",
+                code: `const options = {
+  bar: {
+    height: 20,
+    backgroundColor: '#007acc',
+    color: '#fff',
+    radius: 4,
+    move: {
+      enabled: true,
+      byUnit: true
+    }
+  },
+  milestone: {
+    show: true,             // 允许显示里程碑
+    size: 10,               // 里程碑图标大小
+    color: 'red',         // 自定义里程碑图标颜色
+    border: {
+      width: 1              // 设置里程碑图标边框
+    },
+    label: {
+      show: true,           // 允许里程碑显示一个标签
+      text: '测试标签',       // 标签内容
+    }
+  }
+}`,
+                language: "javascript"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "task-summary",
+        title: "汇总集合",
+        description:
+          "汇总集合是甘特图中对多个或多组任务进行汇总查阅的特殊任务。它通常不包含具体任务信息，而是把所有子项的任务时间框选起来，提高可视化效果。",
+        subsections: [
+          {
+            description: "汇总集合本身也是一条 task 数据，可以通过数据中 type 字段设置为 `summary` 来实现。"
+          },
+          {
+            description: "汇总集合通常使用一个类似括号的形状将子项时间框选起来。它默认不支持自身的移动，但可以通过配置进行调整。"
+          },
+          {
+            description: "当汇总集合的任务被折叠收起时，它会展示成一个普通任务条的形状。"
+          },
+          {
+            customContent: `<img src="/tutorials-summary.png" />`
+          },
+          {
+            code: [
+              {
+                framework: "javascript",
+                code: `const options = {
+  summary: {
+    show: true
+  },
+}`,
+                language: "javascript"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: "baselines",
+        title: "基线",
+        description: "基线是时间可视化中非常重要的一个概念和实现方式。它可以与实际时间进行非常之观的可视化对比，从而高效的看到哪一个任务滞后，进而可以调整工作进度。",
+        subsections: [
+          {
+            description: "XGantt基线功能支持：",
+            list: [
+              "多条基线",
+              "基线对比",
+              "指定对比",
+              "基线高亮",
+              "指定高亮",
+              "对比指示器"
+            ],
+            customContent: `<img src="/tutorials-baseline.png" />`
+          },
+          {
+            description: "XGantt 提供了丰富的基线配置，包括但不限于形式、位置、颜色等，最大限度地让用户自定义出不同的效果。"
+          },
+          {
+            code: [
+              {
+                framework: "javascript",
+                code: `const options = {
+  baselines: {
+    show: true,
+    offset: 0,
+    backgroundColor: '#999',
+    data: [
+      {
+        id: "baseline1",
+        taskId: "1",
+        startTime: "2025-01-01",
+        endTime: "2025-01-15",
+        name: "Baseline 1",
+        highlight: false        // 该条内容不用高亮对比显示
+      },
+      {
+        id: "baseline1-1",
+        taskId: "1",            // taskId 相同时，可以在同一行显示多个基线
+        startTime: "2025-01-16",
+        endTime: "2025-01-18",
+        name: "Baseline 1-1",
+        target: true            // 使用该条数据与任务时间进行对比
+      },
+      {
+        id: "baseline2",
+        taskId: "2",
+        startTime: "2025-01-16",
+        endTime: "2025-01-28",
+        name: "Baseline 2"
+      },
+      {
+        id: "baseline3",
+        taskId: "1-1",
+        startTime: "2025-01-01",
+        endTime: "2025-01-04",
+        name: "Baseline 3"
+      }
+    ],
+    label: {
+      show: true,
+      position: 'left'
+    },
+    compare: {
+      enabled: true,
+      indicator: {
+        show: true,
+        ahead: {
+          opacity: 0.5,
+          text: (diff, row) => \`领先 \${diff} 天\`
+        },
+        delayed: {
+          text: (diff, row) => {
+            return \`超期 \${-diff} 天\`;
+          }
+        },
+      }
+    }
+  }
+}`,
+                language: "javascript"
+              }
+            ],
+          },
+          {
+            customContent: `完整基线配置可以参考 <a href="/api/options#baselines">Baselines API</a>`
+          }
+        ]
+      },
+      {
         id: "dependencies",
         title: "依赖关系",
         description:

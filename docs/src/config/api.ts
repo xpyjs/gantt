@@ -1105,13 +1105,7 @@ export const apiItems: ApiItem[] = [
         id: "holiday-holidays",
         key: "holidays",
         title: "节假日列表",
-        type: `Array<{
-  date: Date | number | string | Array<Date | number | string>;
-  backgroundColor?: string;
-  opacity?: number;
-  pattern?: "stripe" | "dot" | "grid" | "custom";
-  patternOptions?: { ... }  // 详看 holiday 中的 patternOptions
-}>`,
+        type: `Array<{\n  date: Date | number | string | Array<Date | number | string>;\n  backgroundColor?: string;\n  opacity?: number;\n  pattern?: "stripe" | "dot" | "grid" | "custom";\n  patternOptions?: { ... }  // 详看 holiday 中的 patternOptions\n}>`,
         description: "配置节假日期。可以针对不同节假日配置不同的背景颜色"
       },
       {
@@ -1801,6 +1795,56 @@ export const apiItems: ApiItem[] = [
         type: "boolean",
         defaultValue: "true",
         description: "右键点击时是否包含自身"
+      }
+    ]
+  },
+  {
+    id: "summary",
+    key: "summary",
+    title: "汇总集合任务配置",
+    type: "object",
+    description: "汇总集合任务的显示与行为配置。启用后，标记为汇总类型的任务将以汇总形态展示，并支持单独的移动规则。",
+    category: "style",
+    children: [
+      {
+        id: "summary-color",
+        key: "color",
+        title: "颜色",
+        type: "string | ((row: EmitData) => string | undefined)",
+        description: "汇总集合任务颜色。默认与 bar 颜色保持一致"
+      },
+      {
+        id: "summary-mode",
+        key: "mode",
+        title: "汇总集合任务的展示形式",
+        type: '"always" | "expand"',
+        defaultValue: '"expand"',
+        description: "汇总集合任务的展示形式。always: 始终展示; expand: 当子任务展开时展示"
+      },
+      {
+        id: "summary-move",
+        key: "move",
+        title: "移动设置",
+        type: "object",
+        description: "汇总集合任务的移动设置。默认不可移动",
+        children: [
+          {
+            id: "summary-move-enabled",
+            key: "enabled",
+            title: "允许移动",
+            type: "boolean",
+            defaultValue: "false",
+            description: "是否允许移动汇总集合任务"
+          }
+        ]
+      },
+      {
+        id: "summary-show",
+        key: "show",
+        title: "启用汇总集合任务的显示",
+        type: "boolean",
+        defaultValue: "false",
+        description: "是否启用汇总集合任务的显示"
       }
     ]
   },
