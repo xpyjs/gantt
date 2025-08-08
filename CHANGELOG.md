@@ -1,3 +1,20 @@
+## [0.0.1-alpha.5](https://github.com/xpyjs/gantt/compare/v0.0.1-alpha.4...v0.0.1-alpha.5) (2025-08-08)
+
+
+### Bug Fixes
+
+* **core:** table merge problem ([b9b51d9](https://github.com/xpyjs/gantt/commit/b9b51d95fe469f132d1132096172b2434ecc38ad))
+* **core:** update bar hover style ([736ae17](https://github.com/xpyjs/gantt/commit/736ae176e360a791c35e71b258353743c16c73ab))
+
+
+### Features
+
+* **core:** add summary bar ([763c952](https://github.com/xpyjs/gantt/commit/763c9524af0252420af89e33ab29e3c8a6aacf5e))
+* **core:** After the link update, there is no longer a need for manual view updates. ([6281002](https://github.com/xpyjs/gantt/commit/628100204b79ef6025f3773339fc5136307dc04a))
+* **core:** When create & drag links, can use ESC to cancel ([55d4e1b](https://github.com/xpyjs/gantt/commit/55d4e1b6872554ec3a265af1502a218631d12b29))
+
+
+
 ## [0.0.1-alpha.4](https://github.com/xpyjs/gantt/compare/v0.0.1-alpha.3...v0.0.1-alpha.4) (2025-08-06)
 
 

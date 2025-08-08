@@ -2,7 +2,7 @@ import { CodeBlock } from "@/types/demo";
 import { toJSON } from "@/utils/common";
 import { cloneDeep } from "lodash-es";
 
-const VERSION = "0.0.1-alpha.4";
+const VERSION = "0.0.1-alpha.5";
 
 const VITE_CONFIG = `import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
