@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:57:49
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-25 15:21:09
+ * @LastEditTime: 2025-08-18 17:51:28
  * @Description: 时间轴管理
  */
 
@@ -68,8 +68,6 @@ export class TimeAxis {
   private strictStart = false;
   /** 固定截止日期 */
   private strictEnd = false;
-  /** 是否锁定时间范围 */
-  private isStrict = false;
   /** 是否自适应宽度 */
   private isAuto = false;
 
@@ -166,6 +164,7 @@ export class TimeAxis {
 
   public init(options: IGanttOptions): void {
     this.isDirty = true;
+    this.isFirstTime = true;
 
     const { unit, chart } = options;
     this.isAuto = !!chart.autoCellWidth;
@@ -196,8 +195,6 @@ export class TimeAxis {
       this.strictEnd = true;
     }
 
-    this.isStrict = this.strictStart && this.strictEnd;
-
     if (chart.cellWidth) {
       if (isNumber(chart.cellWidth)) {
         this.cellWidth = {
@@ -227,17 +224,19 @@ export class TimeAxis {
   }
 
   public setDate(start?: Dayjs, end?: Dayjs) {
-    if (this.isStrict) return;
-
-    if (!this.strictStart && start) {
-      if (this.isFirstTime || start.isBefore(this.startTime)) {
-        this.startTime = start.startOf(this.getFinelyUnit());
+    if (!this.strictStart) {
+      if (start) {
+        if (this.isFirstTime || start.isBefore(this.startTime)) {
+          this.startTime = start.startOf(this.getFinelyUnit());
+        }
       }
     }
 
-    if (!this.strictEnd && end) {
-      if (this.isFirstTime || end.isAfter(this.endTime)) {
-        this.endTime = end.endOf(this.getFinelyUnit());
+    if (!this.strictEnd) {
+      if (end) {
+        if (this.isFirstTime || end.isAfter(this.endTime)) {
+          this.endTime = end.endOf(this.getFinelyUnit());
+        }
       }
     }
 
