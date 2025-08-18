@@ -67,10 +67,9 @@ export class DataManager {
    * 初始化任务
    */
   private initTasks(init = false): void {
-    this.dataLevel = 0;
-
     if (init) {
       // 如果是初始化，清空之前的任务和映射
+      this.dataLevel = 0;
       this.tasks = [];
       this.taskMap.clear();
       this.collapsedTaskIds.clear();
