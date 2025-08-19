@@ -1,3 +1,20 @@
+## [0.0.1-beta.0](https://github.com/xpyjs/gantt/compare/v0.0.1-alpha.5...v0.0.1-beta.0) (2025-08-19)
+
+
+### Bug Fixes
+
+* **core:** chart.startTime & chart.endTime invalid. ([c4df71c](https://github.com/xpyjs/gantt/commit/c4df71c8796580562b59329bef0bdb7352f48504)), closes [#154](https://github.com/xpyjs/gantt/issues/154)
+* **core:** the table is flashing when update options. ([fe5a161](https://github.com/xpyjs/gantt/commit/fe5a1613e3b6399790cbf4aac9aa077314832b1f)), closes [#153](https://github.com/xpyjs/gantt/issues/153)
+
+
+### Features
+
+* **core:** add a flag for today ([b4371e3](https://github.com/xpyjs/gantt/commit/b4371e3d09348571cf859130f74e20cc4438d7d4))
+* **core:** add a text config for holidays ([e609122](https://github.com/xpyjs/gantt/commit/e60912223265bb8181cbdca4337be8a536b96639))
+* **core:** add flag config for custom moment. ([9a8cea3](https://github.com/xpyjs/gantt/commit/9a8cea3e6b0feeb0f3947e2f46468a35cfd4eed2))
+
+
+
 ## [0.0.1-alpha.5](https://github.com/xpyjs/gantt/compare/v0.0.1-alpha.4...v0.0.1-alpha.5) (2025-08-08)
 
 
