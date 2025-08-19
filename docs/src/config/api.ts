@@ -1113,7 +1113,104 @@ export const apiItems: ApiItem[] = [
         key: "holidays",
         title: "节假日列表",
         type: `Array<{\n  date: Date | number | string | Array<Date | number | string>;\n  backgroundColor?: string;\n  opacity?: number;\n  pattern?: "stripe" | "dot" | "grid" | "custom";\n  patternOptions?: { ... }  // 详看 holiday 中的 patternOptions\n}>`,
-        description: "配置节假日期。可以针对不同节假日配置不同的背景颜色"
+        description: "配置节假日期。可以针对不同节假日配置不同的背景颜色",
+        children: [
+          {
+            id: "holiday-holidays-date",
+            key: "date",
+            title: "节假日日期",
+            type: "Date | number | string | Array<Date | number | string>",
+            description:
+              "节假日日期。可以是单个日期，也可以是一个日期数组，表示多个连续的节假日"
+          },
+          {
+            id: "holiday-holidays-backgroundColor",
+            key: "backgroundColor",
+            title: "节假日背景颜色",
+            type: "string",
+            description: "节假日的背景颜色。默认使用主色"
+          },
+          {
+            id: "holiday-holidays-opacity",
+            key: "opacity",
+            title: "节假日透明度",
+            type: "number",
+            description: "节假日的透明度。默认 0.1"
+          },
+          {
+            id: "holiday-holidays-pattern",
+            key: "pattern",
+            title: "节假日填充样式",
+            type: '"stripe" | "dot" | "grid" | "custom"',
+            description:
+              "节假日的填充样式。stripe: 斜条纹填充; dot: 圆点填充; grid: 网格填充; custom: 自定义图片填充"
+          },
+          {
+            id: "holiday-holidays-patternOptions",
+            key: "patternOptions",
+            title: "节假日图案选项",
+            type: "object",
+            description: "条纹样式配置。详看 holiday 中的 patternOptions",
+          },
+          {
+            id: "holiday-holidays-text",
+            key: "text",
+            title: "节假日文本配置",
+            type: "boolean",
+            description: "配置节假日对应显示的文本。",
+            children: [
+              {
+                id: "holiday-holidays-text-backgroundColor",
+                key: "backgroundColor",
+                title: "背景颜色",
+                type: "string",
+                description: "文本背景颜色"
+              },
+              {
+                id: "holiday-holidays-text-color",
+                key: "color",
+                title: "文字颜色",
+                type: "string",
+                description: "文本颜色"
+              },
+              {
+                id: "holiday-holidays-text-content",
+                key: "content",
+                title: "文本内容",
+                type: "string",
+                description: "显示的文本内容"
+              },
+              {
+                id: "holiday-holidays-text-fontFamily",
+                key: "fontFamily",
+                title: "字体",
+                type: "string",
+                description: "文本字体"
+              },
+              {
+                id: "holiday-holidays-text-fontSize",
+                key: "fontSize",
+                title: "字体大小",
+                type: "number",
+                description: "文本字体大小"
+              },
+              {
+                id: "holiday-holidays-text-opacity",
+                key: "opacity",
+                title: "透明度",
+                type: "number",
+                description: "文本透明度。影响整个文本框的透明度，如果只希望降低背景颜色透明度，直接使用带透明度的背景颜色。"
+              },
+              {
+                id: "holiday-holidays-text-show",
+                key: "show",
+                title: "显示文本",
+                type: "boolean",
+                description: "是否显示文本"
+              }
+            ]
+          }
+        ]
       },
       {
         id: "holiday-opacity",

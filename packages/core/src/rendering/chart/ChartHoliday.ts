@@ -146,24 +146,65 @@ export class HolidayGroup {
           // 根据模式设置填充
           ...(this.patternImage.get(holiday)
             ? {
-                fillPatternImage: this.patternImage.get(holiday) ?? undefined,
-                fillPatternRepeat: "repeat",
-                fillPatternOffset: { x: 0, y: 0 },
-                fillPatternScale: { x: 1, y: 1 },
-                opacity:
-                  holiday.opacity || this.context.getOptions().holiday.opacity
-              }
+              fillPatternImage: this.patternImage.get(holiday) ?? undefined,
+              fillPatternRepeat: "repeat",
+              fillPatternOffset: { x: 0, y: 0 },
+              fillPatternScale: { x: 1, y: 1 },
+              opacity:
+                holiday.opacity || this.context.getOptions().holiday.opacity
+            }
             : {
-                fill:
-                  holiday.backgroundColor ||
-                  this.context.getOptions().holiday.backgroundColor ||
-                  this.context.getOptions().primaryColor,
-                opacity:
-                  holiday.opacity || this.context.getOptions().holiday.opacity
-              })
+              fill:
+                holiday.backgroundColor ||
+                this.context.getOptions().holiday.backgroundColor ||
+                this.context.getOptions().primaryColor,
+              opacity:
+                holiday.opacity || this.context.getOptions().holiday.opacity
+            })
         });
 
         this.holidayGroup.add(backgroundRect);
+
+        if (holiday.text?.show) {
+          if (isArray(holiday.date)) {
+            // 只渲染第一个日期的文本
+            if (!dayjs(holiday.date[0]).isSame(time, "day")) continue;
+          }
+
+          const fontSize = holiday.text?.fontSize || 10;
+          const fontFamily = holiday.text?.fontFamily || 'Arial';
+          const textContent = holiday.text?.content || '';
+          const textSize = new Konva.Text({ fontSize, fontFamily }).measureSize(textContent);
+
+          const textColor = holiday.text?.color || 'white';
+          const textBackgroundColor = holiday.text?.backgroundColor || holiday.backgroundColor || this.context.getOptions().holiday?.backgroundColor || this.context.getOptions().primaryColor;
+          const textGroup = new Konva.Group({
+            name: "holiday-text-group",
+            x,
+            y,
+            opacity: holiday.text?.opacity
+          });
+
+          const text = new Konva.Text({
+            text: textContent,
+            fill: textColor,
+            fontSize,
+            fontFamily,
+            padding: 5
+          });
+
+          const bg = new Konva.Rect({
+            x: 0,
+            y: 0,
+            width: textSize.width + 12,
+            height: textSize.height + 8,
+            fill: textBackgroundColor,
+          });
+
+          textGroup.add(bg);
+          textGroup.add(text);
+          this.holidayGroup.add(textGroup);
+        }
       }
     }
 

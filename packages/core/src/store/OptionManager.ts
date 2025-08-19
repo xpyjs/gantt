@@ -2,13 +2,14 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-08 15:38:40
+ * @LastEditTime: 2025-08-19 13:57:26
  * @Description: 配置项管理器
  */
 
 import { Task } from "@/models/Task";
 import { IOptionConfig, IOptions } from "@/types";
 import { IGanttOptions } from "@/types/options";
+import dayjs, { Dayjs } from "dayjs";
 import { isArray, isFunction, isString, merge } from "lodash-es";
 
 const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
@@ -219,6 +220,38 @@ export class OptionManager {
 
     if (isArray(options.links?.data)) {
       this.options.links.data = options.links.data as any;
+    }
+
+    // 处理假期
+    if (options.holiday?.holidays && options.holiday.holidays.length > 0) {
+      const res: typeof options.holiday.holidays = [];
+      options.holiday.holidays.forEach(holiday => {
+        if (isArray(holiday.date)) {
+          // 检查所有日期是否连续，把非连续的日期截取出来
+          const _dates = holiday.date.map(date => dayjs(date)).sort((a, b) => a.diff(b));
+          for (let i = 1; i < _dates.length; i++) {
+            // 只需要考虑天就可以，所有假期都以 day 为单位
+            if (_dates[i].diff(_dates[i - 1], 'day') > 1) {
+              res.push({
+                ...holiday,
+                date: _dates.slice(0, i).map(d => d.valueOf())
+              });
+              _dates.splice(0, i);
+              break;
+            }
+          }
+          if (_dates.length > 0) {
+            res.push({
+              ...holiday,
+              date: _dates.map(d => d.valueOf())
+            });
+          }
+        } else {
+          res.push(holiday);
+        }
+      });
+
+      this.options.holiday.holidays = res;
     }
   }
 

@@ -156,6 +156,59 @@ if (ganttContainer) {
     { from: "2-1", to: "3-1", index: "666", gap: 10 }
   ];
 
+  const holiday = {
+    show: true,
+    // pattern: "stripe",
+    holidays: [
+      {
+        date: "2024-01-05",
+        text: {
+          show: true,
+          content: '元旦'
+        }
+      },
+      {
+        date: "2024-01-10",
+        backgroundColor: "red",
+        text: {
+          show: true,
+          content: '节日',
+          color: "#fff",
+          fontSize: 14,
+          opacity: 0.8
+        }
+      },
+      {
+        date: "2024-01-11",
+        backgroundColor: "blue",
+        text: {
+          show: true,
+          content: '假期',
+          color: "#fff",
+          fontSize: 14,
+          opacity: 0.8
+        }
+      },
+      {
+        date: ["2024-01-15", "2024-01-16", "2024-01-17"],
+        backgroundColor: "green",
+        text: {
+          show: true,
+          content: '小长假',
+          color: "#fff",
+        }
+      },
+      {
+        date: ["2024-01-21", "2024-01-19"],
+        backgroundColor: "orange",
+        text: {
+          show: true,
+          content: '调休',
+        }
+      }
+    ]
+  };
+
   try {
     const gantt = new XGantt(ganttContainer, {
       logLevel: "debug",
@@ -317,23 +370,7 @@ if (ganttContainer) {
           show: true,
         }
       },
-      holiday: {
-        show: true,
-        // pattern: "stripe",
-        holidays: [
-          {
-            date: "2024-01-05"
-          },
-          {
-            date: "2024-01-10",
-            backgroundColor: "red"
-          },
-          {
-            date: "2024-01-11",
-            backgroundColor: "blue"
-          }
-        ]
-      }
+      holiday
     });
     console.log("XGantt instance created:", gantt);
 
@@ -741,6 +778,21 @@ if (ganttContainer) {
             border = !border;
           };
           btnGroup.appendChild(btn7);
+        }
+
+        /** 切换假期显示标签 */
+        {
+          const btn8 = document.createElement("button");
+          btn8.innerHTML = "切换假期标签";
+          let showHolidayText = false;
+          btn8.onclick = () => {
+            holiday.holidays.forEach(h => {
+              h.text.show = showHolidayText;
+            });
+            gantt.update({ holiday });
+            showHolidayText = !showHolidayText;
+          };
+          btnGroup.appendChild(btn8);
         }
       }
     }
