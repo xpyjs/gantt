@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-06-03 09:10:40
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-16 16:15:11
+ * @LastEditTime: 2025-08-19 10:41:22
  * @Description: 渲染今日线
  */
 
@@ -15,6 +15,7 @@ export class ChartToday {
   private arrowAnimation?: Konva.Animation;
 
   private todayLine?: Konva.Line;
+  private todayTextGroup?: Konva.Group;
   private triangle?: Konva.RegularPolygon;
 
   // 状态变量
@@ -27,7 +28,7 @@ export class ChartToday {
     private context: IContext,
     private bgLayer: Konva.Layer,
     private headerLayer: Konva.Layer
-  ) {}
+  ) { }
 
   /**
    * 调整大小
@@ -101,6 +102,70 @@ export class ChartToday {
       this.todayLine.strokeWidth(strokeWidth);
     }
 
+    if (this.context.getOptions().today.text?.show) {
+      const fontSize = this.context.getOptions().today.text?.fontSize || 10;
+      const fontFamily = this.context.getOptions().today.text?.fontFamily || 'Arial';
+      const textContent = this.context.getOptions().today.text?.content || '今天';
+      const textSize = new Konva.Text({ fontSize, fontFamily }).measureSize(textContent);
+
+      const textColor = this.context.getOptions().today.text?.color || 'white';
+      const textBackgroundColor = this.context.getOptions().today.text?.backgroundColor || color;
+      if (!this.todayTextGroup) {
+        this.todayTextGroup = new Konva.Group({
+          x: start + this.offsetX + strokeWidth,
+          y: headerHeight,
+          opacity: this.context.getOptions().today.text?.opacity,
+        });
+
+        this.todayTextGroup.add(new Konva.Rect({
+          x: 0,
+          y: 0,
+          width: textSize.width + 12,
+          height: textSize.height + 8,
+          fill: textBackgroundColor,
+          cornerRadius: 0,
+          name: "today-text-bg"
+        }))
+
+        this.todayTextGroup.add(new Konva.Text({
+          x: 0,
+          y: 0,
+          text: textContent,
+          fontSize,
+          fontFamily,
+          padding: 5,
+          fill: textColor,
+          align: "center",
+          verticalAlign: "middle",
+          name: "today-text"
+        }));
+
+        this.bgLayer.add(this.todayTextGroup);
+      } else {
+        this.todayTextGroup.x(start + this.offsetX + strokeWidth);
+
+        const textDom = this.todayTextGroup.findOne('.today-text') as Konva.Text;
+        textDom?.setAttrs({
+          text: textContent,
+          fill: textColor,
+          fontSize,
+          fontFamily,
+          padding: 5
+        });
+
+        const bgDom = this.todayTextGroup.findOne('.today-text-bg') as Konva.Rect;
+        bgDom?.setAttrs({
+          width: textSize.width + 12,
+          height: textSize.height + 8,
+          fill: textBackgroundColor
+        })
+      }
+    } else if (this.todayTextGroup) {
+      // 如果不显示文本，则销毁文本组
+      this.todayTextGroup.destroy();
+      this.todayTextGroup = undefined;
+    }
+
     // 如果 type 为 line，则创建箭头标记
     if (todayStyle.type === "line") {
       if (!this.triangle) {
@@ -140,6 +205,7 @@ export class ChartToday {
   public destroy(): void {
     this.todayLine?.destroy();
     this.triangle?.destroy();
+    this.todayTextGroup?.destroy();
     this.arrowAnimation?.stop();
     this.arrowAnimation = undefined;
   }

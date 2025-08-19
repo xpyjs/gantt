@@ -1010,6 +1010,13 @@ export const apiItems: ApiItem[] = [
         title: "开始时间字段",
         type: "string",
         description: "开始时间字段名"
+      },
+      {
+        id: "fields-type",
+        key: "type",
+        title: "任务类型字段",
+        type: "string",
+        description: "任务类型字段"
       }
     ]
   },
@@ -2031,6 +2038,66 @@ export const apiItems: ApiItem[] = [
         description: "是否展示今日线"
       },
       {
+        id: "today-text",
+        key: "text",
+        title: "文本配置",
+        type: "object",
+        description: "今日时间线的文本配置",
+        children: [
+          {
+            id: "today-text-backgroundColor",
+            key: "backgroundColor",
+            title: "背景颜色",
+            type: "string",
+            description: "文本背景颜色"
+          },
+          {
+            id: "today-text-color",
+            key: "color",
+            title: "文字颜色",
+            type: "string",
+            description: "文本颜色"
+          },
+          {
+            id: "today-text-content",
+            key: "content",
+            title: "文本内容",
+            type: "string",
+            defaultValue: '"今天"',
+            description: "显示的文本内容"
+          },
+          {
+            id: "today-text-fontFamily",
+            key: "fontFamily",
+            title: "字体",
+            type: "string",
+            description: "文本字体"
+          },
+          {
+            id: "today-text-fontSize",
+            key: "fontSize",
+            title: "字体大小",
+            type: "number",
+            description: "文本字体大小"
+          },
+          {
+            id: "today-text-opacity",
+            key: "opacity",
+            title: "透明度",
+            type: "number",
+            defaultValue: "1",
+            description: "文本透明度。影响整个文本框的透明度，如果只希望降低背景颜色透明度，直接使用带透明度的背景颜色。"
+          },
+          {
+            id: "today-text-show",
+            key: "show",
+            title: "显示文本",
+            type: "boolean",
+            description: "是否显示文本"
+          }
+        ]
+      },
+      {
         id: "today-type",
         key: "type",
         title: "显示类型",
@@ -2156,6 +2223,7 @@ export const apiItems: ApiItem[] = [
 ];
 
 // 根据分类生成配置分类数据
+
 export const getConfigCategories = (): ConfigCategory[] => {
   // 初始化分类数据
   const categories: ConfigCategory[] = configCategories.map(cat => ({

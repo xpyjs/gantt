@@ -311,6 +311,12 @@ if (ganttContainer) {
         //   spacing: 20
         // }
       },
+      today: {
+        // type: 'block',
+        text: {
+          show: true,
+        }
+      },
       holiday: {
         show: true,
         // pattern: "stripe",

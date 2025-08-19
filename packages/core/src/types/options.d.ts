@@ -776,6 +776,25 @@ export interface IGanttOptions {
      * @default 1
      */
     width: number;
+    /**
+     * 今日时间线的文本
+     */
+    text?: {
+      /** 是否显示文本 */
+      show?: boolean;
+      /** 文本内容。默认为 '今天' */
+      content?: string;
+      /** 文本颜色 */
+      color?: string;
+      /** 背景颜色 */
+      backgroundColor?: string;
+      /** 透明度 */
+      opacity?: number;
+      /** 文本字体大小 */
+      fontSize?: number;
+      /** 文本字体 */
+      fontFamily?: string;
+    }
   };
 
   /** 周末配置 */
