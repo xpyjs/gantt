@@ -12,6 +12,7 @@ import { BodyGroup } from "./ChartBody";
 import { WeekendGroup } from "./ChartWeekend";
 import { ChartToday } from "./ChartToday";
 import { HolidayGroup } from "./ChartHoliday";
+import { FlagGroup } from "./ChartFlag";
 import { LinkGroup } from "./ChartLink";
 import { ChartBaseline } from "./ChartBaseline";
 import { IContext } from "@/types/render";
@@ -25,6 +26,7 @@ export class Chart {
   private gridGroup: GridGroup;
   private weekendGroup: WeekendGroup;
   private holidayGroup: HolidayGroup;
+  private flagGroup: FlagGroup;
   private todayLayer: ChartToday;
   private linkGroup: LinkGroup;
   private baselineGroup: ChartBaseline;
@@ -47,6 +49,7 @@ export class Chart {
     this.bgLayer = new Konva.Layer();
     this.weekendGroup = new WeekendGroup(this.context, this.bgLayer);
     this.holidayGroup = new HolidayGroup(this.context, this.bgLayer);
+    this.flagGroup = new FlagGroup(this.context, this.bgLayer);
     this.gridGroup = new GridGroup(this.context, this.bgLayer);
     this.stage.add(this.bgLayer);
 
@@ -89,6 +92,7 @@ export class Chart {
     this.linkGroup.resize(width, height);
     this.baselineGroup.resize(width, height);
     this.holidayGroup.resize(width, height);
+    this.flagGroup.resize(width, height);
     this.weekendGroup.resize(width, height);
     this.bodyGroup.resize(width, height);
     this.todayLayer.resize(width, height);
@@ -101,12 +105,14 @@ export class Chart {
     this.baselineGroup.setOffset(-x, -y);
     this.weekendGroup.setOffset(-x, -y);
     this.holidayGroup.setOffset(-x, -y);
+    this.flagGroup.setOffset(-x, -y);
     this.bodyGroup.setOffset(-x, -y);
     this.todayLayer.setOffset(-x, -y);
 
     // 渲染
     this.gridGroup.render();
     this.holidayGroup.render();
+    this.flagGroup.render();
     this.weekendGroup.render();
     this.linkGroup.render(tasks);
     this.baselineGroup.render(tasks);
@@ -138,6 +144,7 @@ export class Chart {
     this.todayLayer.destroy();
 
     this.holidayGroup.destroy();
+    this.flagGroup.destroy();
     this.weekendGroup.destroy();
     this.linkGroup.destroy();
     this.baselineGroup.destroy();

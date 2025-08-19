@@ -865,6 +865,69 @@ export interface IGanttOptions {
     >;
   } & IPattern;
 
+  /** 标志配置。它用于配置一个或多个标志性日期 */
+  flag?: {
+    /**
+     * 是否展示标志
+     *
+     * @default false
+     */
+    show: boolean;
+    /**
+     * 标志的背景颜色。默认使用主色调
+     */
+    backgroundColor?: string;
+    /**
+     * 透明度
+     *
+     * @description 它会影响标志的整体透明度
+     */
+    opacity?: number;
+    /** 文本颜色 */
+    color?: string;
+    /** 文本字体大小 */
+    fontSize?: number;
+    /** 文本字体 */
+    fontFamily?: string;
+    /** 标志日期的数据以及配置 */
+    data: Array<{
+      /**
+       * 标志的背景颜色
+       */
+      backgroundColor?: string;
+      /**
+       * 透明度
+       *
+       * @description 它会影响标志的整体透明度
+       */
+      opacity?: number;
+      /**
+       * 标志时间。支持精准时间，会根据最精度位置展示
+       */
+      date: Date | number | string;
+      /** 文本内容。展示文本就是普通文本旗帜 */
+      content?: string;
+      /**
+       * 如果不展示文本，支持几种特殊旗帜符号
+       *
+       * @description 它与文本内容互斥，如果 content 不为空，则不会展示特殊旗帜
+       *
+       * @param banner 横幅旗（比带文本旗帜略小）
+       * @param pennant 三角信号旗
+       * @param tag 矩形带缺口旗
+       * @param wedge 锥形旗
+       * @param ribbon 丝带旗
+       */
+      flag?: "banner" | "pennant" | "tag" | "wedge" | "ribbon";
+      /** 文本颜色 */
+      color?: string;
+      /** 文本字体大小 */
+      fontSize?: number;
+      /** 文本字体 */
+      fontFamily?: string;
+    }>
+  }
+
   /** 滚动条配置 */
   scrollbar?: {
     /** 是否显示水平滚动条 */

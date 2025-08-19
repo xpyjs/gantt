@@ -1021,6 +1021,125 @@ export const apiItems: ApiItem[] = [
     ]
   },
   {
+    id: "flag",
+    key: "flag",
+    title: "标志配置",
+    type: "object",
+    description: "标志配置。它用于配置一个或多个标志性日期",
+    category: "style",
+    children: [
+      {
+        id: "flag-backgroundColor",
+        key: "backgroundColor",
+        title: "背景颜色",
+        type: "string",
+        description: "标志的背景颜色。默认使用主色调"
+      },
+      {
+        id: "flag-color",
+        key: "color",
+        title: "文字颜色",
+        type: "string",
+        description: "文本颜色"
+      },
+      {
+        id: "flag-data",
+        key: "data",
+        title: "标志数据",
+        type: "object",
+        description: "标志日期的数据以及配置",
+        children: [
+          {
+            id: "flag-data-backgroundColor",
+            key: "backgroundColor",
+            title: "背景颜色",
+            type: "string",
+            description: "标志的背景颜色"
+          },
+          {
+            id: "flag-data-color",
+            key: "color",
+            title: "文字颜色",
+            type: "string",
+            description: "文本颜色"
+          },
+          {
+            id: "flag-data-content",
+            key: "content",
+            title: "文本内容",
+            type: "string",
+            description: "展示文本就是普通文本旗帜"
+          },
+          {
+            id: "flag-data-date",
+            key: "date",
+            title: "标志时间",
+            type: "Date | number | string",
+            required: true,
+            description: "标志时间。支持精准时间，会根据最精度位置展示"
+          },
+          {
+            id: "flag-data-flag",
+            key: "flag",
+            title: "旗帜形状",
+            type: '"banner" | "pennant" | "tag" | "wedge" | "ribbon"',
+            description: "不展示文本时的特殊旗帜符号。与 content 互斥"
+          },
+          {
+            id: "flag-data-fontFamily",
+            key: "fontFamily",
+            title: "字体",
+            type: "string",
+            description: "文本字体"
+          },
+          {
+            id: "flag-data-fontSize",
+            key: "fontSize",
+            title: "字体大小",
+            type: "number",
+            description: "文本字体大小"
+          },
+          {
+            id: "flag-data-opacity",
+            key: "opacity",
+            title: "透明度",
+            type: "number",
+            description: "影响标志的整体透明度"
+          }
+        ]
+      },
+      {
+        id: "flag-fontFamily",
+        key: "fontFamily",
+        title: "字体",
+        type: "string",
+        description: "文本字体"
+      },
+      {
+        id: "flag-fontSize",
+        key: "fontSize",
+        title: "字体大小",
+        type: "number",
+        description: "文本字体大小"
+      },
+      {
+        id: "flag-opacity",
+        key: "opacity",
+        title: "透明度",
+        type: "number",
+        description: "影响标志的整体透明度"
+      },
+      {
+        id: "flag-show",
+        key: "show",
+        title: "显示标志",
+        type: "boolean",
+        defaultValue: "false",
+        description: "是否展示标志"
+      }
+    ]
+  },
+  {
     id: "header",
     key: "header",
     title: "头部样式",

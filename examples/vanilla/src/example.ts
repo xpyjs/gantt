@@ -1,4 +1,4 @@
-import { XGantt } from "@xpyjs/gantt-core";
+import { XGantt, type IOptions } from "@xpyjs/gantt-core";
 import dayjs from "dayjs";
 // Import the type from the main package entry
 // import type { XGanttOptions } from "@xpyjs/gantt-core";
@@ -156,7 +156,7 @@ if (ganttContainer) {
     { from: "2-1", to: "3-1", index: "666", gap: 10 }
   ];
 
-  const holiday = {
+  const holiday: IOptions['holiday'] = {
     show: true,
     // pattern: "stripe",
     holidays: [
@@ -208,6 +208,21 @@ if (ganttContainer) {
       }
     ]
   };
+
+  const flag: IOptions['flag'] = {
+    show: true,
+    data: [
+      {
+        date: '2024-01-08 14:30:00',
+        content: '重要事件',
+      },
+      {
+        date: '2024-01-13 19:30:00',
+        backgroundColor: 'purple',
+        flag: 'ribbon'
+      }
+    ]
+  }
 
   try {
     const gantt = new XGantt(ganttContainer, {
@@ -370,7 +385,8 @@ if (ganttContainer) {
           show: true,
         }
       },
-      holiday
+      holiday,
+      flag
     });
     console.log("XGantt instance created:", gantt);
 

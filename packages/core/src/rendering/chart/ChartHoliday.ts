@@ -45,7 +45,7 @@ export class HolidayGroup {
 
     // 应用偏移到假期组
     this.holidayGroup.x(x);
-    this.holidayGroup.y(y);
+    // this.holidayGroup.y(y);
 
     // 重新计算假期
     this.calculateHoliday();
