@@ -190,6 +190,26 @@ if (success) {
   console.log('跳转失败，可能是日期格式不正确');
 }`,
 
+  // 获取某个节点的完整链路信息示例
+  getDataChain: `// 获取任务的完整链路信息
+const dataChain = gantt.getDataChain('task-1');
+console.log('任务的完整链路信息:', dataChain);
+`,
+
+  // 事件解除监听示例
+  eventOff: `// 移除特定的任务选择事件监听器
+const selectHandler = (data, checked, all) => {
+  console.log('选择了任务:', data);
+};
+gantt.on('select', selectHandler);
+
+// 当不再需要时，可以移除该监听器
+gantt.off('select', selectHandler);
+
+// 移除所有任务选择事件监听器
+gantt.off('select');
+`,
+
   // 事件监听示例
   eventOn: `// 监听任务选择事件
 gantt.on('select', (selectedData, isChecked, allSelectedData) => {
@@ -378,6 +398,30 @@ export const methodsPageConfig: MethodsPageConfig = {
       ]
     },
     {
+      id: "getDataChain",
+      name: "getDataChain(id)",
+      type: "获取某个节点的完整链路信息",
+      description: "获取指定任务的所有相关联的完整路径，包含所有连接线与任务节点",
+      icon: "⛓️",
+      parameters: [
+        {
+          name: "id",
+          type: "string",
+          description: "节点 ID",
+          optional: false
+        }
+      ],
+      returnType: "DataChain",
+      returnDescription: "节点的完整链路信息表",
+      examples: [
+        {
+          framework: "javascript",
+          code: codeExamples.getDataChain,
+          language: "javascript"
+        }
+      ]
+    },
+    {
       id: "update",
       name: "update(options, config?)",
       type: "配置更新",
@@ -457,6 +501,35 @@ export const methodsPageConfig: MethodsPageConfig = {
       ]
     },
     {
+      id: "off",
+      name: "off(event, callback?)",
+      type: "事件解除监听",
+      description: "移除事件监听器或所有监听器",
+      icon: "❌",
+      parameters: [
+        {
+          name: "event",
+          type: "string",
+          description: "要解除监听的事件名称",
+          optional: false
+        },
+        {
+          name: "callback",
+          type: "EventCallback",
+          description: "要移除的特定回调函数，若不传则移除所有监听器",
+          optional: true
+        }
+      ],
+      returnType: "void",
+      examples: [
+        {
+          framework: "javascript",
+          code: codeExamples.eventOff,
+          language: "javascript"
+        }
+      ]
+    },
+    {
       id: "on",
       name: "on(event, callback)",
       type: "事件监听",
@@ -477,7 +550,6 @@ export const methodsPageConfig: MethodsPageConfig = {
         }
       ],
       returnType: "void",
-      notes: ["同一个事件注册多个监听器时，只会执行最后一个监听器。"],
       examples: [
         {
           framework: "javascript",

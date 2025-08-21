@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-19 13:57:26
+ * @LastEditTime: 2025-09-02 10:59:27
  * @Description: 配置项管理器
  */
 
@@ -37,7 +37,8 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
     },
     move: {
       enabled: false
-    }
+    },
+    enableCycleDetection: true
   },
   baselines: {
     data: [],
@@ -217,10 +218,6 @@ export class OptionManager {
     this.options = config.merge
       ? merge(DEFAULT_OPTIONS(), this.options, options)
       : merge(DEFAULT_OPTIONS(), options);
-
-    if (isArray(options.links?.data)) {
-      this.options.links.data = options.links.data as any;
-    }
 
     // 处理假期
     if (options.holiday?.holidays && options.holiday.holidays.length > 0) {

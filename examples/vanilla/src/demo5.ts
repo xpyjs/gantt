@@ -207,46 +207,51 @@ const gantt = new XGantt(ganttContainer, {
   }
 });
 
+let selectNode: any = null;
+
 console.log("Gantt chart initialized:", performance.now(), gantt);
 
 gantt.on("loaded", () => {
   console.log("Gantt chart loaded successfully", performance.now());
 });
+gantt.on("error", (err, msg) => {
+  console.log("Gantt chart error occurred:", err, msg);
+});
 gantt.on("create:link", (link) => {
   links.push({ ...link, id: `link-${links.length + 1}` });
+})
+gantt.on("update:link", (link) => {
+  console.log('update link', link);
+
+  const index = links.findIndex(l => l.id === link.id);
+  links.splice(index, 1, link as any);
 })
 
 
 const btnGroup = document.getElementById('btn-group');
 if (btnGroup) {
   {
-    const btn1 = document.createElement('button');
-    btn1.innerText = '切换里程碑显示';
-    let show = true;
-    btn1.addEventListener('click', () => {
-      show = !show;
-      gantt.update({ milestone: { show } })
-    })
-
-    btnGroup.appendChild(btn1);
+    const div = document.createElement('div');
+    div.innerText = '';
+    btnGroup.appendChild(div);
+    gantt.on("click:slider", (event, taskData) => {
+      selectNode = taskData;
+      div.innerText = `选中节点: ${taskData.name}`;
+    });
   }
 
   {
-    const btn2 = document.createElement('button');
-    btn2.innerText = '切换任务里程碑';
-    let s = false;
-    btn2.addEventListener('click', () => {
-      if (s === false) {
-        data[1].subtask[2].type = 'milestone';
-        s = true;
+    const btn1 = document.createElement('button');
+    btn1.innerText = '获取节点的完整链路';
+    btn1.addEventListener('click', () => {
+      if (selectNode.id) {
+        const data = gantt.getDataChain(selectNode.id);
+        console.log('data chain', data);
       } else {
-        data[1].subtask[2].type = 'task';
-        s = false;
+        console.error('没有找到 id')
       }
-
-      gantt.update({ data })
     })
 
-    btnGroup.appendChild(btn2);
+    btnGroup.appendChild(btn1);
   }
 }

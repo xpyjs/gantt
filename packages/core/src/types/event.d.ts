@@ -3,7 +3,7 @@ import { ILink } from "./link";
 
 export interface EventMap {
   loaded: () => void;
-  error: (error: ErrorType) => void;
+  error: (error: ErrorType, msg?: string) => void;
   "update:link": (link: ILink) => void;
   "create:link": (link: ILink) => void;
   "select:link": (

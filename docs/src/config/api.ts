@@ -1473,10 +1473,10 @@ export const apiItems: ApiItem[] = [
             id: "links-create-from",
             key: "from",
             title: "起始点设置",
-            type: 'boolean | "S" | "F" | ((row: EmitData) => boolean | "S" | "F")',
+            type: 'boolean | "S" | "F" | ((row: EmitData, to?: EmitData) => boolean | "S" | "F")',
             defaultValue: "true",
             description:
-              "是否允许节点作为起始点创建连线。true: 允许; false: 不允许; S: 以左侧起始点为起点; F: 以右侧结束点为起点"
+              "是否允许节点作为起始点创建连线。true: 允许; false: 不允许; S: 以左侧起始点为起点; F: 以右侧结束点为起点。\n当作为函数时，可以获取到该条连线将要链接到哪条数据，进而可以更加灵活的进行判定是否可以落点。需要注意，to 参数仅在拖拽已有连线的起点时，才会生效。当为创建模式时，是没有 to 参数的。"
           },
           {
             id: "links-create-mode",
@@ -1509,7 +1509,7 @@ export const apiItems: ApiItem[] = [
             type: 'boolean | "S" | "F" | ((row: EmitData, from: EmitData) => boolean | "S" | "F")',
             defaultValue: "true",
             description:
-              "是否允许节点被链接。true: 允许; false: 不允许; S: 以左侧起始点为终点; F: 以右侧结束点为终点。当作为函数时，它会多一个 from 参数，可以获取到该条连线是从哪条数据起始的，进而可以更加灵活的进行判定是否可以落点。"
+              "是否允许节点被链接。true: 允许; false: 不允许; S: 以左侧起始点为终点; F: 以右侧结束点为终点。当作为函数时，可以获取到该条连线是从哪条数据起始的，进而可以更加灵活的进行判定是否可以落点。"
           },
           {
             id: "links-create-width",
@@ -1577,6 +1577,15 @@ export const apiItems: ApiItem[] = [
         defaultValue: "20",
         description:
           "转角到起始或结束点的距离。防止出现连线初始就转向，目视不好定位的情况"
+      },
+      {
+        id: "links-enableCycleDetection",
+        key: "enableCycleDetection",
+        title: "启用环检测",
+        type: "boolean",
+        defaultValue: "true",
+        description:
+          "开启后，会自动检查每一条连线的构成，如果存在环链路，在创建、更新连线时，会发出 `LINK_CYCLE` 错误事件。"
       },
       {
         id: "links-gap",

@@ -1,6 +1,7 @@
 import { XGanttContext } from "./GanttContext";
 import { IOptionConfig, IOptions } from "./types";
 import { EventMap } from "./types/event";
+import { DataChain } from "./types/link";
 import { Logger } from "./utils/logger";
 
 /**
@@ -183,6 +184,7 @@ export class XGantt {
 
     Logger.info("Gantt destroyed successfully.");
   }
+
   /**
    * 跳转到指定日期
    *
@@ -233,6 +235,13 @@ export class XGantt {
   }
 
   /**
+   * 获取指定任务的所有相关联的完整路径，包含所有连接线与任务节点
+   */
+  public getDataChain(id: string): DataChain {
+    return this.context.getDataChain(id);
+  }
+
+  /**
    * 注册事件监听器
    *
    * @template K - 事件名称的类型
@@ -240,7 +249,6 @@ export class XGantt {
    * @param cb - 事件回调函数
    *
    * @description 为甘特图注册事件监听器，支持监听各种用户交互和状态变化事件。
-   * 同一个事件注册多个，只会执行最后一个监听器。
    *
    * 支持的事件类型包括：
    * - `loaded`: 加载完成事件，组件初始化完成后触发
@@ -256,6 +264,8 @@ export class XGantt {
    * - `dblclick:slider`: 任务条双击事件
    * - `contextmenu:slider`: 任务条右键菜单事件
    * - `move`: 任务移动事件
+   *
+   * @see {@link EventMap} 查看所有可用事件及其参数类型
    *
    * @example
    * ```typescript
@@ -301,12 +311,52 @@ export class XGantt {
    * });
    * ```
    *
-   * @see {@link EventMap} 查看所有可用事件及其参数类型
    */
   public on<K extends keyof EventMap>(event: K, cb: EventMap[K]): void {
     if (!this.events.has(event)) {
       this.events.set(event, []);
     }
     this.events.get(event)?.push(cb);
+  }
+
+  /**
+   * 移除事件监听器
+   *
+   * @template K - 事件名称的类型
+   * @param event - 要移除的事件名称
+   * @param cb - 可选，指定要移除的回调函数。如果不传入，则移除所有该事件的监听器
+   *
+   * @description 从甘特图中移除指定的事件监听器。
+   * 如果不传入回调函数，则会移除该事件的所有监听器。
+   *
+   * @example
+   * ```typescript
+   * // 移除特定的任务选择事件监听器
+   * const selectHandler = (data, checked, all) => {
+   *   console.log('选择了任务:', data);
+   * };
+   * gantt.on('select', selectHandler);
+   *
+   * // 当不再需要时，可以移除该监听器
+   * gantt.off('select', selectHandler);
+   *
+   * // 移除所有任务选择事件监听器
+   * gantt.off('select');
+   * ```
+   */
+  public off<K extends keyof EventMap>(event: K, cb?: EventMap[K]): void {
+    if (!this.events.has(event)) return;
+
+    if (cb) {
+      const listeners = this.events.get(event);
+      if (listeners) {
+        this.events.set(
+          event,
+          listeners.filter((listener) => listener !== cb)
+        );
+      }
+    } else {
+      this.events.delete(event);
+    }
   }
 }

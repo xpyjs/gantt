@@ -9,7 +9,7 @@ import {
   parseNumberWithPercent,
   svgToImage
 } from "../../utils/helpers";
-import { EventName } from "../../event";
+import { EventName, EventBus } from "../../event";
 import { colorjs } from "../../utils/color";
 import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
@@ -65,6 +65,8 @@ export class ChartSlider {
 
     this.render();
     this.bindEvents();
+
+    this.registerEvents();
   }
 
   public update(x: number, y: number) {
@@ -83,6 +85,14 @@ export class ChartSlider {
   /** 太多需要 function 的判断，搞一个统一的转换 */
   private unpackFunc<T>(val: T | ((data: EmitData) => T)) {
     return this.context.store.getOptionManager().unpackFunc(val, this.task);
+  }
+
+  private registerEvents() {
+    // 监听闪烁事件
+    this.context.event.on(EventName.SLIDER_BLINK, (id: string) => {
+      if (id !== this.task.id) return;
+      this.handleBarBlink();
+    });
   }
 
   private render() {
@@ -1236,5 +1246,46 @@ export class ChartSlider {
         duration: 0.2
       }).play();
     }
+  }
+
+  /** 闪烁 */
+  private handleBarBlink() {
+    if (!this.sliderBar) return;
+
+    const originalOpacity = this.sliderBar.opacity();
+    const blinkDuration = 400; // 每次闪烁持续时间（毫秒）
+    const blinkCount = 2; // 闪烁次数
+    const totalDuration = blinkDuration * blinkCount;
+
+    const anim = new Konva.Animation((frame) => {
+      if (!this.sliderBar || !frame) return;
+
+      const elapsed = frame.time;
+
+      // 超过总时长，停止动画并恢复原状
+      if (elapsed >= totalDuration) {
+        this.sliderBar.opacity(originalOpacity);
+        anim.stop();
+        return;
+      }
+
+      // 计算当前在第几次闪烁中
+      const currentBlink = Math.floor(elapsed / blinkDuration);
+      const blinkProgress = (elapsed % blinkDuration) / blinkDuration;
+
+      // 每次闪烁的透明度变化：0 → 0.5 → 1（淡出→淡入）
+      let opacity: number;
+      if (blinkProgress < 0.5) {
+        // 淡出阶段：从原始透明度到0
+        opacity = originalOpacity * (1 - blinkProgress * 2);
+      } else {
+        // 淡入阶段：从0到原始透明度
+        opacity = originalOpacity * ((blinkProgress - 0.5) * 2);
+      }
+
+      this.sliderBar.opacity(Math.max(0, Math.min(originalOpacity, opacity)));
+    }, this.sliderBar.getLayer());
+
+    anim.start();
   }
 }

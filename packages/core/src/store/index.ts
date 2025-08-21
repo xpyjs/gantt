@@ -2,12 +2,13 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:31
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-06 10:39:15
+ * @LastEditTime: 2025-09-02 11:02:22
  * @Description: Store
  */
 import { OptionManager } from "./OptionManager";
 import { DataManager } from "./DataManager";
 import { ColumnManager } from "./ColumnManager";
+import { LinkManager } from './LinkManager';
 import { TimeAxis } from "./TimeAxis";
 import { Dayjs } from "dayjs";
 import { setLocale } from "../utils/time";
@@ -15,12 +16,14 @@ import { isArray, omit } from "lodash-es";
 import { Logger } from "../utils/logger";
 import { IContext } from "@/types/render";
 import { IOptionConfig, IOptions } from "@/types";
+import { ILink } from "@/types/link";
 
 export class Store {
   // 声明成员属性类型
   private optionManager: OptionManager;
   private dataManager: DataManager;
   private columnManager: ColumnManager;
+  private linkManager: LinkManager;
   private timeAxis: TimeAxis;
 
   // 使用私有构造函数防止直接创建实例
@@ -53,6 +56,14 @@ export class Store {
     if (options?.baselines?.data) {
       this.dataManager.setBaselines(options.baselines.data);
     }
+
+    this.linkManager = new LinkManager(this, this.context.event)
+    if (isArray(options?.links?.data)) {
+      this.linkManager.setLinks(options.links.data as ILink[], true);
+    }
+    // 设置链路环检查
+    this.linkManager.setCycleDetection(options?.links?.enableCycleDetection ?? true);
+
   }
 
   getOptionManager() {
@@ -65,6 +76,10 @@ export class Store {
 
   getColumnManager() {
     return this.columnManager;
+  }
+
+  getLinkManager() {
+    return this.linkManager;
   }
 
   getTimeAxis() {
@@ -89,6 +104,12 @@ export class Store {
     if (isArray(options.baselines?.data)) {
       this.dataManager.setBaselines(options.baselines.data);
     }
+    if (isArray(options.links?.data)) {
+      this.linkManager.setLinks(options.links.data as ILink[]);
+    }
+
+    // 更新链路环检查
+    this.linkManager.setCycleDetection(options.links?.enableCycleDetection ?? true);
 
     if (_options.locale) {
       setLocale(_options.locale);

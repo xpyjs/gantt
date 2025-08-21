@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-31 17:51:30
+ * @LastEditTime: 2025-09-02 15:45:39
  * @Description: Facade Layer for Gantt Component
  */
 import { Logger } from "./utils/logger";
@@ -13,7 +13,7 @@ import dayjs from "./utils/time";
 import { generateId } from "./utils/id";
 import { IOptionConfig, IOptions } from "./types";
 import { EventMap } from "./types/event";
-import type { ILink } from "./types/link";
+import type { DataChain, ILink } from "./types/link";
 import { IContext } from "./types/render";
 import { Task } from "./models/Task";
 import { Baseline } from "./models/Baseline";
@@ -102,6 +102,13 @@ export class XGanttContext implements IContext {
     return true;
   }
 
+  /**
+   * 获取指定任务的所有相关联的完整路径，包含所有连接线与任务节点
+   */
+  public getDataChain(id: string): DataChain {
+    return this.store.getLinkManager().getDataChain(id);
+  }
+
   // ***** 私有事件 ***** /
 
   /**
@@ -118,8 +125,8 @@ export class XGanttContext implements IContext {
   // 注册对外事件
   private registerEvents() {
     // 抛出异常事件
-    this.event.on(EventName.ERROR, (error: ErrorType) => {
-      this._emit("error", error);
+    this.event.on(EventName.ERROR, (error: ErrorType, msg?: string) => {
+      this._emit("error", error, msg);
     });
 
     this.event.on(EventName.LOADED, () => {

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-07 15:45:17
+ * @LastEditTime: 2025-09-02 16:04:56
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -10,10 +10,9 @@ import { Logger } from "../../utils/logger";
 import { ErrorType, EventName } from "../../event";
 import { cloneDeep, isBoolean, isFunction, isString } from "lodash-es";
 import { colorjs } from "../../utils/color";
-import { ILink } from "@/types/link";
+import { ILink, LinkType } from "@/types/link";
 import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
-import { parseNumberWithPercent } from "../../utils/helpers";
 
 export class LinkGroup {
   private tasks: Task[] = [];
@@ -290,7 +289,7 @@ export class LinkGroup {
     if (!this.context.getOptions().links.show) return;
 
     // 获取数据
-    const links = this.context.getOptions().links.data;
+    const links = this.context.store.getLinkManager().getLinks();
 
     // 先清除已不存在但选中的内容
     const exists: string[] = [];
@@ -840,8 +839,6 @@ export class LinkGroup {
       task = this.getTaskByPosition(pos);
       if (!task) return;
 
-      const { allowLeft, allowRight } = this.isAllowDrop(task, link.from);
-
       // 判断拖拽的是 S 还是 F，也就是起始点（圆）还是结束点（箭头），另一头的位置保持不变，创建一条临时的可变的连线，并隐藏原来的连线
       this.templateArrow.visible(true);
       group?.visible(false);
@@ -864,8 +861,18 @@ export class LinkGroup {
           x = right + gap;
         }
 
+        let _type: LinkType;
+        if (type === 'S') {
+          _type = `${target}${(link.type || 'FS')[1]}` as LinkType
+        } else {
+          _type = `${(link.type || "FS")[0]}${target}` as LinkType;
+        }
+
+
         if (type === "S") {
           // 移动的是起始点
+          const { allowLeft, allowRight } = this.isAllowStartDrop(task, link.to, _type!);
+
           this.templateArrow.points([
             x,
             y + rowHeight * task.flatIndex,
@@ -879,6 +886,8 @@ export class LinkGroup {
           }
         } else if (type === "F") {
           // 移动的是结束点
+          const { allowLeft, allowRight } = this.isAllowEndDrop(task, link.from, _type!);
+
           this.templateArrow.points([
             ...points,
             x,
@@ -907,30 +916,30 @@ export class LinkGroup {
         }
       }
 
-      if (
-        _type &&
-        task &&
-        !(_link.from === _link.to && ["FF", "SS"].includes(_type))
-      ) {
-        const { allowLeft, allowRight } = this.isAllowDrop(task, _link.from);
-        _link.type = _type as ILink["type"];
+      if (_type && task) {
+        _link.type = _type as LinkType;
+        let allowLeft = false;
+        let allowRight = false;
+        if (type === "S") {
+          ({ allowLeft, allowRight } = this.isAllowStartDrop(task, _link.to, _link.type!, true));
+        } else if (type === 'F') {
+          ({ allowLeft, allowRight } = this.isAllowEndDrop(task, _link.from, _link.type!, true));
+        }
+
         if (
           (_link.type?.slice(1) === "S" && allowLeft) ||
           (_link.type?.slice(1) === "F" && allowRight)
         ) {
           this.context.event.emit(EventName.UPDATE_LINK, _link);
+          this.context.store.getLinkManager().update();
         } else {
           this.context.event.emit(EventName.ERROR, ErrorType.LINK_NOT_ALLOWED);
         }
       } else {
-        this.context.event.emit(EventName.ERROR, ErrorType.LINK_SAME);
+        this.context.event.emit(EventName.ERROR, ErrorType.TASK_NOT_FOUND);
       }
 
-      this.templateArrow.visible(false);
-
-      this.stage.container().style.cursor = "default";
-      this.isDragging = false;
-
+      this.cleanupTempLink();
       this.calculateLinks();
 
       document.removeEventListener("mousemove", handleMouseMove);
@@ -939,10 +948,7 @@ export class LinkGroup {
 
     const handleKeyEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        this.templateArrow.visible(false);
-        this.stage.container().style.cursor = "default";
-        this.isDragging = false;
-
+        this.cleanupTempLink();
         // 恢复原来的连线
         group?.visible(true);
 
@@ -980,6 +986,8 @@ export class LinkGroup {
     });
     this.templateArrow.visible(false);
 
+    const linkManager = this.context.store.getLinkManager();
+
     // 目标位置，拼类型使用
     let target: "F" | "S" | null = null;
 
@@ -995,8 +1003,6 @@ export class LinkGroup {
 
       task = this.getTaskByPosition(pos);
       if (!task) return;
-
-      const { allowLeft, allowRight } = this.isAllowDrop(task, from);
 
       this.templateArrow.visible(true);
 
@@ -1020,9 +1026,12 @@ export class LinkGroup {
 
         this.templateArrow.points([
           ...points,
+
           x,
           y + rowHeight * task.flatIndex
         ]);
+
+        const { allowLeft, allowRight } = this.isAllowEndDrop(task, from, linkManager.convertPointsToLinkType(type, target));
 
         if (target === "S" && !allowLeft) {
           this.stage.container().style.cursor = "not-allowed";
@@ -1035,24 +1044,18 @@ export class LinkGroup {
     };
 
     const handleMouseUp = () => {
-      let _type: string | undefined = undefined;
+      let _type: LinkType | undefined = undefined;
       if (target) {
-        _type = `${type}${target}`;
+        _type = linkManager.convertPointsToLinkType(type, target);
       }
 
       if (_type && task) {
         // 检查连线是否存在
-        if (
-          this.context.getOptions().links.data.some(link => {
-            return (
-              link.from === from && link.to === task!.id && link.type === _type
-            );
-          })
-        ) {
+        if (linkManager.isLinkExist(from, task.id, _type)) {
           this.context.event.emit(EventName.ERROR, ErrorType.LINK_EXIST);
         } else {
           if (!(from === task.id && type === target)) {
-            const { allowLeft, allowRight } = this.isAllowDrop(task, from);
+            const { allowLeft, allowRight } = this.isAllowEndDrop(task, from, _type, true);
 
             if (
               (target === "S" && allowLeft) ||
@@ -1064,6 +1067,7 @@ export class LinkGroup {
                 type: _type,
                 color
               });
+              this.context.store.getLinkManager().update();
             } else {
               this.context.event.emit(
                 EventName.ERROR,
@@ -1076,11 +1080,7 @@ export class LinkGroup {
         }
       }
 
-      this.templateArrow.visible(false);
-
-      this.stage.container().style.cursor = "default";
-      this.isDragging = false;
-
+      this.cleanupTempLink();
       this.calculateLinks();
 
       document.removeEventListener("mousemove", handleMouseMove);
@@ -1089,9 +1089,7 @@ export class LinkGroup {
 
     const handleKeyEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        this.templateArrow.visible(false);
-        this.stage.container().style.cursor = "default";
-        this.isDragging = false;
+        this.cleanupTempLink();
 
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
@@ -1102,6 +1100,15 @@ export class LinkGroup {
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
     document.addEventListener("keydown", handleKeyEscape);
+  }
+
+  /**
+ * 清理临时连线状态
+ */
+  private cleanupTempLink(): void {
+    this.templateArrow.visible(false);
+    this.stage.container().style.cursor = "default";
+    this.isDragging = false;
   }
 
   /**
@@ -1121,9 +1128,38 @@ export class LinkGroup {
   }
 
   /**
-   * 检查当前连接点是否可以被创建
+   * 检查当前连接线的起始点是否可以被连接
    */
-  private isAllowDrop(task: Task, fromId: string) {
+  private isAllowStartDrop(task: Task, toId: string, linkType: LinkType, useHighlight = false) {
+    let allowLeft = true;
+    let allowRight = true;
+    let _from = this.context.getOptions().links.create.from;
+    if (isFunction(_from)) {
+      _from = _from(
+        task.getEmitData(),
+        this.context.store.getDataManager().getTaskById(toId)!.getEmitData()
+      );
+    }
+
+    if (isBoolean(_from)) {
+      allowLeft = allowRight = _from;
+    } else if (isString(_from)) {
+      allowLeft = _from === "S";
+      allowRight = _from === "F";
+    }
+
+    const res = this.validateChain(task.id, toId, linkType, useHighlight);
+
+    return {
+      allowLeft: allowLeft && res,
+      allowRight: allowRight && res
+    };
+  }
+
+  /**
+   * 检查当前连接点的结束点是否可以被连接
+   */
+  private isAllowEndDrop(task: Task, fromId: string, linkType: LinkType, useHighlight = false) {
     let allowLeft = true;
     let allowRight = true;
     let _to = this.context.getOptions().links.create.to;
@@ -1141,10 +1177,37 @@ export class LinkGroup {
       allowRight = _to === "F";
     }
 
+    const res = this.validateChain(fromId, task.id, linkType, useHighlight);
+
     return {
-      allowLeft,
-      allowRight
+      allowLeft: allowLeft && res,
+      allowRight: allowRight && res
     };
+  }
+
+  /**
+ * 校验连线创建是否合法
+ */
+  private validateChain(from: string, to: string, linkType: LinkType, useHighlight = false): boolean {
+    const linkManager = this.context.store.getLinkManager();
+
+    // 校验链路
+    const result = linkManager.validateChain(from, to, linkType);
+
+    if (!result.ok) {
+      if (useHighlight) {
+        // 特殊处理环检测
+        if (result.reason === ErrorType.LINK_CYCLE && result.cycleInfo) {
+          // 可以在这里添加环检测的视觉提示
+          this.highlightCycleNodes(result.cycleInfo.nodes);
+        }
+      }
+
+      this.context.event.emit(EventName.ERROR, result.reason, result.message);
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -1223,5 +1286,15 @@ export class LinkGroup {
         duration: 0.1
       }).play();
     }
+  }
+
+  /**
+ * 高亮显示环中的节点
+ */
+  private highlightCycleNodes(nodeIds: string[]): void {
+    // 添加环检测的视觉反馈
+    nodeIds.forEach(nodeId => {
+      this.context.event.emit(EventName.SLIDER_BLINK, nodeId);
+    });
   }
 }

@@ -112,7 +112,7 @@ export interface IGanttOptions {
        * @argument {"S"} - 允许以 S，也就是左侧起始点作为起点创建连线
        * @argument {"F"} - 允许以 F，也就是右侧结束点作为起点创建连线
        */
-      from: boolean | "S" | "F" | ((row: EmitData) => boolean | "S" | "F");
+      from: boolean | "S" | "F" | ((row: EmitData, to?: EmitData) => boolean | "S" | "F");
       /**
        * 是否允许节点被链接。如果允许，可以将当前任务节点作为被连接点
        *
@@ -154,6 +154,14 @@ export interface IGanttOptions {
     };
     /** 原点大小。 默认 3 */
     radius: number;
+    /**
+     * 启用环检测。默认开启状态。
+     *
+     * 开启后，会自动检查每一条连线的构成，如果存在环链路，在创建、更新连线时，会发出 `LINK_CYCLE` 错误事件。
+     *
+     * @default true
+     */
+    enableCycleDetection: boolean;
   };
 
   /** 基线配置 */
