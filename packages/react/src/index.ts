@@ -23,7 +23,8 @@ export type {
   ErrorType,
   Dayjs,
   Colorjs,
-  XGanttUnit
+  XGanttUnit,
+  DataChain
 } from "@xpyjs/gantt-core";
 
 // 重新导出核心库的工具函数

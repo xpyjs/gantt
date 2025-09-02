@@ -204,6 +204,14 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             return false;
         }, []);
 
+        // 获取指定任务的所有相关联的完整路径，包含所有连接线与任务节点
+        const getDataChain = useCallback((id: string) => {
+            if (ganttInstanceRef.current) {
+                return ganttInstanceRef.current.getDataChain(id);
+            }
+            return { current: undefined };
+        }, []);
+
         // 销毁甘特图
         const destroyGantt = useCallback(() => {
             if (ganttInstanceRef.current) {
@@ -215,7 +223,8 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
         // 暴露方法给父组件
         useImperativeHandle(ref, () => ({
             getInstance: () => ganttInstanceRef.current,
-            jumpTo
+            jumpTo,
+            getDataChain
         }), [jumpTo]);
 
         // 组件挂载时初始化

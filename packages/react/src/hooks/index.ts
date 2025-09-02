@@ -61,9 +61,17 @@ export function useXGantt() {
     return ganttRef.current?.jumpTo(date) || false;
   }, []);
 
+  /**
+   * 获取指定任务的所有相关联的完整路径
+   */
+  const getDataChain = useCallback((id: string) => {
+    return ganttRef.current?.getDataChain(id) || [];
+  }, []);
+
   return {
     ganttRef,
     getInstance,
-    jumpTo
+    jumpTo,
+    getDataChain
   };
 }

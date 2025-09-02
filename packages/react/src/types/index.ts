@@ -4,7 +4,7 @@
  * @Description: React wrapper types for XGantt
  */
 
-import type { IOptions, EventMap } from "@xpyjs/gantt-core";
+import type { IOptions, EventMap, DataChain } from "@xpyjs/gantt-core";
 
 /**
  * XGanttReact 组件的 Props 类型
@@ -267,4 +267,9 @@ export interface XGanttReactRef {
    * ```
    */
   jumpTo: (date?: any) => boolean;
+
+  /**
+   * 获取指定任务的所有相关联的完整路径，包含所有连接线与任务节点
+   */
+  getDataChain(id: string): DataChain;
 }
