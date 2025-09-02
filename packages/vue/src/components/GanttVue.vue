@@ -106,6 +106,15 @@ defineExpose({
     if (ganttInstance) {
       ganttInstance.jumpTo(date);
     }
+  },
+
+  /**
+   * 获取指定任务的所有相关联的完整路径，包含所有连接线与任务节点
+   */
+  getDataChain: (taskId: string) => {
+    if (ganttInstance) {
+      return ganttInstance.getDataChain(taskId);
+    }
   }
 });
 
