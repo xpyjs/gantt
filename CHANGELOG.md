@@ -1,3 +1,14 @@
+## [0.0.1-beta.1](https://github.com/xpyjs/gantt/compare/v0.0.1-beta.0...v0.0.1-beta.1) (2025-09-02)
+
+
+### Features
+
+* **core:** add a method for link-data chain ([b316636](https://github.com/xpyjs/gantt/commit/b316636c80d0165277a2ae8d22f020c48fd2c9da))
+* **react:** add a method for link-data chain ([df949b1](https://github.com/xpyjs/gantt/commit/df949b1ae7b4f52eef972b1f7d5d5889a316c227))
+* **vue:** add a method for link-data chain ([f8961e7](https://github.com/xpyjs/gantt/commit/f8961e70ff62578172dfd8ed89fe8091d7dbfdb2))
+
+
+
 ## [0.0.1-beta.0](https://github.com/xpyjs/gantt/compare/v0.0.1-alpha.5...v0.0.1-beta.0) (2025-08-19)
 
 

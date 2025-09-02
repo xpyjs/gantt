@@ -1,7 +1,7 @@
 {
   "name": "@xpyjs/gantt-core",
   "private": false,
-  "version": "0.0.1-beta.0",
+  "version": "0.0.1-beta.1",
   "description": "A powerful and flexible Gantt chart component library for modern web applications with TypeScript support",
   "type": "module",
   "main": "./dist/x-gantt.umd.cjs",
