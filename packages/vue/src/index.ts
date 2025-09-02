@@ -44,7 +44,8 @@ export type {
   Dayjs,
   Colorjs,
   XGanttUnit,
-  DataChain
+  DataChain,
+  LinkType
 } from "@xpyjs/gantt-core";
 
 // 导出核心库的工具函数

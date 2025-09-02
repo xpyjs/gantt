@@ -209,7 +209,13 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             if (ganttInstanceRef.current) {
                 return ganttInstanceRef.current.getDataChain(id);
             }
-            return { current: undefined };
+            return {
+                prev: { chain: [], nodes: [], links: [] },
+                next: { chain: [], nodes: [], links: [] },
+                allNodes: [],
+                allLinks: [],
+                current: undefined
+            };
         }, []);
 
         // 销毁甘特图

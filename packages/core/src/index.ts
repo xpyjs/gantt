@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-07 16:41:27
+ * @LastEditTime: 2025-09-02 17:29:12
  * @Description: 项目入口
  */
 
@@ -28,7 +28,7 @@ export const version = VERSION;
 // 导出类型定义
 import type { IOptions, IOptionConfig, EmitData } from "./types";
 import type { EventMap } from "./types/event";
-import type { ILink } from "./types/link";
+import type { ILink, DataChain, LinkType } from "./types/link";
 import type { ErrorType } from "./event";
 import type { XGanttUnit } from "./types/options";
 
@@ -39,5 +39,7 @@ export type {
   EventMap,
   ILink,
   ErrorType,
-  XGanttUnit
+  XGanttUnit,
+  DataChain,
+  LinkType
 };
