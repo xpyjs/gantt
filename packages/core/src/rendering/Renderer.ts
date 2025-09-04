@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-29 11:09:20
+ * @LastEditTime: 2025-09-04 09:17:37
  * @Description: 界面渲染器
  */
 
@@ -167,7 +167,7 @@ export class Renderer {
     });
 
     this.context.event.on(EventName.TOGGLE_COLLAPSE, () => {
-      this.renderScheduler.scheduleTask("CHART_OFFSET_CHANGE", [false]);
+      this.renderScheduler.scheduleTask("CHART_OFFSET_CHANGE", [false], { immediate: true });
     });
   }
 
