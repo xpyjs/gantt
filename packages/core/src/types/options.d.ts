@@ -139,7 +139,7 @@ export interface IGanttOptions {
     distance: number;
     /** 线条的起点/终点位置与任务条的距离。 默认 5 */
     gap: number;
-    /** 线条的虚线设定。 默认 [6, 3] */
+    /** 线条的虚线设定。 默认 [0]，设为 0 即实线 */
     dash: number[];
     /** 线条的宽度。 默认 1 */
     width: number;

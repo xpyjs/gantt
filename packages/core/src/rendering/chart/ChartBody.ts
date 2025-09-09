@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-14 10:15:23
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-22 09:51:00
+ * @LastEditTime: 2025-09-08 17:19:17
  * @Description: 图表部分的主体渲染层
  */
 import Konva from "konva";
@@ -14,6 +14,8 @@ import { IContext } from "@/types/render";
 import { type Task } from "@/models/Task";
 
 export class BodyGroup {
+  private tasks: Task[] = []; // 当前渲染的任务列表
+
   private rowsGroup: Konva.Group; // 包含所有行的容器
   private rowsCache: Map<string, ChartRow> = new Map();
 
@@ -85,12 +87,13 @@ export class BodyGroup {
    * @param tasks 任务数据
    */
   public render(tasks: Task[]): void {
+    this.tasks = tasks;
     const rowHeight = this.context.getOptions().row.height;
     const currentKey = generateId();
 
     this.rowBgGroup.destroyChildren();
 
-    tasks.forEach((task, index) => {
+    this.tasks.forEach((task, index) => {
       const rowId = `chart-row-${task.id}`;
       let rowRect = this.rowsCache.get(rowId);
       const rowY = task.flatIndex * rowHeight;
@@ -152,7 +155,7 @@ export class BodyGroup {
       row.update(
         0,
         task.flatIndex * this.context.getOptions().row.height +
-          this.context.getOptions().header.height
+        this.context.getOptions().header.height
       );
     }
   }
@@ -451,7 +454,7 @@ export class BodyGroup {
       return;
     }
 
-    if (this.context.store.getDataManager().isTaskVisible(rowNode.task)) {
+    if (this.tasks.find(task => task.id === rowNode.task.id)) {
       const rowY =
         rowNode.task.flatIndex * this.context.getOptions().row.height;
       const y = rowY + this.context.getOptions().header.height;

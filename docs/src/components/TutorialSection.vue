@@ -13,7 +13,7 @@
         class="subsection"
       >
         <!-- 子标题 -->
-        <h3 v-if="subsection.title" class="subsection-title">
+        <h3 v-if="subsection.title" class="subsection-title" :id="subsection.title">
           {{ subsection.title }}
         </h3>
 
@@ -104,7 +104,7 @@ const formatListItem = (item: string): string => {
   // 处理双星号包围的粗体文字
   formatted = formatted.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
 
-  return formatted;
+  return processCustomContent(formatted);
 };
 
 // 处理自定义内容中的链接和图片路径

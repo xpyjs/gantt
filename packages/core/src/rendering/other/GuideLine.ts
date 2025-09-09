@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-25 16:35:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-17 15:34:19
+ * @LastEditTime: 2025-09-05 16:52:27
  * @Description: 全局指示线
  */
 
@@ -112,7 +112,8 @@ export class GuideLine {
     // 限制在 0 到容器宽度之间。最右侧让出 20
     const limitedLeft = Math.max(0, Math.min(containerWidth - 20, left));
 
-    this.element.style.left = `${limitedLeft}px`;
+    // this.element.style.left = `${limitedLeft}px`;
+    this.element.style.transform = `translateX(${limitedLeft - 0.5}px)`;
   }
 
   /**

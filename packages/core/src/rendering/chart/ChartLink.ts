@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-02 16:04:56
+ * @LastEditTime: 2025-09-08 17:56:30
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -22,6 +22,9 @@ export class LinkGroup {
   private linksGroup: Konva.Group;
   // 临时箭头
   private templateArrow: Konva.Arrow;
+
+  // 对所有已存在的连线进行缓存
+  private linkCache: Map<string, Konva.Group> = new Map();
 
   private isDragging = false;
   private isSliderMoving = false;
@@ -93,12 +96,6 @@ export class LinkGroup {
   public resize(width: number, height: number): void {
     this.width = width;
     this.height = height;
-
-    // 重新计算关联线
-    this.calculateLinks();
-
-    // 重新计算点组位置
-    this.calculatePoints();
   }
 
   /**
@@ -120,23 +117,17 @@ export class LinkGroup {
     // 应用偏移到临时箭头
     this.templateArrow.x(x);
     this.templateArrow.y(y);
-
-    // 如果需要重新计算关联线
-    this.calculateLinks();
-
-    // 重新计算点组位置
-    this.calculatePoints();
   }
 
   /**
-   * 更新数据
+   * 更新某一条数据
    */
-  public update() {
+  public updateTask(task: Task) {
     // 重新计算关联线
-    this.calculateLinks();
+    this.calculateLinks(task);
 
     // 重新计算点组位置
-    this.calculatePoints();
+    this.calculatePoints(task);
   }
 
   /**
@@ -145,8 +136,11 @@ export class LinkGroup {
   public render(tasks: Task[]): void {
     this.tasks = tasks;
 
-    // 使用批量绘制，减少重绘次数
-    this.update();
+    // 重新计算关联线
+    this.calculateLinks();
+
+    // 重新计算点组位置
+    this.calculatePoints();
   }
 
   /**
@@ -157,17 +151,28 @@ export class LinkGroup {
     this.pointGroup.destroy();
     this.templateArrow.destroy();
     this.selectedMap.clear();
+    this.linkCache.clear();
   }
 
   /**
    * 计算点组位置
    */
-  private calculatePoints(): void {
-    // 清除现有点组
-    this.pointGroup.destroyChildren();
-
+  private calculatePoints(currentTask?: Task): void {
     // 不展示
-    if (!this.context.getOptions().links.create.enabled) return;
+    if (!this.context.getOptions().links.show || !this.context.getOptions().links.create.enabled) {
+      // 清除现有点组
+      this.pointGroup.destroyChildren();
+      return;
+    }
+
+    if (currentTask) {
+      // 仅更新该任务的点
+      this.pointGroup.findOne(`#point-${currentTask.id}-left`)?.destroy();
+      this.pointGroup.findOne(`#point-${currentTask.id}-right`)?.destroy();
+    } else {
+      // 清除现有点组
+      this.pointGroup.destroyChildren();
+    }
 
     // 获取一些参数
     const headerHeight = this.context.getOptions().header.height;
@@ -185,9 +190,10 @@ export class LinkGroup {
     const strokeWidth = this.context.getOptions().links.create.width;
 
     this.tasks.forEach(task => {
+      if (currentTask && task.id !== currentTask.id) return;
+
       if (
         this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, task) &&
-        this.context.store.getDataManager().isTaskVisible(task) &&
         task.startTime &&
         task.endTime
       ) {
@@ -281,32 +287,43 @@ export class LinkGroup {
   /**
    * 计算关联线位置
    */
-  private calculateLinks(): void {
-    // 清除现有关联线
-    this.linksGroup.destroyChildren();
-
+  private calculateLinks(task?: Task): void {
     // 不展示
-    if (!this.context.getOptions().links.show) return;
+    if (!this.context.getOptions().links.show) {
+      this.destroy();
+      return;
+    }
+
+    // 没有任务，不需要创建任何连线
+    if (this.tasks.length === 0) {
+      this.destroy();
+      return;
+    }
 
     // 获取数据
-    const links = this.context.store.getLinkManager().getLinks();
+    const links = task
+      ? this.context.store.getLinkManager().getLinksByTaskId(task.id)
+      : this.context.store.getLinkManager().getLinks();
 
-    // 先清除已不存在但选中的内容
+    if (task) {
+      // 仅更新与该任务相关的连线
+      links.forEach(link => {
+        const id = this.createId(link);
+        this.linkCache.delete(id);
+        const existing = this.linksGroup.findOne(`#${id}`);
+        if (existing) existing.destroy();
+      });
+    }
+
+    // 清除已不存在但选中的内容
     const exists: string[] = [];
+    // 记录已选择的状态
     links.forEach(link => {
       const id = this.createId(link);
       if (this.selectedMap.has(id)) {
         exists.push(id);
       }
-    });
-    this.selectedMap.forEach((_, id) => {
-      if (!exists.includes(id)) {
-        this.selectedMap.delete(id);
-      }
-    });
 
-    // 然后重新创建 links
-    links.forEach(link => {
       const fromTask = this.context.store.getDataManager().getTaskById(link.from);
       const toTask = this.context.store.getDataManager().getTaskById(link.to);
 
@@ -315,6 +332,7 @@ export class LinkGroup {
           `No corresponding FROM task [${link.from}] was found for the link. Info:`,
           link
         );
+        return;
       }
 
       if (!toTask) {
@@ -322,22 +340,41 @@ export class LinkGroup {
           `No corresponding TO task [${link.to}] was found for the link. Info:`,
           link
         );
+        return;
       }
 
+      if (fromTask.flatIndex < this.tasks[0].flatIndex && toTask.flatIndex < this.tasks[0].flatIndex) {
+        // 全都在上面，不显示
+        return;
+      }
+      if (fromTask.flatIndex > this.tasks[this.tasks.length - 1].flatIndex && toTask.flatIndex > this.tasks[this.tasks.length - 1].flatIndex) {
+        // 全都在下面，不显示
+        return;
+      }
+      // 只计算可视范围内
+      const visibleStartX = Math.max(0, -this.offsetX);
+      const visibleEndX = visibleStartX + this.width;
+      if (this.context.store.getTimeAxis().getTimeLeft(link.type?.[0] === 'S' ? fromTask.startTime! : fromTask.endTime!) < visibleStartX &&
+        this.context.store.getTimeAxis().getTimeLeft(link.type?.[1] === 'F' ? toTask.endTime! : toTask.startTime!) < visibleStartX) {
+        // 全都在左边，不显示
+        return;
+      }
+      if (this.context.store.getTimeAxis().getTimeLeft(link.type?.[0] === 'S' ? fromTask.startTime! : fromTask.endTime!) > visibleEndX &&
+        this.context.store.getTimeAxis().getTimeLeft(link.type?.[1] === 'F' ? toTask.endTime! : toTask.startTime!) > visibleEndX) {
+        // 全都在右边，不显示
+        return;
+      }
+
+      // ====== 开始创建 ======
       if (
-        fromTask &&
         this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, fromTask) &&
-        this.context.store.getDataManager().isTaskVisible(fromTask) &&
-        toTask &&
-        this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, toTask) &&
-        this.context.store.getDataManager().isTaskVisible(toTask)
+        this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, toTask)
       ) {
         const points = this.getPoints(fromTask, toTask, link);
 
         if (points.length <= 2) {
           Logger.warn(`The link position has some error.`, link);
         } else {
-          const id = this.createId(link);
           const radius: number =
             link.radius ?? this.context.getOptions().links.radius; // 圆点半径
           const pointerWidth: number =
@@ -347,18 +384,37 @@ export class LinkGroup {
           const strokeWidth: number =
             link.width ?? this.context.getOptions().links.width; // 线条宽度
 
-          const group = new Konva.Group({ id });
+          // 检测是否已存在
+          let group = this.linkCache.get(id);
 
-          const circle = new Konva.Circle({
-            radius,
-            fill:
+          if (group === undefined) {
+            group = new Konva.Group({ id });
+            // 缓存连线
+            this.linkCache.set(id, group);
+          }
+
+          const circle = group.findOne<Konva.Circle>('Circle');
+          if (circle) {
+            circle.radius(radius);
+            circle.fill(
               link.color ||
               this.context.getOptions().links.color ||
-              this.context.getOptions().primaryColor,
-            x: points[0],
-            y: points[1]
-          });
-          group.add(circle);
+              this.context.getOptions().primaryColor
+            );
+            circle.x(points[0]);
+            circle.y(points[1]);
+          } else {
+            const circle = new Konva.Circle({
+              radius,
+              fill:
+                link.color ||
+                this.context.getOptions().links.color ||
+                this.context.getOptions().primaryColor,
+              x: points[0],
+              y: points[1]
+            });
+            group.add(circle);
+          }
 
           // 更新拖拽时间的主体
           // 整条箭头线的前半段可以拖拽起始点
@@ -370,59 +426,94 @@ export class LinkGroup {
           const startPoints = points.slice(0, actualMidIndex + 2);
           const endPoints = points.slice(actualMidIndex);
 
-          const line = new Konva.Line({
-            points: startPoints,
-            stroke:
+          const line = group.findOne<Konva.Line>('Line');
+          if (line) {
+            line.points(startPoints);
+            line.stroke(
               link.color ||
               this.context.getOptions().links.color ||
-              this.context.getOptions().primaryColor,
-            strokeWidth,
-            lineCap: "round",
-            lineJoin: "round",
-            dash: link.dash || this.context.getOptions().links.dash,
-            hitStrokeWidth: 10, // 增加点击区域
-            draggable: true,
-            dragBoundFunc: pos => ({ x: 0, y: 0 })
-          });
-          group.add(line);
-
-          line.on("dragstart", e => {
-            this.handleDrag(
-              e,
-              link,
-              "S",
-              [points[points.length - 2], points[points.length - 1]],
-              id
+              this.context.getOptions().primaryColor
             );
-          });
+            line.strokeWidth(strokeWidth);
+            line.dash(link.dash || this.context.getOptions().links.dash);
+          } else {
+            const line = new Konva.Line({
+              points: startPoints,
+              stroke:
+                link.color ||
+                this.context.getOptions().links.color ||
+                this.context.getOptions().primaryColor,
+              strokeWidth,
+              lineCap: "round",
+              lineJoin: "round",
+              dash: link.dash || this.context.getOptions().links.dash,
+              hitStrokeWidth: 10, // 增加点击区域
+              draggable: true,
+              dragBoundFunc: pos => ({ x: 0, y: 0 })
+            });
+            group.add(line);
 
-          const arrow = new Konva.Arrow({
-            points: endPoints,
-            stroke:
+            line.on("dragstart", e => {
+              this.handleDrag(
+                e,
+                link,
+                "S",
+                [points[points.length - 2], points[points.length - 1]],
+                id
+              );
+            });
+          }
+
+          const arrow = group.findOne<Konva.Arrow>('Arrow');
+          if (arrow) {
+            arrow.points(endPoints);
+            arrow.stroke(
               link.color ||
               this.context.getOptions().links.color ||
-              this.context.getOptions().primaryColor,
-            strokeWidth,
-            pointerLength,
-            pointerWidth,
-            fill:
+              this.context.getOptions().primaryColor
+            );
+            arrow.strokeWidth(strokeWidth);
+            arrow.pointerLength(pointerLength);
+            arrow.pointerWidth(pointerWidth);
+            arrow.fill(
               link.arrow?.color ||
               this.context.getOptions().links.arrow.color ||
               link.color ||
               this.context.getOptions().links.color ||
-              this.context.getOptions().primaryColor, // 箭头填充色
-            lineJoin: "round",
-            dash: link.dash || this.context.getOptions().links.dash,
-            hitStrokeWidth: 10, // 增加点击区域
-            draggable: true,
-            dragBoundFunc: pos => ({ x: 0, y: 0 })
-          });
-          group.add(arrow);
+              this.context.getOptions().primaryColor
+            );
+            arrow.lineJoin("round");
+            arrow.dash(link.dash || this.context.getOptions().links.dash);
+          } else {
+            const arrow = new Konva.Arrow({
+              points: endPoints,
+              stroke:
+                link.color ||
+                this.context.getOptions().links.color ||
+                this.context.getOptions().primaryColor,
+              strokeWidth,
+              pointerLength,
+              pointerWidth,
+              fill:
+                link.arrow?.color ||
+                this.context.getOptions().links.arrow.color ||
+                link.color ||
+                this.context.getOptions().links.color ||
+                this.context.getOptions().primaryColor, // 箭头填充色
+              lineJoin: "round",
+              dash: link.dash || this.context.getOptions().links.dash,
+              hitStrokeWidth: 10, // 增加点击区域
+              draggable: true,
+              dragBoundFunc: pos => ({ x: 0, y: 0 })
+            });
+            group.add(arrow);
 
-          arrow.on("dragstart", e => {
-            this.handleDrag(e, link, "F", [points[0], points[1]], id);
-          });
+            arrow.on("dragstart", e => {
+              this.handleDrag(e, link, "F", [points[0], points[1]], id);
+            });
+          }
 
+          // 加载到视图
           this.linksGroup.add(group);
 
           group.on("mouseover", e => {
@@ -506,6 +597,16 @@ export class LinkGroup {
         }
       }
     });
+
+    // 删除选择状态
+    this.selectedMap.forEach((_, id) => {
+      if (!exists.includes(id)) {
+        this.selectedMap.delete(id);
+      }
+    });
+
+    // 使用批量绘制，减少重绘次数
+    this.layer.batchDraw();
   }
 
   private createId(link: ILink) {
@@ -940,7 +1041,7 @@ export class LinkGroup {
       }
 
       this.cleanupTempLink();
-      this.calculateLinks();
+      this.calculateLinks(task || undefined);
 
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
@@ -1081,7 +1182,7 @@ export class LinkGroup {
       }
 
       this.cleanupTempLink();
-      this.calculateLinks();
+      this.calculateLinks(task || undefined);
 
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
@@ -1192,7 +1293,7 @@ export class LinkGroup {
     const linkManager = this.context.store.getLinkManager();
 
     // 校验链路
-    const result = linkManager.validateChain(from, to, linkType);
+    const result = linkManager.validateLink({ from, to, type: linkType });
 
     if (!result.ok) {
       if (useHighlight) {
@@ -1203,7 +1304,7 @@ export class LinkGroup {
         }
       }
 
-      this.context.event.emit(EventName.ERROR, result.reason, result.message);
+      this.context.event.emit(EventName.ERROR, result.reason);
       return false;
     }
 

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:00:12
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-30 18:13:35
+ * @LastEditTime: 2025-09-09 09:52:45
  * @Description: 图表渲染管理器
  */
 import Konva from "konva";
@@ -31,6 +31,7 @@ export class Chart {
   private linkGroup: LinkGroup;
   private baselineGroup: ChartBaseline;
 
+  private axisLayer: Konva.Layer;
   private bgLayer: Konva.Layer;
   private bodyLayer: Konva.Layer;
 
@@ -53,23 +54,17 @@ export class Chart {
     this.gridGroup = new GridGroup(this.context, this.bgLayer);
     this.stage.add(this.bgLayer);
 
-    this.headerLayer = new HeaderLayer(this.context, this.stage);
-    this.todayLayer = new ChartToday(
-      this.context,
-      this.bgLayer,
-      this.headerLayer.layer
-    );
+    this.axisLayer = new Konva.Layer();
+    this.headerLayer = new HeaderLayer(this.context, this.axisLayer);
+    this.todayLayer = new ChartToday(this.context, this.bgLayer, this.axisLayer);
+    this.stage.add(this.axisLayer);
 
     this.bodyLayer = new Konva.Layer();
     this.linkGroup = new LinkGroup(this.context, this.stage, this.bodyLayer);
     this.baselineGroup = new ChartBaseline(this.context, this.stage, this.bodyLayer);
-    this.bodyGroup = new BodyGroup(
-      this.context,
-      this.stage,
-      this.bodyLayer,
-      this.bgLayer
-    );
+    this.bodyGroup = new BodyGroup(this.context, this.stage, this.bodyLayer, this.bgLayer);
     this.stage.add(this.bodyLayer);
+
   }
 
   /**
@@ -98,7 +93,7 @@ export class Chart {
     this.todayLayer.resize(width, height);
   }
 
-  public render(x: number, y: number, tasks: Task[]) {
+  public render(x: number, y: number, tasks: Task[], isRefresh = false, isScroll = false) {
     this.headerLayer.setOffset(-x, 0); // 表头只横向移动
     this.gridGroup.setOffset(-x, -y);
     this.linkGroup.setOffset(-x, -y);
@@ -124,8 +119,8 @@ export class Chart {
   /**
    * 刷新图表（用于滚动或局部更新时的高效渲染）
    */
-  public refresh(x: number, y: number, tasks: Task[]) {
-    this.render(x, y, tasks);
+  public refresh(x: number, y: number, tasks: Task[], isScroll = false) {
+    this.render(x, y, tasks, true, isScroll);
   }
 
   /**
@@ -133,7 +128,7 @@ export class Chart {
    */
   public updateTask(task: Task) {
     this.bodyGroup.updateTask(task);
-    this.linkGroup.update();
+    this.linkGroup.updateTask(task);
     this.baselineGroup.update();
   }
 
@@ -149,6 +144,7 @@ export class Chart {
     this.linkGroup.destroy();
     this.baselineGroup.destroy();
 
+    this.axisLayer.destroy();
     this.bgLayer.destroy();
     this.stage.destroy();
   }

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:59:03
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-06 15:26:40
+ * @LastEditTime: 2025-09-04 16:15:03
  * @Description:任务数据模型
  */
 
@@ -14,6 +14,7 @@ import { cloneDeep, isArray, isObject, isString } from "lodash-es";
 import { IGanttOptions, TaskType } from "../types/options";
 import { EmitData } from "@/types";
 import { Store } from "@/store";
+import { clamp } from "../utils/helpers";
 
 export class Task {
   __key__ = generateId();
@@ -152,50 +153,77 @@ export class Task {
   }
 
   /** 切换展示模式时，需要调整时间 */
-  updateMode() {
+  updateMode(): boolean {
+    let isChanged = false;
+
     // 更新开始时间
     if (this.data[this.fields.startTime]) {
-      this.startTime = dayjs(this.data[this.fields.startTime]);
+      if (!this.startTime || !this.startTime.isSame(dayjs(this.data[this.fields.startTime]))) {
+        this.startTime = dayjs(this.data[this.fields.startTime]);
+        isChanged = true;
+      }
     }
 
     // 更新结束时间
     if (this.data[this.fields.endTime]) {
-      this.endTime = dayjs(this.data[this.fields.endTime]);
+      if (!this.endTime || !this.endTime.isSame(dayjs(this.data[this.fields.endTime]))) {
+        this.endTime = dayjs(this.data[this.fields.endTime]);
+        isChanged = true;
+      }
     }
 
     // 更新持续时间
     if (this.startTime && this.endTime) {
-      this.duration = this.endTime.diff(this.startTime);
+      if (this.duration === 0) {
+        this.duration = this.endTime.diff(this.startTime);
+      }
     }
 
     if (this.isMilestone()) {
-      this.endTime = this.startTime;
+      // 里程碑模式下，结束时间 = 开始时间
+      if (!this.endTime || !this.endTime.isSame(this.startTime)) {
+        this.endTime = this.startTime;
+        isChanged = true;
+      }
     }
+
+    return isChanged;
   }
 
   updateData(data: any): void {
     // 替换数据
     this.data = data;
 
+    // 脏数据
+    let dirty = false;
+
     // 更新任务名称
     if (data[this.fields.name]) {
-      this.name = data[this.fields.name];
+      if (this.name !== data[this.fields.name]) {
+        this.name = data[this.fields.name];
+        dirty = true;
+      }
     }
 
     if (data[this.fields.type]) {
-      this.type = data[this.fields.type];
+      if (this.type !== data[this.fields.type]) {
+        this.type = data[this.fields.type];
+        dirty = true;
+      }
     }
 
-    this.updateMode();
+    dirty = this.updateMode();
 
     // 更新进度
     if (data[this.fields.progress] !== undefined) {
-      this.progress = data[this.fields.progress];
+      if (this.progress !== data[this.fields.progress]) dirty = true;
+      this.progress = clamp(data[this.fields.progress], 0, 100);
     }
 
-
     // 触发更新事件
-    this.event.emit(EventName.UPDATE_TASK, this);
+    if (dirty) {
+      this.event.emit(EventName.UPDATE_TASK, this);
+    }
   }
 
   updateTime(startTime: Dayjs, endTime: Dayjs): void {

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-02 10:59:27
+ * @LastEditTime: 2025-09-09 10:23:29
  * @Description: 配置项管理器
  */
 
@@ -19,7 +19,7 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
     key: "id",
     data: [],
     distance: 20,
-    dash: [6, 3],
+    dash: [0],
     width: 1,
     gap: 5,
     arrow: {

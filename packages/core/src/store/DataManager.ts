@@ -374,12 +374,6 @@ export class DataManager {
     return this.getVisibleTasks().length;
   }
 
-  /** 检查任务是否可见 */
-  isTaskVisible(task: Task): boolean {
-    // 如果任务在可视任务列表中，则可见
-    return this.getVisibleTasks().some(t => t.id === task.id);
-  }
-
   /**
    * 清空所有数据
    */

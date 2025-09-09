@@ -1526,8 +1526,8 @@ export const apiItems: ApiItem[] = [
         key: "dash",
         title: "虚线设定",
         type: "number[]",
-        defaultValue: "[6, 3]",
-        description: "线条的虚线设定"
+        defaultValue: "[0]",
+        description: "线条的虚线设定。默认设为 0 即实线。在大量连线时，设为实线可以有效提升渲染性能。如果需要虚线，可以设置类似 [5, 5] 的值，还可以减少 width 的线宽，来优化渲染。"
       },
       {
         id: "links-data",
@@ -1643,7 +1643,7 @@ export const apiItems: ApiItem[] = [
         title: "线条宽度",
         type: "number",
         defaultValue: "1",
-        description: "线条的宽度"
+        description: "线条的宽度。\n<span style=\"font-style: italic; color: var(--text-tertiary)\">减少线宽可以优化渲染性能，线宽支持小数（0.5）渲染</span>"
       }
     ]
   },

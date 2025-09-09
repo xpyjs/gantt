@@ -87,12 +87,14 @@ const { isDark, toggleTheme } = useTheme();
 
 <style scoped>
 .navbar {
-  background: var(--navbar-bg);
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: 100;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: saturate(100%) blur(4px);
+  background-image: radial-gradient(transparent 1px, var(--navbar-bg) 1px);
+  background-size: 4px 4px;
 }
 
 .nav-container {

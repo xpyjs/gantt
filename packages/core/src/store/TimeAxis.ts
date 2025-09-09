@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:57:49
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-18 17:51:28
+ * @LastEditTime: 2025-09-05 17:50:04
  * @Description: 时间轴管理
  */
 
@@ -162,9 +162,9 @@ export class TimeAxis {
     return this.startTime.add(diffSeconds, "second");
   }
 
-  public init(options: IGanttOptions): void {
+  public init(options: IGanttOptions, isFirstTime = true): void {
     this.isDirty = true;
-    this.isFirstTime = true;
+    this.isFirstTime = isFirstTime;
 
     const { unit, chart } = options;
     this.isAuto = !!chart.autoCellWidth;
@@ -218,7 +218,7 @@ export class TimeAxis {
   }
 
   public update(options: IGanttOptions): void {
-    this.init(options);
+    this.init(options, false);
 
     this.endTime = this.targetEnd.clone();
   }

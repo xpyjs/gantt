@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-07-30 17:53:19
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-04 10:49:21
+ * @LastEditTime: 2025-09-05 09:20:06
  * @Description: 图表基线渲染管理器
  */
 
@@ -132,8 +132,7 @@ export class ChartBaseline {
 
     this.tasks.forEach(task => {
       if (
-        this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, task) &&
-        this.context.store.getDataManager().isTaskVisible(task)
+        this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, task)
       ) {
         const bls = this.context.store.getDataManager().getBaselinesByTaskId(task.id);
         const barHeight = parseNumberWithPercent(

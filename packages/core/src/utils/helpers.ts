@@ -152,6 +152,13 @@ export function formatNumber(
 }
 
 /**
+ * 将 SVG 字符串转成可复用的 HTMLImageElement（带全局缓存）。
+ * 同一内容的 svg 只会 decode 一次，后续直接复用 Promise。
+ * width / height 参数仅为兼容旧签名，不在此阶段做缩放，缩放交给使用处的 Konva.Image 属性。
+ */
+const __svgImageCache = new Map<string, Promise<HTMLImageElement>>();
+
+/**
  * svg to image - 简化版本，通过正则表达式处理 SVG
  */
 export function svgToImage(
@@ -159,7 +166,10 @@ export function svgToImage(
   width: number = 16,
   height: number = 16
 ): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
+  const cached = __svgImageCache.get(svg);
+  if (cached) return cached;
+
+  const promise = new Promise<HTMLImageElement>((resolve, reject) => {
     // 使用正则表达式处理 SVG 尺寸
     let processedSvg = svg;
 
@@ -208,6 +218,7 @@ export function svgToImage(
     };
     img.onerror = (error) => {
       URL.revokeObjectURL(img.src);
+      __svgImageCache.delete(svg);
       reject(error);
     };
 
@@ -217,4 +228,7 @@ export function svgToImage(
 
     img.src = url;
   });
+
+  __svgImageCache.set(svg, promise);
+  return promise;
 }

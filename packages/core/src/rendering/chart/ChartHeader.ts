@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:02:13
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-19 15:41:06
+ * @LastEditTime: 2025-09-09 09:40:52
  * @Description: 图表部分的表头渲染层
  */
 import Konva from "konva";
@@ -13,8 +13,6 @@ import { IContext } from "@/types/render";
 import { type Task } from "@/models/Task";
 
 export class HeaderLayer {
-  public layer: Konva.Layer;
-
   private background: Konva.Rect; // 表头背景
   private groupHeader: Konva.Group; // 主表头 (年/月)
   private cellHeader: Konva.Group; // 次表头 (月/日)
@@ -26,11 +24,7 @@ export class HeaderLayer {
   private height: number = 0;
   private offsetX: number = 0;
 
-  constructor(private context: IContext, private stage: Konva.Stage) {
-    // 创建层
-    this.layer = new Konva.Layer();
-    this.stage.add(this.layer);
-
+  constructor(private context: IContext, private layer: Konva.Layer) {
     // 背景
     this.background = new Konva.Rect({
       fill:
@@ -48,7 +42,7 @@ export class HeaderLayer {
     this.layer.add(this.cellHeader);
 
     // 初始尺寸
-    this.resize(this.stage.width());
+    this.resize(this.layer.width());
 
     // 注册事件
     this.registerEvents();
@@ -65,7 +59,7 @@ export class HeaderLayer {
     this.background.height(this.height);
 
     // 重新绘制表头
-    this.calculateHeader();
+    this.render();
   }
 
   /**
@@ -83,7 +77,7 @@ export class HeaderLayer {
     this.cellHeader.x(x);
 
     // // 检查是否需要重新计算表头
-    this.calculateHeader();
+    this.render();
   }
 
   /**
@@ -195,7 +189,7 @@ export class HeaderLayer {
       if (isArray(item.children) && item.children.length > 0) {
         let childStartX = startX;
 
-        for (let j = 0; j < item.children.length; ) {
+        for (let j = 0; j < item.children.length;) {
           const child = item.children[j];
 
           // 判断 label 内容相同的，直接合并

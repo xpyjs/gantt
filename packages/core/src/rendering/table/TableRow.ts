@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:01:19
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-07 16:56:40
+ * @LastEditTime: 2025-09-05 16:46:10
  * @Description: 表格行渲染管理器
  */
 
@@ -155,7 +155,10 @@ export class TableRow {
     this.top = top;
     const rowHeight = this.context.store.getOptionManager().getOptions()
       .row.height;
-    this.element.style.top = `${-this.top + this.task.flatIndex * rowHeight}px`;
+
+    // this.element.style.top = `${-this.top + this.task.flatIndex * rowHeight}px`;
+    const t = `${-this.top + this.task.flatIndex * rowHeight}px`;
+    this.element.style.transform = `translateY(${t})`;
   }
 
   /**

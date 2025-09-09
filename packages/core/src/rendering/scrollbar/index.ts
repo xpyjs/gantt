@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-23 14:54:51
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-29 14:49:04
+ * @LastEditTime: 2025-09-05 16:52:33
  * @Description: 自定义滚动区域。为了优化滚动样式
  */
 
@@ -615,11 +615,11 @@ export class Scrollbar {
       const newScrollLeft =
         this.animationStartScrollLeft +
         (this.animationTargetScrollLeft - this.animationStartScrollLeft) *
-          easedProgress;
+        easedProgress;
       const newScrollTop =
         this.animationStartScrollTop +
         (this.animationTargetScrollTop - this.animationStartScrollTop) *
-          easedProgress;
+        easedProgress;
 
       const changedX = this.scrollLeft !== newScrollLeft;
       const changedY = this.scrollTop !== newScrollTop;
@@ -695,12 +695,10 @@ export class Scrollbar {
     this.isVisible = true;
 
     // 设置过渡效果，使用固定的渐入动画时间
-    this.hScrollbar.style.transition = `opacity ${
-      this.options.showDuration / 1000
-    }s ease-in`;
-    this.vScrollbar.style.transition = `opacity ${
-      this.options.showDuration / 1000
-    }s ease-in`;
+    this.hScrollbar.style.transition = `opacity ${this.options.showDuration / 1000
+      }s ease-in`;
+    this.vScrollbar.style.transition = `opacity ${this.options.showDuration / 1000
+      }s ease-in`;
 
     // 使用 requestAnimationFrame 确保渐变效果生效
     requestAnimationFrame(() => {
@@ -720,12 +718,10 @@ export class Scrollbar {
       setTimeout(() => {
         // 只有当滚动条仍然可见时，才更新隐藏过渡效果
         if (this.isVisible) {
-          this.hScrollbar.style.transition = `opacity ${
-            this.options.hideDuration / 1000
-          }s ease-out`;
-          this.vScrollbar.style.transition = `opacity ${
-            this.options.hideDuration / 1000
-          }s ease-out`;
+          this.hScrollbar.style.transition = `opacity ${this.options.hideDuration / 1000
+            }s ease-out`;
+          this.vScrollbar.style.transition = `opacity ${this.options.hideDuration / 1000
+            }s ease-out`;
         }
       }, this.options.showDuration);
     });
@@ -816,7 +812,8 @@ export class Scrollbar {
       const hScrollbarWidth =
         this.viewportWidth - (needVScroll ? this.options.track.size! : 0);
       this.hScrollbar.style.display = "block";
-      this.hScrollbar.style.left = `${tableWidth}px`;
+      // this.hScrollbar.style.left = `${tableWidth}px`;
+      this.hScrollbar.style.transform = `translateX(${tableWidth}px)`;
       this.hScrollbar.style.width = `${Math.max(0, hScrollbarWidth)}px`;
       this.hScrollbar.style.bottom = "0px"; // 贴底
       // 如果垂直滚动条也显示，则右边留出空间
@@ -834,7 +831,8 @@ export class Scrollbar {
         headerHeight -
         (needHScroll ? this.options.track.size! : 0);
       this.vScrollbar.style.display = "block";
-      this.vScrollbar.style.top = `${headerHeight}px`;
+      // this.vScrollbar.style.top = `${headerHeight}px`;
+      this.vScrollbar.style.transform = `translateY(${headerHeight}px)`;
       this.vScrollbar.style.height = `${Math.max(0, vScrollbarHeight)}px`;
       this.vScrollbar.style.right = "0px"; // 贴右
       // 如果水平滚动条也显示，则底部留出空间
@@ -1007,7 +1005,7 @@ export class Scrollbar {
 
       if (changedX || changedY) {
         // 触发滚动事件
-        this.emit(source,  clampedPos.x, clampedPos.y);
+        this.emit(source, clampedPos.x, clampedPos.y);
       }
     }
   }
@@ -1027,11 +1025,11 @@ export class Scrollbar {
     const newScrollLeft =
       this.animationStartScrollLeft +
       (this.animationTargetScrollLeft - this.animationStartScrollLeft) *
-        easedProgress;
+      easedProgress;
     const newScrollTop =
       this.animationStartScrollTop +
       (this.animationTargetScrollTop - this.animationStartScrollTop) *
-        easedProgress;
+      easedProgress;
 
     const changedX = this.scrollLeft !== newScrollLeft;
     const changedY = this.scrollTop !== newScrollTop;

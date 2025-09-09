@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 17:06:07
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-29 11:18:34
+ * @LastEditTime: 2025-09-05 16:51:14
  * @Description: 表格和图表中间的移动线
  */
 
@@ -36,33 +36,33 @@ export class MiddleResizeLine {
 
     // 添加收起按钮
     // if (!!this.root.store.getOptionManager().getOptions().table.collapsible) {
-      this.collapseButton = document.createElement("div");
-      this.collapseButton.className = "x-gantt-collapse-button";
-      this.collapseButton.style.position = "absolute";
-      this.collapseButton.style.top = "50%";
-      this.collapseButton.style.left = "0";
-      this.collapseButton.style.transform = "translateY(-50%)";
-      this.collapseButton.style.cursor = "pointer";
+    this.collapseButton = document.createElement("div");
+    this.collapseButton.className = "x-gantt-collapse-button";
+    this.collapseButton.style.position = "absolute";
+    this.collapseButton.style.top = "50%";
+    this.collapseButton.style.left = "0";
+    this.collapseButton.style.transform = "translateY(-50%)";
+    this.collapseButton.style.cursor = "pointer";
 
-      // 设置折叠按钮的样式
-      this.collapseButton.style.width = "16px";
-      this.collapseButton.style.height = "30px";
-      this.collapseButton.style.backgroundColor = "#fff";
-      this.collapseButton.style.borderRadius = "0 6px 6px 0";
-      this.collapseButton.style.boxShadow = "0 0 2px rgba(0, 0, 0, 0.2)";
-      this.collapseButton.style.display = "flex";
-      this.collapseButton.style.alignItems = "center";
-      this.collapseButton.style.justifyContent = "center";
-      // 设置折叠按钮的图标
-      this.collapseButton.innerHTML = leftIcon;
+    // 设置折叠按钮的样式
+    this.collapseButton.style.width = "16px";
+    this.collapseButton.style.height = "30px";
+    this.collapseButton.style.backgroundColor = "#fff";
+    this.collapseButton.style.borderRadius = "0 6px 6px 0";
+    this.collapseButton.style.boxShadow = "0 0 2px rgba(0, 0, 0, 0.2)";
+    this.collapseButton.style.display = "flex";
+    this.collapseButton.style.alignItems = "center";
+    this.collapseButton.style.justifyContent = "center";
+    // 设置折叠按钮的图标
+    this.collapseButton.innerHTML = leftIcon;
 
-      // 点击折叠按钮时触发事件
-      this.collapseButton.addEventListener("click", e => {
-        e.stopPropagation();
-        this.root.store.getColumnManager().collapse();
-      });
+    // 点击折叠按钮时触发事件
+    this.collapseButton.addEventListener("click", e => {
+      e.stopPropagation();
+      this.root.store.getColumnManager().collapse();
+    });
 
-      this.line.appendChild(this.collapseButton);
+    this.line.appendChild(this.collapseButton);
     // }
 
     this.container.appendChild(this.line);
@@ -72,7 +72,8 @@ export class MiddleResizeLine {
   }
 
   public setOffset(x: number) {
-    this.line.style.left = `${x - 2}px`;
+    // this.line.style.left = `${x - 2}px`;
+    this.line.style.transform = `translateX(${x - 2}px)`;
     this.initialX = x;
 
     // 更新图标
@@ -107,7 +108,7 @@ export class MiddleResizeLine {
       this.initialWidth = columnManager.getColumnWidth(lastColumnKey);
 
       // 显示指导线
-      const guidelineLeft = parseInt(this.line.style.left) + 2; // 加回偏移量
+      const guidelineLeft = this.initialX;
       this.root.event.emit(EventName.SHOW_GUIDELINE, guidelineLeft);
 
       // 添加移动和抬起事件监听

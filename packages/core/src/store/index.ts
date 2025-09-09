@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:31
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-02 11:02:22
+ * @LastEditTime: 2025-09-04 10:07:16
  * @Description: Store
  */
 import { OptionManager } from "./OptionManager";
@@ -63,7 +63,6 @@ export class Store {
     }
     // 设置链路环检查
     this.linkManager.setCycleDetection(options?.links?.enableCycleDetection ?? true);
-
   }
 
   getOptionManager() {

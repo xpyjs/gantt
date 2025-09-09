@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-04 09:17:37
+ * @LastEditTime: 2025-09-08 17:20:35
  * @Description: 界面渲染器
  */
 
@@ -116,7 +116,7 @@ export class Renderer {
     // 注册需要立即执行的任务
     this.renderScheduler.registerSimpleHandler(
       "SCROLL",
-      (refresh: boolean = true) => this.performRender(refresh),
+      () => this.performRender(true, true),
       true // 滚动需要立即响应
     );
 
@@ -175,7 +175,7 @@ export class Renderer {
    * 实际执行渲染的方法
    * @param refresh 是否强制刷新
    */
-  private performRender(refresh: boolean = false): void {
+  private performRender(refresh: boolean = false, isScroll: boolean = false): void {
     this.setStyleValue();
 
     // 渲染逻辑，例如渲染表格、图表等到对应的容器 ...
@@ -206,7 +206,10 @@ export class Renderer {
 
     this.updateSize();
 
-    if (refresh) {
+    if (isScroll) {
+      this.table.refresh(y, tasks);
+      this.chart.refresh(x, y, tasks, true);
+    } else if (refresh) {
       this.table.refresh(y, tasks);
       this.chart.refresh(x, y, tasks);
     } else {
@@ -285,8 +288,8 @@ export class Renderer {
       this.height,
       chartSize, // 滚动区域宽度
       this.context.store.getDataManager().getVisibleSize() *
-        this.context.store.getOptionManager().getOptions().row.height +
-        this.context.store.getOptionManager().getOptions().header.height,
+      this.context.store.getOptionManager().getOptions().row.height +
+      this.context.store.getOptionManager().getOptions().header.height,
       tableWidth
     );
   };
