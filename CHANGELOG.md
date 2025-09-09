@@ -1,3 +1,20 @@
+## [0.0.1-beta.2](https://github.com/xpyjs/gantt/compare/v0.0.1-beta.1...v0.0.1-beta.2) (2025-09-09)
+
+
+### Bug Fixes
+
+* **core:** 移动任务条时，可以按照当前时间进行跳转 ([6c94c72](https://github.com/xpyjs/gantt/commit/6c94c7288e3b8ff7bf886e3cb03af98d818ab8e6))
+* **core:** 优化拖拽任务条，当任务条在界外时的移动优化 ([463c98b](https://github.com/xpyjs/gantt/commit/463c98b9f2ad108fb7fbb414acf1b30d64bb5921))
+* **core:** optimizing the problem of lag when dealing with large amounts of data ([6e3b32b](https://github.com/xpyjs/gantt/commit/6e3b32b3067cfaf24b51fe26fd66f754d0fd0ee4)), closes [#157](https://github.com/xpyjs/gantt/issues/157)
+* **core:** when click collapse button, view may not update. ([304fe25](https://github.com/xpyjs/gantt/commit/304fe25dadb4e8e796a75836bb2cf6c1e96867e4))
+
+
+### Features
+
+* **core:** When links has cycle, it will print one warning message ([a650b18](https://github.com/xpyjs/gantt/commit/a650b1882333ff8bcba92035cc06249265c11209))
+
+
+
 ## [0.0.1-beta.1](https://github.com/xpyjs/gantt/compare/v0.0.1-beta.0...v0.0.1-beta.1) (2025-09-02)
 
 
