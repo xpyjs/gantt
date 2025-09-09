@@ -64,6 +64,10 @@ const gantt = new XGantt(ganttContainer, {
       { field: "progress", label: "进度(%)", width: 90 }
     ]
   },
+  chart: {
+    startTime: '2025-07-22',
+    endTime: '2026-01-20',
+  },
   fields: {
     id: 'id',
     startTime: "start",
