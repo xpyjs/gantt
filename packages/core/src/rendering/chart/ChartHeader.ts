@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:02:13
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-09 09:40:52
+ * @LastEditTime: 2025-09-09 14:42:18
  * @Description: 图表部分的表头渲染层
  */
 import Konva from "konva";
@@ -40,9 +40,6 @@ export class HeaderLayer {
 
     this.layer.add(this.groupHeader);
     this.layer.add(this.cellHeader);
-
-    // 初始尺寸
-    this.resize(this.layer.width());
 
     // 注册事件
     this.registerEvents();
