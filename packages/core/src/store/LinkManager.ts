@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-04 16:43:34
+ * @LastEditTime: 2025-09-09 14:32:55
  * @Description: 连线 / 依赖 管理器 (面向开发者的核心功能)
  */
 
@@ -198,6 +198,7 @@ export class LinkManager {
 
     // 精细化缓存失效
     this.invalidateSmartCaches(affectedTaskIds, operationType);
+
 
     if (detectAll && this.enableCycleDetection) {
       this.detectAllCycles();
@@ -584,11 +585,11 @@ export class LinkManager {
   /** 检查当前图是否存在环 */
   public hasCycle(): boolean {
     if (this.lastCycleReport) return this.lastCycleReport.hasCycle;
-    return this.detectAllCycles().hasCycle;
+    return this.detectAllCycles(false).hasCycle;
   }
 
   /** 全量环检测（Tarjan 算法） */
-  public detectAllCycles(): CycleReport {
+  public detectAllCycles(sendErr = true): CycleReport {
     const indexMap = new Map<string, number>();
     const lowMap = new Map<string, number>();
     const onStack = new Set<string>();
@@ -643,6 +644,9 @@ export class LinkManager {
     };
 
     this.lastCycleReport = report;
+    if (sendErr && report.hasCycle) {
+      Logger.warn('Cycle detected in task dependencies', report);
+    }
     return report;
   }
 
