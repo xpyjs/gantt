@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-08 17:56:30
+ * @LastEditTime: 2025-09-09 11:16:17
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -389,8 +389,6 @@ export class LinkGroup {
 
           if (group === undefined) {
             group = new Konva.Group({ id });
-            // 缓存连线
-            this.linkCache.set(id, group);
           }
 
           const circle = group.findOne<Konva.Circle>('Circle');
@@ -513,74 +511,79 @@ export class LinkGroup {
             });
           }
 
-          // 加载到视图
-          this.linksGroup.add(group);
+          if (!this.linkCache.has(id)) {
+            // 加载到视图
+            this.linksGroup.add(group);
 
-          group.on("mouseover", e => {
-            e.target.moveToTop();
+            group.on("mouseover", e => {
+              e.target.moveToTop();
 
-            if (this.context.getOptions().links.move.enabled === true) {
-              this.stage.container().style.cursor = "pointer";
-            }
+              if (this.context.getOptions().links.move.enabled === true) {
+                this.stage.container().style.cursor = "pointer";
+              }
 
-            if (!this.selectedMap.has(id)) {
-              this.handleHighlight(
-                group,
-                radius,
-                pointerWidth,
-                pointerLength,
-                strokeWidth,
-                2
-              );
-            }
-          });
-          group.on("mouseout", e => {
-            if (!this.selectedMap.has(id)) {
-              this.handleHighlight(
-                group,
-                radius,
-                pointerWidth,
-                pointerLength,
-                strokeWidth,
-                0
-              );
-            }
-
-            if (this.isDragging) return;
-            this.stage.container().style.cursor = "default";
-          });
-          group.on("mousedown", e => {
-            this.isDragging = true;
-          });
-          group.on("click", e => {
-            e.cancelBubble = true; // 阻止事件冒泡
-            this.isDragging = false;
-            group.moveToTop();
-
-            if (e.evt.button === 0) {
-              // 左键点击
-              if (this.selectedMap.has(id)) {
-                this.selectedMap.delete(id);
-                this.context.event.emit(
-                  EventName.SELECT_LINK,
-                  null,
-                  link,
-                  this.selectedMap.values().toArray()
-                );
-              } else {
-                this.selectedMap.set(id, link);
-                this.context.event.emit(
-                  EventName.SELECT_LINK,
-                  link,
-                  null,
-                  this.selectedMap.values().toArray()
+              if (!this.selectedMap.has(id)) {
+                this.handleHighlight(
+                  group,
+                  radius,
+                  pointerWidth,
+                  pointerLength,
+                  strokeWidth,
+                  2
                 );
               }
-            } else if (e.evt.button === 2) {
-              // 右键点击
-              this.context.event.emit(EventName.CONTEXT_LINK, e.evt, link);
-            }
-          });
+            });
+            group.on("mouseout", e => {
+              if (!this.selectedMap.has(id)) {
+                this.handleHighlight(
+                  group,
+                  radius,
+                  pointerWidth,
+                  pointerLength,
+                  strokeWidth,
+                  0
+                );
+              }
+
+              if (this.isDragging) return;
+              this.stage.container().style.cursor = "default";
+            });
+            group.on("mousedown", e => {
+              this.isDragging = true;
+            });
+            group.on("click", e => {
+              e.cancelBubble = true; // 阻止事件冒泡
+              this.isDragging = false;
+              group.moveToTop();
+
+              if (e.evt.button === 0) {
+                // 左键点击
+                if (this.selectedMap.has(id)) {
+                  this.selectedMap.delete(id);
+                  this.context.event.emit(
+                    EventName.SELECT_LINK,
+                    null,
+                    link,
+                    this.selectedMap.values().toArray()
+                  );
+                } else {
+                  this.selectedMap.set(id, link);
+                  this.context.event.emit(
+                    EventName.SELECT_LINK,
+                    link,
+                    null,
+                    this.selectedMap.values().toArray()
+                  );
+                }
+              } else if (e.evt.button === 2) {
+                // 右键点击
+                this.context.event.emit(EventName.CONTEXT_LINK, e.evt, link);
+              }
+            });
+
+            // 缓存连线
+            this.linkCache.set(id, group);
+          }
 
           // 创建后检查是否处于选中状态
           if (this.selectedMap.has(id)) {

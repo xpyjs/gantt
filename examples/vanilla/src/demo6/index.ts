@@ -153,6 +153,9 @@ gantt.on("select", (data, checked, all) => {
   checkedList = all;
   updateFooterChecked();
 });
+gantt.on("select:link", (link, checked, all) => {
+  console.log('select:link', link, checked, all);
+});
 
 // 交互按钮
 const btnGroup = document.getElementById('btn-group');
