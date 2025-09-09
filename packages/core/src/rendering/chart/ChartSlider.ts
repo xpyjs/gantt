@@ -45,6 +45,7 @@ export class ChartSlider {
   // 拖拽状态变量
   private isDragging = false;
   private draggingDirection: "left" | "right" | "none" = "none";
+  private dragDiffX = 0;
 
   // 记录拖拽时的原始数据
   private oldTasks: Task[] = [];
@@ -799,6 +800,11 @@ export class ChartSlider {
     this.context.event.emit(EventName.SLIDER_MOVING, true);
     stage.container().style.cursor = "grabbing";
 
+    const currentX = e.target.x();
+    const cellWidth = this.context.store.getTimeAxis().getCellWidth();
+    const standardValue = getStandardValue(currentX, cellWidth);
+    this.dragDiffX = standardValue - currentX;
+
     this.handleMove(e, stage);
   }
 
@@ -817,7 +823,7 @@ export class ChartSlider {
       const currentX = e.target.x();
       const cellWidth = this.context.store.getTimeAxis().getCellWidth();
       const standardValue = getStandardValue(currentX, cellWidth);
-      e.target.x(standardValue);
+      e.target.x(standardValue - this.dragDiffX);
     }
   }
 
@@ -826,6 +832,7 @@ export class ChartSlider {
     this.stopAutoScroll();
     this.stopAutoExpand();
     this.isDragging = false;
+    this.dragDiffX = 0;
     this.draggingDirection = "none"; // 重置拖拽方向
 
     if (this.oldTasks.length > 0) {

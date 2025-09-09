@@ -59,8 +59,8 @@ const gantt = new XGantt(ganttContainer, {
   table: {
     columns: [
       { field: "name", label: "任务名称", width: 230, align: 'left' },
-      { field: "start", label: "开始时间", width: 120 },
-      { field: "end", label: "结束时间", width: 120 },
+      { field: "start", label: "开始时间", width: 180 },
+      { field: "end", label: "结束时间", width: 180 },
       { field: "progress", label: "进度(%)", width: 90 }
     ]
   },
@@ -122,7 +122,6 @@ const gantt = new XGantt(ganttContainer, {
   summary: { show: true, move: { enabled: false }, mode: 'expand' },
   today: { show: true, type: 'line', backgroundColor: '#ff3366', opacity: 1, width: 1 },
   unit: 'day',
-  logLevel: 'info'
 });
 
 let selected: any = null;
