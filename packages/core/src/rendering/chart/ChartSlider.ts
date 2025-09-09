@@ -128,8 +128,9 @@ export class ChartSlider {
     if (!this.slider) {
       this.slider = new Konva.Group({
         dragBoundFunc: pos => {
-          let min = 0;
-          let max = Math.abs(this.rowWidth - this.slider.width());
+          let min = Math.min(0, -(-this.offsetX - this.slider.x()));
+          const _end = this.context.store.getTimeAxis().getTimeLeft(this.task.endTime!);
+          let max = this.rowWidth - this.slider.width() + Math.abs(_end - (-this.offsetX + this.rowWidth));
 
           // 严格父级模式下，移动时需要判定不能超过父级边界
           const parent = this.context.getOptions().bar.move.link.parent;
@@ -813,9 +814,17 @@ export class ChartSlider {
 
     // 记录拖拽方向
     if (e.evt.movementX > 0) {
-      this.draggingDirection = "right";
+      if (this.draggingDirection !== 'right') {
+        this.draggingDirection = "right";
+        this.stopAutoScroll();
+        this.stopAutoExpand();
+      }
     } else if (e.evt.movementX < 0) {
-      this.draggingDirection = "left";
+      if (this.draggingDirection !== 'left') {
+        this.draggingDirection = "left";
+        this.stopAutoScroll();
+        this.stopAutoExpand();
+      }
     }
 
     const moveStep = !!this.context.getOptions().bar.move.byUnit;
@@ -872,8 +881,6 @@ export class ChartSlider {
           // 重置鼠标
           stage.container().style.cursor = "default";
         }
-
-
       }
     }
 
@@ -893,29 +900,39 @@ export class ChartSlider {
     const moveStep = !!this.context.getOptions().bar.move.byUnit;
     const cellWidth = this.context.store.getTimeAxis().getCellWidth();
 
+    // 获取任务条初始状态
+    const initSliderWidth = e.target.width();
+    const initSliderLeft = e.target.x();
+    const initSliderRight = initSliderLeft + initSliderWidth;
+    const initSliderLeftDiffX = Math.max(0, -this.offsetX - initSliderLeft);
+    const initSliderRightDiffX = Math.max(0, initSliderRight - (-this.offsetX + stageWidth));
+
     this.autoMoveTimer = window.setInterval(() => {
       // 获取当前任务条的属性
       const sliderWidth = e.target.width();
-      const sliderLeft = e.target.x() - this.offsetX;
+      const sliderLeft = e.target.x();
       const sliderRight = sliderLeft + sliderWidth;
 
       const viewportLeft = -this.offsetX; // 视图的左侧边界（绝对坐标）
       const viewportRight = viewportLeft + stageWidth; // 视图的右侧边界（绝对坐标）
+      const totalWidth = this.context.store.getTimeAxis().getTotalWidth();
 
       // 判断是否触碰边界
       const isTouchingLeftEdge =
-        sliderLeft <= viewportLeft - this.offsetX + this.EDGE_THRESHOLD;
+        sliderLeft <= viewportLeft + this.EDGE_THRESHOLD;
       const isTouchingRightEdge =
-        sliderRight >= viewportRight - this.offsetX - this.EDGE_THRESHOLD;
+        sliderRight >= viewportRight - this.EDGE_THRESHOLD;
 
       if (isTouchingLeftEdge) {
         if (viewportLeft <= 0) {
-          e.target.x(0); // 顶到最左边，直接贴边
+          if (this.draggingDirection === "left") {
+            e.target.x(-initSliderLeftDiffX); // 顶到最左边，直接贴边
+          }
           this.stopAutoScroll();
           if (!dragLock) {
             if (this.draggingDirection === "left") {
               // 顶到最左边，继续滚动
-              this.startAutoExpand("left");
+              this.startAutoExpand("left", -initSliderLeftDiffX);
             } else {
               // 停止向左滚动
               this.stopAutoExpand();
@@ -925,25 +942,27 @@ export class ChartSlider {
           if (this.draggingDirection === "left") {
             // 向左滚动
             const step = moveStep ? -cellWidth : -this.SCROLL_STEP;
-            this.startAutoScroll(step, moveStep, () => {
-              e.target.x(e.target.x() + step);
-            });
+            this.startAutoScroll(
+              step,
+              moveStep,
+              () => { e.target.x(e.target.x() + step); },
+              () => e.target.x(e.target.x() - initSliderLeftDiffX));
           } else {
             this.stopAutoScroll();
           }
         }
       } else if (isTouchingRightEdge) {
-        if (viewportRight >= this.context.store.getTimeAxis().getTotalWidth()) {
-          // 顶到最右边，停止滚动
-          e.target.x(
-            this.context.store.getTimeAxis().getTotalWidth() - sliderWidth
-          );
+        if (viewportRight >= totalWidth) {
+          if (this.draggingDirection === "right") {
+            // 顶到最右边，停止滚动
+            e.target.x(totalWidth - sliderWidth + initSliderRightDiffX);
+          }
           this.stopAutoScroll();
           if (!dragLock) {
             // 顶到最右边，继续滚动
             if (this.draggingDirection === "right") {
               // 继续向右滚动
-              this.startAutoExpand("right");
+              this.startAutoExpand("right", 0, initSliderRightDiffX);
             } else {
               // 停止向右滚动
               this.stopAutoExpand();
@@ -1157,7 +1176,7 @@ export class ChartSlider {
   }
 
   // 开始自动扩展
-  private startAutoExpand(direction: "left" | "right") {
+  private startAutoExpand(direction: "left" | "right", diffLeft = 0, diffRight = 0) {
     if (this.autoExpandTimer) return;
 
     const timeAxis = this.context.store.getTimeAxis();
@@ -1166,7 +1185,7 @@ export class ChartSlider {
       this.context.event.emit(EventName.CHART_OFFSET_CHANGE);
 
       if (direction === "left") {
-        this.slider.x(0); // 向左时，每次移动后任务条会刷新到第二格。手动贴边，触发继续移动
+        this.slider.x(diffLeft); // 向左时，每次移动后任务条会刷新到第二格。手动贴边，触发继续移动
       } else {
         // 向右不会有问题
       }
@@ -1174,11 +1193,15 @@ export class ChartSlider {
   }
 
   // 开始自动滚动
-  private startAutoScroll(offsetX: number, moveStep: boolean, cb?: () => void) {
+  private startAutoScroll(offsetX: number, moveStep: boolean, cb?: () => void, once?: () => void) {
     if (this.autoScrollTimer) return;
 
     const scrollbar = this.context.getScrollbar();
     if (!scrollbar) return;
+
+    if (once) {
+      once?.();
+    }
 
     this.autoScrollTimer = window.setInterval(
       () => {
