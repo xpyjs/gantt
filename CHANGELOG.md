@@ -1,3 +1,12 @@
+## [0.0.1-beta.3](https://github.com/xpyjs/gantt/compare/v0.0.1-beta.2...v0.0.1-beta.3) (2025-09-10)
+
+
+### Bug Fixes
+
+* **core:** fix the view not update after delete link ([e57b809](https://github.com/xpyjs/gantt/commit/e57b809d19572a7d733766375a801c52dc193719))
+
+
+
 ## [0.0.1-beta.2](https://github.com/xpyjs/gantt/compare/v0.0.1-beta.1...v0.0.1-beta.2) (2025-09-09)
 
 
