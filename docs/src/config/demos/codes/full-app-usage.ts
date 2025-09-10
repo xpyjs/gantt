@@ -6,13 +6,12 @@ if (!ganttContainer) {
   throw new Error("Gantt container not found");
 }
 
-
 ganttContainer.innerHTML = "";
 
 // 设置容器样式
 ganttContainer.style.cssText = \`
   width: 100%;
-  flex: 1;
+  height: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -231,7 +230,10 @@ function deleteTaskById(id: string): boolean {
   return findAndDelete(ganttData!, id);
 }
 
-let links: ILink[] = [];
+let links: ILink[] = [
+  { id: 1, from: "1-1", to: "2-1", color: "#eca710" },
+  { id: 2, from: "2-1", to: "2-2", color: "#00bfff", width: 5, dash: [5, 0] }
+];
 
 // 创建筛选器组件
 function createFilterHeader() {
@@ -267,9 +269,8 @@ function createFilterHeader() {
     \`;
 
     optionEl.innerHTML = \`
-      <input type="checkbox" id="filter-\${option}" \${
-      filterType.has(option) ? "checked" : ""
-    } style="margin: 0;">
+      <input type="checkbox" id="filter-\${option}" \${filterType.has(option) ? "checked" : ""
+      } style="margin: 0;">
       <label for="filter-\${option}" style="cursor: pointer; user-select: none; flex: 1;">\${option}</label>
     \`;
 
@@ -365,7 +366,6 @@ function createFilterHeader() {
 }
 
 const ganttOptions: IOptions = {
-  logLevel: "debug",
   data: ganttData,
   locale: "zh",
   table: {
@@ -384,9 +384,8 @@ const ganttOptions: IOptions = {
           // 自定义渲染函数
           if (row.level === 1) {
             const cell = document.createElement("div");
-            cell.innerHTML = \`<span style="color: \${
-              row.data.progress > 50 ? "green" : "red"
-            }">\${row.data.name}</span>\`;
+            cell.innerHTML = \`<span style="color: \${row.data.progress > 50 ? "green" : "red"
+              }">\${row.data.name}</span>\`;
             return cell;
           } else {
             return row.data.name;
@@ -408,13 +407,22 @@ const ganttOptions: IOptions = {
       }
     ]
   },
+  chart: {
+    headerGroupFormat: 'MM月 (YYYY年)'
+  },
   bar: {
+    show: row => {
+      return row.data.type !== 's'
+    },
     move: {
       enabled: row => row.level > 1,
       byUnit: true,
       single: {
         left: true,
-        right: true
+        right: true,
+        backgroundColor: '#1890ff',
+        opacity: 0.2,
+        icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="#f0f0f0" d="M7 0h2v16H7zM3 5L0 8l3 3V9h3V7H3zm13 3l-3-3v2h-3v2h3v2z"/></svg>'
       },
       link: {
         child: "scale",
@@ -422,11 +430,19 @@ const ganttOptions: IOptions = {
       }
     },
     progress: {
-      show: true,
+      show: row => row.level > 1,
       textAlign: "top"
     },
-    height: "40%",
-    radius: 6,
+    height: (row) => row.level === 1 ? '20%' : "40%",
+    backgroundColor: row => {
+      if (row.level === 1) {
+        return "#1890ff";
+      } else if (row.$index % 2 === 0) {
+        return "#52c41a";
+      }
+      return "#f5222d";
+    },
+    radius: row => row.level === 1 ? 0 : 6,
     shadowBlur: 2,
     shadowColor: "rgba(0, 0, 0, 0.1)",
     shadowOffsetX: 0,
@@ -449,7 +465,8 @@ const ganttOptions: IOptions = {
     track: {
       color: "rgba(0, 0, 0, 0.1)"
     }
-  }
+  },
+  milestone: { show: true }
 };
 
 const gantt = new XGantt(ganttChart, ganttOptions);
@@ -615,6 +632,7 @@ gantt.on("contextmenu:slider", (e, data) => {
           break;
         case 1: // 标记为完成
           data.progress = 100;
+          data.type = 'milestone';
           updateData(data);
           gantt.update({ data: ganttData });
           toast(\`标记任务 "\${data.name}" 为完成\`);
@@ -632,6 +650,35 @@ gantt.on("contextmenu:slider", (e, data) => {
     });
   });
   document.body.appendChild(menu);
+});
+
+let infoDialog: any = null;
+gantt.on("hover:slider", (e, data) => {
+  if (infoDialog) {
+    document.body.removeChild(infoDialog);
+  }
+  infoDialog = document.createElement("div");
+  infoDialog.style.position = "absolute";
+  infoDialog.style.top = \`\${e.pageY + 10}px\`;
+  infoDialog.style.left = \`\${e.pageX}px\`;
+  infoDialog.style.background = "white";
+  infoDialog.style.border = "1px solid #d9d9d9";
+  infoDialog.style.padding = "8px";
+  infoDialog.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.1)";
+  infoDialog.innerHTML = \`
+    <strong>任务信息</strong><br>
+    <strong>名称:</strong> \${data.name}<br>
+    <strong>开始时间:</strong> \${data.startTime}<br>
+    <strong>结束时间:</strong> \${data.endTime}<br>
+    <strong>进度:</strong> \${data.progress || 0}%
+  \`;
+  document.body.appendChild(infoDialog);
+})
+gantt.on("leave:slider", () => {
+  if (infoDialog) {
+    document.body.removeChild(infoDialog);
+    infoDialog = null;
+  }
 });
 
 // 添加具体的工具

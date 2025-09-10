@@ -18,6 +18,7 @@ import fullAppUsage from "./codes/full-app-usage";
 import frameworkUsage from "./codes/framework";
 import baselineUsage from "./codes/baseline-usage";
 import milestoneUsage from "./codes/milestone-usage";
+import autoWidthUsage from "./codes/auto-width-usage";
 
 // 常量
 export const DIFFICULTY_LEVELS = {
@@ -311,6 +312,21 @@ export const demoCategories: DemoCategory[] = [
     description: "探索 XGantt 的高级特性",
     icon: "🚀",
     demos: [
+      {
+        id: "auto-width",
+        title: "时间的自动宽度",
+        description: "展示如何实现右侧自动宽度",
+        category: "advanced",
+        difficulty: "intermediate",
+        tags: ["自动宽度", "表格", "样式"],
+        code: [
+          {
+            framework: "javascript",
+            language: "javascript",
+            code: autoWidthUsage.jsCode
+          }
+        ]
+      },
       {
         id: "cell-merge",
         title: "单元格合并演示",

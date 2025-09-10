@@ -98,9 +98,29 @@ const INDEX_HTML = `<!DOCTYPE html>
 
 const MAIN_TS = `import { createApp } from "vue";
 import App from "./App.vue";
+import "./style.css";
 
 const app = createApp(App);
 app.mount("#app");`;
+
+const STYLE_CSS = `body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.demo-container {
+  width: 100%;
+  height: 100%;
+}`;
 
 // 创建 Vue 项目文件
 export const createVueProjectFiles = (
@@ -119,6 +139,7 @@ export const createVueProjectFiles = (
     "index.html": INDEX_HTML,
     "src/vite-env.d.ts": `/// <reference types="vite/client" />\n`,
     "src/main.ts": MAIN_TS,
-    "src/App.vue": block.code
+    "src/App.vue": block.code,
+    "src/style.css": STYLE_CSS
   };
 };

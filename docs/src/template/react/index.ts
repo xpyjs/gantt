@@ -95,12 +95,32 @@ const INDEX_HTML = `<!doctype html>
 const MAIN_TSX = `import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
+import './style.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
   </StrictMode>,
 )`;
+
+const STYLE_CSS = `body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.demo-container {
+  width: 100%;
+  height: 100%;
+}`;
 
 // 创建 React 项目文件
 export const createReactProjectFiles = (
@@ -119,6 +139,7 @@ export const createReactProjectFiles = (
     "index.html": INDEX_HTML,
     "src/vite-env.d.ts": `/// <reference types="vite/client" />\n`,
     "src/main.tsx": MAIN_TSX,
+    "src/style.css": STYLE_CSS,
     "src/App.tsx": block.code
   };
 };

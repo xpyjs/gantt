@@ -269,9 +269,8 @@ function createFilterHeader() {
     `;
 
     optionEl.innerHTML = `
-      <input type="checkbox" id="filter-${option}" ${
-      filterType.has(option) ? "checked" : ""
-    } style="margin: 0;">
+      <input type="checkbox" id="filter-${option}" ${filterType.has(option) ? "checked" : ""
+      } style="margin: 0;">
       <label for="filter-${option}" style="cursor: pointer; user-select: none; flex: 1;">${option}</label>
     `;
 
@@ -386,9 +385,8 @@ const ganttOptions: IOptions = {
           // 自定义渲染函数
           if (row.level === 1) {
             const cell = document.createElement("div");
-            cell.innerHTML = `<span style="color: ${
-              row.data.progress > 50 ? "green" : "red"
-            }">${row.data.name}</span>`;
+            cell.innerHTML = `<span style="color: ${row.data.progress > 50 ? "green" : "red"
+              }">${row.data.name}</span>`;
             return cell;
           } else {
             return row.data.name;
@@ -468,7 +466,8 @@ const ganttOptions: IOptions = {
     track: {
       color: "rgba(0, 0, 0, 0.1)"
     }
-  }
+  },
+  milestone: { show: true }
 };
 
 const gantt = new XGantt(ganttChart, ganttOptions);
@@ -634,7 +633,7 @@ gantt.on("contextmenu:slider", (e, data) => {
           break;
         case 1: // 标记为完成
           data.progress = 100;
-          data.type = 's';
+          data.type = 'milestone';
           updateData(data);
           gantt.update({ data: ganttData });
           toast(`标记任务 "${data.name}" 为完成`);

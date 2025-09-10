@@ -92,6 +92,7 @@ const gantt = new XGantt(ganttContainer, {
     data: links,
     key: 'id',
     show: true,
+    move: { enabled: true },
     create: { enabled: true, mode: 'always' },
   },
 });
