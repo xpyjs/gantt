@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-09 11:16:17
+ * @LastEditTime: 2025-09-10 14:33:06
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -13,6 +13,7 @@ import { colorjs } from "../../utils/color";
 import { ILink, LinkType } from "@/types/link";
 import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
+import { generateId } from "../../utils/id";
 
 export class LinkGroup {
   private tasks: Task[] = [];
@@ -315,14 +316,10 @@ export class LinkGroup {
       });
     }
 
-    // 清除已不存在但选中的内容
-    const exists: string[] = [];
+    const currentKey = generateId();
     // 记录已选择的状态
     links.forEach(link => {
       const id = this.createId(link);
-      if (this.selectedMap.has(id)) {
-        exists.push(id);
-      }
 
       const fromTask = this.context.store.getDataManager().getTaskById(link.from);
       const toTask = this.context.store.getDataManager().getTaskById(link.to);
@@ -390,6 +387,7 @@ export class LinkGroup {
           if (group === undefined) {
             group = new Konva.Group({ id });
           }
+          (group as any)._ = currentKey; // 标记当前渲染周期
 
           const circle = group.findOne<Konva.Circle>('Circle');
           if (circle) {
@@ -601,10 +599,11 @@ export class LinkGroup {
       }
     });
 
-    // 删除选择状态
-    this.selectedMap.forEach((_, id) => {
-      if (!exists.includes(id)) {
-        this.selectedMap.delete(id);
+    // 删除已不存在的连线
+    this.linkCache.forEach((group, id) => {
+      if ((group as any)._ !== currentKey) {
+        group.destroy();
+        this.linkCache.delete(id);
       }
     });
 

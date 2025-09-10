@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:31
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-04 10:07:16
+ * @LastEditTime: 2025-09-10 14:09:36
  * @Description: Store
  */
 import { OptionManager } from "./OptionManager";
@@ -104,7 +104,7 @@ export class Store {
       this.dataManager.setBaselines(options.baselines.data);
     }
     if (isArray(options.links?.data)) {
-      this.linkManager.setLinks(options.links.data as ILink[]);
+      this.linkManager.setLinks(options.links.data as ILink[], true);
     }
 
     // 更新链路环检查
