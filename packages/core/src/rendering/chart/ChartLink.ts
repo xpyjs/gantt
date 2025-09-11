@@ -432,7 +432,7 @@ export class LinkGroup {
               this.context.getOptions().links.color ||
               this.context.getOptions().primaryColor
             );
-            line.strokeWidth(strokeWidth);
+            line.strokeWidth(strokeWidth + (this.selectedMap.has(id) ? 2 : 0));
             line.dash(link.dash || this.context.getOptions().links.dash);
           } else {
             const line = new Konva.Line({
@@ -470,7 +470,7 @@ export class LinkGroup {
               this.context.getOptions().links.color ||
               this.context.getOptions().primaryColor
             );
-            arrow.strokeWidth(strokeWidth);
+            arrow.strokeWidth(strokeWidth + (this.selectedMap.has(id) ? 2 : 0));
             arrow.pointerLength(pointerLength);
             arrow.pointerWidth(pointerWidth);
             arrow.fill(

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-09 14:32:55
+ * @LastEditTime: 2025-09-11 14:21:07
  * @Description: 连线 / 依赖 管理器 (面向开发者的核心功能)
  */
 
@@ -209,7 +209,7 @@ export class LinkManager {
 
   /** 更新各种缓存配置 */
   public update() {
-    this.setLinks(this.links);
+    this.setLinks(this.links, true);
   }
 
   /** 检查连线是否存在 */
