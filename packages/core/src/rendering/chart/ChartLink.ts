@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-10 17:04:33
+ * @LastEditTime: 2025-09-11 17:35:25
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -387,7 +387,9 @@ export class LinkGroup {
           if (group === undefined) {
             group = new Konva.Group({ id });
           }
-          (group as any)._ = currentKey; // 标记当前渲染周期
+          if (!task) {
+            (group as any)._ = currentKey; // 标记当前渲染周期
+          }
 
           const circle = group.findOne<Konva.Circle>('Circle');
           if (circle) {
@@ -603,12 +605,14 @@ export class LinkGroup {
     });
 
     // 删除已不存在的连线
-    this.linkCache.forEach((group, id) => {
-      if ((group as any)._ !== currentKey) {
-        group.destroy();
-        this.linkCache.delete(id);
-      }
-    });
+    if (!task) {
+      this.linkCache.forEach((group, id) => {
+        if ((group as any)._ !== currentKey) {
+          group.destroy();
+          this.linkCache.delete(id);
+        }
+      });
+    }
 
     // 使用批量绘制，减少重绘次数
     this.layer.batchDraw();
