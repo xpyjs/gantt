@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-11 14:21:07
+ * @LastEditTime: 2025-09-11 17:38:16
  * @Description: 连线 / 依赖 管理器 (面向开发者的核心功能)
  */
 
@@ -284,13 +284,16 @@ export class LinkManager {
     if (!base.ok) return base;
 
     // 临时环检测：判断新增是否产生环
-    if (this.enableCycleDetection && this.willCreateCycle(from, to)) {
-      return {
-        ok: false,
-        reason: ErrorType.LINK_CYCLE,
-        message: Logger.getMessage('Adding this link would create a cycle'),
-        cycleInfo: this.buildSimpleCycleInfo(from, to)
-      };
+    if (this.enableCycleDetection) {
+      const info = this.willCreateCycle(from, to);
+      if (info) {
+        return {
+          ok: false,
+          reason: ErrorType.LINK_CYCLE,
+          message: Logger.getMessage('Adding this link would create a cycle'),
+          cycleInfo: info
+        };
+      }
     }
 
     return { ok: true };
@@ -736,26 +739,61 @@ export class LinkManager {
   }
 
   /** 增量环检测（基于拓扑序 + DFS） */
-  private willCreateCycle(from: string, to: string): boolean {
+  private willCreateCycle(from: string, to: string): CycleInfo | null {
     const topo = this.computeTopo();
     if (topo) {
       const ifrom = this.topoIndex.get(from);
       const ito = this.topoIndex.get(to);
-      if (ifrom != null && ito != null && ifrom < ito) return false; // 仍保持拓扑顺序
+      if (ifrom != null && ito != null && ifrom < ito) return null; // 仍保持拓扑顺序
     }
 
     // DFS from 'to'
     const stack: string[] = [to];
     const visited = new Set<string>();
+    const parent = new Map<string, string>(); // child -> parent
+
     while (stack.length) {
       const cur = stack.pop()!;
-      if (cur === from) return true; // 可以回到起点，形成环
       if (visited.has(cur)) continue;
       visited.add(cur);
+
       const outs = this.fromLinksMap.get(cur) || [];
-      for (const e of outs) stack.push(e.to);
+      for (const e of outs) {
+        const next = e.to;
+        if (!visited.has(next) && !parent.has(next)) {
+          parent.set(next, cur);
+        }
+
+        if (next === from) {
+          if (!parent.has(next)) {
+            parent.set(next, cur);
+          }
+
+          // 回溯构建环
+          const backtrack: string[] = [];
+
+          let p: string | undefined = from;
+          while (p !== undefined) {
+            backtrack.push(p);
+            p = parent.get(p);
+          }
+
+          const path2From = backtrack.slice().reverse();
+          // from -> [to, ..., from]
+          const cycle = [from, ...path2From];
+
+          return {
+            cycles: [cycle],
+            nodes: Array.from(new Set(cycle)),
+            sccs: []
+          };
+        }
+
+        stack.push(next);
+      }
     }
-    return false;
+
+    return null;
   }
 
   /** 构建/重建邻接表 */
@@ -823,7 +861,6 @@ export class LinkManager {
     };
   }
 
-  // 优化后的缓存失效策略
   /**
    * 精细化缓存失效策略
    * 根据操作类型和影响范围进行精确的缓存失效

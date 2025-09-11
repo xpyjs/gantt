@@ -1279,21 +1279,21 @@ export class ChartSlider {
 
   /** 闪烁 */
   private handleBarBlink() {
-    if (!this.sliderBar) return;
+    if (!this.sliderGroup) return;
 
-    const originalOpacity = this.sliderBar.opacity();
-    const blinkDuration = 400; // 每次闪烁持续时间（毫秒）
+    const originalOpacity = this.sliderGroup.opacity();
+    const blinkDuration = 500; // 每次闪烁持续时间（毫秒）
     const blinkCount = 2; // 闪烁次数
     const totalDuration = blinkDuration * blinkCount;
 
     const anim = new Konva.Animation((frame) => {
-      if (!this.sliderBar || !frame) return;
+      if (!this.sliderGroup || !frame) return;
 
       const elapsed = frame.time;
 
       // 超过总时长，停止动画并恢复原状
       if (elapsed >= totalDuration) {
-        this.sliderBar.opacity(originalOpacity);
+        this.sliderGroup.opacity(originalOpacity);
         anim.stop();
         return;
       }
@@ -1312,8 +1312,8 @@ export class ChartSlider {
         opacity = originalOpacity * ((blinkProgress - 0.5) * 2);
       }
 
-      this.sliderBar.opacity(Math.max(0, Math.min(originalOpacity, opacity)));
-    }, this.sliderBar.getLayer());
+      this.sliderGroup.opacity(Math.max(0, Math.min(originalOpacity, opacity)));
+    }, this.sliderGroup.getLayer());
 
     anim.start();
   }
