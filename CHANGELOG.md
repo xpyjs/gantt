@@ -1,3 +1,19 @@
+## [0.0.1-beta.4](https://github.com/xpyjs/gantt/compare/v0.0.1-beta.3...v0.0.1-beta.4) (2025-09-11)
+
+
+### Bug Fixes
+
+* **core:** fix baseline render error ([a3d4d81](https://github.com/xpyjs/gantt/commit/a3d4d819af4937233ca23b4aee4665634a075af5))
+* **core:** fix link bling when scrolling ([bdca277](https://github.com/xpyjs/gantt/commit/bdca27781f88c8ff56f3923b010b5f1df18faebc))
+* **core:** link contextmenu error ([30bcfac](https://github.com/xpyjs/gantt/commit/30bcfac1be464dd3b47b3ea419d4df4265f3879c))
+* **core:** links disappeared when update someone task ([84819db](https://github.com/xpyjs/gantt/commit/84819dbbc2b2d840d8179dbbee83edcafff9a207))
+* **core:** Optimization of render link ([df790ec](https://github.com/xpyjs/gantt/commit/df790ec5458e4eac543e16112ab1f307c440577a))
+* **core:** slider moves abnormally to right after toggle table display ([b2e122d](https://github.com/xpyjs/gantt/commit/b2e122de74c8a5380a19ecfdaa2a477e688bd1c0))
+* **core:** table row contextmenu event error ([1c9cfa9](https://github.com/xpyjs/gantt/commit/1c9cfa98e862cca200ef36384f41b7fe671fe2f6))
+* **core:** update blink when link has cycle and full tasks-link will be blink. ([49053b5](https://github.com/xpyjs/gantt/commit/49053b52396c4be4a8714ce4edbd876ccd90e403))
+
+
+
 ## [0.0.1-beta.3](https://github.com/xpyjs/gantt/compare/v0.0.1-beta.2...v0.0.1-beta.3) (2025-09-10)
 
 
