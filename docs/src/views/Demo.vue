@@ -149,7 +149,7 @@ import { FrameworkKey, useFramework } from "@/composables/useFramework";
 import { useTheme } from "@/composables/useTheme";
 import { toast } from "@/composables/useToast";
 import type { CodeBlock } from "@/types/demo";
-import sdk, { type VM } from "@stackblitz/sdk";
+import sdk, { UiViewOption, type VM } from "@stackblitz/sdk";
 import { createVueProjectFiles } from "@/template/vue";
 import { createReactProjectFiles } from "@/template/react";
 import { createJavaScriptProjectFiles } from "@/template/vanilla";
@@ -226,6 +226,7 @@ const initStackBlitz = async () => {
     let files: Record<string, string>;
     let title: string;
     let openFile: string;
+    let view: UiViewOption = 'default';
 
     switch (currentFramework.value) {
       case "vue":
@@ -243,6 +244,7 @@ const initStackBlitz = async () => {
         files = createJavaScriptProjectFiles(currentEntry.value);
         title = `${currentDemo.value.title} - JavaScript`;
         openFile = "src/main.ts";
+        view = currentEntry.value.view || 'default';
         break;
     }
 
@@ -257,7 +259,7 @@ const initStackBlitz = async () => {
       },
       {
         openFile,
-        view: "default",
+        view,
         hideNavigation: true,
         hideDevTools: true,
         hideExplorer: true,

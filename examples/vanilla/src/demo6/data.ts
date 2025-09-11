@@ -17,19 +17,29 @@ export interface TaskNode {
 }
 
 export interface LinkRow {
-    id: string; // links.key 默认为 id
+    id: string;
     from: string;
     to: string;
     type?: 'FS' | 'FF' | 'SS' | 'SF';
-    // 自定义属性示例
     label?: string;
     note?: string;
     color?: string;
 }
 
+// ===== 新增：基线数据结构 =====
+export interface BaselineRow {
+    id: string;
+    taskId: string;      // 关联任务 ID（与任务 id 对应）
+    startTime: string;   // 计划开始
+    endTime: string;     // 计划结束
+    name: string;        // 基线名称
+    highlight?: boolean; // 是否参与对比高亮（可省略，默认 true）
+    target?: boolean;    // 是否作为指示器对比目标
+}
 
 const dataCount = 10000;
-const linkCount = 5000;
+const linkCount = 1000;
+const baselineCount = 5000; // 可调：基线条目数量
 // ========================= 固定随机种子，保证刷新数据不变化 =========================
 const RNG_SEED = 'DEMO6_SEED_V1';
 function hashSeed(str: string): number {
@@ -195,5 +205,71 @@ function generateLinks(count: number, tasks: TaskNode[]): LinkRow[] {
 
 export const links: LinkRow[] = generateLinks(linkCount, flat);
 
+// ===== 新增：生成基线数据 =====
+function generateBaselines(count: number, tasks: TaskNode[]): BaselineRow[] {
+    if (count <= 0) return [];
+    // 优先选择非 summary（叶子或里程碑 / 普通任务），summary 也可以生成但一般意义不大
+    const candidates = tasks.filter(t => t.type !== 'summary');
+    if (!candidates.length) return [];
+    const result: BaselineRow[] = [];
+    const targetUsed = new Set<string>(); // 记录已设置 target 的任务
+
+    // 使用与任务/链接相同的 rng，保证可复现
+    let attempts = 0;
+    while (result.length < count && attempts < count * 5) {
+        attempts++;
+        const task = candidates[Math.floor(rng() * candidates.length)];
+        if (!task) continue;
+
+        const realStart = dayjs(task.start);
+        const realEnd = dayjs(task.end);
+        const duration = Math.max(realEnd.diff(realStart, 'second'), 0);
+
+        // 基线：模拟计划早/晚的情况
+        // 开始偏移：[-7, 3] 天
+        const startShiftDays = Math.floor(rng() * (3 - (-7) + 1)) - 7; // -7 ~ 3
+        let baselineStart = realStart.add(startShiftDays, 'day');
+
+        let baselineEnd: dayjs.Dayjs;
+        if (task.type === 'milestone') {
+            // 里程碑：保持同一天或略微提前/延后（-1 ~ +1）
+            const msShift = Math.floor(rng() * 3) - 1;
+            baselineStart = realStart.add(msShift, 'day');
+            baselineEnd = baselineStart;
+        } else {
+            // 结束偏移：[-3, 7] 天
+            const endShiftDays = Math.floor(rng() * (7 - (-3) + 1)) - 3;
+            // 原计划结束 = 开始 + 原持续时间 + 偏移
+            baselineEnd = baselineStart.add(duration, 'millisecond').add(endShiftDays, 'day');
+            if (baselineEnd.isBefore(baselineStart)) {
+                // 保底：至少不反向
+                baselineEnd = baselineStart;
+            }
+        }
+
+        const row: BaselineRow = {
+            id: `B${result.length + 1}`,
+            taskId: task.id,
+            startTime: baselineStart.format(DATE_FMT),
+            endTime: baselineEnd.format(DATE_FMT),
+            name: `基线-${result.length + 1}`,
+            highlight: true,
+            // 第一条指向某个任务的基线设为 target（指示器基准）
+            target: !targetUsed.has(task.id)
+        };
+        if (!targetUsed.has(task.id)) targetUsed.add(task.id);
+
+        result.push(row);
+    }
+    return result;
+}
+
+export const baselines: BaselineRow[] = generateBaselines(baselineCount, flat);
+
 console.timeEnd("generate-data");
-console.log("数据量统计", { rootCount: data.length, flatCount: flat.length, linkCount: links.length });
+console.log("数据量统计", {
+    rootCount: data.length,
+    flatCount: flat.length,
+    linkCount: links.length,
+    baselineCount: baselines.length   // 新增统计
+}, baselines, flat);

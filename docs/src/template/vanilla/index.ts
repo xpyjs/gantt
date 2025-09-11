@@ -110,7 +110,7 @@ export const createJavaScriptProjectFiles = (
     pkg.dependencies = { ...pkg.dependencies, ...block.dependencies };
   }
 
-  return {
+  const files: Record<string, string> = {
     "package.json": toJSON(pkg),
     "vite.config.ts": VITE_CONFIG,
     "tsconfig.json": toJSON(TSCONFIG),
@@ -118,4 +118,12 @@ export const createJavaScriptProjectFiles = (
     "index.html": INDEX_HTML,
     "src/main.ts": block.code
   };
+
+  if (block.extraFiles) {
+    Object.entries(block.extraFiles).forEach(([filePath, content]) => {
+      files[`src/${filePath}`] = content;
+    });
+  }
+
+  return files;
 };

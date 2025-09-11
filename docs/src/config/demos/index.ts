@@ -14,11 +14,12 @@ import cellRenderUsage from "./codes/cell-render-usage";
 import customHeaderUsage from "./codes/custom-header-usage";
 import holidayUsage from "./codes/holiday-usage";
 import holidayAdvUsage from "./codes/holiday-adv-usage";
-import fullAppUsage from "./codes/full-app-usage";
 import frameworkUsage from "./codes/framework";
 import baselineUsage from "./codes/baseline-usage";
 import milestoneUsage from "./codes/milestone-usage";
 import autoWidthUsage from "./codes/auto-width-usage";
+import fullAppUsage from "./codes/full-app-usage";
+import fullApp2Usage from "./codes/full-app-2-usage";
 
 // 常量
 export const DIFFICULTY_LEVELS = {
@@ -374,8 +375,8 @@ export const demoCategories: DemoCategory[] = [
       },
       {
         id: "full-app",
-        title: "构建一个完整的应用",
-        description: "通过一个比较完整的应用，来展示 XGantt 的强大功能",
+        title: "构建一个完整的应用I",
+        description: "通过一个比较完整的应用，来展示 XGantt 的强大功能。该示例包含切换主题、自定义行内容、创建任务、编辑任务等功能",
         category: "advanced",
         difficulty: "advanced",
         tags: ["自定义", "渲染", "高级"],
@@ -384,6 +385,26 @@ export const demoCategories: DemoCategory[] = [
             framework: "javascript",
             language: "javascript",
             code: fullAppUsage.jsCode
+          }
+        ]
+      },
+      {
+        id: "full-app-2",
+        title: "构建一个完整的应用II",
+        description: "通过一个比较完整的应用，来展示 XGantt 的强大功能。该示例展示了加载大量数据的状态，并基本涵盖所有功能。",
+        category: "advanced",
+        difficulty: "advanced",
+        tags: ["自定义", "渲染", "高级"],
+        code: [
+          {
+            framework: "javascript",
+            language: "javascript",
+            code: fullApp2Usage.jsCode,
+            view: 'preview',
+            extraFiles: {
+              'data.ts': fullApp2Usage.dataCode,
+              'style.css': fullApp2Usage.cssCode
+            }
           }
         ]
       }
