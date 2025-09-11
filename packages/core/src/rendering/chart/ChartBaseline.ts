@@ -150,6 +150,7 @@ export class ChartBaseline {
 
           // 按照模式渲染基线
           this.renderBaselineBar(group, task, bl, left, right, height, rowHeight, barHeight, headerHeight, bgColor, opacity, cornerRadius, offset);
+          this.baselineGroup.add(group);
 
           // 渲染对比
           const compare = this.context.getOptions().baselines.compare;
@@ -174,7 +175,6 @@ export class ChartBaseline {
 
           // 绑定事件
           this.bindEvents(group, task, bl);
-          this.baselineGroup.add(group);
         });
       }
     });
