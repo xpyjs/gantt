@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-10 17:26:22
+ * @LastEditTime: 2025-09-11 16:11:31
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -125,7 +125,7 @@ export class LinkGroup {
    */
   public updateTask(task: Task) {
     // 重新计算关联线
-    this.calculateLinks(task);
+    this.calculateLinks([task]);
 
     // 重新计算点组位置
     this.calculatePoints(task);
@@ -288,7 +288,7 @@ export class LinkGroup {
   /**
    * 计算关联线位置
    */
-  private calculateLinks(task?: Task): void {
+  private calculateLinks(tasks?: Task[]): void {
     // 不展示
     if (!this.context.getOptions().links.show) {
       this.destroy();
@@ -302,17 +302,20 @@ export class LinkGroup {
     }
 
     // 获取数据
-    const links = task
-      ? this.context.store.getLinkManager().getLinksByTaskId(task.id)
+    const links = tasks?.length
+      ? tasks.reduce<ILink[]>((acc, task) => {
+        acc.push(...this.context.store.getLinkManager().getLinksByTaskId(task.id));
+        return acc;
+      }, [])
       : this.context.store.getLinkManager().getLinks();
 
-    if (task) {
+    if (tasks?.length) {
       // 仅更新与该任务相关的连线
       links.forEach(link => {
         const id = this.createId(link);
+        const g = this.linkCache.get(id);
+        g?.destroy();
         this.linkCache.delete(id);
-        const existing = this.linksGroup.findOne(`#${id}`);
-        if (existing) existing.destroy();
       });
     }
 
@@ -387,7 +390,7 @@ export class LinkGroup {
           if (group === undefined) {
             group = new Konva.Group({ id });
           }
-          if (!task) {
+          if (!tasks?.length) {
             (group as any)._ = currentKey; // 标记当前渲染周期
           }
 
@@ -605,7 +608,7 @@ export class LinkGroup {
     });
 
     // 删除已不存在的连线
-    if (!task) {
+    if (!tasks?.length) {
       this.linkCache.forEach((group, id) => {
         if ((group as any)._ !== currentKey) {
           group.destroy();
@@ -949,7 +952,6 @@ export class LinkGroup {
       task = this.getTaskByPosition(pos);
       if (!task) return;
 
-      // 判断拖拽的是 S 还是 F，也就是起始点（圆）还是结束点（箭头），另一头的位置保持不变，创建一条临时的可变的连线，并隐藏原来的连线
       this.templateArrow.visible(true);
       group?.visible(false);
 
@@ -1030,10 +1032,11 @@ export class LinkGroup {
         _link.type = _type as LinkType;
         let allowLeft = false;
         let allowRight = false;
+        let reason: string | undefined = undefined;
         if (type === "S") {
-          ({ allowLeft, allowRight } = this.isAllowStartDrop(task, _link.to, _link.type!, true));
+          ({ allowLeft, allowRight, reason } = this.isAllowStartDrop(task, _link.to, _link.type!, true));
         } else if (type === 'F') {
-          ({ allowLeft, allowRight } = this.isAllowEndDrop(task, _link.from, _link.type!, true));
+          ({ allowLeft, allowRight, reason } = this.isAllowEndDrop(task, _link.from, _link.type!, true));
         }
 
         if (
@@ -1042,15 +1045,16 @@ export class LinkGroup {
         ) {
           this.context.event.emit(EventName.UPDATE_LINK, _link);
           this.context.store.getLinkManager().update();
+          this.calculateLinks();
         } else {
-          this.context.event.emit(EventName.ERROR, ErrorType.LINK_NOT_ALLOWED);
+          this.context.event.emit(EventName.ERROR, reason || ErrorType.LINK_NOT_ALLOWED);
         }
       } else {
         this.context.event.emit(EventName.ERROR, ErrorType.TASK_NOT_FOUND);
       }
 
       this.cleanupTempLink();
-      this.calculateLinks(task || undefined);
+      this.calculateLinks([task, this.context.store.getDataManager().getTaskById(link.from), this.context.store.getDataManager().getTaskById(link.to)].filter(t => !!t));
 
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
@@ -1165,7 +1169,7 @@ export class LinkGroup {
           this.context.event.emit(EventName.ERROR, ErrorType.LINK_EXIST);
         } else {
           if (!(from === task.id && type === target)) {
-            const { allowLeft, allowRight } = this.isAllowEndDrop(task, from, _type, true);
+            const { allowLeft, allowRight, reason } = this.isAllowEndDrop(task, from, _type, true);
 
             if (
               (target === "S" && allowLeft) ||
@@ -1179,10 +1183,7 @@ export class LinkGroup {
               });
               this.context.store.getLinkManager().update();
             } else {
-              this.context.event.emit(
-                EventName.ERROR,
-                ErrorType.LINK_NOT_ALLOWED
-              );
+              this.context.event.emit(EventName.ERROR, reason || ErrorType.LINK_NOT_ALLOWED);
             }
           } else {
             this.context.event.emit(EventName.ERROR, ErrorType.LINK_SAME);
@@ -1191,7 +1192,7 @@ export class LinkGroup {
       }
 
       this.cleanupTempLink();
-      this.calculateLinks(task || undefined);
+      this.calculateLinks([task].filter(t => !!t));
 
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
@@ -1261,8 +1262,9 @@ export class LinkGroup {
     const res = this.validateChain(task.id, toId, linkType, useHighlight);
 
     return {
-      allowLeft: allowLeft && res,
-      allowRight: allowRight && res
+      allowLeft: allowLeft && res.ok,
+      allowRight: allowRight && res.ok,
+      reason: res.reason
     };
   }
 
@@ -1290,19 +1292,20 @@ export class LinkGroup {
     const res = this.validateChain(fromId, task.id, linkType, useHighlight);
 
     return {
-      allowLeft: allowLeft && res,
-      allowRight: allowRight && res
+      allowLeft: allowLeft && res.ok,
+      allowRight: allowRight && res.ok,
+      reason: res.reason
     };
   }
 
   /**
  * 校验连线创建是否合法
  */
-  private validateChain(from: string, to: string, linkType: LinkType, useHighlight = false): boolean {
+  private validateChain(from: string, to: string, linkType: LinkType, useHighlight = false): { ok: boolean; reason?: ErrorType; } {
     const linkManager = this.context.store.getLinkManager();
 
     // 校验链路
-    const result = linkManager.validateLink({ from, to, type: linkType });
+    const result = linkManager.validateChain(from, to, linkType);
 
     if (!result.ok) {
       if (useHighlight) {
@@ -1313,11 +1316,10 @@ export class LinkGroup {
         }
       }
 
-      this.context.event.emit(EventName.ERROR, result.reason);
-      return false;
+      return { ok: false, reason: result.reason };
     }
 
-    return true;
+    return { ok: true };
   }
 
   /**
