@@ -130,7 +130,7 @@ export class ChartSlider {
         dragBoundFunc: pos => {
           let min = Math.min(0, -(-this.offsetX - this.slider.x()));
           const _end = this.context.store.getTimeAxis().getTimeLeft(this.task.endTime!);
-          let max = this.rowWidth - this.slider.width() + Math.abs(_end - (-this.offsetX + this.rowWidth));
+          let max = this.sliderGroup.getStage()!.width() - this.slider.width() + Math.abs(_end - (-this.offsetX + this.sliderGroup.getStage()!.width()));
 
           // 严格父级模式下，移动时需要判定不能超过父级边界
           const parent = this.context.getOptions().bar.move.link.parent;
