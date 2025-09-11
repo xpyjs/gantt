@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:01:19
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-05 16:46:10
+ * @LastEditTime: 2025-09-10 16:14:29
  * @Description: 表格行渲染管理器
  */
 
@@ -89,7 +89,7 @@ export class TableRow {
     this.element.addEventListener("contextmenu", e => {
       e.preventDefault();
       this.context.store.getDataManager().selectTask(this.task.id);
-      this.context.event.emit(EventName.ROW_CONTEXTMENU, e, this.task.id);
+      this.context.event.emit(EventName.ROW_CONTEXTMENU, e, this.task);
     });
   }
 

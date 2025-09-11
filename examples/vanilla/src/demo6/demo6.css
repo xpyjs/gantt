@@ -14,6 +14,7 @@ html, body {
 }
 
 #btn-group {
+    padding: 8px 12px;
     display: flex;
     gap: 8px;
 }
@@ -50,4 +51,12 @@ button:hover {
 }
 button:active {
     background-color: #005c99;
+}
+
+select {
+    padding: 2px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
 }

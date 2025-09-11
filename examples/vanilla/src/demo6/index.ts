@@ -1,51 +1,48 @@
 import { XGantt, dayjs } from "@xpyjs/gantt-core";
 import "@xpyjs/gantt-core/style.css";
 import "./demo6.css";
-import { data, links, DATE_FMT, generateId, type TaskNode, type LinkRow } from './data';
+import { data, links, DATE_FMT, generateId } from './data';
 
 document.body.innerHTML = `<div id="app">
-  <div id="btn-group" style="margin-bottom: 8px;"></div>
+  <div id="btn-group">
+    <button id="btn-today">跳转到今天</button>
+    <button id="btn-random-add-task">随机新增 1 条任务 (根级)</button>
+
+    <div style="flex: 1; display: flex; align-items: center; justify-content: flex-end">
+      <select id="select-primary-color" title="设置主题色">
+        <option value="#e7209e" style="color: #e7209e" selected>默认色</option>
+        <option value="#eca710" style="color: #eca710">黄色</option>
+        <option value="#f5222d" style="color: #f5222d">红色</option>
+        <option value="#52c41a" style="color: #52c41a">绿色</option>
+        <option value="#1890ff" style="color: #1890ff">蓝色</option>
+        <option value="#8a2be2" style="color: #8a2be2">紫色</option>
+      </select>
+    </div>
+  </div>
   <div id="gantt-container"></div>
-  <div id="footer-bar"></div>
+  <div id="footer-bar">
+    <div id="footer-status"></div>
+    <div id="footer-selection"></div>
+    <div id="footer-checked"></div>
+  </div>
 </div>`;
 
 
 const footer = document.getElementById('footer-bar');
 // 状态信息
 const updateFooterStatusInfo = () => {
-  if (footer) {
-    let status = document.getElementById('footer-status');
-    if (!status) {
-      status = document.createElement('div');
-      status.id = 'footer-status';
-      footer.appendChild(status);
-    }
-    status.innerText = '当前任务数: ' + (gantt as any)?.context.store.getDataManager().getVisibleSize() + ' 条任务';
-  }
+  const status = footer!.querySelector('#footer-status') as HTMLElement;
+  status.innerText = '当前任务数: ' + (gantt as any)?.context.store.getDataManager().getVisibleSize() + ' 条任务';
 }
 // 当前选择内容
 const updateFooterSelection = () => {
-  if (footer) {
-    let selection = document.getElementById('footer-selection');
-    if (!selection) {
-      selection = document.createElement('div');
-      selection.id = 'footer-selection';
-      footer.appendChild(selection);
-    }
-    selection.innerText = '当前选择: ' + (selected ? selected.name : '无');
-  }
+  const selection = footer!.querySelector('#footer-selection') as HTMLElement;
+  selection.innerText = '当前选择: ' + (selected ? selected.name : '无');
 }
 // 当前勾选内容
 const updateFooterChecked = () => {
-  if (footer) {
-    let checked = document.getElementById('footer-checked');
-    if (!checked) {
-      checked = document.createElement('div');
-      checked.id = 'footer-checked';
-      footer.appendChild(checked);
-    }
-    checked.innerText = '当前勾选: ' + (checkedList.length) + ' 条任务';
-  }
+  const checked = footer!.querySelector('#footer-checked') as HTMLElement;
+  checked.innerText = '当前勾选: ' + (checkedList.length) + ' 条任务';
 }
 
 const ganttContainer = document.getElementById("gantt-container");
@@ -137,15 +134,13 @@ gantt.on("error", (err, msg) => console.warn("Gantt error", err, msg));
 // 新增连线事件（演示增量）
 let dynamicLinkId = links.length + 1;
 gantt.on("create:link", (link) => {
-  const newLink = { ...link, id: `L${dynamicLinkId++}` } as any;
+  const newLink = { ...link, id: `L${dynamicLinkId++}` };
   links.push(newLink);
-  console.log('create:link', newLink);
 });
 gantt.on("update:link", (link) => {
   const index = links.findIndex(l => l.id === (link as any).id);
   if (index > -1) {
     links.splice(index, 1, link as any);
-    console.log('update:link', link);
   }
 });
 gantt.on("click:row", (e, item) => {
@@ -164,17 +159,14 @@ gantt.on("select:link", (link, checked, all) => {
 const btnGroup = document.getElementById('btn-group');
 if (btnGroup) {
   {
-    const btn1 = document.createElement('button');
-    btn1.innerText = '跳转到今天';
+    const btn1 = btnGroup.querySelector('#btn-today') as HTMLButtonElement;
     btn1.addEventListener('click', () => {
       gantt.jumpTo();
     });
-    btnGroup.appendChild(btn1);
   }
 
   {
-    const btn2 = document.createElement('button');
-    btn2.innerText = '随机新增 1 条任务 (根级)';
+    const btn2 = btnGroup.querySelector('#btn-random-add-task') as HTMLButtonElement;
     btn2.addEventListener('click', () => {
       const id = generateId();
       const newTask = {
@@ -189,7 +181,14 @@ if (btnGroup) {
       gantt.update({ data });
       updateFooterStatusInfo();
     });
-    btnGroup.appendChild(btn2);
+  }
+
+  {
+    const select = btnGroup.querySelector('#select-primary-color') as HTMLSelectElement;
+    select.addEventListener('change', () => {
+      const color = select.value;
+      gantt.update({ primaryColor: color });
+    });
   }
 }
 
