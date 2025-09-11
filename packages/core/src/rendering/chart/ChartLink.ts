@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-10 14:33:06
+ * @LastEditTime: 2025-09-10 17:04:33
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -573,11 +573,14 @@ export class LinkGroup {
                     this.selectedMap.values().toArray()
                   );
                 }
-              } else if (e.evt.button === 2) {
-                // 右键点击
-                this.context.event.emit(EventName.CONTEXT_LINK, e.evt, link);
               }
             });
+            group.on("contextmenu", e => {
+              e.evt.preventDefault(); // 阻止默认右键菜单
+              e.cancelBubble = true; // 阻止事件冒泡
+              // 右键点击
+              this.context.event.emit(EventName.CONTEXT_LINK, e.evt, link);
+            })
 
             // 缓存连线
             this.linkCache.set(id, group);
