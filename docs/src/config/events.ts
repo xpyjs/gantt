@@ -368,6 +368,7 @@ gantt.on('click:row', (event, rowData) => {
 
   // 根据错误类型处理
   switch (error) {
+    INVALID_TYPE
     case 'LINK_NOT_ALLOWED':
       showError('连线不被允许', '请检查任务关系设置');
       break;
@@ -376,6 +377,15 @@ gantt.on('click:row', (event, rowData) => {
       break;
     case 'LINK_EXIST':
       showError('当前关联已存在', '该依赖关系已经建立');
+      break;
+    case 'TASK_NOT_FOUND':
+      showError('任务未找到', '请检查任务 ID 是否正确');
+      break;
+    case 'LINK_INVALID_ARG':
+      showError('无效的链接参数', '请检查链接的任务 ID');
+      break;
+    case 'LINK_CYCLE':
+      showError('依赖关系循环', '请检查任务之间的依赖关系');
       break;
     default:
       showError('未知错误', \`错误代码: \${error}\`);
@@ -852,7 +862,15 @@ export const eventsPageConfig: EventsPageConfig = {
               language: "javascript"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      id: "baseline-events",
+      title: "基线相关事件",
+      icon: "📏",
+      description: "用户与基线进行交互时触发的事件",
+      events: [
         {
           id: "click:baseline",
           name: "click:baseline",
@@ -1127,9 +1145,13 @@ export const eventsPageConfig: EventsPageConfig = {
           ],
           notes: [
             "ErrorType 错误类型：",
+            "INVALID_TYPE - 无效类型",
             "LINK_NOT_ALLOWED - 连线不被允许",
             "LINK_SAME - 相同节点",
-            "LINK_EXIST - 当前关联已存在"
+            "LINK_EXIST - 当前关联已存在",
+            "TASK_NOT_FOUND - 任务不存在",
+            "LINK_INVALID_ARG - 依赖关系参数错误",
+            "LINK_CYCLE - 依赖关系循环"
           ],
           examples: [
             {

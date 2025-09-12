@@ -85,6 +85,21 @@
                         </ul>
                       </div>
 
+                      <div
+                        v-if="method.functions && method.functions.length > 0"
+                      >
+                        <p><strong>方法：</strong></p>
+                        <ul>
+                          <li
+                            v-for="param in method.functions"
+                            :key="param.name"
+                          >
+                            <code>{{ param.name }}({{ param.parameters?.map(p => `${p.name}${p.optional ? '?' : ''}: ${p.type}`).join(', ') }}): {{ param.returns }}</code>
+                            {{ param.description }}
+                          </li>
+                        </ul>
+                      </div>
+
                       <p>
                         <strong>返回值：</strong
                         ><code>{{ method.returnType }}</code>
@@ -110,18 +125,19 @@
                         </ul>
                       </div>
 
+                      <div v-if="method.href">
+                        <p><strong>相关链接：</strong></p>
+                        <ul>
+                          <li>
+                            <a :href="method.href" target="_blank">{{ method.href }}</a>
+                          </li>
+                        </ul>
+                      </div>
+
                       <FrameworkCodeBlock v-if="method.examples" :code-blocks="method.examples" />
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <!-- 框架专用方法 -->
-              <div class="section" id="framework">
-                <h2>使用框架</h2>
-                <p>不同框架的使用方式可能会有一些区别</p>
-
-                <FrameworkCodeBlock v-if="frameworkMethods" :code-blocks="frameworkMethods" />
               </div>
             </div>
           </main>
@@ -145,7 +161,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { Icon } from "@iconify/vue";
 import FrameworkCodeBlock from "@/components/FrameworkCodeBlock.vue";
-import { methodsPageConfig } from "@/config/methods";
+import { assistPageConfig } from "@/config/assist";
 
 // 当前激活的导航section
 const activeSection = ref("overview");
@@ -154,7 +170,7 @@ const activeSection = ref("overview");
 const showBackToTop = ref(false);
 
 // 从配置中获取数据
-const { overview, methods, frameworkMethods } = methodsPageConfig;
+const { overview, methods } = assistPageConfig;
 
 // 生成导航数据
 const navigation = [
@@ -165,7 +181,6 @@ const navigation = [
     icon: method.icon,
     href: `#${method.id}`
   })),
-  { id: "framework", title: "使用框架", icon: "🔧", href: "#framework" }
 ];
 
 // 滚动到指定section

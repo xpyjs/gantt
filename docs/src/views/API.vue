@@ -15,7 +15,7 @@
         <div class="api-section">
           <div class="section-header" @click="navigateToPage('/api/methods')">
             <h2>
-              <Icon icon="material-symbols:code" width="28" height="28" />
+              <Icon icon="codicon:symbol-method" width="28" height="28" />
               方法接口
             </h2>
             <Icon
@@ -44,6 +44,29 @@
                   :key="item.id"
                   class="item-link"
                   @click="navigateToAnchor('/api/methods', item.anchor)"
+                >
+                  {{ item.name }}
+                </span>
+              </div>
+            </div>
+
+            <div class="category-card">
+              <div class="category-header">
+                <div class="category-icon assist-icon">
+                  <Icon
+                    icon="material-symbols:build-circle"
+                    width="24"
+                    height="24"
+                  />
+                </div>
+                <h4>辅助方法</h4>
+              </div>
+              <div class="category-items">
+                <span
+                  v-for="item in assistItems"
+                  :key="item.id"
+                  class="item-link"
+                  @click="navigateToAnchor('/api/assist', item.anchor)"
                 >
                   {{ item.name }}
                 </span>
@@ -141,6 +164,43 @@
             </div>
           </div>
         </div>
+
+        <!-- TypeScript -->
+        <div class="api-section">
+          <div class="section-header" @click="navigateToPage('/api/types')">
+            <h2>
+              <Icon icon="material-symbols:code" width="28" height="28" />
+              TypeScript
+            </h2>
+            <Icon
+              icon="material-symbols:arrow-forward"
+              width="20"
+              height="20"
+              class="nav-arrow"
+            />
+          </div>
+          <p class="section-description">核心公共类型声明，辅助更好地进行二次开发与类型推导</p>
+          <div class="category-grid">
+            <div class="category-card">
+              <div class="category-header">
+                <div class="category-icon structure-icon">
+                  <Icon icon="material-symbols:data-object" width="24" height="24" />
+                </div>
+                <h4>核心类型</h4>
+              </div>
+              <div class="category-items">
+                <span
+                  v-for="item in typeItems"
+                  :key="item.id"
+                  class="item-link"
+                  @click="navigateToAnchor('/api/types', item.anchor)"
+                >
+                  {{ item.name }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>
@@ -153,6 +213,8 @@ import { Icon } from "@iconify/vue";
 import { methodsPageConfig } from "@/config/methods";
 import eventsPageConfig from "@/config/events";
 import { getConfigCategories } from "@/config/api";
+import { assistPageConfig } from "@/config/assist";
+import { typesPageConfig } from "@/config/types";
 
 const router = useRouter();
 
@@ -170,6 +232,7 @@ const eventCategories = computed(() => {
       "interaction-events": "click-icon",
       "movement-events": "movement-icon",
       "link-events": "link-icon",
+      "baseline-events": "baseline-icon",
       "system-events": "system-icon"
     };
 
@@ -190,6 +253,7 @@ const getIconByCategory = (categoryId: string): string => {
     "interaction-events": "material-symbols:mouse",
     "movement-events": "material-symbols:drag-indicator",
     "link-events": "material-symbols:account-tree",
+    "baseline-events": "material-symbols:straighten",
     "system-events": "material-symbols:error"
   };
   return iconMap[categoryId] || "material-symbols:check-box";
@@ -199,6 +263,14 @@ const getIconByCategory = (categoryId: string): string => {
 const methodItems = methodsPageConfig.methods.map(item => {
   return { id: item.id, name: item.id, anchor: item.id };
 });
+
+// 辅助列表
+const assistItems = assistPageConfig.methods.map(item => {
+  return { id: item.id, name: item.id, anchor: item.id };
+});
+
+// 类型列表
+const typeItems = typesPageConfig.types.map(t => ({ id: t.id, name: t.name, anchor: t.id }));
 
 // 导航到页面
 const navigateToPage = (route: string) => {
@@ -432,6 +504,16 @@ const navigateToAnchor = (route: string, anchor: string) => {
 
 .methods-icon {
   background: linear-gradient(135deg, #ec4899, #db2777);
+  color: white;
+}
+
+.baseline-icon {
+  background: linear-gradient(135deg, #f5550b, #d4380e);
+  color: white;
+}
+
+.assist-icon {
+  background: linear-gradient(135deg, #3bf63b, #22c522);
   color: white;
 }
 

@@ -67,6 +67,16 @@ const router = createRouter({
       component: () => import("./views/APIMethods.vue")
     },
     {
+      path: "/api/assist",
+      name: "APIAssist",
+      component: () => import("./views/APIAssist.vue")
+    },
+    {
+      path: "/api/types",
+      name: "APITypes",
+      component: () => import("./views/APITypes.vue")
+    },
+    {
       // 重定向旧路径到新路径
       path: "/demo/:pathMatch(.*)*",
       redirect: "/demos"

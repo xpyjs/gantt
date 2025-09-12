@@ -16,12 +16,12 @@
         <div class="breadcrumb">
           <RouterLink to="/demos" class="breadcrumb-item">演示</RouterLink>
           <span class="breadcrumb-separator">›</span>
-          <a
+          <RouterLink
             class="breadcrumb-item clickable"
-            :href="'/demos#category-' + (categoryInfo?.id || category)"
+            :to="'/demos#category-' + (categoryInfo?.id || category)"
           >
             {{ categoryInfo?.title }}
-          </a>
+          </RouterLink>
           <span class="breadcrumb-separator">›</span>
           <div
             class="breadcrumb-dropdown"

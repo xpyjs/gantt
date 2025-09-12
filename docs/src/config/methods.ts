@@ -22,6 +22,20 @@ export interface MethodParameter {
 }
 
 /**
+ * 方法参数配置
+ */
+export interface FunctionParameter {
+  /** 参数名称 */
+  name: string;
+  /** 参数列表 */
+  parameters?: MethodParameter[];
+  /** 参数描述 */
+  description: string;
+  /** 返回类型 */
+  returns: string;
+}
+
+/**
  * 代码示例配置接口
  */
 export interface CodeExample {
@@ -51,6 +65,8 @@ export interface MethodConfig {
   trigger?: string;
   /** 方法参数 */
   parameters?: MethodParameter[];
+  /** 方法函数 */
+  functions?: FunctionParameter[];
   /** 返回值类型 */
   returnType: string;
   /** 返回值描述 */
@@ -60,7 +76,9 @@ export interface MethodConfig {
   /** 清理内容（对于销毁类方法） */
   cleanup?: string[];
   /** 代码示例 */
-  examples: CodeExample[];
+  examples?: CodeExample[];
+  /** 相关链接 */
+  href?: string;
 }
 
 /**
@@ -85,12 +103,12 @@ export interface MethodsPageConfig {
   overview: {
     title: string;
     description: string;
-    examples: CodeExample[];
+    examples?: CodeExample[];
   };
   /** 方法列表 */
   methods: MethodConfig[];
   /** 使用框架 */
-  frameworkMethods: CodeExample[];
+  frameworkMethods?: CodeExample[];
 }
 
 /**
