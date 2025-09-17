@@ -131,15 +131,23 @@ export const createVueProjectFiles = (
     pkg.dependencies = { ...pkg.dependencies, ...block.dependencies };
   }
 
-  return {
+  const files: Record<string, string> = {
     "package.json": toJSON(pkg),
     "vite.config.ts": VITE_CONFIG,
     "tsconfig.json": toJSON(TSCONFIG),
     "tsconfig.node.json": toJSON(TSCONFIG_NODE),
     "index.html": INDEX_HTML,
     "src/vite-env.d.ts": `/// <reference types="vite/client" />\n`,
-    "src/main.ts": MAIN_TS,
+    "src/main.ts": block.customFiles?.['src/main.ts'] || MAIN_TS,
     "src/App.vue": block.code,
     "src/style.css": STYLE_CSS
   };
+
+  if (block.extraFiles) {
+    Object.entries(block.extraFiles).forEach(([filePath, content]) => {
+      files[`src/${filePath}`] = content;
+    });
+  }
+
+  return files;
 };

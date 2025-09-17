@@ -20,6 +20,7 @@ import milestoneUsage from "./codes/milestone-usage";
 import autoWidthUsage from "./codes/auto-width-usage";
 import fullAppUsage from "./codes/full-app-usage";
 import fullApp2Usage from "./codes/full-app-2-usage";
+import fullAppVueUsage from "./codes/full-app-vue-usage";
 
 // 常量
 export const DIFFICULTY_LEVELS = {
@@ -443,6 +444,32 @@ export const demoCategories: DemoCategory[] = [
             framework: "react",
             language: "tsx",
             code: frameworkUsage.reactCode
+          }
+        ]
+      },
+      {
+        id: "full-app-vue-1",
+        title: "使用Vue3构建一个完整的应用",
+        description: "通过一个比较完整的应用，来展示 XGantt 在 Vue3 框架集成下的优秀性能。",
+        category: "advanced",
+        difficulty: "advanced",
+        tags: ["Vue", "自定义", "渲染", "高级"],
+        code: [
+          {
+            framework: "vue",
+            language: "vue",
+            code: fullAppVueUsage.vueCode,
+            view: 'preview',
+            extraFiles: {
+              'data.ts': fullAppVueUsage.dataCode,
+              'components/contextMenu/ContextMenu.vue': fullAppVueUsage.contextComponent
+            },
+            customFiles: {
+              'src/main.ts': fullAppVueUsage.mainTsCode,
+            },
+            dependencies: {
+              "element-plus": "^2.11.2",
+            }
           }
         ]
       }

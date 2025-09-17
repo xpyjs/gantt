@@ -7,6 +7,7 @@ export interface CodeBlock {
   language: string; // 语言标识，用于语法高亮（javascript, vue, tsx）
   dependencies?: Record<string, string>; // 依赖包
   extraFiles?: Record<string, string>; // 额外文件
+  customFiles?: Record<string, string>; // 自定义文件内容，覆盖现有文件内容
   view?: UiViewOption; // 视图类型（默认 default，可选有 default、fullscreen、split）
 }
 
