@@ -227,10 +227,17 @@ gantt.on('click:row', (event, rowData) => {
   updateRelatedTasks(data);
 });`,
 
+  // 任务条移入事件
+  enterSliderEvent: `gantt.on('enter:slider', (e, data) => {
+  console.log('鼠标移入任务条:', data.name);
+  // 显示任务信息
+  showTaskTooltip(e.clientX, e.clientY, data);
+});`,
+
   // 任务条悬停事件
   hoverSliderEvent: `gantt.on('hover:slider', (e, data) => {
   console.log('鼠标悬停在任务条:', data.name);
-  // 显示任务信息
+  // 更新任务条信息对话框位置和内容
   const taskInfoDialog = showTaskBarInfo({
     x: e.clientX,
     y: e.clientY,
@@ -266,11 +273,18 @@ gantt.on('click:row', (event, rowData) => {
   });
 });`,
 
+  // 鼠标移入基线事件
+  enterBaselineEvent: `gantt.on('enter:baseline', (e, task, baseline) => {
+  console.log('鼠标移入基线:', task, baseline);
+  // 显示基线信息
+  showBaselineInfo(baseline);
+});`,
+
   // 基线悬停事件
   hoverBaselineEvent: `gantt.on('hover:baseline', (e, task, baseline) => {
   console.log('鼠标悬停在基线:', task, baseline);
-  // 显示基线信息
-  showBaselineInfo(baseline);
+  // 更新基线信息对话框位置和内容
+  showBaselineInfo(baseline, e.clientX, e.clientY);
 });`,
 
   // 基线离开事件
@@ -812,6 +826,32 @@ export const eventsPageConfig: EventsPageConfig = {
           ]
         },
         {
+          id: "enter:slider",
+          name: "enter:slider",
+          type: "任务条移入",
+          description: "鼠标移入任务条时触发",
+          trigger: "鼠标移入任务条时",
+          parameters: [
+            {
+              name: "e",
+              type: "MouseEvent",
+              description: "鼠标事件对象"
+            },
+            {
+              name: "data",
+              type: "any",
+              description: "移入的任务数据"
+            }
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.enterSliderEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
           id: "hover:slider",
           name: "hover:slider",
           type: "任务条悬停",
@@ -929,6 +969,37 @@ export const eventsPageConfig: EventsPageConfig = {
             {
               framework: "javascript",
               code: codeExamples.contextmenuBaselineEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
+          id: "enter:baseline",
+          name: "enter:baseline",
+          type: "基线移入",
+          description: "鼠标移入基线时触发",
+          trigger: "鼠标移入基线时",
+          parameters: [
+            {
+              name: "e",
+              type: "MouseEvent",
+              description: "鼠标事件对象"
+            },
+            {
+              name: "task",
+              type: "any",
+              description: "任务数据"
+            },
+            {
+              name: "baseline",
+              type: "any",
+              description: "基线数据"
+            }
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.enterBaselineEvent,
               language: "javascript"
             }
           ]

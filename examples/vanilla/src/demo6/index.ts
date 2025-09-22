@@ -931,3 +931,35 @@ gantt.on('contextmenu:link', (e, link) => {
   e.preventDefault();
   buildLinkMenu(link, e);
 });
+
+// 添加 Slider 悬浮提示
+let infoDialog: any = null;
+gantt.on("hover:slider", (e, data) => {
+  if (infoDialog) {
+    infoDialog.style.top = `${e.pageY + 10}px`;
+    infoDialog.style.left = `${e.pageX}px`;
+    return;
+  }
+  infoDialog = document.createElement("div");
+  infoDialog.style.position = "absolute";
+  infoDialog.style.top = `${e.pageY + 10}px`;
+  infoDialog.style.left = `${e.pageX}px`;
+  infoDialog.style.background = "white";
+  infoDialog.style.border = "1px solid #d9d9d9";
+  infoDialog.style.padding = "8px";
+  infoDialog.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.1)";
+  infoDialog.innerHTML = `
+    <strong>任务信息</strong><br>
+    <strong>名称:</strong> ${data.name}<br>
+    <strong>开始时间:</strong> ${data.start}<br>
+    <strong>结束时间:</strong> ${data.end}<br>
+    <strong>进度:</strong> ${data.progress || 0}%
+  `;
+  document.body.appendChild(infoDialog);
+})
+gantt.on("leave:slider", () => {
+  if (infoDialog) {
+    document.body.removeChild(infoDialog);
+    infoDialog = null;
+  }
+});

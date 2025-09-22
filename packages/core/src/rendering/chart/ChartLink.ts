@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-11 16:11:31
+ * @LastEditTime: 2025-09-22 11:13:45
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -86,7 +86,7 @@ export class LinkGroup {
       this.unhighlightPoint(id);
     });
 
-    this.context.event.on(EventName.SLIDER_MOVING, (moving: boolean) => {
+    this.context.event.on(EventName.SLIDER_DRAGGING, (moving: boolean) => {
       this.isSliderMoving = moving;
     });
   }

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-02 15:45:39
+ * @LastEditTime: 2025-09-22 11:24:02
  * @Description: Facade Layer for Gantt Component
  */
 import { Logger } from "./utils/logger";
@@ -200,6 +200,10 @@ export class XGanttContext implements IContext {
       this._emit("contextmenu:slider", e, task.data);
     });
 
+    this.event.on(EventName.SLIDER_ENTER, (e: MouseEvent, task: Task) => {
+      this._emit("enter:slider", e, task.data);
+    });
+
     this.event.on(EventName.SLIDER_HOVER, (e: MouseEvent, task: Task) => {
       this._emit("hover:slider", e, task.data);
     });
@@ -216,7 +220,11 @@ export class XGanttContext implements IContext {
       this._emit("contextmenu:baseline", e, task.data, baseline.data);
     });
 
-    this.event.on(EventName.BASELINE_MOUSEOVER, (e: MouseEvent, task: Task, baseline: Baseline) => {
+    this.event.on(EventName.BASELINE_MOUSEENTER, (e: MouseEvent, task: Task, baseline: Baseline) => {
+      this._emit("enter:baseline", e, task.data, baseline.data);
+    });
+
+    this.event.on(EventName.BASELINE_MOUSEMOVE, (e: MouseEvent, task: Task, baseline: Baseline) => {
       this._emit("hover:baseline", e, task.data, baseline.data);
     });
 

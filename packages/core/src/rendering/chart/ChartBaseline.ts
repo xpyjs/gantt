@@ -415,8 +415,12 @@ export class ChartBaseline {
   }
 
   private bindEvents(dom: Konva.Group, task: Task, baseline: Baseline): void {
-    dom.on('mouseover', e => {
-      this.context.event.emit(EventName.BASELINE_MOUSEOVER, e.evt, task, baseline);
+    dom.on('mouseenter', e => {
+      this.context.event.emit(EventName.BASELINE_MOUSEENTER, e.evt, task, baseline);
+    });
+
+    dom.on('mousemove', e => {
+      this.context.event.emit(EventName.BASELINE_MOUSEMOVE, e.evt, task, baseline);
     });
 
     dom.on('mouseout', e => {

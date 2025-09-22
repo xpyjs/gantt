@@ -236,6 +236,19 @@ export class XGantt {
 
   /**
    * 获取指定任务的所有相关联的完整路径，包含所有连接线与任务节点
+   *
+   * 结果集中包含前置链路信息、后置链路信息、所有节点、关联线的信息等
+   * - prev: 前置链路信息
+   *    - chain: 所有源 -> 当前任务的完整路径（每条路径末尾为当前节点）
+   *    - nodes: 前置方向所有唯一节点
+   *    - links: 前置方向所有连线
+   * - next: 后置链路信息
+   *   - chain: 当前任务 -> 所有汇的完整路径（每条路径首元素为当前节点）
+   *   - nodes: 后置方向所有唯一节点
+   *   - links: 后置方向所有连线
+   * - allNodes: 所有相关联的节点
+   * - allLinks: 所有相关联的连线
+   * - current: 当前任务
    */
   public getDataChain(id: string): DataChain {
     return this.context.getDataChain(id);

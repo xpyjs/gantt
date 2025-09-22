@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:58:36
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-02 10:53:28
+ * @LastEditTime: 2025-09-22 11:23:33
  * @Description: 事件总线
  */
 
@@ -91,7 +91,8 @@ export enum EventName {
   SLIDER_CLICK = "slider-click",
   SLIDER_DBL_CLICK = "slider-dbl-click",
   SLIDER_CONTEXTMENU = "slider-contextmenu",
-  SLIDER_MOVING = "slider-moving",
+  SLIDER_DRAGGING = "slider-dragging",
+  SLIDER_ENTER = "slider-enter",
   SLIDER_HOVER = "slider-hover",
   SLIDER_LEAVE = "slider-leave",
 
@@ -111,7 +112,8 @@ export enum EventName {
   // 基线事件
   BASELINE_CLICK = "baseline-click",
   BASELINE_CONTEXTMENU = "baseline-contextmenu",
-  BASELINE_MOUSEOVER = "baseline-mouseover",
+  BASELINE_MOUSEENTER = "baseline-mouseenter",
+  BASELINE_MOUSEMOVE = "baseline-mousemove",
   BASELINE_MOUSEOUT = "baseline-mouseout",
 
   // 抛出异常事件

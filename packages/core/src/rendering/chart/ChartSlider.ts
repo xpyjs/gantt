@@ -173,8 +173,11 @@ export class ChartSlider {
         shadowOffsetX: Math.max((shadowOffsetX || 1), 2),
         shadowOffsetY: Math.max((shadowOffsetY || 1) * 1.5, 4),
       });
-      this.context.event.emit(EventName.SLIDER_HOVER, e.evt, this.task);
+      this.context.event.emit(EventName.SLIDER_ENTER, e.evt, this.task);
     });
+    this.slider.on("mousemove", e => {
+      this.context.event.emit(EventName.SLIDER_HOVER, e.evt, this.task);
+    })
     this.slider.on("mouseout", e => {
       if (draggable && !this.isDragging) {
         e.target.getStage()!.container().style.cursor = "default";
@@ -798,7 +801,7 @@ export class ChartSlider {
 
     this.isDragging = true;
     this.oldTasks = [];
-    this.context.event.emit(EventName.SLIDER_MOVING, true);
+    this.context.event.emit(EventName.SLIDER_DRAGGING, true);
     stage.container().style.cursor = "grabbing";
 
     const currentX = e.target.x();
@@ -885,7 +888,7 @@ export class ChartSlider {
     }
 
 
-    this.context.event.emit(EventName.SLIDER_MOVING, false);
+    this.context.event.emit(EventName.SLIDER_DRAGGING, false);
   }
 
   private handleMove(
@@ -999,7 +1002,7 @@ export class ChartSlider {
     const stage = e.target.getStage();
     if (!stage) return;
     this.isDragging = true;
-    this.context.event.emit(EventName.SLIDER_MOVING, true);
+    this.context.event.emit(EventName.SLIDER_DRAGGING, true);
 
     let startX = stage.getPointerPosition()?.x || 0;
     const moveStep = !!this.context.getOptions().bar.move.byUnit;
