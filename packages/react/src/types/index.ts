@@ -155,6 +155,15 @@ export interface XGanttReactProps
   onMove?: EventMap["move"];
 
   /**
+   * 鼠标进入任务条的事件回调
+   *
+   * @description 当鼠标进入任务条时触发
+   * @param e 鼠标事件对象
+   * @param data 进入的任务数据
+   */
+  onEnterSlider?: EventMap["enter:slider"];
+
+  /**
    * 鼠标悬停在任务条的事件回调
    *
    * @description 当鼠标悬停在任务条上时触发
@@ -189,6 +198,16 @@ export interface XGanttReactProps
    * @param baseline 右键的基线数据
    */
   onContextMenuBaseline?: EventMap["contextmenu:baseline"];
+
+  /**
+   * 基线进入事件回调
+   *
+   * @description 当鼠标进入基线时触发
+   * @param e 鼠标事件对象
+   * @param data 进入的任务数据
+   * @param baseline 进入的基线数据
+   */
+  onEnterBaseline?: EventMap["enter:baseline"];
 
   /**
    * 基线悬停事件回调

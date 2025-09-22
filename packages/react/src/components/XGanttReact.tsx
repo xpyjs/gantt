@@ -81,10 +81,12 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onDoubleClickSlider,
             onContextMenuSlider,
             onMove,
+            onEnterSlider,
             onHoverSlider,
             onLeaveSlider,
             onClickBaseline,
             onContextMenuBaseline,
+            onEnterBaseline,
             onHoverBaseline,
             onLeaveBaseline,
             ...restProps
@@ -144,6 +146,9 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             if (onMove) {
                 instance.on("move", onMove);
             }
+            if (onEnterSlider) {
+                instance.on("enter:slider", onEnterSlider);
+            }
             if (onHoverSlider) {
                 instance.on("hover:slider", onHoverSlider);
             }
@@ -155,6 +160,9 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             }
             if (onContextMenuBaseline) {
                 instance.on("contextmenu:baseline", onContextMenuBaseline);
+            }
+            if (onEnterBaseline) {
+                instance.on("enter:baseline", onEnterBaseline);
             }
             if (onHoverBaseline) {
                 instance.on("hover:baseline", onHoverBaseline);
@@ -177,10 +185,12 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onDoubleClickSlider,
             onContextMenuSlider,
             onMove,
+            onEnterSlider,
             onHoverSlider,
             onLeaveSlider,
             onClickBaseline,
             onContextMenuBaseline,
+            onEnterBaseline,
             onHoverBaseline,
             onLeaveBaseline
         ]);
