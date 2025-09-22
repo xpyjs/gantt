@@ -117,6 +117,33 @@ defineExpose({
     if (ganttInstance) {
       return ganttInstance.getDataChain(taskId);
     }
+  },
+
+  /**
+   * 滚动到指定任务位置
+   */
+  scrollTo: (id?: string, highlight?: boolean) => {
+    if (ganttInstance) {
+      ganttInstance.scrollTo(id, highlight);
+    }
+  },
+
+  /**
+   * 获取某一条数据
+   */
+  getDataById: (id: string) => {
+    if (ganttInstance) {
+      return ganttInstance.getDataById(id);
+    }
+  },
+
+  /**
+   * 获取当前数据集合的数量
+   */
+  getDataSize: () => {
+    if (ganttInstance) {
+      return ganttInstance.getDataSize();
+    }
   }
 });
 
