@@ -59,10 +59,12 @@ const registerEventListeners = () => {
     "dblclick:slider",
     "contextmenu:slider",
     "move",
+    "enter:slider",
     "hover:slider",
     "leave:slider",
     "click:baseline",
     "contextmenu:baseline",
+    "enter:baseline",
     "hover:baseline",
     "leave:baseline"
   ];

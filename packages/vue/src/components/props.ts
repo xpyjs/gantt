@@ -16,10 +16,12 @@ export type XGanttVueEmits = {
   "dblclick:slider": [e: MouseEvent, data: any];
   "contextmenu:slider": [e: MouseEvent, data: any];
   move: [data: { row: any; old: any }[]];
+  "enter:slider": [e: MouseEvent, data: any];
   "hover:slider": [e: MouseEvent, data: any];
   "leave:slider": [e: MouseEvent, data: any];
   "click:baseline": [e: MouseEvent, data: any, baseline: any];
   "contextmenu:baseline": [e: MouseEvent, data: any, baseline: any];
+  "enter:baseline": [e: MouseEvent, data: any, baseline: any];
   "hover:baseline": [e: MouseEvent, data: any, baseline: any];
   "leave:baseline": [e: MouseEvent, data: any, baseline: any];
 };
