@@ -228,6 +228,30 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             };
         }, []);
 
+        // 滚动到指定数据
+        const scrollTo = useCallback((id?: string, highlight?: boolean) => {
+            if (ganttInstanceRef.current) {
+                return ganttInstanceRef.current.scrollTo(id, highlight);
+            }
+            return false;
+        }, []);
+
+        // 获取指定任务的数据
+        const getDataById = useCallback((id: string) => {
+            if (ganttInstanceRef.current) {
+                return ganttInstanceRef.current.getDataById(id);
+            }
+            return null;
+        }, []);
+
+        // 获取当前数据集合的数量
+        const getDataSize = useCallback(() => {
+            if (ganttInstanceRef.current) {
+                return ganttInstanceRef.current.getDataSize();
+            }
+            return 0;
+        }, []);
+
         // 销毁甘特图
         const destroyGantt = useCallback(() => {
             if (ganttInstanceRef.current) {
@@ -240,7 +264,10 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
         useImperativeHandle(ref, () => ({
             getInstance: () => ganttInstanceRef.current,
             jumpTo,
-            getDataChain
+            getDataChain,
+            scrollTo,
+            getDataById,
+            getDataSize
         }), [jumpTo]);
 
         // 组件挂载时初始化

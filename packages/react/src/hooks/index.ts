@@ -68,10 +68,34 @@ export function useXGantt() {
     return ganttRef.current?.getDataChain(id) || [];
   }, []);
 
+  /**
+   * 滚动到指定数据
+   */
+  const scrollTo = useCallback((id?: string, highlight?: boolean) => {
+    return ganttRef.current?.scrollTo(id, highlight) || false;
+  }, []);
+
+  /**
+   * 获取指定任务的数据
+   */
+  const getDataById = useCallback((id: string) => {
+    return ganttRef.current?.getDataById(id) || null;
+  }, []);
+
+  /**
+   * 获取当前数据集合的数量
+   */
+  const getDataSize = useCallback(() => {
+    return ganttRef.current?.getDataSize() || 0;
+  }, []);
+
   return {
     ganttRef,
     getInstance,
     jumpTo,
-    getDataChain
+    getDataChain,
+    scrollTo,
+    getDataById,
+    getDataSize
   };
 }

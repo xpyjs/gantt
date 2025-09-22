@@ -288,7 +288,22 @@ export interface XGanttReactRef {
   jumpTo: (date?: any) => boolean;
 
   /**
+   * 滚动到指定数据
+   */
+  scrollTo: (id?: string, highlight?: boolean) => boolean;
+
+  /**
    * 获取指定任务的所有相关联的完整路径，包含所有连接线与任务节点
    */
   getDataChain(id: string): DataChain;
+
+  /**
+   * 获取某一条数据
+   */
+  getDataById(id: string): any | null;
+
+  /**
+   * 获取当前数据集合的数量
+   */
+  getDataSize(): number;
 }
