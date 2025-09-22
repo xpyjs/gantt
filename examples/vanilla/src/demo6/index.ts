@@ -913,6 +913,19 @@ function buildLinkMenu(link: any, e: MouseEvent) {
           notify('success', '依赖已删除');
         } else notify('error', '未找到该依赖');
       }
+    },
+    {
+      divider: true
+    },
+    {
+      label: '查看起始任务', onClick: () => {
+        gantt.scrollTo(link.from, true);
+      }
+    },
+    {
+      label: '查看目标任务', onClick: () => {
+        gantt.scrollTo(link.to, true);
+      }
     }
   ];
   createContextMenu(items, e.clientX, e.clientY);

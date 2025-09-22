@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-22 11:24:02
+ * @LastEditTime: 2025-09-22 14:46:26
  * @Description: Facade Layer for Gantt Component
  */
 import { Logger } from "./utils/logger";
@@ -99,6 +99,35 @@ export class XGanttContext implements IContext {
 
     const left = this.store.getTimeAxis().getTimeLeft(day) - 100;
     this.renderer.getScrollbar().scrollTo({ x: Math.max(left, 0) });
+    return true;
+  }
+
+  /**
+   * 滚动到指定任务节点。默认为第一个任务
+   *
+   * @return {boolean} 是否成功跳转
+   */
+  public scrollTo(id?: string, highlight?: boolean): boolean {
+    let top = 0;
+    let task: Task | undefined;
+    const duration = Math.max(100, this.getOptions().scrollbar?.animationDuration || 100);
+    if (id) {
+      task = this.store.getDataManager().getTaskById(id);
+      if (!task) return false;
+
+      top = task.flatIndex * this.store.getOptionManager().getOptions().row.height - 100;
+
+      setTimeout(() => {
+        this.jumpTo(task?.startTime);
+      }, duration);
+    }
+
+    this.renderer.getScrollbar().scrollTo({ y: top });
+    if (highlight && task) {
+      setTimeout(() => {
+        this.event.emit(EventName.SLIDER_BLINK, task.id);
+      }, duration * 2);
+    }
     return true;
   }
 

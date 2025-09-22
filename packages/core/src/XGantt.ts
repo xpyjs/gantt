@@ -235,6 +235,41 @@ export class XGantt {
   }
 
   /**
+   * 滚动到指定任务
+   * @param id - 任务 ID，如果不传入则滚动到顶部
+   * @param highlight - 是否高亮任务，默认为 false
+   *
+   * @returns 是否成功滚动到指定任务
+   *   - `true`: 成功滚动，任务已在视图中可见
+   *   - `false`: 滚动失败，可能是任务 ID 无效或任务不可见
+   *
+   * @description 此方法将甘特图的视图滚动到指定任务的位置，使该任务在当前视窗中可见。并且支持跳转后高亮当前任务。
+   *
+   * @example
+   * ```typescript
+   * // 滚动到指定任务
+   * const success1 = gantt.scrollTo('task-1');
+   * const success2 = gantt.scrollTo('non-existent-id'); // 任务不存在，返回 false
+   *
+   * // 滚动到顶部
+   * const success3 = gantt.scrollTo();
+   *
+   * // 检查滚动结果
+   * if (gantt.scrollTo('task-2')) {
+   *   console.log('成功滚动到任务 task-2');
+   * } else {
+   *   console.log('滚动失败，任务 ID 可能无效');
+   * }
+   *
+   * // 滚动到任务并高亮
+   * gantt.scrollTo('task-3', true);
+   * ```
+   */
+  public scrollTo(id?: string, highlight?: boolean): boolean {
+    return this.context.scrollTo(id, highlight);
+  }
+
+  /**
    * 获取指定任务的所有相关联的完整路径，包含所有连接线与任务节点
    *
    * 结果集中包含前置链路信息、后置链路信息、所有节点、关联线的信息等
@@ -371,5 +406,29 @@ export class XGantt {
     } else {
       this.events.delete(event);
     }
+  }
+
+  /**
+   * 根据任务 ID 获取对应的任务数据
+   * @param id 任务 ID
+   * @returns 任务数据
+   *
+   * @example
+   * ```typescript
+   * const data = gantt.getDataById('task-1');
+   * if (data) {
+   *   console.log('任务名称:', data.name);
+   * }
+   * ```
+   */
+  public getDataById(id: string): any | undefined {
+    return this.context.store.getDataManager().getTaskById(id)?.data;
+  }
+
+  /**
+   * 获取当前数据量总数。该数量为所有数据展开后的数据条数
+   */
+  public getDataSize() {
+    return this.context.store.getDataManager().getVisibleSize();
   }
 }

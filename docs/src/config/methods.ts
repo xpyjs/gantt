@@ -208,10 +208,36 @@ if (success) {
   console.log('跳转失败，可能是日期格式不正确');
 }`,
 
+  // 滚动示例
+  scrollTo: `// 滚动到指定任务节点
+gantt.scrollTo('task-1');
+// 滚动并高亮指定任务节点
+gantt.scrollTo('task-1', true);
+// 滚动到第一个任务，也就是视图顶部
+gantt.scrollTo();
+
+// 任务不存在，返回 false
+const res = gantt.scrollTo('non-existent-id'); // res === false
+`,
+
   // 获取某个节点的完整链路信息示例
   getDataChain: `// 获取任务的完整链路信息
 const dataChain = gantt.getDataChain('task-1');
 console.log('任务的完整链路信息:', dataChain);
+`,
+
+  // 获取任务数据示例
+  getDataById: `// 获取任务数据
+const data = gantt.getDataById('task-1');
+if (data) {
+  console.log('任务名称:', data.name);
+}
+`,
+
+  // 获取任务数据集合大小示例
+  getDataSize: `// 获取当前任务数据集合的大小
+const size = gantt.getDataSize();
+console.log('当前任务数据数量:', size);
 `,
 
   // 事件解除监听示例
@@ -440,6 +466,47 @@ export const methodsPageConfig: MethodsPageConfig = {
       ]
     },
     {
+      id: "getDataById",
+      name: "getDataById(id)",
+      type: "获取任务数据",
+      description: "根据任务 ID 获取任务的完整数据",
+      icon: "📄",
+      parameters: [
+        {
+          name: "id",
+          type: "string",
+          description: "任务 ID",
+          optional: false
+        }
+      ],
+      returnType: "any | undefined",
+      returnDescription: "任务的完整数据，未找到时返回 undefined",
+      examples: [
+        {
+          framework: "javascript",
+          code: codeExamples.getDataById,
+          language: "javascript"
+        }
+      ]
+    },
+    {
+      id: "getDataSize",
+      name: "getDataSize()",
+      type: "获取任务数据集合大小",
+      description: "获取当前任务数据集合的大小",
+      icon: "📊",
+      parameters: [],
+      returnType: "number",
+      returnDescription: "当前任务数据数量",
+      examples: [
+        {
+          framework: "javascript",
+          code: codeExamples.getDataSize,
+          language: "javascript"
+        }
+      ]
+    },
+    {
       id: "update",
       name: "update(options, config?)",
       type: "配置更新",
@@ -514,6 +581,36 @@ export const methodsPageConfig: MethodsPageConfig = {
         {
           framework: "javascript",
           code: codeExamples.jumpTo,
+          language: "javascript"
+        }
+      ]
+    },
+    {
+      id: "scrollTo",
+      name: "scrollTo(id?, highlight?)",
+      type: "任务滚动",
+      description: "滚动到指定任务节点",
+      icon: "📍",
+      parameters: [
+        {
+          name: "id",
+          type: "string",
+          description: "任务节点 ID。不填写则滚动到视图顶部",
+          optional: true
+        },
+        {
+          name: "highlight",
+          type: "boolean",
+          description: "是否高亮显示",
+          optional: true
+        }
+      ],
+      returnType: "boolean",
+      returnDescription: "是否成功滚动",
+      examples: [
+        {
+          framework: "javascript",
+          code: codeExamples.scrollTo,
           language: "javascript"
         }
       ]
