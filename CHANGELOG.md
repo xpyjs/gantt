@@ -1,3 +1,17 @@
+## [0.0.1-rc.1](https://github.com/xpyjs/gantt/compare/v0.0.1-beta.4...v0.0.1-rc.1) (2025-09-22)
+
+
+### Features
+
+* **core:** add get task method & get size method & scroll method ([ef6c4fa](https://github.com/xpyjs/gantt/commit/ef6c4fa156dc10a6fea2e9b6755866f5a7217d4b))
+* **core:** update slider & baseline events ([228717a](https://github.com/xpyjs/gantt/commit/228717a0a5a558fc9becbb508154e615ace28589))
+* **react:** add get task method & get size method & scroll method ([a5288dc](https://github.com/xpyjs/gantt/commit/a5288dcc6228edf6f8773b2619e944c6efd03b38))
+* **react:** update slider & baseline events ([d654efa](https://github.com/xpyjs/gantt/commit/d654efad86d2d26e2a82735eea1cf96173ab2789))
+* **vue:** add get task method & get size method & scroll method ([b4cead8](https://github.com/xpyjs/gantt/commit/b4cead8cc87be17ccea1f27f80fafbc83f9c55be))
+* **vue:** update slider & baseline events ([def7536](https://github.com/xpyjs/gantt/commit/def753653e8e0463e6b6274d108e48bf2c2bbcaf))
+
+
+
 ## [0.0.1-beta.4](https://github.com/xpyjs/gantt/compare/v0.0.1-beta.3...v0.0.1-beta.4) (2025-09-11)
 
 
