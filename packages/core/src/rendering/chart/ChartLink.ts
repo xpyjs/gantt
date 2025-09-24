@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-22 11:13:45
+ * @LastEditTime: 2025-09-24 14:16:47
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -340,6 +340,11 @@ export class LinkGroup {
           `No corresponding TO task [${link.to}] was found for the link. Info:`,
           link
         );
+        return;
+      }
+
+      if (!this.context.store.getDataManager().isTaskVisible(fromTask) || !this.context.store.getDataManager().isTaskVisible(toTask)) {
+        // 任务不可见，不显示
         return;
       }
 

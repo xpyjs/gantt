@@ -368,6 +368,21 @@ export class DataManager {
   }
 
   /**
+   * 获取一个任务是否可展示
+   */
+  isTaskVisible(task: Task): boolean {
+    // 检查任务的所有父任务是否都展开
+    let current = task.parent;
+    while (current) {
+      if (this.collapsedTaskIds.has(current.id)) {
+        return false;
+      }
+      current = current.parent;
+    }
+    return true;
+  }
+
+  /**
    * 获取可展示任务数量
    */
   getVisibleSize(): number {
