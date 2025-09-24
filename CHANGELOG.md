@@ -1,3 +1,13 @@
+## [0.0.1-rc.2](https://github.com/xpyjs/gantt/compare/v0.0.1-rc.1...v0.0.1-rc.2) (2025-09-24)
+
+
+### Bug Fixes
+
+* **core:** fix link visible error when expand some task ([8d16606](https://github.com/xpyjs/gantt/commit/8d16606af9c0bd372037244832f1403afe9d7092))
+* **core:** fix selection pos error when expand some task ([2f21b9d](https://github.com/xpyjs/gantt/commit/2f21b9da241b9cd334e8fa9486e45154a4aa5a21))
+
+
+
 ## [0.0.1-rc.1](https://github.com/xpyjs/gantt/compare/v0.0.1-beta.4...v0.0.1-rc.1) (2025-09-22)
 
 
