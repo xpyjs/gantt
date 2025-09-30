@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-30 17:12:31
+ * @LastEditTime: 2025-09-30 17:36:47
  * @Description: 数据管理器
  */
 
@@ -67,7 +67,7 @@ export class DataManager {
    * 初始化任务
    */
   private initTasks(init = false): void {
-    if (init) {
+    // if (init) {
       // 如果是初始化，清空之前的任务和映射
       this.dataLevel = 0;
       this.tasks = [];
@@ -77,16 +77,16 @@ export class DataManager {
       this.rawData.forEach(data => {
         this.tasks.push(this.createTask(data));
       });
-    } else {
-      if (this.rawData.length > 0) {
-        this.taskMap.clear();
-        this.updateTask(this.rawData, this.tasks);
-      } else {
-        this.tasks = [];
-        this.taskMap.clear();
-        this.collapsedTaskIds.clear();
-      }
-    }
+    // } else {
+    //   if (this.rawData.length > 0) {
+    //     this.taskMap.clear();
+    //     this.updateTask(this.rawData, this.tasks);
+    //   } else {
+    //     this.tasks = [];
+    //     this.taskMap.clear();
+    //     this.collapsedTaskIds.clear();
+    //   }
+    // }
   }
 
   private createTask(data: any, parent?: Task, isRecursive = true): Task {
@@ -107,6 +107,7 @@ export class DataManager {
   }
 
   private updateTask(data: any[], tasks: Task[], parent?: Task): void {
+    // FIXME: 更新方法有问题，在处理子节点时，处理的逻辑不太对。后续有时间看一下，目前直接全部使用 create 方案。
     // 两个数组递归循环遍历。 data 为新的原始数据，tasks 为旧任务数据
     // - 以数组下标为依据：
     //   1、data 下标超过 tasks 下标，则新增任务
@@ -146,10 +147,9 @@ export class DataManager {
       }
 
       // 处理子任务
-      if (newData[this.store.getOptionManager().getOptions().fields.children]) {
+      const childData = newData[this.store.getOptionManager().getOptions().fields.children];
+      if (childData) {
         // 如果有子任务，递归处理
-        const childData =
-          newData[this.store.getOptionManager().getOptions().fields.children];
         if (oldTask && oldTask.children) {
           this.updateTask(childData, oldTask.children, oldTask);
         } else {

@@ -322,6 +322,8 @@ export class LinkGroup {
     const currentKey = generateId();
     // 记录已选择的状态
     links.forEach(link => {
+      if (link.valid === false) return; // 跳过无效的连线
+
       const id = this.createId(link);
 
       const fromTask = this.context.store.getDataManager().getTaskById(link.from);
@@ -332,6 +334,7 @@ export class LinkGroup {
           `No corresponding FROM task [${link.from}] was found for the link. Info:`,
           link
         );
+        link.valid = false;
         return;
       }
 
@@ -340,6 +343,7 @@ export class LinkGroup {
           `No corresponding TO task [${link.to}] was found for the link. Info:`,
           link
         );
+        link.valid = false;
         return;
       }
 
