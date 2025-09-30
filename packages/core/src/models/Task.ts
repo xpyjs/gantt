@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:59:03
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-04 16:15:03
+ * @LastEditTime: 2025-09-25 12:01:23
  * @Description:任务数据模型
  */
 
@@ -155,12 +155,14 @@ export class Task {
   /** 切换展示模式时，需要调整时间 */
   updateMode(): boolean {
     let isChanged = false;
+    let changeTime = false;
 
     // 更新开始时间
     if (this.data[this.fields.startTime]) {
       if (!this.startTime || !this.startTime.isSame(dayjs(this.data[this.fields.startTime]))) {
         this.startTime = dayjs(this.data[this.fields.startTime]);
         isChanged = true;
+        changeTime = true;
       }
     }
 
@@ -169,7 +171,13 @@ export class Task {
       if (!this.endTime || !this.endTime.isSame(dayjs(this.data[this.fields.endTime]))) {
         this.endTime = dayjs(this.data[this.fields.endTime]);
         isChanged = true;
+        changeTime = true;
       }
+    }
+
+    if (changeTime) {
+      // 更新起止时间
+      this.store.updateTime(this.startTime, this.endTime);
     }
 
     // 更新持续时间
