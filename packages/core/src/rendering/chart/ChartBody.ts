@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-14 10:15:23
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-24 13:53:10
+ * @LastEditTime: 2025-09-30 16:36:01
  * @Description: 图表部分的主体渲染层
  */
 import Konva from "konva";
@@ -310,29 +310,32 @@ export class BodyGroup {
       this.highlightRect.destroy();
     }
 
-    const rowY = rowNode.task.flatIndex * this.context.getOptions().row.height;
-    const y = rowY + this.context.getOptions().header.height;
+    const task = this.context.store.getDataManager().getTaskById(id);
+    if (task) {
+      const rowY = task.flatIndex * this.context.getOptions().row.height;
+      const y = rowY + this.context.getOptions().header.height;
 
-    // 如果选中行与高亮行相同，则不创建高亮矩形
-    if (this.selectedRowId === id) return;
+      // 如果选中行与高亮行相同，则不创建高亮矩形
+      if (this.selectedRowId === id) return;
 
-    // 创建高亮矩形
-    this.highlightRect = new Konva.Rect({
-      x: 0,
-      y: y + this.offsetY,
-      width: this.width,
-      height: this.context.getOptions().row.height,
-      fill: colorjs(this.context.getOptions().row.hover.backgroundColor)
-        .alpha(this.context.getOptions().row.hover.opacity)
-        .toHex(),
-      name: "highlight-rect"
-    });
+      // 创建高亮矩形
+      this.highlightRect = new Konva.Rect({
+        x: 0,
+        y: y + this.offsetY,
+        width: this.width,
+        height: this.context.getOptions().row.height,
+        fill: colorjs(this.context.getOptions().row.hover.backgroundColor)
+          .alpha(this.context.getOptions().row.hover.opacity)
+          .toHex(),
+        name: "highlight-rect"
+      });
 
-    // 添加到层中，但确保在行组之下
-    this.layer.add(this.highlightRect);
-    this.highlightRect.moveToBottom();
+      // 添加到层中，但确保在行组之下
+      this.layer.add(this.highlightRect);
+      this.highlightRect.moveToBottom();
 
-    this.layer.batchDraw();
+      this.layer.batchDraw();
+    }
   }
 
   /**
@@ -365,8 +368,12 @@ export class BodyGroup {
     if (diff) {
       this.highlightRect.y(this.highlightRect.y() + diff);
     } else {
-      const rowY =
-        rowNode.task.flatIndex * this.context.getOptions().row.height;
+      const task = this.context.store.getDataManager().getTaskById(rowNode.task.id);
+      if (!task) {
+        this.clearHighlight();
+        return;
+      }
+      const rowY = task.flatIndex * this.context.getOptions().row.height;
       const y = rowY + this.context.getOptions().header.height;
       this.highlightRect.y(y + this.offsetY);
     }
@@ -406,7 +413,9 @@ export class BodyGroup {
       this.highlightRect?.fill("transparent");
     }
 
-    const rowY = rowNode.task.flatIndex * this.context.getOptions().row.height;
+    const task = this.context.store.getDataManager().getTaskById(id);
+    if (!task) return;
+    const rowY = task.flatIndex * this.context.getOptions().row.height;
     const y = rowY + this.context.getOptions().header.height;
 
     // 创建新的选中矩形
@@ -454,7 +463,7 @@ export class BodyGroup {
       return;
     }
 
-    if (this.context.store.getDataManager().getVisibleTasks().find(task => task.id === rowNode.task.id)) {
+    if (this.context.store.getDataManager().getTaskById(rowNode.task.id)) {
       const rowY =
         rowNode.task.flatIndex * this.context.getOptions().row.height;
       const y = rowY + this.context.getOptions().header.height;

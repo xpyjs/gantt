@@ -5,6 +5,7 @@ import { data, links, baselines, DATE_FMT, generateId } from './data';
 
 document.body.innerHTML = `<div id="app">
   <div id="btn-group">
+    <button id="get-instance">获取实例</button>
     <button id="btn-today">跳转到今天</button>
     <button id="btn-open-create-dialog">创建任务</button>
     <button id="btn-open-create-child-dialog" disabled>创建子任务</button>
@@ -622,6 +623,12 @@ function updateActionBtnState() {
 }
 
 if (btnGroup) {
+  const getInstanceBtn = btnGroup.querySelector('#get-instance') as HTMLButtonElement;
+  getInstanceBtn.addEventListener('click', () => {
+    console.log('当前 Gantt 实例：', gantt);
+    notify('info', '实例已打印到控制台');
+  });
+
   const btnToday = btnGroup.querySelector('#btn-today') as HTMLButtonElement;
   btnToday.addEventListener('click', () => {
     gantt.jumpTo();

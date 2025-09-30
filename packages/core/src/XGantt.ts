@@ -429,6 +429,6 @@ export class XGantt {
    * 获取当前数据量总数。该数量为所有数据展开后的数据条数
    */
   public getDataSize() {
-    return this.context.store.getDataManager().getVisibleSize();
+    return this.context.store.getDataManager().getDataSize();
   }
 }

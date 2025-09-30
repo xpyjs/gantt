@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-01 17:13:33
+ * @LastEditTime: 2025-09-30 17:12:31
  * @Description: 数据管理器
  */
 
@@ -79,6 +79,7 @@ export class DataManager {
       });
     } else {
       if (this.rawData.length > 0) {
+        this.taskMap.clear();
         this.updateTask(this.rawData, this.tasks);
       } else {
         this.tasks = [];
@@ -88,12 +89,12 @@ export class DataManager {
     }
   }
 
-  private createTask(data: any, parent?: Task): Task {
+  private createTask(data: any, parent?: Task, isRecursive = true): Task {
     const fields = this.store.getOptionManager().getOptions().fields;
     const task = new Task(this.store, this.event, data, parent);
 
     // 处理子任务
-    if (Array.isArray(data[fields.children])) {
+    if (isRecursive && Array.isArray(data[fields.children])) {
       task.children = data[fields.children].map((child: any) =>
         this.createTask(child, task)
       );
@@ -121,13 +122,11 @@ export class DataManager {
 
       if (newData && !oldTask) {
         // 新数据，旧任务不存在，新增任务
-        const newTask = this.createTask(newData, parent);
+        const newTask = this.createTask(newData, parent, false);
         tasks.push(newTask);
-        this.taskMap.set(newTask.id, newTask);
         this.dataLevel = Math.max(this.dataLevel, newTask.level);
       } else if (!newData && oldTask) {
         // 旧任务存在，新数据不存在，删除任务
-        this.taskMap.delete(oldTask.id);
         tasks.splice(i, 1);
       } else if (newData && oldTask) {
         // 新数据和旧任务都存在，检查 ID 是否相同
@@ -137,12 +136,11 @@ export class DataManager {
         ) {
           // ID 相同，更新任务数据
           oldTask.updateData(newData);
+          this.taskMap.set(oldTask.id, oldTask);
           this.dataLevel = Math.max(this.dataLevel, oldTask.level);
         } else {
           // ID 不同，删除旧任务，新增新任务
-          this.taskMap.delete(oldTask.id);
-          tasks[i] = this.createTask(newData, oldTask.parent);
-          this.taskMap.set(tasks[i].id, tasks[i]);
+          tasks[i] = this.createTask(newData, oldTask.parent, false);
           this.dataLevel = Math.max(this.dataLevel, tasks[i].level);
         }
       }
@@ -157,7 +155,7 @@ export class DataManager {
         } else {
           // 如果旧任务没有子任务，则创建新的子任务
           const newChildren = childData.map((child: any) =>
-            this.createTask(child, tasks[i])
+            this.createTask(child, tasks[i], false)
           );
           tasks[i].children = newChildren;
         }
@@ -171,10 +169,7 @@ export class DataManager {
 
     // 如果 task 长度仍然存在，直接删除
     if (tasks.length >= i) {
-      const delTasks = tasks.splice(i);
-      delTasks.forEach(task => {
-        this.taskMap.delete(task.id);
-      });
+      tasks.splice(i);
     }
   }
 
@@ -193,6 +188,11 @@ export class DataManager {
       return this.tasks;
     }
     return Array.from(this.taskMap.values());
+  }
+
+  /** 获取数据规模 */
+  getDataSize() {
+    return this.taskMap.size;
   }
 
   /**
