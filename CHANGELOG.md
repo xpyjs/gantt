@@ -1,3 +1,13 @@
+## [0.0.1-rc.3](https://github.com/xpyjs/gantt/compare/v0.0.1-rc.2...v0.0.1-rc.3) (2025-09-30)
+
+
+### Bug Fixes
+
+* **core:** highlight position error ([35fef4e](https://github.com/xpyjs/gantt/commit/35fef4eb434f3ae1ad6aa3bec81ff349d0214ad2))
+* **core:** Temporarily resolve the anomalies that occur after data updates at the location of the data update ([697a089](https://github.com/xpyjs/gantt/commit/697a08916a26d496a00d13a06af7a2422b63b8b5))
+
+
+
 ## [0.0.1-rc.2](https://github.com/xpyjs/gantt/compare/v0.0.1-rc.1...v0.0.1-rc.2) (2025-09-24)
 
 
