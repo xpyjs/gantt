@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-14 10:15:23
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-30 16:36:01
+ * @LastEditTime: 2025-10-04 10:39:08
  * @Description: 图表部分的主体渲染层
  */
 import Konva from "konva";
@@ -463,7 +463,7 @@ export class BodyGroup {
       return;
     }
 
-    if (this.context.store.getDataManager().getTaskById(rowNode.task.id)) {
+    if (this.context.store.getDataManager().isTaskVisible(rowNode.task)) {
       const rowY =
         rowNode.task.flatIndex * this.context.getOptions().row.height;
       const y = rowY + this.context.getOptions().header.height;
