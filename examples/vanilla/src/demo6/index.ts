@@ -720,15 +720,8 @@ updateFooterSelection();
 updateActionBtnState();
 
 // 删除任务
-function removeTaskById(id: string | number, list = data): boolean {
-  const idx = list.findIndex(t => t.id === id);
-  if (idx > -1) { list.splice(idx, 1); return true; }
-  for (const t of list) {
-    if (Array.isArray(t.subtask) && t.subtask.length) {
-      if (removeTaskById(id, t.subtask)) return true;
-    }
-  }
-  return false;
+function removeTaskById(id: string): boolean {
+  return gantt.removeDataById(id);
 }
 
 // 上下文菜单系统

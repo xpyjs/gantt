@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-30 17:36:47
+ * @LastEditTime: 2025-10-07 17:29:54
  * @Description: 数据管理器
  */
 
@@ -67,7 +67,7 @@ export class DataManager {
    * 初始化任务
    */
   private initTasks(init = false): void {
-    // if (init) {
+    if (init) {
       // 如果是初始化，清空之前的任务和映射
       this.dataLevel = 0;
       this.tasks = [];
@@ -77,16 +77,24 @@ export class DataManager {
       this.rawData.forEach(data => {
         this.tasks.push(this.createTask(data));
       });
-    // } else {
-    //   if (this.rawData.length > 0) {
-    //     this.taskMap.clear();
-    //     this.updateTask(this.rawData, this.tasks);
-    //   } else {
-    //     this.tasks = [];
-    //     this.taskMap.clear();
-    //     this.collapsedTaskIds.clear();
-    //   }
-    // }
+    } else {
+      // if (this.rawData.length > 0) {
+      //   this.taskMap.clear();
+      //   this.updateTask(this.rawData, this.tasks);
+      // } else {
+      //   this.tasks = [];
+      //   this.taskMap.clear();
+      //   this.collapsedTaskIds.clear();
+      // }
+
+      this.dataLevel = 0;
+      this.tasks = [];
+      this.taskMap.clear();
+
+      this.rawData.forEach(data => {
+        this.tasks.push(this.createTask(data));
+      });
+    }
   }
 
   private createTask(data: any, parent?: Task, isRecursive = true): Task {
@@ -200,6 +208,59 @@ export class DataManager {
    */
   getTaskById(id: string): Task | undefined {
     return this.taskMap.get(id);
+  }
+
+  /**
+   * 删除某个任务数据
+   */
+  deleteTaskById(id: string): boolean {
+    const task = this.getTaskById(id);
+    if (!task) return false;
+
+    let res = false;
+
+    const idProp = this.store.getOptionManager().getOptions().fields.id;
+    const idx = task.parent?.children.findIndex(t => t.id === id);
+    if (idx !== undefined && idx > -1 && task.parent) {
+      task.parent.children.splice(idx, 1);
+      // 同时更新原始数据
+      const childProp = this.store.getOptionManager().getOptions().fields.children;
+      const parentData = task.parent.data[childProp] || [];
+      const idxInParent = parentData.findIndex((t: any) => t[idProp] === id);
+      if (idxInParent !== -1) {
+        parentData.splice(idxInParent, 1);
+        res = true;
+      }
+    } else {
+      const rootIdx = this.tasks.findIndex(t => t.id === id);
+      if (rootIdx !== -1) {
+        this.tasks.splice(rootIdx, 1);
+        // 同时更新原始数据
+        const rootDataIdx = this.rawData.findIndex((t: any) => t[idProp] === id);
+        if (rootDataIdx !== -1) {
+          this.rawData.splice(rootDataIdx, 1);
+          res = true;
+        }
+      }
+    }
+
+    // 如果删除的任务是选中状态，取消选中
+    if (this.selectedTaskId === id) {
+      this.unselectTask();
+    }
+
+    if (this.checkedList.length > 0) {
+      const checkedIdx = this.checkedList.findIndex(t => t.id === id);
+      if (checkedIdx !== -1) {
+        this.checkedList.splice(checkedIdx, 1);
+      }
+    }
+
+    // 从任务映射中移除
+    this.taskMap.delete(id);
+    this.invalidateCache(); // 删除任务后，缓存失效
+    this.event.emit(EventName.DATA_UPDATE);
+    return res;
   }
 
   /**
