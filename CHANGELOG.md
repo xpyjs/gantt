@@ -1,3 +1,19 @@
+## [0.0.1-rc.4](https://github.com/xpyjs/gantt/compare/v0.0.1-rc.3...v0.0.1-rc.4) (2025-10-07)
+
+
+### Bug Fixes
+
+* **core:** chart view selection highlight error when expand changed ([5ebe164](https://github.com/xpyjs/gantt/commit/5ebe164766a1aae6732b3e0c045ae003ac3ffed7))
+
+
+### Features
+
+* **core:** add remove data func ([8e1d798](https://github.com/xpyjs/gantt/commit/8e1d798fbb042cfb992dbbd6b42dd6a4664e6540))
+* **react:** add remove data func ([c3f0813](https://github.com/xpyjs/gantt/commit/c3f0813087e68404be4edb7b4dba219e5bb5391f))
+* **vue:** add remove data func ([82f9925](https://github.com/xpyjs/gantt/commit/82f992565cd8acda1de81f1db689c19139cccd39))
+
+
+
 ## [0.0.1-rc.3](https://github.com/xpyjs/gantt/compare/v0.0.1-rc.2...v0.0.1-rc.3) (2025-09-30)
 
 
