@@ -448,8 +448,10 @@ Contributions are welcome! Please read our contribution guidelines for more info
 
 If you think it's good, invite the author to have a cup of coffee.
 
-![weixin](https://desktop.jeremyjone.com/resource/wx.png)
-![zhifubao](https://desktop.jeremyjone.com/resource/zfb.jpg)
+<div style="display: flex; gap: 20px; align-items: center;">
+<img style="width: 50%" src="https://desktop.jeremyjone.com/resource/wx.png" />
+<img style="width: 50%" src="https://desktop.jeremyjone.com/resource/zfb.jpg" />
+</div>
 
 ---
 

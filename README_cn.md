@@ -449,8 +449,10 @@ MIT License
 
 如果您觉得这个项目不错，可以请作者喝杯咖啡。
 
-![weixin](https://desktop.jeremyjone.com/resource/wx.png)
-![zhifubao](https://desktop.jeremyjone.com/resource/zfb.jpg)
+<div style="display: flex; gap: 20px; align-items: center;">
+<img style="width: 50%" src="https://desktop.jeremyjone.com/resource/wx.png" />
+<img style="width: 50%" src="https://desktop.jeremyjone.com/resource/zfb.jpg" />
+</div>
 
 ---
 
