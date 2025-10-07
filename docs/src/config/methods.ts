@@ -240,6 +240,16 @@ const size = gantt.getDataSize();
 console.log('当前任务数据数量:', size);
 `,
 
+  // 删除任务数据示例
+  removeDataById: `// 删除指定ID的任务数据
+const success = gantt.removeDataById('task-1');
+if (success) {
+  console.log('任务删除成功');
+} else {
+  console.log('任务删除失败，可能ID不存在');
+}
+`,
+
   // 事件解除监听示例
   eventOff: `// 移除特定的任务选择事件监听器
 const selectHandler = (data, checked, all) => {
@@ -502,6 +512,30 @@ export const methodsPageConfig: MethodsPageConfig = {
         {
           framework: "javascript",
           code: codeExamples.getDataSize,
+          language: "javascript"
+        }
+      ]
+    },
+    {
+      id: "removeDataById",
+      name: "removeDataById(id)",
+      type: "删除任务数据",
+      description: "根据任务 ID 删除任务数据。该操作会直接修改当前数据源，并且不可逆，请谨慎使用",
+      icon: "🗑️",
+      parameters: [
+        {
+          name: "id",
+          type: "string",
+          description: "任务 ID",
+          optional: false
+        }
+      ],
+      returnType: "boolean",
+      returnDescription: "是否成功删除任务",
+      examples: [
+        {
+          framework: "javascript",
+          code: codeExamples.removeDataById,
           language: "javascript"
         }
       ]
