@@ -188,15 +188,8 @@ function getTaskById(id: string | number, list = data): any | null {
   return null;
 }
 
-function removeTaskById(id: string | number, list = data): boolean {
-  const idx = list.findIndex(t => t.id === id);
-  if (idx > -1) { list.splice(idx, 1); return true; }
-  for (const t of list) {
-    if (Array.isArray(t.subtask) && t.subtask.length) {
-      if (removeTaskById(id, t.subtask)) return true;
-    }
-  }
-  return false;
+function removeTaskById(id: string): boolean {
+  return ganttRef.value?.removeDataById(id) || false;
 }
 
 // 右键菜单
@@ -219,7 +212,7 @@ const onContextmenuRow = (event: MouseEvent, row: any) => {
         ElMessageBox.confirm('确定删除该任务吗？', '提示', {
           type: 'warning'
         }).then(() => {
-          removeTaskById(row.id, ganttData);
+          removeTaskById(row.id);
         }).catch(() => { });
       }
     }
