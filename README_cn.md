@@ -445,6 +445,13 @@ MIT License
 - [GitHub Issues](https://github.com/xpyjs/gantt/issues)
 - [文档](https://docs.xiaopangying.com/gantt/)
 
+## 🎊 赞助
+
+如果您觉得这个项目不错，可以请作者喝杯咖啡。
+
+![weixin](https://desktop.jeremyjone.com/resource/wx.png)
+![zhifubao](https://desktop.jeremyjone.com/resource/zfb.jpg)
+
 ---
 
 Made with ❤️ by the Jeremy Jone

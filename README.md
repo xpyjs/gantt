@@ -444,6 +444,13 @@ Contributions are welcome! Please read our contribution guidelines for more info
 - [GitHub Issues](https://github.com/xpyjs/gantt/issues)
 - [Documentation](https://docs.xiaopangying.com/gantt/)
 
+## 🎊 Sponsorship
+
+If you think it's good, invite the author to have a cup of coffee.
+
+![weixin](https://desktop.jeremyjone.com/resource/wx.png)
+![zhifubao](https://desktop.jeremyjone.com/resource/zfb.jpg)
+
 ---
 
 Made with ❤️ by the Jeremy Jone
