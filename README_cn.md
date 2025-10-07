@@ -445,6 +445,15 @@ MIT License
 - [GitHub Issues](https://github.com/xpyjs/gantt/issues)
 - [文档](https://docs.xiaopangying.com/gantt/)
 
+## 🎊 赞助
+
+如果您觉得这个项目不错，可以请作者喝杯咖啡。
+
+<div style="display: flex; gap: 20px; align-items: center;">
+<img style="width: 50%" src="https://desktop.jeremyjone.com/resource/wx.png" />
+<img style="width: 50%" src="https://desktop.jeremyjone.com/resource/zfb.jpg" />
+</div>
+
 ---
 
 Made with ❤️ by the Jeremy Jone
