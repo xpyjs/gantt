@@ -306,4 +306,16 @@ export interface XGanttReactRef {
    * 获取当前数据集合的数量
    */
   getDataSize(): number;
+
+  /**
+   * 移除指定 ID 的数据。该操作会直接修改当前数据源，并且不可逆，请谨慎使用
+   * @param id 数据 ID
+   * @returns 是否成功移除
+   *
+   * @example
+   * ```typescript
+   * const success = gantt.removeDataById('task-1');
+   * ```
+   */
+  removeDataById(id: string): boolean;
 }

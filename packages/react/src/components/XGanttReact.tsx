@@ -260,6 +260,14 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             }
         }, []);
 
+        // 移除指定 ID 的数据
+        const removeDataById = useCallback((id: string): boolean => {
+            if (ganttInstanceRef.current) {
+                return ganttInstanceRef.current.removeDataById(id);
+            }
+            return false;
+        }, []);
+
         // 暴露方法给父组件
         useImperativeHandle(ref, () => ({
             getInstance: () => ganttInstanceRef.current,
@@ -267,7 +275,8 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             getDataChain,
             scrollTo,
             getDataById,
-            getDataSize
+            getDataSize,
+            removeDataById
         }), [jumpTo]);
 
         // 组件挂载时初始化

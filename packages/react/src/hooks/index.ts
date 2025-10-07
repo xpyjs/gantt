@@ -89,6 +89,13 @@ export function useXGantt() {
     return ganttRef.current?.getDataSize() || 0;
   }, []);
 
+  /**
+   * 移除指定 ID 的数据
+   */
+  const removeDataById = useCallback((id: string): boolean => {
+    return ganttRef.current?.removeDataById(id) || false;
+  }, []);
+
   return {
     ganttRef,
     getInstance,
@@ -96,6 +103,7 @@ export function useXGantt() {
     getDataChain,
     scrollTo,
     getDataById,
-    getDataSize
+    getDataSize,
+    removeDataById
   };
 }
