@@ -47,6 +47,7 @@
             />
             GitHub
           </a>
+          <a href="https://docs.xiaopangying.com/gantt/docs/" target="_blank" class="nav-link docs-link">去看旧版（vue3）</a>
         </div>
       </div>
     </nav>
