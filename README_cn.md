@@ -18,7 +18,7 @@
 - 插槽不同
 - 组件不同
 
-更多细节请参见 [文档](https://docs.xiaopangying.com/gantt/)
+更多细节请参见 [文档](https://docs.xiaopangying.com/gantt/docs)
 
 ## 十分重要
 
@@ -59,9 +59,9 @@
 
 要查看源码，参见 [Github](http://github.com/xpyjs/gantt)
 
-有关更详细的文档，参见 [document web](https://docs.xiaopangying.com/gantt/)
+有关更详细的文档，参见 [document web](https://docs.xiaopangying.com/gantt/docs)
 
-要看示例，参见 [example web](https://docs.xiaopangying.com/gantt-demo/)
+要看示例，参见 [example web](https://docs.xiaopangying.com/gantt/demo/)
 
 如果遇到任何问题，请提 [issue](https://github.com/xpyjs/gantt/issues).
 
@@ -198,3 +198,4 @@ const dataList = [
 ## 许可证
 
 [MIT](./LICENSE)
+
