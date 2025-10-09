@@ -18,7 +18,7 @@ A high-performance vue gantt component for vue3.
 - slots not same
 - components not same
 
-More details see [document](https://docs.xiaopangying.com/gantt/)
+More details see [document](https://docs.xiaopangying.com/gantt/docs)
 
 ## Important
 
@@ -59,9 +59,9 @@ Beyond that, no other action is required.
 
 For resource code, see [Github](http://github.com/xpyjs/gantt)
 
-For more detailed documentation, see [document web](https://docs.xiaopangying.com/gantt/)
+For more detailed documentation, see [document web](https://docs.xiaopangying.com/gantt/docs/)
 
-For example, see [Example web](https://docs.xiaopangying.com/gantt-demo/)
+For example, see [Example web](https://docs.xiaopangying.com/gantt/demo/)
 
 If you has any problem, please [issue](https://github.com/xpyjs/gantt/issues).
 
@@ -201,3 +201,4 @@ Only one slider whill be rendered. If you insert more than one slider, only last
 ## License
 
 [MIT](./LICENSE)
+
