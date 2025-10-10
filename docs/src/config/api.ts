@@ -1794,6 +1794,24 @@ export const apiItems: ApiItem[] = [
     category: "style"
   },
   {
+    id: "resize",
+    key: "resize",
+    title: "容器匹配规则",
+    type: "object",
+    description: "配置容器宽高匹配规则",
+    category: "style",
+    children: [
+      {
+        id: "resize-enabled",
+        key: "enabled",
+        title: "启用容器匹配",
+        type: "boolean",
+        defaultValue: "false",
+        description: "当容器大小变化时，甘特图是否启用宽高自动匹配"
+      }
+    ]
+  },
+  {
     id: "row",
     key: "row",
     title: "行样式",
