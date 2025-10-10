@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-08 17:20:35
+ * @LastEditTime: 2025-10-10 17:07:14
  * @Description: 界面渲染器
  */
 
@@ -37,6 +37,8 @@ export class Renderer {
   private height: number = 0;
 
   private isInitialized: boolean = true;
+
+  private resizeObserver?: ResizeObserver;
 
   public getScrollbar() {
     return this.scrollbar;
@@ -91,6 +93,22 @@ export class Renderer {
 
     // 监听 store 或 event 的事件，使用渲染调度器来优化渲染
     this.setupEventListeners();
+
+    // 监听窗口大小变化
+    if (this.context.store.getOptionManager().getOptions().resize?.enabled) {
+      if (typeof window.ResizeObserver === "undefined") {
+        Logger.warn(
+          "Current environment does not support ResizeObserver, please include a polyfill to enable auto-resize feature."
+        );
+      } else {
+        // 使用 ResizeObserver 监听容器尺寸变化
+        this.resizeObserver = new ResizeObserver(() => {
+          this.updateSize();
+          this.renderScheduler.scheduleTask("VIEW_UPDATE", [false]);
+        });
+        this.resizeObserver.observe(this.container);
+      }
+    }
   }
 
   /**
@@ -347,6 +365,10 @@ export class Renderer {
 
   public destroy() {
     Logger.debug("Renderer destroy");
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = undefined;
+    }
     this.renderScheduler.destroy(); // 销毁渲染调度器
     this.scrollbar.destroy(); // 销毁滚动条实例
     this.context.event.offAll();

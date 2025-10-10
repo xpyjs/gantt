@@ -11,6 +11,12 @@ export interface IGanttOptions {
   /** 日志 level。 默认 info */
   logLevel?: "debug" | "info" | "warn" | "error" | "none";
 
+  /** 配置 resize 规则 */
+  resize?: {
+    /** 是否启用自适应 */
+    enabled: boolean;
+  };
+
   /** 源数据 */
   data: any[];
 
@@ -287,7 +293,7 @@ export interface IGanttOptions {
       /** 差异显示模式 */
       mode: 'highlight' | 'indicator' | 'both';
       /** 以何种基准展示对比。基线高亮只会以一种（起始/结束）基线进行对比。默认以结束时间为基准（'end'） */
-      target: 'start' | 'end'
+      target: 'start' | 'end';
 
       /** 超期任务的高亮配置 */
       delayed: {
