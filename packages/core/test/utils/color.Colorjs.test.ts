@@ -82,6 +82,40 @@ describe("Colorjs", () => {
       expect(color.B).toBe(128);
       expect(color.A).toBe(1);
     });
+
+    it("应该处理非字符串非对象类型", () => {
+      const color1 = new Colorjs(123 as any);
+      expect(color1.R).toBe(0);
+      expect(color1.G).toBe(0);
+      expect(color1.B).toBe(0);
+      expect(color1.A).toBe(1);
+
+      const color2 = new Colorjs(true as any);
+      expect(color2.R).toBe(0);
+      expect(color2.G).toBe(0);
+      expect(color2.B).toBe(0);
+      expect(color2.A).toBe(1);
+    });
+
+    it("应该处理无效的hex长度", () => {
+      const color1 = new Colorjs("#ff");
+      expect(color1.R).toBe(0);
+      expect(color1.G).toBe(0);
+      expect(color1.B).toBe(0);
+      expect(color1.A).toBe(1);
+
+      const color2 = new Colorjs("#fffff");
+      expect(color2.R).toBe(0);
+      expect(color2.G).toBe(0);
+      expect(color2.B).toBe(0);
+      expect(color2.A).toBe(1);
+
+      const color3 = new Colorjs("#fffffffff");
+      expect(color3.R).toBe(0);
+      expect(color3.G).toBe(0);
+      expect(color3.B).toBe(0);
+      expect(color3.A).toBe(1);
+    });
   });
 
   describe("getter 方法", () => {

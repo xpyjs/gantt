@@ -107,6 +107,12 @@ describe("wrapSize", () => {
       expect(wrapSize("100PX")).toBe(""); // 大写无效
       expect(wrapSize("100Px")).toBe(""); // 混合大小写无效
     });
+
+    it("应该处理无效值但有效单位的情况", () => {
+      expect(wrapSize("invalidpx")).toBe(""); // 无效数字部分
+      expect(wrapSize("abc%")).toBe(""); // 无效数字部分
+      expect(wrapSize("NaNpx")).toBe(""); // NaN 作为字符串
+    });
   });
 
   describe("自定义默认值", () => {
