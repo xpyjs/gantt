@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "0.0.1-rc.4",
+  "version": "0.0.1-rc.5",
   "type": "module",
   "scripts": {
     "dev:core": "node scripts/dev.js core",

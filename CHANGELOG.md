@@ -1,3 +1,17 @@
+## [0.0.1-rc.5](https://github.com/xpyjs/gantt/compare/v0.0.1-rc.4...v0.0.1-rc.5) (2025-10-22)
+
+
+### Bug Fixes
+
+* **core:** click.row event can not be triggered repeatedly ([a9def3f](https://github.com/xpyjs/gantt/commit/a9def3f5b77de9dd38dd3520cde222d917982a13))
+
+
+### Features
+
+* **core:** Adds auto-resize feature with ResizeObserver support ([1c2c22c](https://github.com/xpyjs/gantt/commit/1c2c22cc623c49b532fe48f197fc4f6c8da561ba))
+
+
+
 ## [0.0.1-rc.4](https://github.com/xpyjs/gantt/compare/v0.0.1-rc.3...v0.0.1-rc.4) (2025-10-07)
 
 
