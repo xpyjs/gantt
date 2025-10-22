@@ -5,108 +5,108 @@
 [![OSCS Status](https://www.oscs1024.com/platform/badge/xpyjs/gantt.svg?size=small)](https://www.oscs1024.com/project/xpyjs/gantt?ref=badge_small) ![NPM Version](https://img.shields.io/npm/v/@xpyjs/gantt-core.svg) ![NPM Downloads](https://badgen.net/npm/dt/@xpyjs/gantt-core) [![Bundle Size](https://img.shields.io/bundlephobia/minzip/@xpyjs/gantt-core)](https://bundlephobia.com/result?p=@xpyjs/gantt-core) [![TypeScript](https://img.shields.io/github/languages/top/xpyjs/gantt)](https://github.com/xpyjs/gantt) [![codecov](https://codecov.io/gh/xpyjs/gantt/graph/badge.svg?token=JBQD58RXZI)](https://codecov.io/gh/xpyjs/gantt) ![License](https://img.shields.io/npm/l/@xpyjs/gantt-core.svg)
 [![GitHub Release](https://img.shields.io/github/v/release/xpyjs/gantt)](https://github.com/xpyjs/gantt/releases) [![GitHub Pages](https://img.shields.io/github/deployments/xpyjs/gantt/github-pages?label=gh-pages)](https://xpyjs.github.io/gantt/) [![Last Commit](https://img.shields.io/github/last-commit/xpyjs/gantt)](https://github.com/xpyjs/gantt/commits/master) [![Node Version](https://img.shields.io/badge/node-%3E%3D%2018-brightgreen)](https://nodejs.org/) ![GitHub Stars](https://img.shields.io/github/stars/xpyjs/gantt.svg?style=social) ![GitHub Forks](https://shields.io/github/forks/xpyjs/gantt?label=Fork&style=social)
 
-[[English](./README.md)] [[中文](./README_cn.md)]
+[[中文](./README.md)] [[English](./README_en.md)]
 
-A powerful and flexible Gantt chart component library, written in native JS + Canvas, designed specifically for modern web applications, and supports TypeScript.
+一个功能强大且灵活的甘特图组件库，原生 JS + Canvas 编写，专为现代 Web 应用程序设计，支持 TypeScript。
 
-## About Version
+## 关于版本问题
 
-This current version is fully newly developed. If you just want to use `Vue` version, I strongly recommend that you upgrade to this version(`@xpyjs/gantt-vue` is for `Vue3`).
-If you are looking for the previous version, please refer to the [origin-vue3 branch](https://github.com/xpyjs/gantt/tree/origin-vue3).
+当前版本是全新开发的，如果您只想使用 `Vue` 版本，我强烈建议您升级到此版本（`@xpyjs/gantt-vue` 适用于 `Vue3`）。
+如果您正在寻找以前的版本，请参考 [origin-vue3 分支](https://github.com/xpyjs/gantt/tree/origin-vue3)。
 
-## 📖 Introduction
+## 📖 简介
 
-A Gantt chart is a project management tool used to display project progress, task allocation, and resource utilization. Based on a timeline, it visualizes the start time, end time, duration, and dependencies between tasks in a project through bar charts.
+甘特图是一种项目管理工具，用于展示项目进度、任务分配和资源利用情况。它以时间轴为基础，通过条形图的形式展示项目中各个任务的开始时间、结束时间、持续时间以及它们之间的依赖关系。
 
-`XGantt` is a high-performance Gantt chart component library developed in native JavaScript. Built with Canvas technology, it provides smooth user experience and rich functional features.
+`XGantt` 是一个基于原生 JavaScript 开发的高性能甘特图组件库。它采用 Canvas 技术构建，提供了流畅的用户体验和丰富的功能特性。
 
-## ✨ Features
+## ✨ 特性
 
-- 🚀 **High-Performance Rendering**: Based on Konva.js Canvas rendering engine, supports smooth display of large amounts of data
-- 📊 **Multi-Level Headers**: Supports multi-level header display for better organization and presentation of complex data
-- ⏱️ **Multiple Time Units**: Supports various time scales including hour, day, week, month, quarter
-- 🔗 **Task Dependency Management**: Complete task dependency creation, editing, and visualization
-- 🎯 **Rich Interactions**: Drag & drop, zoom, selection, context menus, and other interactive features
-- 📅 **Multi-Level Linkage**: Supports data linkage between different levels
-- 📏 **Baseline Support**: Provides baseline functionality for tracking project progress
-- 🏁 **Milestones**: Supports milestone markers for tracking key points
-- 📊 **Virtual Scrolling**: Supports virtual scrolling for large datasets to ensure performance
-- 🔄 **Event System**: Comprehensive event listening mechanism for business logic integration
-- 🖌️ **Custom Styling**: Rich styling and theme configuration options
-- 🛠️ **TypeScript Support**: Complete type definitions for better development experience
-- 📦 **Multi-Framework Support**: Native JavaScript, ready to use out-of-the-box, compatible with all frameworks
-- 🌐 **Internationalization Support**: Multi-language support
-- 📚 **New Interactive Documentation**: Documentation includes detailed tutorials, API references, and example code [Doc Link](https://docs.xiaopangying.com/gantt/)
-- 🔄 **Continuous Updates**: Regular releases with new features, bug fixes, and performance optimizations
+- 🚀 **高性能渲染**：基于 Konva.js 的 Canvas 渲染引擎，支持大量数据的流畅显示
+- 📊 **多层级表头**：支持表头的多层级展示，便于复杂数据的组织和展示
+- ⏱️ **多时间单位**：支持小时、天、周、月、季度等多种时间刻度
+- 🔗 **任务依赖管理**：完整的任务依赖关系创建、编辑和可视化
+- 🎯 **丰富的交互**：拖拽、缩放、选择、右键菜单等交互功能
+- 📅 **多层联动**：支持不同层级之间的数据联动
+- 📏 **基线支持**：提供基线功能，用于跟踪项目进度
+- 🏁 **里程碑**：支持里程碑标记，便于关键节点的跟踪
+- 📊 **虚拟滚动**：支持大数据量的虚拟滚动，保证性能
+- 🔄 **事件系统**：完善的事件监听机制，支持业务逻辑集成
+- 🖌️ **自定义样式**：丰富的样式和主题配置
+- 🛠️ **TypeScript 支持**：完整的类型定义，提供更好的开发体验
+- 📦 **多框架支持**：原生 JavaScript，开箱即用，适配所有框架
+- 🌐 **国际化支持**：支持多语言支持
+- 📚 **全新交互文档**：文档包含详细的教程、API和示例代码 [文档链接](https://docs.xiaopangying.com/gantt/)
+- 🔄 **持续更新**：不定期发布新版本，更新功能，修复已知问题，优化性能等
 
-## 🎯 Functionality
+## 🎯 功能
 
-### Core Features
+### 核心功能
 
-- **Table View**: Left table area with support for custom multi-row and multi-column merging
-- **Timeline**: Flexible timeline configuration with support for multiple time units and custom time ranges
-- **Task Management**: Support for multi-level task structures
-- **Dependencies**: Visual task dependency lines with support for drag-and-drop adding, deleting, and managing dependencies within the view
-- **Progress Display**: Task progress bar display with support for percentages and custom styling
+- **表格视图**：左侧表格区域，支持自定义合并多行多列
+- **时间轴**：灵活的时间轴配置，支持多种时间单位和自定义时间范围
+- **任务管理**：支持多层级任务结构
+- **依赖关系**：可视化的任务依赖线，支持视图中拖拽添加、删除、管理依赖线
+- **进度显示**：任务进度条显示，支持百分比和自定义样式
 
-### Interactive Features
+### 交互功能
 
-- **Drag Operations**: Task bar dragging for movement and resizing
-- **Mouse Operations**: Support for row and task bar clicks, double-clicks, context menus, etc.
-- **Dependency Lines**: Support for creating, editing, and deleting dependency lines
+- **拖拽操作**：任务条拖拽移动和调整大小
+- **鼠标操作**：支持行、任务条的点击、双击、右键菜单等操作
+- **依赖线**：支持依赖线的创建、编辑和删除
 
-## 📦 Installation
+## 📦 安装
 
-### Install Core Package
+### 安装核心包
 
 ```bash
 npm install @xpyjs/gantt-core
-# or
+# 或
 yarn add @xpyjs/gantt-core
-# or
+# 或
 pnpm add @xpyjs/gantt-core
 ```
 
-## 🚀 Quick Start
+## 🚀 快速开始
 
-### 1. Basic Usage
+### 1. 基本使用
 
 ```typescript
 import { XGantt } from '@xpyjs/gantt-core';
 import '@xpyjs/gantt-core/index.css';
 
-// Prepare data
+// 准备数据
 const taskData = [
   {
     id: 1,
-    name: 'Project Start',
+    name: '项目启动',
     startTime: '2024-01-01',
     endTime: '2024-01-05',
     progress: 100
   },
   {
     id: 2,
-    name: 'Requirements Analysis',
+    name: '需求分析',
     startTime: '2024-01-06',
     endTime: '2024-01-15',
     progress: 80
   },
   {
     id: 3,
-    name: 'System Design',
+    name: '系统设计',
     startTime: '2024-01-16',
     endTime: '2024-01-30',
     progress: 50
   }
 ];
 
-// Create Gantt chart instance
+// 创建甘特图实例
 const gantt = new XGantt('#gantt-container', {
   data: taskData
 });
 ```
 
-### 2. HTML Structure
+### 2. HTML 结构
 
 ```html
 <!DOCTYPE html>
@@ -121,77 +121,78 @@ const gantt = new XGantt('#gantt-container', {
 </html>
 ```
 
-### 3. Configuration Options
+### 3. 配置选项
 
 ```typescript
 const gantt = new XGantt('#gantt-container', {
-  // Data configuration
+  // 数据配置
   data: taskData,
 
-  // Timeline configuration
+  // 时间轴配置
   unit: 'day', // 'hour' | 'day' | 'week' | 'month' | 'quarter'
-  // Dependency configuration
+
+  // 依赖关系配置
   links: {
-    data: [],         // Dependency relationship data
-    key: 'id',        // Specify the unique identifier field for data
-    show: true,       // Display dependency relationships
+    data: [],         // 依赖关系数据
+    key: 'id',        // 指定数据的唯一标识字段
+    show: true,       // 展示依赖关系
     create: {
-      enabled: true,  // Allow creating dependency relationships in the view
-      mode: 'hover',  // Display creation points when hovering over task bars
-      from: true,     // Allow nodes to be used as starting points for creating connections
-      to: true        // Allow nodes to be used as endpoints for creating connections
+      enabled: true,  // 允许在视图中创建依赖关系
+      mode: 'hover',  // 鼠标悬停在任务条时展示创建点
+      from: true,     // 允许节点作为起始点创建连线
+      to: true        // 允许节点作为终点创建连线
     }
   },
 
-  // Log level
+  // 日志级别
   logLevel: 'info' // 'debug' | 'info' | 'warn' | 'error' | 'none',
 
-  // ... other configuration options
+  // ... 其他配置选项
 });
 ```
 
-### 4. Event Listening
+### 4. 事件监听
 
 ```typescript
-// Listen to task selection events
+// 监听任务选择事件
 gantt.on('select', (data, checked, all) => {
-  console.log('Selected tasks:', data);
+  console.log('选中的任务:', data);
 });
 
-// Listen to task row click events
+// 监听任务点击事件
 gantt.on('click:row', (e, data) => {
-  console.log('Clicked task row:', data);
+  console.log('点击了任务行:', data);
 });
 
-// Listen to task bar click events
+// 监听任务条点击事件
 gantt.on('click:slider', (e, data) => {
-  console.log('Clicked task bar:', data);
+  console.log('点击了任务条:', data);
 });
 
-// Listen to task move events
+// 监听任务移动事件
 gantt.on('move', (data) => {
-  console.log('Task moved:', data);
+  console.log('任务移动:', data);
 });
 ```
 
-## 📚 API Reference
+## 📚 API 参考
 
-### XGantt Class
+### XGantt 类
 
-#### Constructor
+#### 构造函数
 
 ```typescript
 new XGantt(element: string | HTMLElement, options?: IOptions)
 ```
 
-- `element`: Container element or selector
-- `options`: Configuration options
+- `element`: 容器元素或选择器
+- `options`: 配置选项
 
-#### Methods
+#### 方法
 
 ##### update(options: IOptions): void
 
-Dynamically update Gantt chart configuration options.
+动态更新甘特图配置选项。
 
 ```typescript
 gantt.update({
@@ -202,7 +203,7 @@ gantt.update({
 
 ##### render(): void
 
-Force render the view.
+强制渲染视图。
 
 ```typescript
 gantt.render();
@@ -210,7 +211,7 @@ gantt.render();
 
 ##### destroy(): void
 
-Destroy the Gantt chart instance and clean up all resources.
+销毁甘特图实例并清理所有资源。
 
 ```typescript
 gantt.destroy();
@@ -218,7 +219,7 @@ gantt.destroy();
 
 ##### jumpTo(date?: any): boolean
 
-Jump to the specified date position on the timeline.
+跳转到指定日期的时间轴位置。
 
 ```typescript
 gantt.jumpTo('2024-06-01');
@@ -227,67 +228,67 @@ gantt.jumpTo(new Date());
 
 ##### on(event: keyof EventMap, callback: Function): void
 
-Register event listeners.
+注册事件监听器。
 
 ```typescript
 gantt.on('select', (data, checked, all) => {
-  // Handle selection events
+  // 处理选择事件
 });
 ```
 
-### Configuration Options
+### 配置选项
 
-See complete configuration options: [IOptions](./packages/core/src/types/index.d.ts#l7)
+参考完整的配置选项：[IOptions](./packages/core/src/types/index.d.ts#l7)
 
-### Event System
+### 事件系统
 
-The Gantt chart supports the following events:
+甘特图支持以下事件：
 
-| Event Name | Parameters | Description |
-|------------|------------|-------------|
-| `error` | `(error: ErrorType)` | Error handling |
-| `select` | `(data: any[], checked: boolean, all: any[])` | Task selection |
-| `click:row` | `(e: MouseEvent, data: any)` | Row click |
-| `dblclick:row` | `(e: MouseEvent, data: any)` | Row double-click |
-| `contextmenu:row` | `(e: MouseEvent, data: any)` | Row right-click |
-| `click:slider` | `(e: MouseEvent, data: any)` | Task bar click |
-| `dblclick:slider` | `(e: MouseEvent, data: any)` | Task bar double-click |
-| `contextmenu:slider` | `(e: MouseEvent, data: any)` | Task bar right-click |
-| `move` | `(data: {row: any; old: any}[])` | Task movement |
-| `create:link` | `(link: ILink)` | Dependency creation |
-| `update:link` | `(link: ILink)` | Dependency update |
-| `select:link` | `(add: ILink, cancel: ILink, all: ILink[])` | Dependency selection |
+| 事件名称 | 参数 | 描述 |
+|----------|------|------|
+| `error` | `(error: ErrorType)` | 错误处理 |
+| `select` | `(data: any[], checked: boolean, all: any[])` | 任务选择 |
+| `click:row` | `(e: MouseEvent, data: any)` | 行点击 |
+| `dblclick:row` | `(e: MouseEvent, data: any)` | 行双击 |
+| `contextmenu:row` | `(e: MouseEvent, data: any)` | 行右键 |
+| `click:slider` | `(e: MouseEvent, data: any)` | 任务条点击 |
+| `dblclick:slider` | `(e: MouseEvent, data: any)` | 任务条双击 |
+| `contextmenu:slider` | `(e: MouseEvent, data: any)` | 任务条右键 |
+| `move` | `(data: {row: any; old: any}[])` | 任务移动 |
+| `create:link` | `(link: ILink)` | 依赖关系创建 |
+| `update:link` | `(link: ILink)` | 依赖关系更新 |
+| `select:link` | `(add: ILink, cancel: ILink, all: ILink[])` | 依赖关系选择 |
 
-See complete event types: [EventMap](./packages/core/src/types/event.d.ts#l4)
+参考完整的事件类型：[EventMap](./packages/core/src/types/event.d.ts#l4)
 
-### Utility Functions
+### 工具函数
 
-XGantt also provides some practical utility functions to help developers with common operations.
+同时，XGantt 还提供了一些实用的工具函数，方便开发者进行常见操作。
 
 ```typescript
 import { generateId, dayjs, colorjs } from '@xpyjs/gantt-core';
 
-// Generate unique ID
+// 生成唯一 ID
 const id = generateId();
 
-// Time handling (dayjs package, if you don't want to install it separately, you can use it through export. Some plugins are built-in, but if you need more, you still need to install them separately)
+// 时间处理（就是 dayjs 包，如果不想安装，可以通过导出使用。已经内置了一些插件，如果需要更多，仍需要单独安装使用）
 const now = dayjs();
 const formatted = dayjs('2024-01-01').format('YYYY-MM-DD');
 
-// Color handling
+// 颜色处理
 const color = colorjs('#ff0000');
-const rgb = color.alpha(0.5).toRgb(); // Get RGB color value { r: 255, g: 0, b: 0, a: 0.5 }
+const rgb = color.alpha(0.5).toRgb(); // 获取 RGB 颜色值 { r: 255, g: 0, b: 0, a: 0.5 }
 ```
 
-## Framework Support
+## 框架支持
 
-XGantt can be adapted to various front-end frameworks. However, I also provide adaptation packages for `Vue` and `React` to facilitate usage within these frameworks.
+XGantt 本身可以适配多种前端框架。但是我仍然提供了 `Vue` 和 `React` 的适配包，方便在这些框架中使用。
 
-### Vue Version
+### Vue 版本
 
-`@xpyjs/gantt-vue` is designed specifically for Vue 3, providing better integration and user experience.
+`@xpyjs/gantt-vue` 是专为 Vue 3 设计的适配包，提供了更好的集成和使用体验。
 
-#### Installation
+#### 安装
 
 ```bash
 npm install @xpyjs/gantt-vue
@@ -297,7 +298,7 @@ yarn add @xpyjs/gantt-vue
 pnpm add @xpyjs/gantt-vue
 ```
 
-#### Usage
+#### 使用
 
 ```vue
 <template>
@@ -313,21 +314,21 @@ const ganttOptions = reactive({
   data: [
     {
       id: 1,
-      name: 'Project Start',
+      name: '项目启动',
       startTime: '2024-01-01',
       endTime: '2024-01-05',
       progress: 100
     },
     {
       id: 2,
-      name: 'Requirements Analysis',
+      name: '需求分析',
       startTime: '2024-01-06',
       endTime: '2024-01-15',
       progress: 80
     },
     {
       id: 3,
-      name: 'System Design',
+      name: '系统设计',
       startTime: '2024-01-16',
       endTime: '2024-01-30',
       progress: 50
@@ -336,22 +337,22 @@ const ganttOptions = reactive({
   unit: 'day',
   table: {
     columns: [
-      { label: 'Task Name', field: 'name' },
-      { label: 'Start Time', field: 'startTime' },
-      { label: 'End Time', field: 'endTime' },
+      { label: '任务名称', field: 'name' },
+      { label: '开始时间', field: 'startTime' },
+      { label: '结束时间', field: 'endTime' },
     ]
   }
 });
 </script>
 ```
 
-`@xpyjs/gantt-vue` has been adapted for reactivity, so directly modifying the data will trigger automatic updates to the view.
+`@xpyjs/gantt-vue` 已经适配了响应式，所以直接修改数据，就会触发视图自动更新。
 
-### React Version
+### React 版本
 
-`@xpyjs/gantt-react` is designed specifically for React, providing better integration and user experience.
+`@xpyjs/gantt-react` 是专为 React 设计的适配包，提供了更好的集成和使用体验。
 
-#### Installation
+#### 安装
 
 ```bash
 npm install @xpyjs/gantt-react
@@ -361,7 +362,7 @@ yarn add @xpyjs/gantt-react
 pnpm add @xpyjs/gantt-react
 ```
 
-#### Usage
+#### 使用
 
 ```jsx
 import { useState, useCallback, useEffect } from 'react';
@@ -374,21 +375,21 @@ function App() {
   const [ganttData, setGanttData] = useState([
     {
       id: 1,
-      name: 'Project Start',
+      name: '项目启动',
       startTime: '2024-01-01',
       endTime: '2024-01-05',
       progress: 100
     },
     {
       id: 2,
-      name: 'Requirements Analysis',
+      name: '需求分析',
       startTime: '2024-01-06',
       endTime: '2024-01-15',
       progress: 80
     },
     {
       id: 3,
-      name: 'System Design',
+      name: '系统设计',
       startTime: '2024-01-16',
       endTime: '2024-01-30',
       progress: 50
@@ -399,9 +400,9 @@ function App() {
     data: ganttData,
     table: {
       columns: [
-        { label: 'Task Name', field: 'name' },
-        { label: 'Start Time', field: 'startTime' },
-        { label: 'End Time', field: 'endTime' },
+        { label: '任务名称', field: 'name' },
+        { label: '开始时间', field: 'startTime' },
+        { label: '结束时间', field: 'endTime' },
       ]
     },
     unit: 'day',
@@ -417,11 +418,11 @@ function App() {
 export default App;
 ```
 
-`@xpyjs/gantt-react` provides a hook: `useXGantt`, which makes it easy to use within function components.
+`@xpyjs/gantt-react` 提供了一个 hooks：`useXGantt`，方便在函数组件中使用。
 
-## 🔧 Browser Support
+## 🔧 浏览器支持
 
-XGantt is built on HTML5 Canvas technology and works normally as long as the browser supports the Canvas API:
+XGantt 基于 HTML5 Canvas 技术构建，只要浏览器支持 Canvas API 即可正常使用：
 
 - **Chrome** >= 51
 - **Firefox** >= 45
@@ -429,29 +430,28 @@ XGantt is built on HTML5 Canvas technology and works normally as long as the bro
 - **Edge** >= 12
 - **Internet Explorer** >= 9
 
-> **Note**: XGantt primarily relies on the Canvas 2D Context API and runs well in browsers that support Canvas. The above version requirements already cover the vast majority of user scenarios.
+> **注意**：XGantt 主要依赖 Canvas 2D Context API，在支持 Canvas 的浏览器中都能良好运行。上述版本要求已经覆盖了绝大部分用户场景。
 
-## 📄 License
+## 📄 许可证
 
 MIT License
 
-## 🤝 Contributing
+## 🤝 贡献
 
-Contributions are welcome! Please read our contribution guidelines for more information.
+欢迎贡献！请阅读我们的贡献指南以获取更多信息。
 
-## 📞 Support
+## 📞 支持
 
 - [GitHub Issues](https://github.com/xpyjs/gantt/issues)
-- [Documentation](https://docs.xiaopangying.com/gantt/)
+- [文档](https://docs.xiaopangying.com/gantt/)
 
-## 🎊 Sponsorship
+## 🎊 赞助
 
-If you think it's good, invite the author to have a cup of coffee.
+如果您觉得这个项目不错，可以请作者喝杯咖啡。
 
-<div style="display: flex; gap: 20px; align-items: center;">
-<img style="width: 50%" src="https://desktop.jeremyjone.com/resource/wx.png" />
-<img style="width: 50%" src="https://desktop.jeremyjone.com/resource/zfb.jpg" />
-</div>
+| 微信 | 支付宝 |
+|---|---|
+| <img style="width: 100%" src="https://desktop.jeremyjone.com/resource/wx.png" /> | <img style="width: 100%" src="https://desktop.jeremyjone.com/resource/zfb.jpg" /> |
 
 ---
 
