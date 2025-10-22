@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-14 10:15:23
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-10-04 10:39:08
+ * @LastEditTime: 2025-10-22 11:21:15
  * @Description: 图表部分的主体渲染层
  */
 import Konva from "konva";
@@ -238,9 +238,10 @@ export class BodyGroup {
 
     const task = this.getTaskByPosition(pos);
     if (task) {
-      if (this.context.store.getDataManager().isTaskSelected(task.id)) return;
+      if (!this.context.store.getDataManager().isTaskSelected(task.id)) {
+        this.context.store.getDataManager().selectTask(task.id);
+      }
 
-      this.context.store.getDataManager().selectTask(task.id);
       this.context.event.emit(EventName.ROW_CLICK, e.evt, task);
     }
   }

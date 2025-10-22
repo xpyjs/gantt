@@ -75,10 +75,9 @@ export class TableRow {
     });
 
     this.element.addEventListener("click", e => {
-      if (this.context.store.getDataManager().isTaskSelected(this.task.id))
-        return;
-
-      this.context.store.getDataManager().selectTask(this.task.id);
+      if (!this.context.store.getDataManager().isTaskSelected(this.task.id)) {
+        this.context.store.getDataManager().selectTask(this.task.id);
+      }
       this.context.event.emit(EventName.ROW_CLICK, e, this.task);
     });
 
