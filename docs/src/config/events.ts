@@ -100,9 +100,10 @@ gantt.on('select', (selectedData, isChecked, allSelectedData) => {
 });
 
 // 监听行点击事件
-gantt.on('click:row', (event, rowData) => {
+gantt.on('click:row', (event, rowData, time) => {
   console.log('点击了行:', rowData.name);
   console.log('鼠标事件:', event);
+  console.log('点击时间点:', time);
 });`,
 
   // 系统加载事件
@@ -131,8 +132,8 @@ gantt.on('click:row', (event, rowData) => {
 });`,
 
   // 行点击事件
-  clickRowEvent: `gantt.on('click:row', (e, data) => {
-  console.log('点击行:', data.name);
+  clickRowEvent: `gantt.on('click:row', (e, data, time) => {
+  console.log('点击行:', data.name, time);
   // 获取任务详情
   showTaskDetail(data);
 
@@ -144,8 +145,8 @@ gantt.on('click:row', (event, rowData) => {
 });`,
 
   // 行双击事件
-  dblclickRowEvent: `gantt.on('dblclick:row', (e, data) => {
-  console.log('双击行:', data.name);
+  dblclickRowEvent: `gantt.on('dblclick:row', (e, data, time) => {
+  console.log('双击行:', data.name, time);
   // 进入编辑模式
   enterEditMode(data);
 
@@ -154,8 +155,8 @@ gantt.on('click:row', (event, rowData) => {
 });`,
 
   // 行右键菜单事件
-  contextmenuRowEvent: `gantt.on('contextmenu:row', (e, data) => {
-  console.log('右键点击行:', data.name);
+  contextmenuRowEvent: `gantt.on('contextmenu:row', (e, data, time) => {
+  console.log('右键点击行:', data.name, time);
   // 显示自定义右键菜单
   showContextMenu({
     x: e.clientX,
@@ -659,6 +660,11 @@ export const eventsPageConfig: EventsPageConfig = {
               name: "data",
               type: "any",
               description: "被点击行的任务数据"
+            },
+            {
+              name: "time",
+              type: "Dayjs?",
+              description: "点击时间。当点击右侧时间轴区域时有效，表格区域返回 undefined"
             }
           ],
           examples: [
@@ -685,6 +691,11 @@ export const eventsPageConfig: EventsPageConfig = {
               name: "data",
               type: "any",
               description: "被双击行的任务数据"
+            },
+            {
+              name: "time",
+              type: "Dayjs?",
+              description: "双击时间。当双击右侧时间轴区域时有效，表格区域返回 undefined"
             }
           ],
           notes: ["双击事件会多次触发鼠标点击"],
@@ -712,6 +723,11 @@ export const eventsPageConfig: EventsPageConfig = {
               name: "data",
               type: "any",
               description: "被右键点击行的任务数据"
+            },
+            {
+              name: "time",
+              type: "Dayjs?",
+              description: "右键时间。当右键点击右侧时间轴区域时有效，表格区域返回 undefined"
             }
           ],
           examples: [

@@ -271,7 +271,7 @@ gantt.on("update:link", (link) => {
     notify('info', '已更新依赖关系');
   }
 });
-gantt.on("click:row", (_e, item) => {
+gantt.on("click:row", (_e, item, time) => {
   selected = item;
   updateFooterSelection();
   updateActionBtnState();
