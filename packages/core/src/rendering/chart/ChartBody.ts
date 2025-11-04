@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-14 10:15:23
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-10-22 11:21:15
+ * @LastEditTime: 2025-11-04 09:54:06
  * @Description: 图表部分的主体渲染层
  */
 import Konva from "konva";
@@ -12,6 +12,7 @@ import { ChartRow } from "./ChartRow";
 import { generateId } from "../../utils/id";
 import { IContext } from "@/types/render";
 import { type Task } from "@/models/Task";
+import { type Dayjs } from "dayjs";
 
 export class BodyGroup {
   private tasks: Task[] = []; // 当前渲染的任务列表
@@ -242,7 +243,8 @@ export class BodyGroup {
         this.context.store.getDataManager().selectTask(task.id);
       }
 
-      this.context.event.emit(EventName.ROW_CLICK, e.evt, task);
+      const time = this.getTimeByPosition(pos);
+      this.context.event.emit(EventName.ROW_CLICK, e.evt, task, time);
     }
   }
 
@@ -257,7 +259,8 @@ export class BodyGroup {
 
     const task = this.getTaskByPosition(pos);
     if (task) {
-      this.context.event.emit(EventName.ROW_DBL_CLICK, e.evt, task);
+      const time = this.getTimeByPosition(pos);
+      this.context.event.emit(EventName.ROW_DBL_CLICK, e.evt, task, time);
     }
   }
 
@@ -274,7 +277,8 @@ export class BodyGroup {
 
     const task = this.getTaskByPosition(pos);
     if (task) {
-      this.context.event.emit(EventName.ROW_CONTEXTMENU, e.evt, task);
+      const time = this.getTimeByPosition(pos);
+      this.context.event.emit(EventName.ROW_CONTEXTMENU, e.evt, task, time);
     }
   }
 
@@ -292,6 +296,13 @@ export class BodyGroup {
 
     const visibleTasks = this.context.store.getDataManager().getVisibleTasks();
     return visibleTasks[flatIndex] || null;
+  }
+
+  /**
+   * 按照位置获取时间
+   */
+  private getTimeByPosition(pos: { x: number; y: number }): Dayjs {
+    return this.context.store.getTimeAxis().getTimeByLeft(pos.x - this.offsetX);
   }
 
   /**

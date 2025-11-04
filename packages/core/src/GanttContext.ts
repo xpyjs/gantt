@@ -2,14 +2,14 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-22 14:46:26
+ * @LastEditTime: 2025-11-04 09:56:45
  * @Description: Facade Layer for Gantt Component
  */
 import { Logger } from "./utils/logger";
 import { Store } from "./store";
 import { Renderer } from "./rendering/Renderer";
 import { ErrorType, EventBus, EventName } from "./event";
-import dayjs from "./utils/time";
+import dayjs, { type Dayjs } from "./utils/time";
 import { generateId } from "./utils/id";
 import { IOptionConfig, IOptions } from "./types";
 import { EventMap } from "./types/event";
@@ -205,16 +205,16 @@ export class XGanttContext implements IContext {
       this._emit("contextmenu:link", e, link);
     });
 
-    this.event.on(EventName.ROW_CLICK, (e: MouseEvent, task: Task) => {
-      this._emit("click:row", e, task.data);
+    this.event.on(EventName.ROW_CLICK, (e: MouseEvent, task: Task, time: Dayjs) => {
+      this._emit("click:row", e, task.data, time);
     });
 
-    this.event.on(EventName.ROW_DBL_CLICK, (e: MouseEvent, task: Task) => {
-      this._emit("dblclick:row", e, task.data);
+    this.event.on(EventName.ROW_DBL_CLICK, (e: MouseEvent, task: Task, time: Dayjs) => {
+      this._emit("dblclick:row", e, task.data, time);
     });
 
-    this.event.on(EventName.ROW_CONTEXTMENU, (e: MouseEvent, task: Task) => {
-      this._emit("contextmenu:row", e, task.data);
+    this.event.on(EventName.ROW_CONTEXTMENU, (e: MouseEvent, task: Task, time: Dayjs) => {
+      this._emit("contextmenu:row", e, task.data, time);
     });
 
     this.event.on(EventName.SLIDER_CLICK, (e: MouseEvent, task: Task) => {

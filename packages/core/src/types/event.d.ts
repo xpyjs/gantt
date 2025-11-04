@@ -1,3 +1,4 @@
+import { Dayjs } from "../utils/time";
 import { ErrorType } from "../event";
 import { ILink } from "./link";
 
@@ -24,11 +25,11 @@ export interface EventMap {
   /** 任务被选中（checkbox）事件，支持多个选中 */
   select: (data: any[], checked: boolean, all: any[]) => void;
   /** 行点击事件 */
-  "click:row": (e: MouseEvent, data: any) => void;
+  "click:row": (e: MouseEvent, data: any, time?: Dayjs) => void;
   /** 行双击事件 */
-  "dblclick:row": (e: MouseEvent, data: any) => void;
+  "dblclick:row": (e: MouseEvent, data: any, time?: Dayjs) => void;
   /** 行右键点击事件 */
-  "contextmenu:row": (e: MouseEvent, data: any) => void;
+  "contextmenu:row": (e: MouseEvent, data: any, time?: Dayjs) => void;
   /** 任务条点击事件 */
   "click:slider": (e: MouseEvent, data: any) => void;
   /** 任务条双击事件 */
