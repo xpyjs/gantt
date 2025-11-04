@@ -1,5 +1,5 @@
 import type { SlotsType } from "vue";
-import type { IOptions, ILink, ErrorType } from "@xpyjs/gantt-core";
+import type { IOptions, ILink, ErrorType, Dayjs } from "@xpyjs/gantt-core";
 
 export type XGanttVueEmits = {
   loaded: [];
@@ -9,9 +9,9 @@ export type XGanttVueEmits = {
   "select:link": [add: ILink | null, cancel: ILink | null, all: ILink[]];
   "contextmenu:link": [e: MouseEvent, link: ILink];
   select: [data: any[], checked: boolean, all: any[]];
-  "click:row": [e: MouseEvent, data: any];
-  "dblclick:row": [e: MouseEvent, data: any];
-  "contextmenu:row": [e: MouseEvent, data: any];
+  "click:row": [e: MouseEvent, data: any, time?: Dayjs];
+  "dblclick:row": [e: MouseEvent, data: any, time?: Dayjs];
+  "contextmenu:row": [e: MouseEvent, data: any, time?: Dayjs];
   "click:slider": [e: MouseEvent, data: any];
   "dblclick:slider": [e: MouseEvent, data: any];
   "contextmenu:slider": [e: MouseEvent, data: any];
