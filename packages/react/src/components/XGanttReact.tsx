@@ -89,6 +89,7 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onEnterBaseline,
             onHoverBaseline,
             onLeaveBaseline,
+            onDragRow,
             ...restProps
         } = props;
 
@@ -133,6 +134,9 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             }
             if (onContextMenuRow) {
                 instance.on("contextmenu:row", onContextMenuRow);
+            }
+            if (onDragRow) {
+                instance.on("drag:row", onDragRow);
             }
             if (onClickSlider) {
                 instance.on("click:slider", onClickSlider);
@@ -181,6 +185,7 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onClickRow,
             onDoubleClickRow,
             onContextMenuRow,
+            onDragRow,
             onClickSlider,
             onDoubleClickSlider,
             onContextMenuSlider,

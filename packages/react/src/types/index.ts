@@ -123,6 +123,15 @@ export interface XGanttReactProps
   onContextMenuRow?: EventMap["contextmenu:row"];
 
   /**
+   * 拖拽事件回调
+   *
+   * @description 当任务被拖拽时触发
+   * @param target 拖拽落下的目标任务数据
+   * @param source 被拖拽的任务数据
+   */
+  onDragRow?: EventMap["drag:row"];
+
+  /**
    * 任务条点击事件回调
    *
    * @description 当点击甘特图中的任务条时触发

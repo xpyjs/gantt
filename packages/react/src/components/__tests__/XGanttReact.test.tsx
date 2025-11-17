@@ -193,6 +193,7 @@ describe('XGanttReact', () => {
             onClickRow: vi.fn(),
             onDoubleClickRow: vi.fn(),
             onContextMenuRow: vi.fn(),
+            onDragRow: vi.fn(),
             onClickSlider: vi.fn(),
             onDoubleClickSlider: vi.fn(),
             onContextMenuSlider: vi.fn(),
@@ -219,6 +220,7 @@ describe('XGanttReact', () => {
         expect(mockCore.__mockOn).toHaveBeenCalledWith('click:row', handlers.onClickRow);
         expect(mockCore.__mockOn).toHaveBeenCalledWith('dblclick:row', handlers.onDoubleClickRow);
         expect(mockCore.__mockOn).toHaveBeenCalledWith('contextmenu:row', handlers.onContextMenuRow);
+        expect(mockCore.__mockOn).toHaveBeenCalledWith('drag:row', handlers.onDragRow);
         expect(mockCore.__mockOn).toHaveBeenCalledWith('click:slider', handlers.onClickSlider);
         expect(mockCore.__mockOn).toHaveBeenCalledWith('dblclick:slider', handlers.onDoubleClickSlider);
         expect(mockCore.__mockOn).toHaveBeenCalledWith('contextmenu:slider', handlers.onContextMenuSlider);
