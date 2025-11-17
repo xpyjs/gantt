@@ -499,9 +499,9 @@ export interface IGanttOptions {
     enabled: boolean | ((row: EmitData) => boolean);
     /** 图标颜色。默认 #999 */
     color?: string;
-    /** 拖拽时目标行的背景色。默认主色 */
+    /** 可放置区域的背景色。默认主色 */
     targetBackgroundColor?: string;
-    /** 拖拽时目标行的透明度。默认 0.2 */
+    /** 可放置区域的透明度。默认 0.2 */
     targetOpacity?: number;
     /** 放置的相关配置 */
     drop?: {

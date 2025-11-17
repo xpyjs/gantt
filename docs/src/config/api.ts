@@ -962,6 +962,69 @@ export const apiItems: ApiItem[] = [
     ]
   },
   {
+    id: "drag",
+    key: "drag",
+    title: "配置任务间的拖拽",
+    type: "object",
+    description: "配置任务间的拖拽排序行为和相关选项",
+    category: "interaction",
+    children: [
+      {
+        id: "drag-enabled",
+        key: "enabled",
+        title: "是否启用任务拖拽功能",
+        type: "boolean | ((row: EmitData) => boolean)",
+        defaultValue: "false",
+        description: "是否启用任务拖拽功能。启用后，拖拽时会在目标行出现一个可放置区域，该区域会呈现一条线或者整行区域。如果为一条线，则放置为插入当前位置。如果为整行区域，则放置到当前位置数据的子项中。"
+      },
+      {
+        id: "drag-color",
+        key: "color",
+        title: "图标颜色",
+        type: "string",
+        defaultValue: "#999",
+        description: "任务拖拽图标的颜色"
+      },
+      {
+        id: "drag-targetBackgroundColor",
+        key: "targetBackgroundColor",
+        title: "可放置区域的背景色",
+        type: "string",
+        description: "配置可放置区域的背景色，默认主色调"
+      },
+      {
+        id: "drag-targetOpacity",
+        key: "targetOpacity",
+        title: "可放置区域的透明度",
+        type: "string",
+        description: "配置可放置区域的透明度。默认0.2"
+      },
+      {
+        id: "drag-drop",
+        key: "drop",
+        title: "放置的相关配置",
+        type: "object",
+        description: "放置的相关配置",
+        children: [
+          {
+            id: "drag-allowed",
+            key: "allowed",
+            title: "放置的回调函数",
+            type: "((target: EmitData, source: EmitData) => boolean)",
+            description: "允许放置的回调函数，如果不配置，则表示可被放置的内容均允许放置。\n该方法的优先级最低，结合其他参数配置使用。\n需要注意的是，无论如何配置，都不能将一个任务放置到其子项中的任意内容。"
+          },
+          {
+            id: "drag-crossLevel",
+            key: "crossLevel",
+            title: "配置跨层级放置",
+            type: "boolean",
+            description: "配置跨层级放置。默认情况下只允许在当前父级下进行拖拽。\n主要注意的是，同层级、不同父级的内容，也属于跨层级放置"
+          },
+        ]
+      }
+    ]
+  },
+  {
     id: "fields",
     key: "fields",
     title: "字段映射",

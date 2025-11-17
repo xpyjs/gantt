@@ -170,6 +170,11 @@ gantt.on('click:row', (event, rowData, time) => {
   });
 });`,
 
+  // 行拖拽排序事件
+  dragRowEvent: `gantt.on('drag:row', (target, source) => {
+  console.log('拖拽排序:', { target: target.name, source: source.name });
+})`,
+
   // 任务条点击事件
   clickSliderEvent: `gantt.on('click:slider', (e, data) => {
   console.log('点击任务条:', data.name);
@@ -734,6 +739,32 @@ export const eventsPageConfig: EventsPageConfig = {
             {
               framework: "javascript",
               code: codeExamples.contextmenuRowEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
+          id: "drag:row",
+          name: "drag:row",
+          type: "行拖拽排序功能",
+          description: "当启用行拖拽功能后，在拖拽完成会触发该事件",
+          trigger: "当启用行拖拽功能后，在拖拽完成会触发该事件",
+          parameters: [
+            {
+              name: "target",
+              type: "any",
+              description: "被拖拽的目标行数据"
+            },
+            {
+              name: "source",
+              type: "any",
+              description: "被拖拽的源行数据"
+            }
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.dragRowEvent,
               language: "javascript"
             }
           ]

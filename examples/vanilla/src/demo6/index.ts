@@ -97,9 +97,11 @@ const gantt = new XGantt(ganttContainer, {
   table: {
     columns: [
       { field: "name", label: "任务名称", width: 230 },
-      { field: "index", label: "索引", width: 60, render(row) {
-        return `${row.$index}`
-      }, },
+      {
+        field: "index", label: "索引", width: 60, render(row) {
+          return `${row.$index}`
+        },
+      },
       { field: "start", label: "开始时间", width: 120 },
       { field: "end", label: "结束时间", width: 120 },
       { field: "progress", label: "进度(%)", width: 90, align: 'center' }
@@ -118,7 +120,17 @@ const gantt = new XGantt(ganttContainer, {
     children: "subtask",
     type: 'type'
   },
-  drag: { enabled: true },
+  drag: {
+    enabled: row => row.level > 1,
+    targetBackgroundColor: '#eca710',
+    drop: {
+      crossLevel: true,
+      allowed: (targetRow, dragRow) => {
+        if (targetRow.$index === 20) return false;
+        return true
+      }
+    }
+  },
   expand: { show: true, enabled: true },
   selection: { enabled: true, includeSelf: true },
   border: { show: true },
@@ -221,6 +233,9 @@ const gantt = new XGantt(ganttContainer, {
 let selected: any = null;
 let checkedList: any[] = [];
 
+console.log('Gantt', gantt);
+
+
 // 提示系统
 type NotifyType = 'info' | 'success' | 'warning' | 'error';
 interface NotifyOptions { duration?: number; closable?: boolean; id?: string; }
@@ -284,6 +299,11 @@ gantt.on("select", (_data, _checked, all) => {
   checkedList = all;
   updateFooterChecked();
 });
+gantt.on("drag:row", (t, s) => {
+  notify('info', '已经到新的位置');
+  console.log('....', data);
+
+})
 
 // 查找任务
 function findTaskById(id: string | number, list = data): any | null {
