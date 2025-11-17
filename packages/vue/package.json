@@ -1,7 +1,7 @@
 {
   "name": "@xpyjs/gantt-vue",
   "private": false,
-  "version": "0.0.1-rc.5",
+  "version": "0.0.1",
   "description": "Vue wrapper for x-gantt",
   "type": "module",
   "main": "./dist/index.umd.cjs",

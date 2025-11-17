@@ -1,3 +1,18 @@
+## [0.0.1](https://github.com/xpyjs/gantt/compare/v0.0.1-rc.5...v0.0.1) (2025-11-17)
+
+
+### Features
+
+* **core:** add a time param on click.row / dblclick.row / contextmenu.row. User can create a schedule quickly by event. ([4c8f9dc](https://github.com/xpyjs/gantt/commit/4c8f9dcbf96bec01a4b954620a2373f425b88170))
+* **core:** add drag function. User can allow a drag icon at left on table. When dragging, it will be appeared a prompt area/line on gantt. ([2cfc30f](https://github.com/xpyjs/gantt/commit/2cfc30f761b9c30a4f97396b777c19316cfe8b3a))
+* **core:** change log default level to warn. ([bcd2394](https://github.com/xpyjs/gantt/commit/bcd23945fb84d03dbe5ffadaea021affc8015d0c))
+* **react:** add drag function on react. ([8aa69df](https://github.com/xpyjs/gantt/commit/8aa69dff946cefa6a3deb9506ae5b5dd91ef17d8))
+* **react:** update parameters description ([9354030](https://github.com/xpyjs/gantt/commit/935403003ed6e62e956a6f962809f09c91b49d44))
+* **vue:** Adaptation parameters ([486ee41](https://github.com/xpyjs/gantt/commit/486ee41bb4c234e5437ed1b773edc486ee856321))
+* **vue:** add drag function on vue. ([68bfee0](https://github.com/xpyjs/gantt/commit/68bfee061ce455b0804da9a625e2e177f82f9341))
+
+
+
 ## [0.0.1-rc.5](https://github.com/xpyjs/gantt/compare/v0.0.1-rc.4...v0.0.1-rc.5) (2025-10-22)
 
 
