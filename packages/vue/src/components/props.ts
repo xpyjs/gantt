@@ -12,6 +12,7 @@ export type XGanttVueEmits = {
   "click:row": [e: MouseEvent, data: any, time?: Dayjs];
   "dblclick:row": [e: MouseEvent, data: any, time?: Dayjs];
   "contextmenu:row": [e: MouseEvent, data: any, time?: Dayjs];
+  "drag:row": [target: any, source: any];
   "click:slider": [e: MouseEvent, data: any];
   "dblclick:slider": [e: MouseEvent, data: any];
   "contextmenu:slider": [e: MouseEvent, data: any];

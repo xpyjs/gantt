@@ -55,6 +55,7 @@ const registerEventListeners = () => {
     "click:row",
     "dblclick:row",
     "contextmenu:row",
+    "drag:row",
     "click:slider",
     "dblclick:slider",
     "contextmenu:slider",
