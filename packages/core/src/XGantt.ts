@@ -60,7 +60,7 @@ export class XGantt {
             warn: 3,
             error: 4,
             none: 5
-          }[options.logLevel] || 2
+          }[options.logLevel] || 3
       });
     }
 
