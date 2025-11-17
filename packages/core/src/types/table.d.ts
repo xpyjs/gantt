@@ -21,7 +21,7 @@ export interface ITableColumnStandard {
   /**
    * 当前列对齐方式
    *
-   * @default center
+   * @default left
    */
   align?: "left" | "center" | "right";
   /**
@@ -102,7 +102,7 @@ export interface ITableOptions {
   /**
    * 统一设置列对齐方式。每列的对齐方式可以单独设置
    *
-   * @default center
+   * @default left
    */
   align: "left" | "center" | "right";
 

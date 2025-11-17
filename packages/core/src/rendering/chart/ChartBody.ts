@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-14 10:15:23
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-11-04 09:54:06
+ * @LastEditTime: 2025-11-06 15:54:46
  * @Description: 图表部分的主体渲染层
  */
 import Konva from "konva";
@@ -322,13 +322,13 @@ export class BodyGroup {
       this.highlightRect.destroy();
     }
 
+    // 如果选中行与高亮行相同，则不创建高亮矩形
+    if (this.selectedRowId === id) return;
+
     const task = this.context.store.getDataManager().getTaskById(id);
     if (task) {
       const rowY = task.flatIndex * this.context.getOptions().row.height;
       const y = rowY + this.context.getOptions().header.height;
-
-      // 如果选中行与高亮行相同，则不创建高亮矩形
-      if (this.selectedRowId === id) return;
 
       // 创建高亮矩形
       this.highlightRect = new Konva.Rect({

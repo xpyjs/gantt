@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-11-04 09:56:45
+ * @LastEditTime: 2025-11-17 14:01:47
  * @Description: Facade Layer for Gantt Component
  */
 import { Logger } from "./utils/logger";
@@ -52,6 +52,10 @@ export class XGanttContext implements IContext {
 
   public getScrollbar() {
     return this.renderer?.getScrollbar();
+  }
+
+  public getRootElement() {
+    return this.renderer?.getRootElement();
   }
 
   public getOptions() {
@@ -172,6 +176,14 @@ export class XGanttContext implements IContext {
           };
         })
       );
+    });
+
+    this.event.on(EventName.ROW_DRAG_END, (target: Task, source: Task) => {
+      this._emit(
+        "drag:row",
+        target.data,
+        source.data
+      )
     });
 
     this.event.on(EventName.CHECK_TASK, (tasks: Task[], checked: boolean) => {

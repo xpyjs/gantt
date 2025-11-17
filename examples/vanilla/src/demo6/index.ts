@@ -96,10 +96,13 @@ const gantt = new XGantt(ganttContainer, {
   data,
   table: {
     columns: [
-      { field: "name", label: "任务名称", width: 230, align: 'left' },
+      { field: "name", label: "任务名称", width: 230 },
+      { field: "index", label: "索引", width: 60, render(row) {
+        return `${row.$index}`
+      }, },
       { field: "start", label: "开始时间", width: 120 },
       { field: "end", label: "结束时间", width: 120 },
-      { field: "progress", label: "进度(%)", width: 90 }
+      { field: "progress", label: "进度(%)", width: 90, align: 'center' }
     ]
   },
   chart: {
@@ -115,6 +118,7 @@ const gantt = new XGantt(ganttContainer, {
     children: "subtask",
     type: 'type'
   },
+  drag: { enabled: true },
   expand: { show: true, enabled: true },
   selection: { enabled: true, includeSelf: true },
   border: { show: true },

@@ -8,7 +8,7 @@ export type XGanttUnit = "hour" | "day" | "week" | "month" | "quarter";
 export type TaskType = "task" | "milestone" | "summary";
 
 export interface IGanttOptions {
-  /** 日志 level。 默认 info */
+  /** 日志 level。 默认 warn */
   logLevel?: "debug" | "info" | "warn" | "error" | "none";
 
   /** 配置 resize 规则 */
@@ -491,6 +491,34 @@ export interface IGanttOptions {
      * @description 如果禁用，则右键点击选择框时，不会影响自身的选择，有时候这会反直觉。
      */
     includeSelf: boolean;
+  };
+
+  /** 配置任务间的拖拽 */
+  drag: {
+    /** 是否启用任务拖拽功能 */
+    enabled: boolean | ((row: EmitData) => boolean);
+    /** 图标颜色。默认 #999 */
+    color?: string;
+    /** 拖拽时目标行的背景色。默认主色 */
+    targetBackgroundColor?: string;
+    /** 拖拽时目标行的透明度。默认 0.2 */
+    targetOpacity?: number;
+    /** 放置的相关配置 */
+    drop?: {
+      /**
+       * 允许放置的回调函数，如果不配置，则表示可被放置的内容均允许放置。
+       *
+       * @description 该方法的优先级最低，结合其他参数配置使用
+       * @description 需要注意的是，无论如何配置，都不能将一个任务放置到其子项中的任意内容
+       */
+      allowed?: ((target: EmitData, source: EmitData) => boolean);
+      /**
+       * 允许跨层级放置。默认情况下只允许在当前父级下进行拖拽
+       *
+       * @description 主要注意的是，同层级、不同父级的内容，也属于跨层级放置
+       */
+      crossLevel?: boolean;
+    }
   };
 
   /**

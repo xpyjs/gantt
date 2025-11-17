@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-09 10:23:29
+ * @LastEditTime: 2025-11-06 16:17:49
  * @Description: 配置项管理器
  */
 
@@ -140,13 +140,18 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
     show: true,
     enabled: true
   },
+  drag: {
+    enabled: false,
+    color: "#999",
+    targetOpacity: 0.2
+  },
   dateFormat: "YYYY-MM-DD HH:mm:ss",
   locale: "en",
   unit: "day",
   table: {
     width: 100,
     ellipsis: true,
-    align: "center",
+    align: "left",
     headerAlign: "center",
     emptyText: "-"
   },

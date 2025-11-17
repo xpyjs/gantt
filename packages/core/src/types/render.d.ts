@@ -20,6 +20,11 @@ export interface IContext {
   getScrollbar: () => Scrollbar;
 
   /**
+   * 获取根元素
+   */
+  getRootElement: () => HTMLElement;
+
+  /**
    * 获取选项
    */
   getOptions: () => IGanttOptions;

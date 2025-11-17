@@ -33,6 +33,8 @@ export interface IChartOptions {
    * @description small | normal | large 会根据当前展示单位，自动计算宽度。或者直接给对象，指定具体每一个单位下 cell 的宽度值
    *
    * @description 如果同时给定了起止时间，则图表则只会渲染给定的时间区间，并且指定宽度将失效。（失效是指：如果给定时间区间范围小于可视范围，则会自动撑满宽度，此时每一格 cell 的宽度则会变为自动；如果时间区间范围大于可视范围，则继续按照当前设定宽度展示，超出部分可通过滚动条移动展示）
+   *
+   * @description 对于 cell 的定义，它表示一个最小单位的宽度。当为 unit 单位为 hour 时，cell 的最小单位是 hour，当 unit 单位大于 day 时，cell 的最小单位永远为 day。例如：当前 unit 单位为 month，那么在3月份中就会有对应天数 cell 31个。
    */
   cellWidth:
     | number

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-10-10 17:07:14
+ * @LastEditTime: 2025-11-06 15:56:19
  * @Description: 界面渲染器
  */
 
@@ -42,6 +42,10 @@ export class Renderer {
 
   public getScrollbar() {
     return this.scrollbar;
+  }
+
+  public getRootElement() {
+    return this.rootElement;
   }
 
   constructor(

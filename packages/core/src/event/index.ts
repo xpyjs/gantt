@@ -116,6 +116,11 @@ export enum EventName {
   BASELINE_MOUSEMOVE = "baseline-mousemove",
   BASELINE_MOUSEOUT = "baseline-mouseout",
 
+  // 拖拽操作
+  ROW_DRAG_START = "row-drag-start",
+  ROW_DRAGGING = "row-dragging",
+  ROW_DRAG_END = "row-drag-end",
+
   // 抛出异常事件
   ERROR = "error"
 }

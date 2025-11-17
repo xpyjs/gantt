@@ -1,0 +1,11 @@
+.x-gantt-drag-handle {
+    cursor: grab;
+    user-select: none;
+}
+
+.x-gantt-drag-source {
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+    background-color: #e0e0e0;
+}

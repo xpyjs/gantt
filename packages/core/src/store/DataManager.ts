@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-10-07 17:29:54
+ * @LastEditTime: 2025-11-17 11:16:19
  * @Description: 数据管理器
  */
 
@@ -11,6 +11,7 @@ import { EventName, type EventBus } from "../event";
 import { Task } from "../models/Task";
 import type { Store } from ".";
 import { Baseline } from "../models/Baseline";
+import { Logger } from "../utils/logger";
 
 export class DataManager {
   /**
@@ -266,64 +267,81 @@ export class DataManager {
   /**
    * 移动任务位置
    */
-  // moveTask(
-  //   id: string,
-  //   targetParentId?: string,
-  //   index?: number
-  // ): Task | undefined {
-  //   const task = this.getTaskById(id);
-  //   if (!task) {
-  //     return undefined;
-  //   }
+  moveTask(
+    type: "before" | "after" | "inside",
+    task: Task | undefined,
+    targetIndex: number
+  ): void {
+    const target = this.getVisibleTasks()[targetIndex];
 
-  //   // 从原位置移除
-  //   if (task.parent && task.parent.children) {
-  //     task.parent.children = task.parent.children.filter(
-  //       child => child.id !== id
-  //     );
-  //   } else {
-  //     this.tasks = this.tasks.filter(t => t.id !== id);
-  //   }
+    if (!task || !target) {
+      return;
+    }
 
-  //   // 移动到新位置
-  //   let targetTasks: Task[];
-  //   let targetParent: Task | undefined;
+    // 防止将任务移动到其子任务下
+    if (type === 'inside' && task.isSomeoneChildren(target)) return;
+    if (type !== 'inside' && task.isSomeoneChildren(target.parent)) return;
 
-  //   if (targetParentId) {
-  //     targetParent = this.getTaskById(targetParentId);
-  //     if (!targetParent) {
-  //       return undefined;
-  //     }
-  //     targetTasks = targetParent.children || [];
-  //     targetParent.children = targetTasks;
-  //   } else {
-  //     targetTasks = this.tasks;
-  //   }
+    const idProp = this.store.getOptionManager().getOptions().fields.id;
+    const childProp = this.store.getOptionManager().getOptions().fields.children;
 
-  //   // 更新任务的父任务和层级
-  //   task.parent = targetParent;
-  //   task.level = targetParent
-  //     ? targetParent.level !== undefined
-  //       ? targetParent.level + 1
-  //       : 0
-  //     : 0;
+    // 从原位置移除
+    if (task.parent && task.parent.children) {
+      task.parent.children = task.parent.children.filter(
+        child => child.id !== task.id
+      );
+      // 同时更新原始数据
+      const parentData = task.parent.data[childProp] || [];
+      task.parent.data[childProp] = parentData.filter((t: any) => t[idProp] !== task.id);
+    } else {
+      this.tasks = this.tasks.filter(t => t.id !== task.id);
+      // 同时更新原始数据
+      this.rawData = this.rawData.filter((t: any) => t[idProp] !== task.id);
+    }
 
-  //   // 更新子任务的层级
-  //   if (task.children && task.children.length > 0) {
-  //     this.updateChildrenLevel(task);
-  //   }
+    // 移动到新位置
+    if (type === "inside") {
+      // 作为子任务
+      target.children = target.children || [];
+      target.children.push(task);
+      task.parent = target;
+      // 同时更新原始数据
+      target.data[childProp] = target.data[childProp] || [];
+      target.data[childProp].push(task.data);
+    } else {
+      // 作为同级任务
+      const siblings = target.parent ? target.parent.children : this.tasks;
+      const siblingTargetIndex = siblings.findIndex(t => t.id === target.id);
+      // 同时更新原始数据
+      const siblingsData = target.parent ? target.parent.data[childProp] || [] : this.rawData;
+      const siblingTargetDataIndex = siblingsData.findIndex((t: any) => t[idProp] === target.id);
+      if (type === "before") {
+        siblings.splice(siblingTargetIndex, 0, task);
+        siblingsData.splice(siblingTargetDataIndex, 0, task.data);
+      } else if (type === "after") {
+        siblings.splice(siblingTargetIndex + 1, 0, task);
+        siblingsData.splice(siblingTargetDataIndex + 1, 0, task.data);
+      }
+      task.parent = target.parent;
+    }
 
-  //   // 插入到目标位置
-  //   if (index !== undefined && index >= 0 && index <= targetTasks.length) {
-  //     targetTasks.splice(index, 0, task);
-  //   } else {
-  //     targetTasks.push(task);
-  //   }
+    // 更新任务的父任务和层级
+    if (task.parent) {
+      task.level = task.parent.level + 1;
+    } else {
+      task.level = 0;
+    }
 
-  //   this.invalidateCache(); // 移动任务后，缓存失效
-  //   this.event.emit(EventName.VIEW_UPDATE);
-  //   return task;
-  // }
+    // 更新子任务的层级
+    this.updateChildrenLevel(task);
+
+    this.invalidateCache(); // 移动任务后，缓存失效
+    this.event.emit(EventName.VIEW_UPDATE);
+
+    // 抛出事件
+    Logger.info(`Task ${task.id} moved ${type} task ${target.id}`);
+    this.event.emit(EventName.ROW_DRAG_END, target, task)
+  }
 
   /**
    * 展开任务
@@ -466,18 +484,18 @@ export class DataManager {
   /**
    * 更新子任务的层级
    */
-  // private updateChildrenLevel(task: Task): void {
-  //   if (!task.children || task.children.length === 0) {
-  //     return;
-  //   }
+  private updateChildrenLevel(task: Task): void {
+    if (!task.children || task.children.length === 0) {
+      return;
+    }
 
-  //   const parentLevel = task.level !== undefined ? task.level : 0;
+    const parentLevel = task.level !== undefined ? task.level : 0;
 
-  //   task.children.forEach(child => {
-  //     child.level = parentLevel + 1;
-  //     this.updateChildrenLevel(child);
-  //   });
-  // }
+    task.children.forEach(child => {
+      child.level = parentLevel + 1;
+      this.updateChildrenLevel(child);
+    });
+  }
 
   /**
    * 使缓存失效，标记需要重新生成扁平化任务列表

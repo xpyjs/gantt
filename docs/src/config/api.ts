@@ -2111,7 +2111,7 @@ export const apiItems: ApiItem[] = [
         key: "align",
         title: "对齐方式",
         type: '"left" | "center" | "right"',
-        defaultValue: '"center"',
+        defaultValue: '"left"',
         description: "统一设置列对齐方式。每列的对齐方式可以单独设置"
       },
       {
@@ -2134,7 +2134,7 @@ export const apiItems: ApiItem[] = [
             key: "align",
             title: "对齐方式",
             type: '"left" | "center" | "right"',
-            defaultValue: '"center"',
+            defaultValue: '"left"',
             description: "当前列对齐方式"
           },
           {

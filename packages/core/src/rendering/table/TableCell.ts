@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-25 10:30:00
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-07 16:22:47
+ * @LastEditTime: 2025-11-17 09:35:49
  * @Description: 表格单元格渲染，使用td元素支持合并
  */
 
@@ -13,6 +13,7 @@ import { Checkbox } from "./Checkbox";
 import { ITableColumnStandard } from "@/types/table";
 import type { Task } from "@/models/Task";
 import { IColumn } from "@/store/ColumnManager";
+import { DragHandler } from "./DragHandler";
 
 export class TableCell {
   private element: HTMLDivElement;
@@ -160,11 +161,38 @@ export class TableCell {
     cellHandler.style.flex = "1";
     cellHandler.style.height = "100%";
 
+    // 有没有拖拽的方案。如果不为 false，表示当前甘特图有拖拽，需要撑开相应宽度
+    const isDrag = this.context.getOptions().drag.enabled !== false;
+    // 当前项能不能拖拽，取决于统一配置 true 或者函数返回值
+    const isRowDrag = this.context.store.getOptionManager().unpackFunc(this.context.getOptions().drag.enabled, this.task);
+    const flexValue = ['0.3', '0.3', '0.4'];
+    if (!isDrag) {
+      flexValue[0] = '0';
+      flexValue[1] = '0.5';
+      flexValue[2] = '0.5';
+    }
+
+    // 创建拖拽手柄
+    if (isDrag) {
+      const dragContainer = document.createElement("div");
+      dragContainer.style.flex = flexValue[0];
+      dragContainer.style.display = "flex";
+      dragContainer.style.justifyContent = "center";
+      dragContainer.style.alignItems = "center";
+
+      if (isRowDrag) {
+        new DragHandler(this.context, dragContainer, this.task);
+      }
+
+      // 添加到容器
+      cellHandler.appendChild(dragContainer);
+    }
+
     // 创建选择框
     if (this.context.getOptions().selection.enabled) {
       const checkboxContainer = document.createElement("div");
+      checkboxContainer.style.flex = flexValue[1];
       checkboxContainer.style.display = "flex";
-      checkboxContainer.style.flex = "0.5";
       checkboxContainer.style.justifyContent = "center";
       checkboxContainer.style.alignItems = "center";
 
@@ -182,9 +210,9 @@ export class TableCell {
     ) {
       const expandContainer = document.createElement("div");
       expandContainer.className = "x-gantt-table-cell__expand";
-      expandContainer.style.display = "flex";
-      expandContainer.style.flex = "0.5";
+      expandContainer.style.flex = flexValue[2];
       expandContainer.style.color = this.context.getOptions().primaryColor;
+      expandContainer.style.display = "flex";
       expandContainer.style.alignItems = "center";
       expandContainer.style.justifyContent = "center";
       expandContainer.style.height = "100%";

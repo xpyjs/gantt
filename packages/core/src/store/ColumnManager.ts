@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-25 17:23:34
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-07-29 11:10:39
+ * @LastEditTime: 2025-11-04 10:51:31
  * @Description: 列管理器
  */
 
@@ -246,13 +246,20 @@ export class ColumnManager {
 
   getHandlerColumn() {
     let width = 0;
-    if (this.context.store.getOptionManager().getOptions().selection.enabled) {
+    const isDrag = this.context.store.getOptionManager().getOptions().drag.enabled;
+    if (isDrag) {
+      width += 40;
+    }
+
+    const isSelection = this.context.store.getOptionManager().getOptions().selection.enabled;
+    if (isSelection) {
       width += 40;
     }
 
     // 如果为一层数据，隐藏掉
+    const isExpand = this.context.store.getOptionManager().getOptions().expand.show;
     if (this.context.store.getDataManager().dataLevel > 0) {
-      if (this.context.store.getOptionManager().getOptions().expand.show) {
+      if (isExpand) {
         width += 40;
       }
     }
@@ -267,16 +274,10 @@ export class ColumnManager {
         align: "left",
         headerAlign: "left",
         customStyle: {
-          paddingLeft: this.context.store.getOptionManager().getOptions().expand
-            .show
-            ? "8px"
-            : 0
+          paddingLeft: isExpand ? `${isDrag ? 40 : 8}px` : 0
         },
         headerRender: () => {
-          return this.context.store.getOptionManager().getOptions().selection
-            .enabled
-            ? new Checkbox(this.context).getElement()
-            : null;
+          return isSelection ? new Checkbox(this.context).getElement() : null;
         },
         ellipsis: false
       },

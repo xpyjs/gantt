@@ -42,9 +42,10 @@ export function parseNumberWithPercent(value: number | string, target: number) {
  * 获取距离当前值最近的基准值或其倍数
  * @param value 当前值
  * @param target 基准值
+ * @param type 取值方式，默认为 round，可选 floor 或 ceil
  * @returns 最近的基准值或其倍数
  */
-export function getStandardValue(value: number, target: number): number {
+export function getStandardValue(value: number, target: number, type: 'round' | 'floor' | 'ceil' = 'round'): number {
   if (target === 0) {
     throw new Error("基准值不能为0");
   }
@@ -63,6 +64,12 @@ export function getStandardValue(value: number, target: number): number {
   // 比较距离
   const distanceToLower = Math.abs(value - lowerValue);
   const distanceToUpper = Math.abs(value - upperValue);
+
+  if (type === 'floor') {
+    return lowerValue;
+  } else if (type === 'ceil') {
+    return upperValue;
+  }
 
   return distanceToLower <= distanceToUpper ? lowerValue : upperValue;
 }

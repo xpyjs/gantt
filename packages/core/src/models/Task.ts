@@ -298,4 +298,15 @@ export class Task {
 
     return false;
   }
+
+  public isSomeoneChildren(parent: Task | undefined): boolean {
+    let p = parent;
+    while (p) {
+      if (p.id === this.id) {
+        return true;
+      }
+      p = p.parent;
+    }
+    return false;
+  }
 }

@@ -30,6 +30,8 @@ export interface EventMap {
   "dblclick:row": (e: MouseEvent, data: any, time?: Dayjs) => void;
   /** 行右键点击事件 */
   "contextmenu:row": (e: MouseEvent, data: any, time?: Dayjs) => void;
+  /** 行拖拽事件。当且仅当行拖拽结束时被触发。仅当 启用 drag 配置项后生效 */
+  "drag:row": (target: any, source: any) => void;
   /** 任务条点击事件 */
   "click:slider": (e: MouseEvent, data: any) => void;
   /** 任务条双击事件 */
