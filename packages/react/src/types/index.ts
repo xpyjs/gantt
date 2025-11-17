@@ -98,6 +98,7 @@ export interface XGanttReactProps
    * @description 当点击表格行时触发
    * @param e 鼠标事件对象
    * @param data 点击行对应的任务数据
+   * @param time 点击时对应的时间点。左侧表格点击时时间为 undefined
    */
   onClickRow?: EventMap["click:row"];
 
@@ -107,6 +108,7 @@ export interface XGanttReactProps
    * @description 当双击表格行时触发
    * @param e 鼠标事件对象
    * @param data 双击行对应的任务数据
+   * @param time 双击时对应的时间点。左侧表格点击时时间为 undefined
    */
   onDoubleClickRow?: EventMap["dblclick:row"];
 
@@ -116,6 +118,7 @@ export interface XGanttReactProps
    * @description 当在表格行上右键点击时触发
    * @param e 鼠标事件对象
    * @param data 右键行对应的任务数据
+   * @param time 右键时对应的时间点。左侧表格点击时时间为 undefined
    */
   onContextMenuRow?: EventMap["contextmenu:row"];
 
