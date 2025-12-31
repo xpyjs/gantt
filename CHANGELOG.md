@@ -1,3 +1,12 @@
+## [0.0.2](https://github.com/xpyjs/gantt/compare/v0.0.1...v0.0.2) (2025-12-31)
+
+
+### Bug Fixes
+
+* **core:** Abnormal slider pos when drag data ([df39023](https://github.com/xpyjs/gantt/commit/df3902375976949f0dfbd7727be851d81de29150)), closes [#167](https://github.com/xpyjs/gantt/issues/167)
+
+
+
 ## [0.0.1](https://github.com/xpyjs/gantt/compare/v0.0.1-rc.5...v0.0.1) (2025-11-17)
 
 

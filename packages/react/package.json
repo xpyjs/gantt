@@ -1,6 +1,6 @@
 {
   "name": "@xpyjs/gantt-react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "React wrapper for x-gantt",
   "author": "JeremyJone",
