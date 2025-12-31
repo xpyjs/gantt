@@ -34,8 +34,8 @@ export class ChartRow {
     this.row.add(this.slider.sliderGroup);
   }
 
-  public update(x: number, y: number) {
-    this.slider.update(x, y);
+  public update(x: number, y: number, task: Task) {
+    this.slider.update(x, y, task);
   }
 
   public setOffset(x: number, y: number) {

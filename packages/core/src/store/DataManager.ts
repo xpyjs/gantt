@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-11-17 11:16:19
+ * @LastEditTime: 2025-12-31 16:56:13
  * @Description: 数据管理器
  */
 
@@ -11,7 +11,7 @@ import { EventName, type EventBus } from "../event";
 import { Task } from "../models/Task";
 import type { Store } from ".";
 import { Baseline } from "../models/Baseline";
-import { Logger } from "../utils/logger";
+import { remove } from "lodash-es";
 
 export class DataManager {
   /**
@@ -287,16 +287,13 @@ export class DataManager {
 
     // 从原位置移除
     if (task.parent && task.parent.children) {
-      task.parent.children = task.parent.children.filter(
-        child => child.id !== task.id
-      );
-      // 同时更新原始数据
-      const parentData = task.parent.data[childProp] || [];
-      task.parent.data[childProp] = parentData.filter((t: any) => t[idProp] !== task.id);
+      remove(task.parent.children, (t: Task) => t?.id === task.id);
+
+      const parentData = task.parent.data?.[childProp];
+      remove(parentData, t => t?.[idProp] === task.id);
     } else {
-      this.tasks = this.tasks.filter(t => t.id !== task.id);
-      // 同时更新原始数据
-      this.rawData = this.rawData.filter((t: any) => t[idProp] !== task.id);
+      remove(this.tasks, t => t?.id === task.id);
+      remove(this.rawData, t => t?.[idProp] === task.id);
     }
 
     // 移动到新位置
@@ -339,8 +336,7 @@ export class DataManager {
     this.event.emit(EventName.VIEW_UPDATE);
 
     // 抛出事件
-    Logger.info(`Task ${task.id} moved ${type} task ${target.id}`);
-    this.event.emit(EventName.ROW_DRAG_END, target, task)
+    this.event.emit(EventName.ROW_DRAG_END, target, task);
   }
 
   /**

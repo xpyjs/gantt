@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-14 10:15:23
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-11-06 15:54:46
+ * @LastEditTime: 2025-12-31 17:14:00
  * @Description: 图表部分的主体渲染层
  */
 import Konva from "konva";
@@ -113,7 +113,7 @@ export class BodyGroup {
         this.rowsGroup.add(rowRect.row);
         this.rowsCache.set(rowId, rowRect);
       } else {
-        rowRect.update(0, y);
+        rowRect.update(0, y, task);
         rowRect.setOffset(this.offsetX, this.offsetY);
       }
       rowRect.cacheKey = currentKey;
@@ -156,7 +156,8 @@ export class BodyGroup {
       row.update(
         0,
         task.flatIndex * this.context.getOptions().row.height +
-        this.context.getOptions().header.height
+        this.context.getOptions().header.height,
+        task
       );
     }
   }

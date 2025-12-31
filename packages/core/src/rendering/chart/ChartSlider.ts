@@ -69,7 +69,8 @@ export class ChartSlider {
     this.registerEvents();
   }
 
-  public update(x: number, y: number) {
+  public update(x: number, y: number, task: Task) {
+    this.task = task;
     this.x = x;
     this.y = y;
 
