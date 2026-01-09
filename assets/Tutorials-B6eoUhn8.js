@@ -1,10 +1,24 @@
-import{h as y,d as G,i as _,c as o,o as n,j as u,e as x,t as d,F as m,r as g,a as i,k as j,l as D,m as X,p as R,u as S,q as $,n as I,s as E,_ as A}from"./main-f4z-Szqw.js";const T=[{id:1,name:"项目规划",startTime:"2025-01-01",endTime:"2025-01-15",progress:100},{id:2,name:"开发阶段",startTime:"2025-01-16",endTime:"2025-02-28",progress:45}],B=`import { XGantt } from '@xpyjs/gantt-core'
+import{d as D,h as I,c as r,o as i,i as f,e as j,t as m,F as k,r as w,a as d,j as x,k as X,l as R,m as A,u as _,p as E,n as M,q as O,_ as B}from"./main-h1TlyhMG.js";const b=70,G="  ",v=(t,u,l)=>{if(t===null)return"null";if(t===void 0)return"undefined";if(typeof t=="string")return`'${t}'`;if(["number","boolean","bigint"].includes(typeof t))return String(t);if(typeof t=="symbol")return t.toString();if(typeof t=="function"){const p=t.toString();return p.includes("[native code]")?`function ${t.name}() { [native code] }`:p}if(typeof t=="object"){if(l.has(t))return"'[Circular]'";l.add(t);const p=G.repeat(u),g=G.repeat(u+1);if(t instanceof Error)return l.delete(t),`new Error('${t.message}')`;if(t instanceof Date)return l.delete(t),`new Date('${t.toISOString()}')`;if(t instanceof RegExp)return l.delete(t),t.toString();let c;if(Array.isArray(t))if(t.length===0)c="[]";else{const s=t.map(o=>v(o,u+1,l)),n=`[${s.join(", ")}]`;c=n.length<=b?n:`[
+${s.map(o=>`${g}${o}`).join(`,
+`)}
+${p}]`}else if(t instanceof Map)if(t.size===0)c="new Map()";else{const s=Array.from(t.entries()).map(([o,e])=>`[${v(o,u+1,l)}, ${v(e,u+1,l)}]`),n=`new Map([${s.join(", ")}])`;c=n.length<=b?n:`new Map([
+${s.map(o=>`${g}${o}`).join(`,
+`)}
+${p}])`}else if(t instanceof Set)if(t.size===0)c="new Set()";else{const s=Array.from(t.values()).map(o=>v(o,u+1,l)),n=`new Set([${s.join(", ")}])`;c=n.length<=b?n:`new Set([
+${s.map(o=>`${g}${o}`).join(`,
+`)}
+${p}])`}else{const s=Object.keys(t);if(s.length===0)c="{}";else{const n=s.map(e=>{const a=/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(e)?e:`'${e}'`,h=v(t[e],u+1,l);return{keyStr:a,valStr:h}}),o=`{ ${n.map(e=>`${e.keyStr}: ${e.valStr}`).join(", ")} }`;o.length<=b?c=o:c=`{
+${n.map(a=>`${g}${a.keyStr}: ${a.valStr}`).join(`,
+`)}
+${p}}`}}return l.delete(t),c}return String(t)},S=(t,u)=>{const l=v(t,0,new Set);return u?l.split(`
+`).map((p,g)=>g===0?p:u+p).join(`
+`):l},T=[{id:1,name:"项目规划",startTime:"2025-01-01",endTime:"2025-01-15",progress:100},{id:2,name:"开发阶段",startTime:"2025-01-16",endTime:"2025-02-28",progress:45}],F=`import { XGantt } from '@xpyjs/gantt-core'
 
 // 创建甘特图实例
 const gantt = new XGantt({
   container: '#gantt-container',
-  data: ${y(T,"  ")}
-})`,L=`<template>
+  data: ${S(T,"  ")}
+})`,V=`<template>
   <div>
     <XGanttVue :options="ganttOptions" />
   </div>
@@ -15,14 +29,14 @@ import { ref } from 'vue'
 import { XGanttVue } from '@xpyjs/gantt-vue'
 
 const ganttOptions = ref({
-  data: ${y(T,"  ")}
+  data: ${S(T,"  ")}
 })
-<\/script>`,F=`import React from 'react'
+<\/script>`,L=`import React from 'react'
 import { XGanttReact } from '@xpyjs/gantt-react'
 
 function App() {
   const ganttOptions = {
-    data: ${y(T,"    ")}
+    data: ${S(T,"    ")}
   }
 
   return (
@@ -32,7 +46,7 @@ function App() {
   )
 }
 
-export default App`,w={jsCode:B,vueCode:L,reactCode:F},O=`<!-- Vue 组件中使用 -->
+export default App`,y={jsCode:F,vueCode:V,reactCode:L},N=`<!-- Vue 组件中使用 -->
 <template>
   <div>
     <XGanttVue
@@ -83,7 +97,7 @@ const handleCreateLink = (linkData) => {
 const handleError = (error) => {
   console.error('Vue: 错误处理', error)
 }
-<\/script>`,M=`// React 组件中使用
+<\/script>`,P=`// React 组件中使用
 import React, { useRef, useEffect, useState } from 'react';
 import { XGanttReact } from '@xpyjs/gantt-react'
 
@@ -133,7 +147,7 @@ const GanttComponent = () => {
   );
 };
 
-export default GanttComponent;`,V=`// Angular 中使用。使用原生组件来实现
+export default GanttComponent;`,U=`// Angular 中使用。使用原生组件来实现
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { XGantt } from '@xpyjs/gantt-core';
 
@@ -211,7 +225,7 @@ export class GanttComponent implements OnInit, OnDestroy {
     });
   }
 }
-`,b={vueCode:O,reactCode:M,angularCode:V},C=[{id:"quick-start",title:"快速入门",sections:[{id:"installation",title:"安装",description:"XGantt 支持多种安装方式，你可以根据项目需求选择合适的包。",subsections:[{title:"核心包",code:[{framework:"vue",code:"npm install @xpyjs/gantt-vue",language:"bash"},{framework:"react",code:"npm install @xpyjs/gantt-react",language:"bash"},{framework:"javascript",code:"npm install @xpyjs/gantt-core",language:"bash"}]}]},{id:"basic-usage",title:"基础用法",description:"以下是不同框架下的基础使用方法：",code:[{framework:"vue",code:w.vueCode,language:"vue"},{framework:"react",code:w.reactCode,language:"tsx"},{framework:"javascript",code:w.jsCode,language:"javascript"}],customContent:'这样在浏览器中就可以看到效果了。想要实践一下，去 <a href="/demo/basic/simple">演示广场</a> 试试吧。'},{id:"data-structure",title:"数据结构",description:"数据结构应当保证有唯一 id。如果需要展示时间进度等信息，需要添加对应字段。这些字段都可以通过 fields 来自定义。",subsections:[{title:"基础数据结构",code:[{framework:"javascript",code:`const data = [
+`,C={vueCode:N,reactCode:P,angularCode:U},$=[{id:"quick-start",title:"快速入门",sections:[{id:"installation",title:"安装",description:"XGantt 支持多种安装方式，你可以根据项目需求选择合适的包。",subsections:[{title:"核心包",code:[{framework:"vue",code:"npm install @xpyjs/gantt-vue",language:"bash"},{framework:"react",code:"npm install @xpyjs/gantt-react",language:"bash"},{framework:"javascript",code:"npm install @xpyjs/gantt-core",language:"bash"}]}]},{id:"basic-usage",title:"基础用法",description:"以下是不同框架下的基础使用方法：",code:[{framework:"vue",code:y.vueCode,language:"vue"},{framework:"react",code:y.reactCode,language:"tsx"},{framework:"javascript",code:y.jsCode,language:"javascript"}],customContent:'这样在浏览器中就可以看到效果了。想要实践一下，去 <a href="/demo/basic/simple">演示广场</a> 试试吧。'},{id:"data-structure",title:"数据结构",description:"数据结构应当保证有唯一 id。如果需要展示时间进度等信息，需要添加对应字段。这些字段都可以通过 fields 来自定义。",subsections:[{title:"基础数据结构",code:[{framework:"javascript",code:`const data = [
   {
     id: '1',                    // 唯一标识
     name: '项目规划',            // 任务名称
@@ -569,4 +583,4 @@ gantt.on('create:link', (data) => {
       }
     ]
   }
-}`,language:"javascript"}]},{description:"渲染的内容如下图，可以看到表头、任务条、周末、假期等自定义后的显示效果："},{customContent:'<img src="/tutorials-custom-axis.png" />'}]},{id:"frameworks",title:"框架集成",description:"XGantt 可以很方便的集成到各种框架中。并且 XGantt 已经自带 vue 与 react 的框架",subsections:[{title:"Vue 集成",code:[{framework:"vue",language:"vue",code:b.vueCode},{framework:"react",language:"tsx",code:b.reactCode},{framework:"angular",language:"ts",code:b.angularCode}]}]},{id:"performance",title:"性能优化",description:"为了确保在大数据量下的流畅体验，XGantt 内置了多种性能优化策略。在多数情况，用户不用关心也不必担心性能问题，但是用户仍然可以通过编码使其更加优秀。",subsections:[{list:["**确保数据唯一键**：尽可能给每条数据添加唯一 ID，这会让 XGantt 处理数据更加高效","**只更新需要的内容**：尽可能不要每次全量更新 options，当数据没有变化时，不要传递它","**拖拽功能**：拖拽是一个耗时操作，非必要不开启，尽量启用按单位拖拽（byUnit）",'**依赖关系**：依赖关系是一个十分消耗性能的渲染功能，尽可能避免使用虚线绘制，具体可以查看 <a href="/tutorials#依赖关系的性能问题">依赖关系的性能问题</a>']}]}]}],P=()=>{const r=[];return C.forEach(h=>{r.push({id:h.id,title:h.title,sections:h.sections.map(p=>({id:p.id,title:p.title}))})}),r},U={class:"tutorial-content"},N={key:0,class:"section-description"},H=["id"],z={key:1,class:"subsection-description"},W={key:2,class:"content-list"},q=["innerHTML"],K={key:3,class:"config-table"},J=["innerHTML"],Q=["innerHTML"],Y=G({__name:"TutorialSection",props:{section:{}},setup(r){const h=_(),p=l=>{let c=l.replace(/`([^`]+)`/g,"<code>$1</code>");return c=c.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>"),k(c)},k=l=>{if(!l)return"";const c="/gantt/";let e=l.replace(/href="(\/[^"]*)"/g,(s,t)=>{const a=c.replace(/\/$/,""),f=t.startsWith("/")?t:`/${t}`;return`href="${a}${f}"`});return e=e.replace(/src="(\/[^"]*)"/g,(s,t)=>{const a=c.replace(/\/$/,""),f=t.startsWith("/")?t:`/${t}`;return`src="${a}${f}"`}),e},v=l=>{const c=l.target;if(c.tagName==="A"){const e=c.getAttribute("href");if(e){const s=new URL(e,window.location.origin);if(s.origin===window.location.origin){l.preventDefault();const t="/gantt/";let a=s.pathname;a.startsWith(t)&&(a=a.substring(t.length)),h.push(a+s.search+s.hash)}}}};return(l,c)=>(n(),o("div",U,[r.section.description?(n(),o("p",N,d(r.section.description),1)):u("",!0),r.section.subsections?(n(!0),o(m,{key:1},g(r.section.subsections,(e,s)=>(n(),o("div",{key:s,class:"subsection"},[e.title?(n(),o("h3",{key:0,class:"subsection-title",id:e.title},d(e.title),9,H)):u("",!0),e.description?(n(),o("p",z,d(e.description),1)):u("",!0),e.list?(n(),o("ul",W,[(n(!0),o(m,null,g(e.list,(t,a)=>(n(),o("li",{key:a,innerHTML:p(t)},null,8,q))),128))])):u("",!0),e.table?(n(),o("div",K,[i("table",null,[i("thead",null,[i("tr",null,[(n(!0),o(m,null,g(e.table.headers,t=>(n(),o("th",{key:t},d(t),1))),128))])]),i("tbody",null,[(n(!0),o(m,null,g(e.table.rows,t=>(n(),o("tr",{key:t.property},[i("td",null,[i("code",null,d(t.property),1)]),i("td",null,d(t.type),1),i("td",null,d(t.default),1),i("td",null,d(t.description),1)]))),128))])])])):u("",!0),e.code?(n(),x(j,{key:4,codeBlocks:e.code},null,8,["codeBlocks"])):u("",!0),e.customContent?(n(),o("div",{key:5,innerHTML:k(e.customContent),class:"custom-content",onClick:v},null,8,J)):u("",!0)]))),128)):u("",!0),r.section.code?(n(),x(j,{key:2,codeBlocks:r.section.code},null,8,["codeBlocks"])):u("",!0),r.section.customContent?(n(),o("div",{key:3,innerHTML:k(r.section.customContent),class:"custom-content",onClick:v},null,8,Q)):u("",!0)]))}}),Z={class:"tutorials-page"},tt={class:"tutorials-content"},et={class:"tutorials-sidebar"},at={class:"tutorials-nav"},nt=["href","onClick"],ot={class:"category-title"},it=["id"],st=G({__name:"Tutorials",setup(r){const h=P(),p=D(""),k=(e,s)=>{let t;return(...a)=>{clearTimeout(t),t=setTimeout(()=>e.apply(null,a),s)}},v=()=>{const e=[];return C.forEach(s=>{s.sections.forEach(t=>{e.push(t.id)})}),e},l=k(()=>{const e=v(),s=150;for(let t=e.length-1;t>=0;t--){const a=document.getElementById(e[t]);if(a&&a.getBoundingClientRect().top<=s){p.value=e[t];break}}},100),c=e=>{const s=document.getElementById(e);if(s){const f=s.offsetTop-80;window.scrollTo({top:f,behavior:"smooth"}),p.value=e}};return X(()=>{window.addEventListener("scroll",l,{passive:!0}),l()}),R(()=>{window.removeEventListener("scroll",l)}),(e,s)=>(n(),o("div",Z,[s[0]||(s[0]=i("header",{class:"page-header"},[i("div",{class:"container"},[i("h1",null,"教程文档"),i("p",null,"深入学习 XGantt 的各种功能和 API")])],-1)),i("div",tt,[i("aside",et,[i("nav",at,[(n(!0),o(m,null,g(S(h),t=>(n(),o("div",{key:t.id,class:"nav-section"},[i("h3",null,d(t.title),1),i("ul",null,[(n(!0),o(m,null,g(t.sections,a=>(n(),o("li",{key:a.id},[i("a",{href:`#${a.id}`,class:I({active:p.value===a.id}),onClick:$(f=>c(a.id),["prevent"])},d(a.title),11,nt)]))),128))])]))),128))])]),i("main",null,[(n(!0),o(m,null,g(S(C),t=>(n(),o("section",{key:t.id,class:"tutorials-main"},[i("h1",ot,d(t.title),1),(n(!0),o(m,null,g(t.sections,a=>(n(),o("div",{key:a.id,id:a.id,class:"tutorial-section"},[i("h2",null,d(a.title),1),E(Y,{section:a},null,8,["section"])],8,it))),128))]))),128))])])]))}}),lt=A(st,[["__scopeId","data-v-e21ab759"]]);export{lt as default};
+}`,language:"javascript"}]},{description:"渲染的内容如下图，可以看到表头、任务条、周末、假期等自定义后的显示效果："},{customContent:'<img src="/tutorials-custom-axis.png" />'}]},{id:"frameworks",title:"框架集成",description:"XGantt 可以很方便的集成到各种框架中。并且 XGantt 已经自带 vue 与 react 的框架",subsections:[{title:"Vue 集成",code:[{framework:"vue",language:"vue",code:C.vueCode},{framework:"react",language:"tsx",code:C.reactCode},{framework:"angular",language:"ts",code:C.angularCode}]}]},{id:"performance",title:"性能优化",description:"为了确保在大数据量下的流畅体验，XGantt 内置了多种性能优化策略。在多数情况，用户不用关心也不必担心性能问题，但是用户仍然可以通过编码使其更加优秀。",subsections:[{list:["**确保数据唯一键**：尽可能给每条数据添加唯一 ID，这会让 XGantt 处理数据更加高效","**只更新需要的内容**：尽可能不要每次全量更新 options，当数据没有变化时，不要传递它","**拖拽功能**：拖拽是一个耗时操作，非必要不开启，尽量启用按单位拖拽（byUnit）",'**依赖关系**：依赖关系是一个十分消耗性能的渲染功能，尽可能避免使用虚线绘制，具体可以查看 <a href="/tutorials#依赖关系的性能问题">依赖关系的性能问题</a>']}]}]}],z=()=>{const t=[];return $.forEach(u=>{t.push({id:u.id,title:u.title,sections:u.sections.map(l=>({id:l.id,title:l.title}))})}),t},H={class:"tutorial-content"},W={key:0,class:"section-description"},q=["id"],K={key:1,class:"subsection-description"},Z={key:2,class:"content-list"},J=["innerHTML"],Q={key:3,class:"config-table"},Y=["innerHTML"],tt=["innerHTML"],et=D({__name:"TutorialSection",props:{section:{}},setup(t){const u=I(),l=c=>{let s=c.replace(/`([^`]+)`/g,"<code>$1</code>");return s=s.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>"),p(s)},p=c=>{if(!c)return"";const s="/gantt/";let n=c.replace(/href="(\/[^"]*)"/g,(o,e)=>{const a=s.replace(/\/$/,""),h=e.startsWith("/")?e:`/${e}`;return`href="${a}${h}"`});return n=n.replace(/src="(\/[^"]*)"/g,(o,e)=>{const a=s.replace(/\/$/,""),h=e.startsWith("/")?e:`/${e}`;return`src="${a}${h}"`}),n},g=c=>{const s=c.target;if(s.tagName==="A"){const n=s.getAttribute("href");if(n){const o=new URL(n,window.location.origin);if(o.origin===window.location.origin){c.preventDefault();const e="/gantt/";let a=o.pathname;a.startsWith(e)&&(a=a.substring(e.length)),u.push(a+o.search+o.hash)}}}};return(c,s)=>(i(),r("div",H,[t.section.description?(i(),r("p",W,m(t.section.description),1)):f("",!0),t.section.subsections?(i(!0),r(k,{key:1},w(t.section.subsections,(n,o)=>(i(),r("div",{key:o,class:"subsection"},[n.title?(i(),r("h3",{key:0,class:"subsection-title",id:n.title},m(n.title),9,q)):f("",!0),n.description?(i(),r("p",K,m(n.description),1)):f("",!0),n.list?(i(),r("ul",Z,[(i(!0),r(k,null,w(n.list,(e,a)=>(i(),r("li",{key:a,innerHTML:l(e)},null,8,J))),128))])):f("",!0),n.table?(i(),r("div",Q,[d("table",null,[d("thead",null,[d("tr",null,[(i(!0),r(k,null,w(n.table.headers,e=>(i(),r("th",{key:e},m(e),1))),128))])]),d("tbody",null,[(i(!0),r(k,null,w(n.table.rows,e=>(i(),r("tr",{key:e.property},[d("td",null,[d("code",null,m(e.property),1)]),d("td",null,m(e.type),1),d("td",null,m(e.default),1),d("td",null,m(e.description),1)]))),128))])])])):f("",!0),n.code?(i(),j(x,{key:4,codeBlocks:n.code},null,8,["codeBlocks"])):f("",!0),n.customContent?(i(),r("div",{key:5,innerHTML:p(n.customContent),class:"custom-content",onClick:g},null,8,Y)):f("",!0)]))),128)):f("",!0),t.section.code?(i(),j(x,{key:2,codeBlocks:t.section.code},null,8,["codeBlocks"])):f("",!0),t.section.customContent?(i(),r("div",{key:3,innerHTML:p(t.section.customContent),class:"custom-content",onClick:g},null,8,tt)):f("",!0)]))}}),nt={class:"tutorials-page"},ot={class:"tutorials-content"},at={class:"tutorials-sidebar"},it={class:"tutorials-nav"},rt=["href","onClick"],st={class:"category-title"},lt=["id"],ct=D({__name:"Tutorials",setup(t){const u=z(),l=X(""),p=(n,o)=>{let e;return(...a)=>{clearTimeout(e),e=setTimeout(()=>n.apply(null,a),o)}},g=()=>{const n=[];return $.forEach(o=>{o.sections.forEach(e=>{n.push(e.id)})}),n},c=p(()=>{const n=g(),o=150;for(let e=n.length-1;e>=0;e--){const a=document.getElementById(n[e]);if(a&&a.getBoundingClientRect().top<=o){l.value=n[e];break}}},100),s=n=>{const o=document.getElementById(n);if(o){const h=o.offsetTop-80;window.scrollTo({top:h,behavior:"smooth"}),l.value=n}};return R(()=>{window.addEventListener("scroll",c,{passive:!0}),c()}),A(()=>{window.removeEventListener("scroll",c)}),(n,o)=>(i(),r("div",nt,[o[0]||(o[0]=d("header",{class:"page-header"},[d("div",{class:"container"},[d("h1",null,"教程文档"),d("p",null,"深入学习 XGantt 的各种功能和 API")])],-1)),d("div",ot,[d("aside",at,[d("nav",it,[(i(!0),r(k,null,w(_(u),e=>(i(),r("div",{key:e.id,class:"nav-section"},[d("h3",null,m(e.title),1),d("ul",null,[(i(!0),r(k,null,w(e.sections,a=>(i(),r("li",{key:a.id},[d("a",{href:`#${a.id}`,class:M({active:l.value===a.id}),onClick:E(h=>s(a.id),["prevent"])},m(a.title),11,rt)]))),128))])]))),128))])]),d("main",null,[(i(!0),r(k,null,w(_($),e=>(i(),r("section",{key:e.id,class:"tutorials-main"},[d("h1",st,m(e.title),1),(i(!0),r(k,null,w(e.sections,a=>(i(),r("div",{key:a.id,id:a.id,class:"tutorial-section"},[d("h2",null,m(a.title),1),O(et,{section:a},null,8,["section"])],8,lt))),128))]))),128))])])]))}}),ut=B(ct,[["__scopeId","data-v-e21ab759"]]);export{ut as default};
