@@ -426,14 +426,14 @@ export const demoCategories: DemoCategory[] = [
         id: "full-app-vue-1",
         title: "使用Vue3构建一个完整的应用",
         description: "通过一个比较完整的应用，来展示 XGantt 在 Vue3 框架集成下的优秀性能。",
-        category: "advanced",
+        category: "integration",
         difficulty: "advanced",
         tags: ["Vue", "自定义", "渲染", "高级"],
         code: [
           {
             framework: "vue",
             language: "vue",
-            path: "advanced/full-app-vue-1/vue",
+            path: "integration/full-app-vue-1/vue",
             view: 'preview',
             dependencies: {
               'element-plus': '^2.11.2'

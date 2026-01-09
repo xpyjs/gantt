@@ -348,7 +348,7 @@ const viewSource = () => {
     toast.warning("该示例暂无源码链接");
     return;
   }
-  const url = `https://github.com/xpyjs/gantt/tree/main/docs${BASE_DEMO_PATH}${currentEntry.value.path}`;
+  const url = `https://github.com/xpyjs/gantt/tree/master/docs${BASE_DEMO_PATH}${currentEntry.value.path}`;
   window.open(url, "_blank");
 };
 

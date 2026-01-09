@@ -31,30 +31,48 @@
               class="demo-card"
               :to="`/demo/${category.id}/${demo.id}`"
             >
-              <div class="demo-card-header">
-                <h3 class="demo-title">{{ demo.title }}</h3>
-                <span class="demo-difficulty" :class="demo.difficulty">
-                  {{ DIFFICULTY_LEVELS[demo.difficulty] }}
-                </span>
+              <!-- 预览图片区域 -->
+              <div class="demo-preview">
+                <img
+                  :src="getDemoImage(demo.category, demo.id)"
+                  :alt="demo.title"
+                  class="demo-image"
+                  loading="lazy"
+                  @error="handleImageError"
+                />
               </div>
-              <p class="demo-description">{{ demo.description }}</p>
 
-              <div class="demo-tags">
-                <span v-for="tag in demo.tags" :key="tag" class="demo-tag">
-                  {{ tag }}
-                </span>
-              </div>
-              <div class="demo-frameworks">
-                <span
-                  v-for="codeBlock in demo.code"
-                  :key="codeBlock.framework"
-                  class="framework-badge"
-                  :class="codeBlock.framework"
-                >
-                  {{
-                    getFrameworkByKey(codeBlock.framework as FrameworkKey).label
-                  }}
-                </span>
+              <!-- 卡片内容区域 -->
+              <div class="demo-card-content">
+                <div class="demo-card-header">
+                  <h3 class="demo-title">{{ demo.title }}</h3>
+                  <span class="demo-difficulty" :class="demo.difficulty">
+                    {{ DIFFICULTY_LEVELS[demo.difficulty] }}
+                  </span>
+                </div>
+                <p class="demo-description">{{ demo.description }}</p>
+
+                <!-- 标签行 -->
+                <div class="demo-tags">
+                  <span v-for="tag in demo.tags.slice(0, 4)" :key="tag" class="demo-tag">
+                    {{ tag }}
+                  </span>
+                  <span v-if="demo.tags.length > 4" class="demo-tag more-tag">
+                    +{{ demo.tags.length - 4 }}
+                  </span>
+                </div>
+
+                <!-- 框架行 -->
+                <div class="demo-frameworks">
+                  <span
+                    v-for="codeBlock in demo.code"
+                    :key="codeBlock.framework"
+                    class="framework-badge"
+                    :class="codeBlock.framework"
+                  >
+                    {{ getFrameworkByKey(codeBlock.framework as FrameworkKey).label }}
+                  </span>
+                </div>
               </div>
             </RouterLink>
           </div>
@@ -69,13 +87,25 @@ import { demoCategories, DIFFICULTY_LEVELS } from "@/config/demos/index";
 import { useFramework, type FrameworkKey } from "@/composables/useFramework";
 
 const { getFrameworkByKey } = useFramework();
+
+// 获取 demo 预览图片路径（新路径：demos/{category}/{id}/screenshot.png）
+const getDemoImage = (categoryId: string, demoId: string): string => {
+  return new URL(`../demos/${categoryId}/${demoId}/screenshot.png`, import.meta.url).href;
+};
+
+// 图片加载失败处理
+const handleImageError = (event: Event) => {
+  const img = event.target as HTMLImageElement;
+  // 使用占位图
+  img.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" fill="%23f5f5f5"><rect width="400" height="100"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="%23999" font-size="12">暂无预览</text></svg>';
+};
 </script>
 
 <style scoped>
 .demos-page {
   min-height: calc(100vh - 64px);
   background: var(--bg-secondary);
-  scroll-behavior: smooth; /* 启用平滑滚动 */
+  scroll-behavior: smooth;
 }
 
 .demos-header {
@@ -115,7 +145,7 @@ const { getFrameworkByKey } = useFramework();
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   margin-bottom: 3rem;
-  scroll-margin-top: 2rem; /* 为锚点跳转预留空间 */
+  scroll-margin-top: 2rem;
 }
 
 .category-header {
@@ -135,7 +165,7 @@ const { getFrameworkByKey } = useFramework();
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  scroll-margin-top: 80px; /* 为锚点跳转预留空间 */
+  scroll-margin-top: 80px;
 }
 
 .category-description {
@@ -145,58 +175,86 @@ const { getFrameworkByKey } = useFramework();
 .demos-grid {
   padding: 2rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
+/* 重新设计的 Demo 卡片 */
 .demo-card {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  border: 2px solid transparent;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
 }
 
 .demo-card:hover {
-  background: #ffffff;
-  border-color: #007acc;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: #667eea;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.15);
 }
 
-/* 暗色模式下的卡片样式 */
-[data-theme="dark"] .demo-card {
-  background: #2d2d2d !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+/* 预览图片区域 */
+.demo-preview {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
 }
 
-[data-theme="dark"] .demo-card:hover {
-  background: #353535 !important;
-  border-color: #40a9ff !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+.demo-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  /* object-position: top left; */
+  object-position: -4px -4px;
+  transition: transform 0.4s ease;
+}
+
+.demo-card:hover .demo-image {
+  transform: scale(1.15);
+}
+
+/* 卡片内容区域 */
+.demo-card-content {
+  padding: 1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-top: -30px;
+  z-index: 2;
+  background: linear-gradient(to bottom, transparent 0, var(--bg-primary) 30px, var(--bg-primary) 100%);
 }
 
 .demo-card-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .demo-title {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #fff;
+  mix-blend-mode: difference;
   margin: 0;
+  line-height: 1.4;
 }
 
 .demo-difficulty {
-  padding: 0.25rem 0.5rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .demo-difficulty.basic {
@@ -214,7 +272,90 @@ const { getFrameworkByKey } = useFramework();
   color: #f5222d;
 }
 
-/* 暗色模式下的难度标签适配 */
+.demo-description {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 标签行 */
+.demo-tags {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.demo-tag {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+}
+
+.more-tag {
+  background: transparent;
+  color: var(--text-tertiary);
+}
+
+/* 框架行 */
+.demo-frameworks {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.framework-badge {
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.framework-badge.javascript {
+  background: #f7df1e;
+  color: #323330;
+}
+
+.framework-badge.vue {
+  background: #42b883;
+  color: white;
+}
+
+.framework-badge.react {
+  background: #61dafb;
+  color: #20232a;
+}
+
+/* 暗色模式适配 */
+[data-theme="dark"] .demo-card {
+  background: #2d2d2d !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="dark"] .demo-card:hover {
+  background: #353535 !important;
+  border-color: #667eea !important;
+  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.2) !important;
+}
+
+[data-theme="dark"] .demo-preview {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%) !important;
+}
+
+[data-theme="dark"] .demo-frameworks {
+  border-top-color: rgba(255, 255, 255, 0.05) !important;
+}
+
 [data-theme="dark"] .demo-difficulty.basic {
   background: rgba(24, 144, 255, 0.15) !important;
   color: #69c0ff !important;
@@ -230,70 +371,7 @@ const { getFrameworkByKey } = useFramework();
   color: #ff7875 !important;
 }
 
-.demo-description {
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.demo-tags {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
-.demo-tag {
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-}
-
-.demo-frameworks {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.framework-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.framework-badge.javascript {
-  background: #fff7e6;
-  color: #fa8c16;
-}
-
-.framework-badge.vue {
-  background: #f0f9e8;
-  color: #52c41a;
-}
-
-.framework-badge.react {
-  background: #e6f7ff;
-  color: #1890ff;
-}
-
-/* 暗色模式下的框架徽章适配 */
-[data-theme="dark"] .framework-badge.javascript {
-  background: rgba(250, 140, 22, 0.15) !important;
-  color: #ffc069 !important;
-}
-
-[data-theme="dark"] .framework-badge.vue {
-  background: rgba(82, 196, 26, 0.15) !important;
-  color: #95de64 !important;
-}
-
-[data-theme="dark"] .framework-badge.react {
-  background: rgba(24, 144, 255, 0.15) !important;
-  color: #69c0ff !important;
-}
-
+/* 响应式适配 */
 @media (max-width: 768px) {
   .demos-title {
     font-size: 2rem;
@@ -315,8 +393,14 @@ const { getFrameworkByKey } = useFramework();
     gap: 0.75rem;
   }
 
-  .demo-card {
-    padding: 1.5rem;
+  .demo-preview {
+    height: 60px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .demos-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 </style>
