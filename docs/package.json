@@ -11,21 +11,16 @@
     "serve": "vite preview --port 4173"
   },
   "dependencies": {
+    "@codesandbox/sandpack-themes": "^2.0.0",
     "@iconify/vue": "^5.0.0",
-    "@stackblitz/sdk": "^1.11.0",
-    "@webcontainer/api": "^1.6.1",
     "highlight.js": "^11.11.1",
     "jszip": "^3.10.1",
     "lodash-es": "^4.17.21",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "sandpack-vue3": "^3.1.12",
     "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@vitejs/plugin-react": "^4.2.0",
     "@vitejs/plugin-vue": "^5.0.0",
     "sass": "^1.77.0",
     "typescript": "^5.2.0",

@@ -101,38 +101,31 @@
           </div>
 
           <div class="demo-controls">
-            <button @click="copyCode" class="control-btn" title="复制代码">
-              <Icon icon="ph:copy" width="16" height="16" />
-              复制代码
+            <button @click="viewSource" class="control-btn" title="查看源码">
+              <Icon icon="ph:github-logo" width="16" height="16" />
+              <span>查看源码</span>
             </button>
-            <button @click="resetCode" class="control-btn" title="重置代码">
-              <Icon icon="ph:arrow-counter-clockwise" width="16" height="16" />
-              重置
-            </button>
-            <button @click="downloadCode" class="control-btn" title="下载代码">
+            <button @click="downloadCode" class="control-btn" title="下载该代码">
               <Icon icon="ph:download" width="16" height="16" />
-              下载
+              <span>下载</span>
+            </button>
+            <button @click="copyCode" class="control-btn" title="复制当前代码">
+              <Icon icon="ph:copy" width="16" height="16" />
+              <span>复制</span>
             </button>
           </div>
         </div>
 
-        <!-- StackBlitz 编辑器和预览区域 -->
-        <div class="stackblitz-container">
-          <div v-if="isStackBlitzLoading" class="stackblitz-loading">
-            <Icon icon="eos-icons:loading" width="32" height="32" />
-            <p>正在加载 StackBlitz 编辑器...</p>
-          </div>
-          <div v-else-if="stackBlitzError" class="stackblitz-error">
-            <Icon icon="ph:warning" width="32" height="32" />
-            <p>{{ stackBlitzError }}</p>
-            <button @click="initStackBlitz" class="retry-btn">重试</button>
-          </div>
-          <div
-            class="stackblitz-editor"
-            :style="{ opacity: isStackBlitzLoading || stackBlitzError ? 0 : 1 }"
-          >
-            <div id="stackblitz-editor"></div>
-          </div>
+        <!-- Sandpack 编辑器和预览区域 -->
+        <div class="sandpack-container" :key="sandpackKey">
+          <Sandpack
+            ref="sandpackRef"
+            :template="sandpackTemplate"
+            :theme="sandpackTheme"
+            :files="sandpackFiles"
+            :custom-setup="sandpackCustomSetup"
+            :options="sandpackOptions"
+          />
         </div>
       </div>
     </div>
@@ -144,16 +137,20 @@ import { ref, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { RouterLink } from "vue-router";
 import { Icon } from "@iconify/vue";
+import { Sandpack } from "sandpack-vue3";
+import type { SandpackPredefinedTemplate } from "sandpack-vue3";
+import { githubLight, amethyst } from "@codesandbox/sandpack-themes";
+import JSZip from "jszip";
 import { demoCategories, DIFFICULTY_LEVELS } from "@/config/demos/index";
 import { FrameworkKey, useFramework } from "@/composables/useFramework";
 import { useTheme } from "@/composables/useTheme";
 import { toast } from "@/composables/useToast";
 import type { CodeBlock } from "@/types/demo";
-import sdk, { UiViewOption, type VM } from "@stackblitz/sdk";
-import { createVueProjectFiles } from "@/template/vue";
-import { createReactProjectFiles } from "@/template/react";
-import { createJavaScriptProjectFiles } from "@/template/vanilla";
-import JSZip from "jszip";
+import {
+  getDemoFiles,
+  prepareSandpackFiles,
+  BASE_DEMO_PATH
+} from "@/utils/demoLoader";
 
 interface DemoProps {
   category?: string;
@@ -164,17 +161,22 @@ const props = defineProps<DemoProps>();
 const route = useRoute();
 
 const { getFrameworkByKey } = useFramework();
+const { isDark } = useTheme();
 
 // 响应式状态
 const currentFramework = ref<FrameworkKey>("javascript");
+const sandpackKey = ref(0); // 用于强制刷新 Sandpack
+
 const categoryInfo = demoCategories.find(
   cat => cat.id === props.category || cat.id === route.params.category
 );
+
 const currentDemo = computed(() => {
   return categoryInfo?.demos.find(
     demo => demo.id === props.name || demo.id === route.params.name
   );
 });
+
 const availableFrameworks = computed(() => {
   return (
     currentDemo.value?.code.map((c: CodeBlock) =>
@@ -182,11 +184,6 @@ const availableFrameworks = computed(() => {
     ) || []
   );
 });
-
-// StackBlitz 相关状态
-const isStackBlitzLoading = ref(false);
-const stackBlitzError = ref<string | null>(null);
-const stackBlitzProject = ref<VM>();
 
 // 当前代码内容
 const currentEntry = computed(() => {
@@ -197,103 +194,106 @@ const currentEntry = computed(() => {
   return codeEntry;
 });
 
-const { currentTheme } = useTheme();
-watch(
-  () => currentTheme.value,
-  v => {
-    stackBlitzProject.value?.editor?.setTheme(v);
+// 获取文件夹形式的源码（基于 path 配置）
+const filesSource = computed(() => {
+  if (!currentEntry.value?.path) return {};
+  return getDemoFiles(currentEntry.value.path);
+});
+
+// Sandpack 配置
+const sandpackTemplate = computed<SandpackPredefinedTemplate>(() => {
+  switch (currentFramework.value) {
+    case "vue":
+      return "vite-vue-ts";
+    case "react":
+      return "vite-react-ts";
+    case "javascript":
+    default:
+      return "vanilla-ts";
   }
-);
+});
 
-// 初始化 StackBlitz
-const initStackBlitz = async () => {
-  if (!currentDemo.value || !currentEntry.value?.code) return;
+const sandpackTheme = computed(() => {
+  return isDark.value ? amethyst : githubLight;
+});
 
-  if (stackBlitzProject.value) {
-    stackBlitzProject.value = undefined;
+const sandpackFiles = computed(() => {
+  if (!currentEntry.value) return {};
+
+  // 使用文件夹中的文件（path 模式）
+  if (Object.keys(filesSource.value).length > 0) {
+    return prepareSandpackFiles(filesSource.value, currentFramework.value, currentEntry.value);
   }
 
-  isStackBlitzLoading.value = true;
-  stackBlitzError.value = null;
+  return {};
+});
 
-  try {
-    const container = document.getElementById("stackblitz-editor");
-    if (!container) {
-      throw new Error("StackBlitz 容器未找到");
-    }
+const sandpackCustomSetup = computed(() => {
+  const dependencies: Record<string, string> = {};
 
-    // 生成项目文件
-    let files: Record<string, string>;
-    let title: string;
-    let openFile: string;
-    let view: UiViewOption = 'default';
-
-    switch (currentFramework.value) {
-      case "vue":
-        files = createVueProjectFiles(currentEntry.value);
-        title = `${currentDemo.value.title} - Vue`;
-        openFile = "src/App.vue";
-        break;
-      case "react":
-        files = createReactProjectFiles(currentEntry.value);
-        title = `${currentDemo.value.title} - React`;
-        openFile = "src/App.tsx";
-        break;
-      case "javascript":
-      default:
-        files = createJavaScriptProjectFiles(currentEntry.value);
-        title = `${currentDemo.value.title} - JavaScript`;
-        openFile = "src/main.ts";
-        view = currentEntry.value.view || 'default';
-        break;
-    }
-
-    // 嵌入 StackBlitz 编辑器
-    stackBlitzProject.value = await sdk.embedProject(
-      container,
-      {
-        title,
-        description: currentDemo.value.description,
-        template: "node",
-        files
-      },
-      {
-        openFile,
-        view,
-        hideNavigation: true,
-        hideDevTools: true,
-        hideExplorer: true,
-        showSidebar: false,
-        theme: currentTheme.value,
-        height: 600
-      }
-    );
-
-    setTimeout(() => {
-      isStackBlitzLoading.value = false;
-    }, 3000);
-  } catch (error) {
-    console.error("初始化 StackBlitz 失败:", error);
-    stackBlitzError.value = `加载失败: ${
-      error instanceof Error ? error.message : "未知错误"
-    }`;
-    toast.error("编辑器加载失败");
-    isStackBlitzLoading.value = false;
+  // 根据框架添加对应的 gantt 包
+  switch (currentFramework.value) {
+    case "vue":
+      dependencies["@xpyjs/gantt-vue"] = "latest";
+      break;
+    case "react":
+      dependencies["@xpyjs/gantt-react"] = "latest";
+      break;
+    case "javascript":
+    default:
+      dependencies["@xpyjs/gantt-core"] = "latest";
+      break;
   }
-};
+
+  // 合并代码块中定义的额外依赖
+  if (currentEntry.value?.dependencies) {
+    Object.assign(dependencies, currentEntry.value.dependencies);
+  }
+
+  return { dependencies };
+});
+
+const sandpackOptions = computed(() => ({
+  showNavigator: false,
+  showTabs: true,
+  showLineNumbers: true,
+  showInlineErrors: true,
+  showConsole: false,
+  showConsoleButton: false,
+  showRefreshButton: true,
+  wrapContent: false,
+  editorHeight: 500,
+  editorWidthPercentage: 40 // 编辑区宽度占比
+}));
 
 // 复制代码到剪贴板
 const copyCode = async () => {
-  if (!currentEntry.value?.code) {
+  // 从文件源获取主入口文件内容
+  const files = filesSource.value;
+  let codeContent = '';
+
+  // 根据框架类型确定主文件
+  switch (currentFramework.value) {
+    case 'vue':
+      codeContent = files['src/App.vue'] as string || '';
+      break;
+    case 'react':
+      codeContent = files['App.tsx'] as string || '';
+      break;
+    case 'javascript':
+    default:
+      codeContent = files['index.ts'] as string || '';
+      break;
+  }
+
+  if (!codeContent) {
     toast.warning("没有可复制的代码内容");
     return;
   }
 
-  // 检查是否支持现代剪贴板 API
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    // 使用现代剪贴板 API
     const copySuccess = await navigator.clipboard
-      .writeText(currentEntry.value.code)
+      .writeText(codeContent)
       .then(() => true)
       .catch(error => {
         console.error("现代剪贴板 API 失败:", error);
@@ -303,18 +303,15 @@ const copyCode = async () => {
     if (copySuccess) {
       toast.success("代码已复制到剪贴板");
     } else {
-      // 如果现代 API 失败，降级到传统方法
-      fallbackCopyText(currentEntry.value.code);
+      fallbackCopyText(codeContent);
     }
   } else {
-    // 降级到传统复制方法
-    fallbackCopyText(currentEntry.value.code);
+    fallbackCopyText(codeContent);
   }
 };
 
 /**
  * 降级复制方法
- * @param text - 要复制的文本
  */
 const fallbackCopyText = (text: string) => {
   const textArea = document.createElement("textarea");
@@ -338,51 +335,60 @@ const fallbackCopyText = (text: string) => {
   document.body.removeChild(textArea);
 };
 
-// 重置代码
-const resetCode = () => {
-  initStackBlitz();
+// 切换框架
+const switchFramework = (framework: FrameworkKey) => {
+  currentFramework.value = framework;
+  // 强制刷新 Sandpack
+  sandpackKey.value++;
+};
+
+// 查看源码 - 打开 GitHub 链接
+const viewSource = () => {
+  if (!currentEntry.value?.path) {
+    toast.warning("该示例暂无源码链接");
+    return;
+  }
+  const url = `https://github.com/xpyjs/gantt/tree/main/docs${BASE_DEMO_PATH}${currentEntry.value.path}`;
+  window.open(url, "_blank");
 };
 
 // 下载代码
 const downloadCode = async () => {
-  if (!currentDemo.value || !stackBlitzProject.value) {
-    toast.warning("没有可下载的内容");
+  const files = sandpackFiles.value;
+  if (!files || Object.keys(files).length === 0) {
+    toast.warning("没有可下载的代码内容");
     return;
   }
 
   try {
-    const snapshot = await stackBlitzProject.value.getFsSnapshot();
-    if (!snapshot) {
-      toast.error("获取项目快照失败");
-      return;
+    const zip = new JSZip();
+    const folderName = `${currentDemo.value?.id || "demo"}-${currentFramework.value}`;
+
+    // 添加所有文件到 zip
+    for (const [filePath, content] of Object.entries(files)) {
+      // 移除开头的 /
+      const cleanPath = filePath.startsWith("/") ? filePath.slice(1) : filePath;
+      zip.file(cleanPath, typeof content === "string" ? content : content.code);
     }
 
-    const zip = new JSZip();
-    Object.entries(snapshot).forEach(([filePath, content]) => {
-      zip.file(filePath, content);
-    });
-
+    // 生成 zip 文件
     const blob = await zip.generateAsync({ type: "blob" });
+
+    // 下载
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${currentDemo.value.title}-${currentFramework.value}.zip`;
-
+    link.download = `${folderName}.zip`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    toast.success("代码包下载成功");
+    toast.success("代码下载成功");
   } catch (error) {
     console.error("下载失败:", error);
-    toast.error("下载失败，请稍后重试");
+    toast.error("下载失败，请重试");
   }
-};
-
-// 切换框架
-const switchFramework = (framework: FrameworkKey) => {
-  currentFramework.value = framework;
 };
 
 // 下拉菜单交互处理
@@ -404,38 +410,21 @@ function handleDropdownLeave() {
   }, 300) as unknown as number;
 }
 
-// 监听框架切换
-watch(currentFramework, () => {
-  initStackBlitz();
-});
-
 // 监听演示变化
-// watch(
-//   () => currentDemo.value,
-//   newDemo => {
-//     if (newDemo && availableFrameworks.value.length > 0) {
-//       // 设置默认框架
-//       // currentFramework.value = availableFrameworks.value[0].key;
-//     }
-//   },
-//   { immediate: true }
-// );
-
 watch(
   () => currentDemo.value,
   () => {
-    // 每次演示变化时重新初始化 StackBlitz
-    initStackBlitz();
+    if (currentDemo.value && availableFrameworks.value.length > 0) {
+      currentFramework.value = availableFrameworks.value[0].key;
+    }
+    sandpackKey.value++;
   }
 );
 
 // 组件挂载后初始化
 onMounted(() => {
   if (currentDemo.value && availableFrameworks.value.length > 0) {
-    // 设置默认框架
     currentFramework.value = availableFrameworks.value[0].key;
-
-    initStackBlitz();
   }
 });
 </script>
@@ -687,7 +676,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  padding: 0.4rem 0.8rem;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   background: var(--bg-secondary);
@@ -701,14 +690,12 @@ onMounted(() => {
 .framework-tab:hover {
   border-color: var(--accent-color);
   color: var(--accent-color);
-  transform: translateY(-1px);
 }
 
 .framework-tab.active {
   background: #007acc;
   border-color: #007acc;
   color: white;
-  transform: translateY(-1px);
 }
 
 .framework-tab.active:hover {
@@ -751,69 +738,43 @@ onMounted(() => {
   transform: translateY(-1px);
 }
 
-/* StackBlitz 容器样式 */
-.stackblitz-container {
+/* Sandpack 容器样式 */
+.sandpack-container {
   border-radius: 0 0 8px 8px;
   overflow: hidden;
   border: 1px solid var(--border-color);
   background: var(--bg-primary);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  height: 600px;
+}
+
+/* 隐藏 Sandpack 的底部状态栏和控制按钮 */
+.sandpack-container :deep(.sp-preview-container) {
   position: relative;
 }
 
-.stackblitz-editor {
-  width: 100%;
-  height: 600px;
-  border: none;
-  border-radius: 4px;
+/* 隐藏左下角的地址 */
+.sandpack-container :deep(.sp-bridge-frame) {
+  display: none !important;
+}
+
+/* 隐藏右下角按钮 */
+.sandpack-container :deep(.sp-preview-actions) {
+  display: none !important;
+}
+
+/* 隐藏加载时的终端输出 */
+.sandpack-container :deep(.sp-loading) {
+  display: none !important;
+}
+
+/* 隐藏终端/控制台 */
+.sandpack-container :deep(.sp-console) {
+  display: none !important;
+}
+
+/* 预览区域样式优化 */
+.sandpack-container :deep(.sp-preview) {
   background: var(--bg-primary);
-}
-
-.stackblitz-loading,
-.stackblitz-error {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 600px;
-  color: var(--text-secondary);
-  gap: 1rem;
-  z-index: 2;
-}
-
-.stackblitz-loading {
-  background: var(--bg-primary);
-}
-
-.stackblitz-error {
-  background: var(--bg-primary);
-  color: var(--error-color, #f5222d);
-}
-
-.retry-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.retry-btn:hover {
-  border-color: var(--accent-color);
-  color: var(--accent-color);
-}
-
-/* StackBlitz iframe 样式优化 */
-.stackblitz-container :deep(iframe) {
-  border: none;
 }
 
 /* 响应式设计 */
@@ -831,11 +792,6 @@ onMounted(() => {
   .demo-controls {
     justify-content: center;
     flex-wrap: wrap;
-  }
-
-  .stackblitz-loading,
-  .stackblitz-error {
-    height: 500px;
   }
 }
 
@@ -865,11 +821,6 @@ onMounted(() => {
 
   .framework-tab {
     justify-content: center;
-  }
-
-  .stackblitz-loading,
-  .stackblitz-error {
-    height: 400px;
   }
 
   .control-btn span {

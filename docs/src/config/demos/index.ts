@@ -1,26 +1,4 @@
-import type { DemoCategory } from "../../types/demo";
-import basicUsage from "./codes/basic-usage";
-import hierarchical from "./codes/hierarchical";
-import selectUsage from "./codes/select-usage";
-import fieldUsage from "./codes/field-usage";
-import styleUsage from "./codes/style-usage";
-import languageUsage from "./codes/language-usage";
-import moveUsage from "./codes/move-usage";
-import resizeUsage from "./codes/resize-usage";
-import linkageUsage from "./codes/linkage-usage";
-import linkHandleUsage from "./codes/link-usage";
-import cellMergeUsage from "./codes/cell-merge-usage";
-import cellRenderUsage from "./codes/cell-render-usage";
-import customHeaderUsage from "./codes/custom-header-usage";
-import holidayUsage from "./codes/holiday-usage";
-import holidayAdvUsage from "./codes/holiday-adv-usage";
-import frameworkUsage from "./codes/framework";
-import baselineUsage from "./codes/baseline-usage";
-import milestoneUsage from "./codes/milestone-usage";
-import autoWidthUsage from "./codes/auto-width-usage";
-import fullAppUsage from "./codes/full-app-usage";
-import fullApp2Usage from "./codes/full-app-2-usage";
-import fullAppVueUsage from "./codes/full-app-vue-usage";
+﻿import type { DemoCategory } from "../../types/demo";
 
 // 常量
 export const DIFFICULTY_LEVELS = {
@@ -47,18 +25,18 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: basicUsage.jsCode
+            language: "typescript",
+            path: "basic/simple/javascript"
           },
           {
             framework: "vue",
             language: "vue",
-            code: basicUsage.vueCode
+            path: "basic/simple/vue"
           },
           {
             framework: "react",
             language: "tsx",
-            code: basicUsage.reactCode
+            path: "basic/simple/react"
           }
         ]
       },
@@ -72,18 +50,18 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: hierarchical.jsCode
+            language: "typescript",
+            path: "basic/hierarchical/javascript"
           },
           {
             framework: "vue",
             language: "vue",
-            code: hierarchical.vueCode
+            path: "basic/hierarchical/vue"
           },
           {
             framework: "react",
             language: "tsx",
-            code: hierarchical.reactCode
+            path: "basic/hierarchical/react"
           }
         ]
       },
@@ -97,8 +75,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: fieldUsage.jsCode
+            language: "typescript",
+            path: "basic/field-usage/javascript"
           }
         ]
       },
@@ -112,18 +90,18 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: selectUsage.jsCode
+            language: "typescript",
+            path: "basic/selected/javascript"
           },
           {
             framework: "vue",
             language: "vue",
-            code: selectUsage.vueCode
+            path: "basic/selected/vue"
           },
           {
             framework: "react",
             language: "tsx",
-            code: selectUsage.reactCode
+            path: "basic/selected/react"
           }
         ]
       },
@@ -137,8 +115,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: languageUsage.jsCode,
+            language: "typescript",
+            path: "basic/language-switch/javascript",
             dependencies: { dayjs: "^1.10.7" }
           }
         ]
@@ -153,18 +131,18 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: styleUsage.jsCode
+            language: "typescript",
+            path: "basic/customization/javascript"
           },
           {
             framework: "vue",
             language: "vue",
-            code: styleUsage.vueCode
+            path: "basic/customization/vue"
           },
           {
             framework: "react",
             language: "tsx",
-            code: styleUsage.reactCode
+            path: "basic/customization/react"
           }
         ]
       },
@@ -178,18 +156,18 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: holidayUsage.jsCode
+            language: "typescript",
+            path: "basic/holiday/javascript"
           },
           {
             framework: "vue",
             language: "vue",
-            code: holidayUsage.vueCode
+            path: "basic/holiday/vue"
           },
           {
             framework: "react",
             language: "tsx",
-            code: holidayUsage.reactCode
+            path: "basic/holiday/react"
           }
         ]
       },
@@ -203,8 +181,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: holidayAdvUsage.jsCode
+            language: "typescript",
+            path: "basic/holiday-advanced/javascript"
           }
         ]
       },
@@ -218,8 +196,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: baselineUsage.jsCode
+            language: "typescript",
+            path: "basic/baseline/javascript"
           }
         ]
       },
@@ -233,8 +211,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: milestoneUsage.jsCode
+            language: "typescript",
+            path: "basic/milestone/javascript"
           }
         ]
       }
@@ -256,8 +234,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: moveUsage.jsCode
+            language: "typescript",
+            path: "interaction/move-bar/javascript"
           }
         ]
       },
@@ -271,8 +249,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: resizeUsage.jsCode
+            language: "typescript",
+            path: "interaction/resize-bar/javascript"
           }
         ]
       },
@@ -286,8 +264,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: linkageUsage.jsCode
+            language: "typescript",
+            path: "interaction/linkage-bar/javascript"
           }
         ]
       },
@@ -301,8 +279,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: linkHandleUsage.jsCode
+            language: "typescript",
+            path: "interaction/link-handle/javascript"
           }
         ]
       }
@@ -324,8 +302,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: autoWidthUsage.jsCode
+            language: "typescript",
+            path: "advanced/auto-width/javascript"
           }
         ]
       },
@@ -339,8 +317,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: cellMergeUsage.jsCode
+            language: "typescript",
+            path: "advanced/cell-merge/javascript"
           }
         ]
       },
@@ -354,8 +332,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: cellRenderUsage.jsCode
+            language: "typescript",
+            path: "advanced/cell-render/javascript"
           }
         ]
       },
@@ -369,8 +347,8 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: customHeaderUsage.jsCode
+            language: "typescript",
+            path: "advanced/custom-header/javascript"
           }
         ]
       },
@@ -384,8 +362,9 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: fullAppUsage.jsCode
+            language: "typescript",
+            path: "advanced/full-app/javascript",
+            view: 'preview'
           }
         ]
       },
@@ -399,13 +378,9 @@ export const demoCategories: DemoCategory[] = [
         code: [
           {
             framework: "javascript",
-            language: "javascript",
-            code: fullApp2Usage.jsCode,
-            view: 'preview',
-            extraFiles: {
-              'data.ts': fullApp2Usage.dataCode,
-              'style.css': fullApp2Usage.cssCode
-            }
+            language: "typescript",
+            path: "advanced/full-app-2/javascript",
+            view: 'preview'
           }
         ]
       }
@@ -428,7 +403,7 @@ export const demoCategories: DemoCategory[] = [
           {
             framework: "vue",
             language: "vue",
-            code: frameworkUsage.vueCode
+            path: "integration/vue-composition/vue"
           }
         ]
       },
@@ -443,7 +418,7 @@ export const demoCategories: DemoCategory[] = [
           {
             framework: "react",
             language: "tsx",
-            code: frameworkUsage.reactCode
+            path: "integration/react-hooks/react"
           }
         ]
       },
@@ -458,17 +433,10 @@ export const demoCategories: DemoCategory[] = [
           {
             framework: "vue",
             language: "vue",
-            code: fullAppVueUsage.vueCode,
+            path: "advanced/full-app-vue-1/vue",
             view: 'preview',
-            extraFiles: {
-              'data.ts': fullAppVueUsage.dataCode,
-              'components/contextMenu/ContextMenu.vue': fullAppVueUsage.contextComponent
-            },
-            customFiles: {
-              'src/main.ts': fullAppVueUsage.mainTsCode,
-            },
             dependencies: {
-              "element-plus": "^2.11.2",
+              'element-plus': '^2.11.2'
             }
           }
         ]

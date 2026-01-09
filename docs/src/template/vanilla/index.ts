@@ -1,77 +1,7 @@
 import { CodeBlock } from "@/types/demo";
-import { toJSON } from "@/utils/common";
-import { cloneDeep } from "lodash-es";
+import { SandpackFile } from "sandpack-vue3";
 
-const VERSION = "0.0.2";
-
-const VITE_CONFIG = `import { defineConfig } from "vite";
-
-export default defineConfig({
-  server: {
-    port: 6876
-  }
-});
-`;
-
-const PACKAGE_JSON = {
-  name: "@xpyjs/gantt-vanilla-typescript-starter",
-  private: true,
-  version: "0.0.0",
-  type: "module",
-  scripts: {
-    dev: "vite",
-    build: "tsc && vite build",
-    preview: "vite preview"
-  },
-  dependencies: {
-    "@xpyjs/gantt-core": VERSION
-  },
-  devDependencies: {
-    typescript: "^5.4.5",
-    vite: "^5.2.11"
-  },
-  packageManager: "pnpm@9.1.1",
-  engines: {
-    node: ">=18.0.0"
-  }
-};
-
-const TSCONFIG = {
-  compilerOptions: {
-    target: "ES2020",
-    useDefineForClassFields: true,
-    lib: ["ES2020", "DOM", "DOM.Iterable"],
-    module: "ESNext",
-    skipLibCheck: true,
-
-    /* Bundler mode */
-    moduleResolution: "bundler",
-    allowImportingTsExtensions: true,
-    resolveJsonModule: true,
-    isolatedModules: true,
-    noEmit: true,
-
-    /* Linting */
-    strict: true,
-    noUnusedLocals: true,
-    noUnusedParameters: true,
-    noFallthroughCasesInSwitch: true
-  },
-  include: ["src"],
-  references: [{ path: "./tsconfig.node.json" }]
-};
-const TSCONFIG_NODE = {
-  compilerOptions: {
-    composite: true,
-    skipLibCheck: true,
-    module: "ESNext",
-    moduleResolution: "bundler",
-    allowSyntheticDefaultImports: true
-  },
-  include: ["vite.config.ts"]
-};
-
-const INDEX_HTML = `<!doctype html>
+const INDEX_HTML = `<!DOCTYPE html>
 <html lang="zh-CN">
 
 <head>
@@ -95,35 +25,19 @@ const INDEX_HTML = `<!doctype html>
     </div>
     <div id="btn-container"></div>
     <div id="log-container"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <script type="module" src="/index.ts"></script>
 </body>
 
 </html>
 `;
 
-// 创建 JavaScript 项目文件
-export const createJavaScriptProjectFiles = (
-  block: CodeBlock
-): Record<string, string> => {
-  const pkg = cloneDeep(PACKAGE_JSON);
-  if (block.dependencies) {
-    pkg.dependencies = { ...pkg.dependencies, ...block.dependencies };
-  }
-
-  const files: Record<string, string> = {
-    "package.json": toJSON(pkg),
-    "vite.config.ts": VITE_CONFIG,
-    "tsconfig.json": toJSON(TSCONFIG),
-    "tsconfig.node.json": toJSON(TSCONFIG_NODE),
-    "index.html": INDEX_HTML,
-    "src/main.ts": block.code
+// 创建 Sandpack 用的 Vanilla 文件
+export const createSandpackVanillaFiles = (
+  _block: CodeBlock
+): Record<string, string | SandpackFile> => {
+  const files: Record<string, string | SandpackFile> = {
+    "index.html": { code: INDEX_HTML, hidden: true },
   };
-
-  if (block.extraFiles) {
-    Object.entries(block.extraFiles).forEach(([filePath, content]) => {
-      files[`src/${filePath}`] = content;
-    });
-  }
 
   return files;
 };
