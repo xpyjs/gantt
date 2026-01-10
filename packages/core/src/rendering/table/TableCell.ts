@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-25 10:30:00
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-11-17 09:35:49
+ * @LastEditTime: 2026-01-10 19:59:15
  * @Description: 表格单元格渲染，使用td元素支持合并
  */
 
@@ -229,6 +229,13 @@ export class TableCell {
         // 点击展开/收起子层
         this.context.store.getDataManager().expandTask(this.task.id, false);
       });
+
+      expandContainer.addEventListener("dblclick", e => {
+        e.stopPropagation(); // 阻止事件冒泡，避免触发行双击事件
+      });
+      // expandContainer.addEventListener("contextmenu", e => {
+      //   e.stopPropagation(); // 阻止事件冒泡，避免触发行右键事件
+      // });
 
       cellHandler.appendChild(expandContainer);
     }
