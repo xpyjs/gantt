@@ -450,11 +450,7 @@ If you think it's good, invite the author to have a cup of coffee.
 
 Now connected to [Afdian](https://afdian.com/a/xpyjs) platform, through which you can choose various plans to support and receive corresponding feedback.
 
-Also, you can directly reward me through the following QR codes:
-
-| WeChat | Alipay |
-|---|---|
-| <img style="width: 100%; max-height: 200px;" src="https://desktop.jeremyjone.com/resource/wx.png" /> | <img style="width: 100%; max-height: 200px;" src="https://desktop.jeremyjone.com/resource/zfb.jpg" /> |
+Also, you can learn more about sponsorship methods through the [Sponsor](./Sponsor.md) document.
 
 ---
 

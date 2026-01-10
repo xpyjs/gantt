@@ -451,11 +451,7 @@ MIT License
 
 现已接入 [爱发电](https://afdian.com/a/xpyjs) 平台，通过该平台可以选择多种方案支持，并可以得到相应回馈。
 
-也可以通过以下二维码直接打赏：
-
-| 微信 | 支付宝 |
-|---|---|
-| <img style="width: 100%; max-height: 200px;" src="https://desktop.jeremyjone.com/resource/wx.png" /> | <img style="width: 100%; max-height: 200px;" src="https://desktop.jeremyjone.com/resource/zfb.jpg" /> |
+也可以通过 [Sponsor](./Sponsor.md) 文档了解更多赞助方式。
 
 ---
 
