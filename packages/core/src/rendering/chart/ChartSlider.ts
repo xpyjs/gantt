@@ -222,7 +222,7 @@ export class ChartSlider {
               fill: msColor,
               stroke: msBorderColor,
               strokeWidth: msBorderWidth,
-              y: (r / 3) * 2 // 居中
+              y: height / 2 // 居中
             });
             break;
           case 'circle':
@@ -231,7 +231,7 @@ export class ChartSlider {
               fill: msColor,
               stroke: msBorderColor,
               strokeWidth: msBorderWidth,
-              y: r / 2 // 居中
+              y: height / 2 // 居中
             });
             break;
           case 'star':
@@ -242,7 +242,7 @@ export class ChartSlider {
               fill: msColor,
               stroke: msBorderColor,
               strokeWidth: msBorderWidth,
-              y: r / 2 // 居中
+              y: height / 2 // 居中
             });
             break;
           case 'diamond':
@@ -254,7 +254,7 @@ export class ChartSlider {
               fill: msColor,
               stroke: msBorderColor,
               strokeWidth: msBorderWidth,
-              y: r / 2 // 居中
+              y: height / 2 // 居中
             });
         }
 
