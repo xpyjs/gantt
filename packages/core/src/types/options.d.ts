@@ -566,7 +566,7 @@ export interface IGanttOptions {
     height: number;
     /** 背景颜色。默认使用主色调 */
     backgroundColor?: string;
-    /** 文字颜色 */
+    /** 文字颜色。支持 auto 特殊关键字，当为 auto 时，可根据背景色自动调整为 黑/白 */
     color: string;
     /**
      * 文字大小

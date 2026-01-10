@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-25 14:21:32
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-19 15:54:21
+ * @LastEditTime: 2026-01-10 19:30:16
  * @Description: 表格列表头
  */
 
@@ -11,6 +11,7 @@ import { EventName } from "../../event";
 import { wrapSize } from "../../utils/size";
 import { IContext } from "@/types/render";
 import { IColumn } from "@/store/ColumnManager";
+import { autoColor } from "../../utils/color";
 
 export class TableHeaderCell {
   private columnElement: HTMLElement;
@@ -76,7 +77,7 @@ export class TableHeaderCell {
     );
     cellContent.style.setProperty(
       "color",
-      this.context.getOptions().header.color,
+      autoColor(this.context.getOptions().header.color, this.context.getOptions().header.backgroundColor || this.context.getOptions().primaryColor),
       "important"
     );
     cellContent.style.fontFamily = this.context.getOptions().header.fontFamily;

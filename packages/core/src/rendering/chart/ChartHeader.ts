@@ -2,13 +2,13 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:02:13
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-09 14:42:18
+ * @LastEditTime: 2026-01-10 19:29:39
  * @Description: 图表部分的表头渲染层
  */
 import Konva from "konva";
 import { isArray } from "lodash-es";
 import { EventName } from "../../event";
-import { colorjs } from "../../utils/color";
+import { autoColor, colorjs } from "../../utils/color";
 import { IContext } from "@/types/render";
 import { type Task } from "@/models/Task";
 
@@ -309,7 +309,7 @@ export class HeaderLayer {
       fontSize: fontSize,
       fontFamily: this.context.getOptions().header.fontFamily,
       fontStyle: `${this.context.getOptions().header.fontWeight}`,
-      fill: this.context.getOptions().header.color,
+      fill: autoColor(this.context.getOptions().header.color, this.context.getOptions().header.backgroundColor || this.context.getOptions().primaryColor),
       align: "center",
       verticalAlign: "middle",
       wrap: "none",

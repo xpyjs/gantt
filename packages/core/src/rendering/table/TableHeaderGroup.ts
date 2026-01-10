@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-25 14:21:32
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-06-17 15:35:39
+ * @LastEditTime: 2026-01-10 19:31:38
  * @Description: 表格分组表头
  */
 
@@ -11,6 +11,7 @@ import { wrapSize } from "../../utils/size";
 import { TableHeaderCell } from "./TableHeaderCell";
 import { ITableColumnStandard } from "@/types/table";
 import { IColumn } from "@/store/ColumnManager";
+import { autoColor } from "../../utils/color";
 
 export class TableHeaderGroup {
   private groupElement: HTMLElement;
@@ -91,7 +92,7 @@ export class TableHeaderGroup {
       this.context.getOptions().header.fontFamily;
     this.titleContainer.style.setProperty(
       "color",
-      this.context.getOptions().header.color,
+      autoColor(this.context.getOptions().header.color, this.context.getOptions().header.backgroundColor || this.context.getOptions().primaryColor),
       "important"
     );
 

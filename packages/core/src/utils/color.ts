@@ -475,3 +475,13 @@ export const colorjs = (value: any): Colorjs => {
 
 // 示例 (如果需要导出的话):
 // export { colorjs, Colorjs, RGBA, PluginFunc };
+
+/** 判断颜色是否需要自动调整 */
+export const autoColor = (color: string, target: string) => {
+  if (color.toLowerCase() === "auto") {
+    const c = colorjs(target);
+    return c.isLight() ? "#000000" : "#FFFFFF";
+  } else {
+    return color;
+  }
+}

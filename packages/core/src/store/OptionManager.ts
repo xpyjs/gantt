@@ -165,7 +165,7 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
   },
   header: {
     height: 80,
-    color: "#000",
+    color: "auto",
     fontSize: 14,
     fontWeight: 600,
     fontFamily: "Arial"
