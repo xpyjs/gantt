@@ -130,8 +130,8 @@ export class ChartSlider {
       this.slider = new Konva.Group({
         dragBoundFunc: pos => {
           let min = Math.min(0, -(-this.offsetX - this.slider.x()));
-          const _end = this.context.store.getTimeAxis().getTimeLeft(this.task.endTime!);
-          let max = this.sliderGroup.getStage()!.width() - this.slider.width() + Math.abs(_end - (-this.offsetX + this.sliderGroup.getStage()!.width()));
+          const _end = this.context.store.getTimeAxis().getTimeLeft(this.context.store.getTimeAxis().getEndTime());
+          let max = _end + this.offsetX - this.slider.width();
 
           // 严格父级模式下，移动时需要判定不能超过父级边界
           const parent = this.context.getOptions().bar.move.link.parent;
@@ -927,64 +927,45 @@ export class ChartSlider {
       const isTouchingRightEdge =
         sliderRight >= viewportRight - this.EDGE_THRESHOLD;
 
-      if (isTouchingLeftEdge) {
+      // 优先根据移动方向判断边界
+      if (this.draggingDirection === "left" && isTouchingLeftEdge) {
         if (viewportLeft <= 0) {
-          if (this.draggingDirection === "left") {
-            e.target.x(-initSliderLeftDiffX); // 顶到最左边，直接贴边
-          }
+          e.target.x(-initSliderLeftDiffX); // 顶到最左边，直接贴边
           this.stopAutoScroll();
           if (!dragLock) {
-            if (this.draggingDirection === "left") {
-              // 顶到最左边，继续滚动
-              this.startAutoExpand("left", -initSliderLeftDiffX);
-            } else {
-              // 停止向左滚动
-              this.stopAutoExpand();
-            }
+            // 顶到最左边，继续滚动
+            this.startAutoExpand("left", -initSliderLeftDiffX);
           }
         } else {
-          if (this.draggingDirection === "left") {
-            // 向左滚动
-            const step = moveStep ? -cellWidth : -this.SCROLL_STEP;
-            this.startAutoScroll(
-              step,
-              moveStep,
-              () => { e.target.x(e.target.x() + step); },
-              () => e.target.x(e.target.x() - initSliderLeftDiffX));
-          } else {
-            this.stopAutoScroll();
-          }
+          // 向左滚动
+          const step = moveStep ? -cellWidth : -this.SCROLL_STEP;
+          this.startAutoScroll(
+            step,
+            moveStep,
+            () => {
+              e.target.x(e.target.x() + step);
+            },
+            () => e.target.x(e.target.x() - initSliderLeftDiffX)
+          );
         }
-      } else if (isTouchingRightEdge) {
+      } else if (this.draggingDirection === "right" && isTouchingRightEdge) {
         if (viewportRight >= totalWidth) {
-          if (this.draggingDirection === "right") {
-            // 顶到最右边，停止滚动
-            e.target.x(totalWidth - sliderWidth + initSliderRightDiffX);
-          }
+          // 顶到最右边，停止滚动
+          e.target.x(totalWidth - sliderWidth + initSliderRightDiffX);
           this.stopAutoScroll();
           if (!dragLock) {
             // 顶到最右边，继续滚动
-            if (this.draggingDirection === "right") {
-              // 继续向右滚动
-              this.startAutoExpand("right", 0, initSliderRightDiffX);
-            } else {
-              // 停止向右滚动
-              this.stopAutoExpand();
-            }
+            this.startAutoExpand("right", 0, initSliderRightDiffX);
           }
         } else {
-          if (this.draggingDirection === "right") {
-            // 向右滚动
-            const step = moveStep ? cellWidth : this.SCROLL_STEP;
-            this.startAutoScroll(step, moveStep, () => {
-              e.target.x(e.target.x() + step);
-            });
-          } else {
-            this.stopAutoScroll();
-          }
+          // 向右滚动
+          const step = moveStep ? cellWidth : this.SCROLL_STEP;
+          this.startAutoScroll(step, moveStep, () => {
+            e.target.x(e.target.x() + step);
+          });
         }
       } else {
-        // 普通移动（在视图内）
+        // 普通移动（在视图内）或方向不匹配
         this.stopAutoExpand();
         this.stopAutoScroll();
       }
