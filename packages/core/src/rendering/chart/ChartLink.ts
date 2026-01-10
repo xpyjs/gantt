@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 16:52:26
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-24 14:16:47
+ * @LastEditTime: 2026-01-10 19:18:33
  * @Description: 关联线
  */
 import Konva from "konva";
@@ -291,13 +291,15 @@ export class LinkGroup {
   private calculateLinks(tasks?: Task[]): void {
     // 不展示
     if (!this.context.getOptions().links.show) {
-      this.destroy();
+      this.linksGroup.destroyChildren();
+      this.linkCache.clear();
       return;
     }
 
     // 没有任务，不需要创建任何连线
     if (this.tasks.length === 0) {
-      this.destroy();
+      this.linksGroup.destroyChildren();
+      this.linkCache.clear();
       return;
     }
 
