@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-25 16:35:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-05 16:52:27
+ * @LastEditTime: 2026-01-12 17:01:08
  * @Description: 全局指示线
  */
 
@@ -78,6 +78,11 @@ export class GuideLine {
     this.context.event.on(EventName.MOVE_GUIDELINE, (left: number) => {
       this.setLeft(left);
     });
+
+    // 监听更新事件
+    this.context.event.on(EventName.OPTIONS_UPDATE, () => {
+      this.updateOptions();
+    });
   }
 
   /**
@@ -148,5 +153,16 @@ export class GuideLine {
    */
   public getLeft() {
     return this.element.offsetLeft;
+  }
+
+  /**
+   * 更新参数
+   */
+  public updateOptions(): void {
+    this.element.style.setProperty(
+      "border-left",
+      `1px dashed ${this.context.getOptions().border.color}`,
+      "important"
+    );
   }
 }

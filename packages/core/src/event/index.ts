@@ -68,6 +68,7 @@ export enum EventName {
   CHART_OFFSET_CHANGE = "chart_offset_change",
   DATA_UPDATE = "data-update",
   VIEW_UPDATE = "view-update",
+  OPTIONS_UPDATE = "options-update",
 
   // 指定更新内容
   UPDATE_TABLE_HEADER = "update_table_header",

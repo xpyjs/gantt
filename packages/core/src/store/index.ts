@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:31
  * @LastEditors: JeremyJone
- * @LastEditTime: 2026-01-12 11:19:19
+ * @LastEditTime: 2026-01-12 16:54:12
  * @Description: Store
  */
 import { OptionManager } from "./OptionManager";
@@ -17,6 +17,7 @@ import { Logger } from "../utils/logger";
 import { IContext } from "@/types/render";
 import { IOptionConfig, IOptions } from "@/types";
 import { ILink } from "@/types/link";
+import { EventName } from "../event";
 
 export class Store {
   // 声明成员属性类型
@@ -100,6 +101,7 @@ export class Store {
     this.context.getScrollbar().updateOptions(
       this.context.store.getOptionManager().getOptions().scrollbar || {}
     );
+    this.context.event.emit(EventName.OPTIONS_UPDATE);
 
     if (isArray(data)) {
       this.dataManager.setData(data, false);
