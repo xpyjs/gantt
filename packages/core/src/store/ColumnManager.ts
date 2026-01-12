@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-25 17:23:34
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-11-04 10:51:31
+ * @LastEditTime: 2026-01-12 20:28:55
  * @Description: 列管理器
  */
 
@@ -60,6 +60,9 @@ export class ColumnManager {
 
   /** 临时叶子列数据，用于更新源数据，读取宽度等原信息 */
   private temporaryLeafColumns: IColumn[] = [];
+
+  /** 记录每一列的列宽 */
+  private columnWidths: Map<string, number> = new Map();
 
   /**
    * 保存所有行列合并的信息
@@ -130,12 +133,11 @@ export class ColumnManager {
         column.label || (isLeaf ? (column as ITableColumnStandard).field : "");
 
       // 获取列宽度。分组列的宽度会自动撑开。更新数据的话，会优先调取旧数据中的宽度
-      const width = isLeaf
+      const width = this.columnWidths.get(key) ?? (isLeaf
         ? this.temporaryLeafColumns.find(c => c.key === key)?.width ||
         (column as ITableColumnStandard).width ||
         100
-        : "auto";
-
+        : "auto");
       // 创建内部列数据
       const internalColumn: IColumn = {
         label,
@@ -218,6 +220,8 @@ export class ColumnManager {
     const column = this.leafColumns.find(column => column.key === key);
     if (column) {
       column.width = width;
+      // 保存列宽度
+      this.columnWidths.set(key, width);
     }
 
     this.context.event.emit(EventName.COLUMN_WIDTH_CHANGE, key, width);
