@@ -917,6 +917,38 @@ export const apiItems: ApiItem[] = [
     ]
   },
   {
+    id: "collapse",
+    key: "collapse",
+    title: "表格收起按钮配置",
+    type: "object",
+    description: "控制表格收起按钮的显示和行为",
+    category: "interaction",
+    children: [
+      {
+        id: "collapse-show",
+        key: "show",
+        title: "显示收起按钮",
+        type: "boolean",
+        defaultValue: "true",
+        description: "是否显示收起按钮"
+      },
+      {
+        id: "collapse-backgroundColor",
+        key: "backgroundColor",
+        title: "背景颜色",
+        type: "string",
+        description: "收起按钮的背景颜色"
+      },
+      {
+        id: "collapse-radius",
+        key: "radius",
+        title: "圆角",
+        type: "number",
+        description: "收起按钮的圆角。仅对右上角和右下角生效。"
+      }
+    ]
+  },
+  {
     id: "data",
     key: "data",
     title: "源数据",
@@ -2176,14 +2208,6 @@ export const apiItems: ApiItem[] = [
         type: '"left" | "center" | "right"',
         defaultValue: '"left"',
         description: "统一设置列对齐方式。每列的对齐方式可以单独设置"
-      },
-      {
-        id: "table-collapsible",
-        key: "collapsible",
-        title: "收起/展开表格",
-        type: "boolean",
-        defaultValue: "false",
-        description: "允许收起表格。开启后，中线会显示一个折叠按钮，点击后可以收起表格"
       },
       {
         id: "table-columns",
