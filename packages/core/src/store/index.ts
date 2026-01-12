@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:31
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-10 14:09:36
+ * @LastEditTime: 2026-01-12 11:19:19
  * @Description: Store
  */
 import { OptionManager } from "./OptionManager";
@@ -96,6 +96,10 @@ export class Store {
         task.updateMode();
       });
     }
+
+    this.context.getScrollbar().updateOptions(
+      this.context.store.getOptionManager().getOptions().scrollbar || {}
+    );
 
     if (isArray(data)) {
       this.dataManager.setData(data, false);

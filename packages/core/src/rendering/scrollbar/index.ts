@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-23 14:54:51
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-05 16:52:33
+ * @LastEditTime: 2026-01-12 11:02:33
  * @Description: 自定义滚动区域。为了优化滚动样式
  */
 
@@ -47,7 +47,7 @@ interface ScrollEventData {
  */
 export class Scrollbar {
   private rootElement: HTMLElement;
-  private options: Required<ScrollbarOptions>;
+  private options!: Required<ScrollbarOptions>;
 
   // 滚动条元素
   private hScrollbar!: HTMLDivElement;
@@ -99,6 +99,29 @@ export class Scrollbar {
     options?: Partial<ScrollbarOptions>
   ) {
     this.rootElement = rootElement;
+    this.createElements();
+    this.updateOptions(options);
+
+    this.throttledHandleMouseMove = throttle(
+      this.handleMouseMove.bind(this),
+      16
+    );
+    this.throttledHandleWheel = throttle(this.handleWheel.bind(this), 16, {
+      leading: true,
+      trailing: false
+    });
+
+    this.bindEvents();
+
+    if (this.rootElement.matches(":hover")) {
+      this.handleMouseEnter();
+    } else {
+      this.clearTimeouts();
+      this.hideScrollbars(true);
+    }
+  }
+
+  public updateOptions(options?: Partial<ScrollbarOptions>): void {
     this.options = merge(
       {
         showHorizontal: true,
@@ -122,25 +145,7 @@ export class Scrollbar {
       options
     );
 
-    this.throttledHandleMouseMove = throttle(
-      this.handleMouseMove.bind(this),
-      16
-    );
-    this.throttledHandleWheel = throttle(this.handleWheel.bind(this), 16, {
-      leading: true,
-      trailing: false
-    });
-
-    this.createElements();
     this.applyStyles();
-    this.bindEvents();
-
-    if (this.rootElement.matches(":hover")) {
-      this.handleMouseEnter();
-    } else {
-      this.clearTimeouts();
-      this.hideScrollbars(true);
-    }
   }
 
   // --- 元素创建与管理 ---
