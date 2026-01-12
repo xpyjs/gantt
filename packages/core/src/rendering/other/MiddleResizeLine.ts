@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-05-09 17:06:07
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-05 16:51:14
+ * @LastEditTime: 2026-01-12 17:15:24
  * @Description: 表格和图表中间的移动线
  */
 
@@ -35,40 +35,52 @@ export class MiddleResizeLine {
     this.line.style.cursor = "col-resize";
 
     // 添加收起按钮
-    // if (!!this.root.store.getOptionManager().getOptions().table.collapsible) {
-    this.collapseButton = document.createElement("div");
-    this.collapseButton.className = "x-gantt-collapse-button";
-    this.collapseButton.style.position = "absolute";
-    this.collapseButton.style.top = "50%";
-    this.collapseButton.style.left = "0";
-    this.collapseButton.style.transform = "translateY(-50%)";
-    this.collapseButton.style.cursor = "pointer";
+    if (this.root.store.getOptionManager().getOptions().collapse.show) {
+      this.collapseButton = document.createElement("div");
+      this.collapseButton.className = "x-gantt-collapse-button";
+      this.collapseButton.style.position = "absolute";
+      this.collapseButton.style.top = "50%";
+      this.collapseButton.style.left = "0";
+      this.collapseButton.style.transform = "translateY(-50%)";
+      this.collapseButton.style.cursor = "pointer";
 
-    // 设置折叠按钮的样式
-    this.collapseButton.style.width = "16px";
-    this.collapseButton.style.height = "30px";
-    this.collapseButton.style.backgroundColor = "#fff";
-    this.collapseButton.style.borderRadius = "0 6px 6px 0";
-    this.collapseButton.style.boxShadow = "0 0 2px rgba(0, 0, 0, 0.2)";
-    this.collapseButton.style.display = "flex";
-    this.collapseButton.style.alignItems = "center";
-    this.collapseButton.style.justifyContent = "center";
-    // 设置折叠按钮的图标
-    this.collapseButton.innerHTML = leftIcon;
+      // 设置折叠按钮的样式
+      this.collapseButton.style.width = "16px";
+      this.collapseButton.style.height = "30px";
+      this.collapseButton.style.backgroundColor = this.root.store.getOptionManager().getOptions().collapse.backgroundColor || "#fff";
+      this.collapseButton.style.borderRadius = `0 ${this.root.store.getOptionManager().getOptions().collapse.radius}px ${this.root.store.getOptionManager().getOptions().collapse.radius}px 0`;
+      this.collapseButton.style.boxShadow = "0 0 2px rgba(0, 0, 0, 0.2)";
+      this.collapseButton.style.display = "flex";
+      this.collapseButton.style.alignItems = "center";
+      this.collapseButton.style.justifyContent = "center";
+      // 设置折叠按钮的图标
+      this.collapseButton.innerHTML = leftIcon;
 
-    // 点击折叠按钮时触发事件
-    this.collapseButton.addEventListener("click", e => {
-      e.stopPropagation();
-      this.root.store.getColumnManager().collapse();
-    });
+      // 点击折叠按钮时触发事件
+      this.collapseButton.addEventListener("click", e => {
+        e.stopPropagation();
+        this.root.store.getColumnManager().collapse();
+      });
 
-    this.line.appendChild(this.collapseButton);
-    // }
+      this.line.appendChild(this.collapseButton);
+    }
 
     this.container.appendChild(this.line);
 
     // 添加拖拽功能
     this.addDragEvents();
+
+    this.initEvents();
+  }
+
+  /**
+   * 初始化事件
+   */
+  private initEvents() {
+    // 监听更新事件
+    this.root.event.on(EventName.OPTIONS_UPDATE, () => {
+      this.updateOptions();
+    });
   }
 
   public setOffset(x: number) {
@@ -180,5 +192,23 @@ export class MiddleResizeLine {
 
     // 添加鼠标按下事件监听
     this.line.addEventListener("mousedown", onMouseDown);
+  }
+
+  /**
+   * 更新配置
+   */
+  private updateOptions() {
+    // 更新边框颜色
+    this.line.style.setProperty(
+      "border-left-color",
+      this.root.store.getOptionManager().getOptions().border.color,
+      "important"
+    );
+
+    // 更新按钮样式
+    if (this.collapseButton) {
+      this.collapseButton.style.backgroundColor = this.root.store.getOptionManager().getOptions().collapse.backgroundColor || "#fff";
+      this.collapseButton.style.borderRadius = `0 ${this.root.store.getOptionManager().getOptions().collapse.radius}px ${this.root.store.getOptionManager().getOptions().collapse.radius}px 0`;
+    }
   }
 }

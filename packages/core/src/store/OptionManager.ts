@@ -163,6 +163,11 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
   border: {
     color: "#e5e5e5"
   },
+  collapse: {
+    show: true,
+    backgroundColor: "#fff",
+    radius: 6
+  },
   header: {
     height: 80,
     color: "auto",

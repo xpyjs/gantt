@@ -556,6 +556,16 @@ export interface IGanttOptions {
     color: string;
   };
 
+  /** 表格收起按钮配置 */
+  collapse: {
+    /** 是否显示收起按钮。默认 true */
+    show: boolean;
+    /** 按钮背景颜色。默认 #fff */
+    backgroundColor: string;
+    /** 按钮圆角。针对右上角与右下角。默认 6 */
+    radius: number;
+  };
+
   /** 头部配置 */
   header: {
     /**
