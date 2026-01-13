@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-12-31 16:56:13
+ * @LastEditTime: 2026-01-13 10:01:41
  * @Description: 数据管理器
  */
 
@@ -79,22 +79,16 @@ export class DataManager {
         this.tasks.push(this.createTask(data));
       });
     } else {
-      // if (this.rawData.length > 0) {
-      //   this.taskMap.clear();
-      //   this.updateTask(this.rawData, this.tasks);
-      // } else {
-      //   this.tasks = [];
-      //   this.taskMap.clear();
-      //   this.collapsedTaskIds.clear();
-      // }
-
-      this.dataLevel = 0;
-      this.tasks = [];
-      this.taskMap.clear();
-
-      this.rawData.forEach(data => {
-        this.tasks.push(this.createTask(data));
-      });
+      if (this.rawData.length > 0) {
+        this.dataLevel = 0;
+        this.updateTask(this.rawData, this.tasks);
+      } else {
+        // 数据为空，彻底清空
+        this.tasks = [];
+        this.taskMap.clear();
+        this.collapsedTaskIds.clear();
+        this.dataLevel = 0;
+      }
     }
   }
 
@@ -116,70 +110,88 @@ export class DataManager {
   }
 
   private updateTask(data: any[], tasks: Task[], parent?: Task): void {
-    // FIXME: 更新方法有问题，在处理子节点时，处理的逻辑不太对。后续有时间看一下，目前直接全部使用 create 方案。
-    // 两个数组递归循环遍历。 data 为新的原始数据，tasks 为旧任务数据
-    // - 以数组下标为依据：
-    //   1、data 下标超过 tasks 下标，则新增任务
-    //   2、tasks 下标超过 data 下标，则删除任务
-    //   3、data 和 tasks 下标相同，检查：
-    //     - id 相同，更新 task 数据，返回当前 task
-    //     - id 不同，删除旧任务，新增新任务
-    //     - 没有 id，则直接更新数据
-    let i = 0;
-    while (i < data.length) {
-      const newData = data[i];
-      const oldTask = tasks[i];
+    const options = this.store.getOptionManager().getOptions();
+    const idField = options.fields.id;
+    const childrenField = options.fields.children;
 
-      if (newData && !oldTask) {
-        // 新数据，旧任务不存在，新增任务
-        const newTask = this.createTask(newData, parent, false);
-        tasks.push(newTask);
-        this.dataLevel = Math.max(this.dataLevel, newTask.level);
-      } else if (!newData && oldTask) {
-        // 旧任务存在，新数据不存在，删除任务
-        tasks.splice(i, 1);
-      } else if (newData && oldTask) {
-        // 新数据和旧任务都存在，检查 ID 是否相同
-        if (
-          newData[this.store.getOptionManager().getOptions().fields.id] ===
-          oldTask.id
-        ) {
-          // ID 相同，更新任务数据
-          oldTask.updateData(newData);
-          this.taskMap.set(oldTask.id, oldTask);
-          this.dataLevel = Math.max(this.dataLevel, oldTask.level);
-        } else {
-          // ID 不同，删除旧任务，新增新任务
-          tasks[i] = this.createTask(newData, oldTask.parent, false);
-          this.dataLevel = Math.max(this.dataLevel, tasks[i].level);
+    // 1. 建立当前层级旧任务的映射 Map<ID, Task>，这样可以通过 ID 快速找回之前的任务实例，保留状态
+    const existingTasksMap = new Map<string, Task>();
+    tasks.forEach(t => existingTasksMap.set(t.id, t));
+
+    // 2. 清空现有任务列表，按照新数据的顺序重新填充。使用 length = 0 修改原数组引用，保持引用关联
+    tasks.length = 0;
+
+    // 3. 遍历新数据进行 Diff
+    for (const item of data) {
+      const id = item[idField];
+      let task = existingTasksMap.get(id);
+
+      if (task) {
+        // 任务已存在，更新数据
+        task.updateData(item);
+        task.parent = parent; // 更新父节点引用（为了处理移动节点的情况）
+
+        // 从 map 中移除，任务已被消费
+        existingTasksMap.delete(id);
+      } else {
+        // 任务不存在，创建新任务。 isRecursive 传 false，手动处理子节点递归
+        task = this.createTask(item, parent, false);
+      }
+
+      // 更新层级
+      task.level = parent ? parent.level + 1 : 0;
+      this.dataLevel = Math.max(this.dataLevel, task.level);
+
+      // 递归处理子节点
+      const childData = item[childrenField];
+      if (Array.isArray(childData) && childData.length > 0) {
+        if (!task.children) task.children = [];
+        this.updateTask(childData, task.children, task);
+      } else {
+        // 新数据没有子任务，但旧对象可能有子任务，需要清理
+        if (task.children && task.children.length > 0) {
+          this.removeTasksRecursive(task.children);
+          task.children = [];
         }
       }
 
-      // 处理子任务
-      const childData = newData[this.store.getOptionManager().getOptions().fields.children];
-      if (childData) {
-        // 如果有子任务，递归处理
-        if (oldTask && oldTask.children) {
-          this.updateTask(childData, oldTask.children, oldTask);
-        } else {
-          // 如果旧任务没有子任务，则创建新的子任务
-          const newChildren = childData.map((child: any) =>
-            this.createTask(child, tasks[i], false)
-          );
-          tasks[i].children = newChildren;
-        }
-      } else if (oldTask && oldTask.children) {
-        // 如果没有子任务，但旧任务有子任务，则清空子任务
-        oldTask.children = [];
+      // 将处理好的任务按新顺序加入列表
+      tasks.push(task);
+    }
+
+    // 4. Map 中剩余的任务说明在新数据中已不存在，需要清理
+    if (existingTasksMap.size > 0) {
+      this.removeTasksRecursive(Array.from(existingTasksMap.values()));
+    }
+  }
+
+  /**
+   * 递归清理任务（从全局 Map、选中状态等中移除）
+   * 这是一个内部辅助方法，不触发视图更新事件，仅清理数据引用
+   */
+  private removeTasksRecursive(tasks: Task[]) {
+    tasks.forEach(task => {
+      // 1. 从全局 ID 映射中移除
+      this.taskMap.delete(task.id);
+      this.collapsedTaskIds.delete(task.id);
+
+      // 2. 清理选中状态
+      if (this.selectedTaskId === task.id) {
+        this.selectedTaskId = null;
+        this.event.emit(EventName.TASK_UNSELECTED, task.id);
       }
 
-      i++;
-    }
+      // 3. 清理 Check 列表
+      const checkedIdx = this.checkedList.findIndex(t => t.id === task.id);
+      if (checkedIdx !== -1) {
+        this.checkedList.splice(checkedIdx, 1);
+      }
 
-    // 如果 task 长度仍然存在，直接删除
-    if (tasks.length >= i) {
-      tasks.splice(i);
-    }
+      // 4. 递归清理子任务
+      if (task.children && task.children.length > 0) {
+        this.removeTasksRecursive(task.children);
+      }
+    });
   }
 
   /**
