@@ -1,3 +1,25 @@
+## [0.0.3](https://github.com/xpyjs/gantt/compare/v0.0.2...v0.0.3) (2026-01-14)
+
+
+### Bug Fixes
+
+* **core:** Fixes memory leak in link cleanup operations ([f525e00](https://github.com/xpyjs/gantt/commit/f525e00df8b1625c40353540c1b723563ed47f6a))
+* **core:** Improves chart slider boundary detection logic ([342508f](https://github.com/xpyjs/gantt/commit/342508fa2b971f2d81a9cc0e964577f6520fdd11))
+* **core:** Improves task update diff algorithm for better performance ([cf8e086](https://github.com/xpyjs/gantt/commit/cf8e0861d1f469c8419f59ed7d3dec8b4b080572))
+* **core:** listen option changed and update resize line style ([533ef66](https://github.com/xpyjs/gantt/commit/533ef665229a6295b61b2f01fdb8a4059120cc45))
+* **core:** Prevents event bubbling on expand button interactions ([be55d0c](https://github.com/xpyjs/gantt/commit/be55d0c794a8ac421b2d0e7fa981bdd74bc71221))
+* **core:** table column width reset when options changed ([80825b9](https://github.com/xpyjs/gantt/commit/80825b92672ee9abece9c017ee20af65e458ab53))
+* **core:** update collapse button when options changed. ([af45120](https://github.com/xpyjs/gantt/commit/af451207379a62ff2128013a97fb6bad58a296a9))
+* **core:** update milestone shape y pos ([eaef0c9](https://github.com/xpyjs/gantt/commit/eaef0c9245198fb39b273999122d2af7ba0b8c4b))
+* **core:** update scrollbar style when options changed ([dc147f8](https://github.com/xpyjs/gantt/commit/dc147f87b1c4f072fae31612ffa3e78aaa929998))
+
+
+### Features
+
+* **core:** Add 'auto' keyword color in HEADER ([cd79ce6](https://github.com/xpyjs/gantt/commit/cd79ce6e2e50af5d1364c0f69821ff428aa9bc87))
+
+
+
 ## [0.0.2](https://github.com/xpyjs/gantt/compare/v0.0.1...v0.0.2) (2025-12-31)
 
 
