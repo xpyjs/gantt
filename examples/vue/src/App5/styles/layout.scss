@@ -1,0 +1,414 @@
+/**
+ * XGantt Pro Demo 布局样式
+ */
+@use './theme.scss' as *;
+
+// ============================================================
+// 布局基础
+// ============================================================
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: $bg-color;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+// ============================================================
+// 卡片组件
+// ============================================================
+.card {
+  background: $bg-card;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &--flat {
+    box-shadow: none;
+    border: 1px solid $border-color;
+  }
+}
+
+// ============================================================
+// 顶部导航栏
+// ============================================================
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 24px;
+  background: $bg-card;
+  border-bottom: 1px solid $border-color;
+  z-index: 100;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    &-logo {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, $primary, $primary-dark);
+      border-radius: 10px;
+      font-size: 18px;
+      color: white;
+    }
+
+    &-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: $text-primary;
+      letter-spacing: -0.5px;
+    }
+
+    &-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      background: rgba($primary, 0.1);
+      color: $primary;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+  }
+
+  &__center {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+// ============================================================
+// 主内容区
+// ============================================================
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow: hidden;
+  gap: 16px;
+}
+
+// ============================================================
+// 统计卡片区
+// ============================================================
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  @extend .card;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 24px;
+
+    &--primary {
+      background: rgba($primary, 0.1);
+      color: $primary;
+    }
+
+    &--success {
+      background: rgba($success, 0.1);
+      color: $success;
+    }
+
+    &--warning {
+      background: rgba($warning, 0.1);
+      color: $warning;
+    }
+
+    &--danger {
+      background: rgba($danger, 0.1);
+      color: $danger;
+    }
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__value {
+    font-size: 28px;
+    font-weight: 700;
+    color: $text-primary;
+    line-height: 1.2;
+  }
+
+  &__label {
+    font-size: 13px;
+    color: $text-muted;
+    margin-top: 4px;
+  }
+
+  &__trend {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+
+    &--up {
+      color: $success;
+    }
+
+    &--down {
+      color: $danger;
+    }
+  }
+}
+
+// ============================================================
+// 甘特图容器
+// ============================================================
+.gantt-wrapper {
+  @extend .card;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid $border-color;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: $text-primary;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &-icon {
+      color: $primary;
+    }
+  }
+
+  &__tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__body {
+    flex: 1;
+    overflow: hidden;
+
+    // XGantt 容器样式
+    :deep(.x-gantt-container) {
+      height: 100%;
+    }
+  }
+}
+
+// ============================================================
+// 状态栏
+// ============================================================
+.statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  padding: 0 20px;
+  background: $bg-card;
+  border-top: 1px solid $border-color;
+  font-size: 12px;
+  color: $text-muted;
+
+  &__left,
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    &-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: $success;
+      animation: pulse 2s infinite;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+// ============================================================
+// 右键菜单
+// ============================================================
+.context-menu {
+  position: fixed;
+  z-index: 9999;
+  min-width: 180px;
+  background: $bg-card;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  padding: 6px;
+  animation: contextMenuIn 0.15s ease-out;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    color: $text-primary;
+    transition: all 0.15s ease;
+
+    &:hover {
+      background: rgba($primary, 0.08);
+      color: $primary;
+    }
+
+    &--danger {
+      color: $danger;
+
+      &:hover {
+        background: rgba($danger, 0.08);
+        color: $danger;
+      }
+    }
+
+    &-icon {
+      font-size: 16px;
+      opacity: 0.7;
+    }
+
+    &-shortcut {
+      margin-left: auto;
+      font-size: 11px;
+      color: $text-muted;
+      background: $bg-color;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    background: $border-color;
+    margin: 6px 0;
+  }
+}
+
+@keyframes contextMenuIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ============================================================
+// 暗色模式
+// ============================================================
+.dark {
+  .app-layout {
+    background: $dark-bg;
+  }
+
+  .card {
+    background: $dark-card;
+    border-color: $dark-border;
+  }
+
+  .navbar {
+    background: $dark-card;
+    border-color: $dark-border;
+
+    &__brand-name {
+      color: $dark-text;
+    }
+  }
+
+  .stat-card {
+    &__value {
+      color: $dark-text;
+    }
+  }
+
+  .gantt-wrapper {
+    &__header {
+      border-color: $dark-border;
+    }
+
+    &__title {
+      color: $dark-text;
+    }
+  }
+
+  .statusbar {
+    background: $dark-card;
+    border-color: $dark-border;
+    color: $dark-text-secondary;
+  }
+
+  .context-menu {
+    background: $dark-card;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+
+    &__item {
+      color: $dark-text;
+
+      &:hover {
+        background: rgba($primary, 0.15);
+      }
+
+      &-shortcut {
+        background: rgba(255, 255, 255, 0.05);
+      }
+    }
+
+    &__divider {
+      background: $dark-border;
+    }
+  }
+}

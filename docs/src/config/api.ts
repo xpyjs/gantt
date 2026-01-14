@@ -10,6 +10,7 @@ export interface ApiItem {
   options?: string[]; // 可选值
   children?: ApiItem[]; // 子项（当 type 为 object 时）
   category?: string; // 所属分类，用于在 API 页面中分组显示
+  updated?: string[]; // 更新记录
 }
 
 // 配置分类接口
@@ -1254,7 +1255,11 @@ export const apiItems: ApiItem[] = [
         key: "color",
         title: "文字颜色",
         type: "string",
-        description: "文字颜色"
+        defaultValue: '"auto"',
+        description: "文字颜色。支持 <code>auto</code> 特殊关键字，当为 <code>auto</code> 时，可根据背景色自动调整为 黑/白",
+        updated: [
+          '<code>auto</code> 特殊字符从 v0.0.3 开始支持'
+        ]
       },
       {
         id: "header-fontFamily",

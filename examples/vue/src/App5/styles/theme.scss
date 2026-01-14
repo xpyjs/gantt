@@ -1,0 +1,75 @@
+/**
+ * XGantt Pro Demo 主题样式
+ * 基于 #b382e7 紫色为主色调
+ */
+
+// ============================================================
+// 颜色变量
+// ============================================================
+$primary: #b382e7;
+$primary-light: #c9a4ee;
+$primary-lighter: #e1d0f5;
+$primary-dark: #9463c9;
+
+$success: #52c41a;
+$warning: #faad14;
+$danger: #ff4d4f;
+$info: #909399;
+
+$bg-color: #f8f9fc;
+$bg-card: #ffffff;
+$border-color: #e8ecf1;
+$text-primary: #1f2937;
+$text-secondary: #6b7280;
+$text-muted: #9ca3af;
+
+// 暗色模式
+$dark-bg: #0f172a;
+$dark-card: #1e293b;
+$dark-border: #334155;
+$dark-text: #e2e8f0;
+$dark-text-secondary: #94a3b8;
+
+// ============================================================
+// Element Plus CSS 变量覆盖
+// ============================================================
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': $primary,
+    ),
+  )
+);
+@use "element-plus/theme-chalk/src/index.scss" as *;
+// import dark theme
+@use "element-plus/theme-chalk/src/dark/css-vars.scss" as *;
+
+// ============================================================
+// 全局基础样式
+// ============================================================
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+// ============================================================
+// 导出变量供其他文件使用
+// ============================================================
+:export {
+  primary: $primary;
+  primaryLight: $primary-light;
+  primaryDark: $primary-dark;
+  success: $success;
+  warning: $warning;
+  danger: $danger;
+}

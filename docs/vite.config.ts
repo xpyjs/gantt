@@ -32,5 +32,9 @@ export default defineConfig({
   },
   worker: {
     format: "es"
+  },
+  // @vue/repl 优化配置
+  optimizeDeps: {
+    exclude: ["@vue/repl"]
   }
 });

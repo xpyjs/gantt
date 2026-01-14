@@ -27,6 +27,9 @@ document.body.innerHTML = `<div id="app">
         </div>
       </div>
       <div class="checkbox">
+        <input type="checkbox" id="chk-show-link" checked>显示关连线</checkbox>
+      </div>
+      <div class="checkbox">
         <input type="checkbox" id="chk-show-holiday" checked>显示假期</checkbox>
       </div>
       <div class="checkbox">
@@ -687,6 +690,12 @@ if (btnGroup) {
   unitSelect.addEventListener('change', () => {
     gantt.update({ unit: unitSelect.value as any });
     notify('info', '视图单位已更新');
+  });
+
+  const linkChk = btnGroup.querySelector('#chk-show-link') as HTMLInputElement;
+  linkChk.addEventListener('change', () => {
+    gantt.update({ links: { show: linkChk.checked } });
+    notify('info', '关连线显示已更新');
   });
 
   const holidayChk = btnGroup.querySelector('#chk-show-holiday') as HTMLInputElement;

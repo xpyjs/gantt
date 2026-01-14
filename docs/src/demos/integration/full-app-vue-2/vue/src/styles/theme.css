@@ -1,0 +1,79 @@
+/**
+ * XGantt Pro Demo 主题样式
+ * 基于 #b382e7 紫色为主色调
+ */
+
+/* ============================================================
+   通过 CSS 变量覆盖主题色
+   ============================================================ */
+:root {
+  /* 主色调 */
+  --primary: #b382e7;
+  --primary-light: #c9a4ee;
+  --primary-lighter: #e1d0f5;
+  --primary-dark: #9463c9;
+
+  /* 状态颜色 */
+  --success: #52c41a;
+  --warning: #faad14;
+  --danger: #ff4d4f;
+  --info: #909399;
+
+  /* 背景颜色 */
+  --bg-color: #f8f9fc;
+  --bg-card: #ffffff;
+  --bg-secondary: #f5f7fa;
+
+  /* 边框颜色 */
+  --border-color: #e8ecf1;
+  --border-light: #ebeef5;
+
+  /* 文字颜色 */
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-tertiary: #9ca3af;
+  --text-muted: #9ca3af;
+
+  /* Element Plus 主题色覆盖 */
+  --el-color-primary: #b382e7;
+  --el-color-primary-light-3: #c9a4ee;
+  --el-color-primary-light-5: #e1d0f5;
+  --el-color-primary-light-7: #ede3f7;
+  --el-color-primary-light-8: #f3ebfa;
+  --el-color-primary-light-9: #f9f5fc;
+  --el-color-primary-dark-2: #9463c9;
+
+  /* 主色别名 */
+  --primary-color: #b382e7;
+}
+
+/* 暗色模式变量 */
+.dark {
+  --bg-color: #0f172a;
+  --bg-card: #1e293b;
+  --bg-secondary: #334155;
+  --border-color: #334155;
+  --border-light: #475569;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --text-muted: #64748b;
+}
+
+/* ============================================================
+   全局基础样式
+   ============================================================ */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}

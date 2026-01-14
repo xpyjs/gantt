@@ -243,7 +243,7 @@ const onContextmenuSlider = (event: MouseEvent, task: any) => {
 };
 </script>
 
-<style lang="css">
+<style>
 body,
 html,
 #app,

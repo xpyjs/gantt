@@ -436,7 +436,27 @@ export const demoCategories: DemoCategory[] = [
             path: "integration/full-app-vue-1/vue",
             view: 'preview',
             dependencies: {
-              'element-plus': '^2.11.2'
+              "element-plus": "https://esm.sh/element-plus@2.11.2?external=vue",
+            }
+          }
+        ]
+      },
+      {
+        id: "full-app-vue-2",
+        title: "Vue3+ElementPlus的复杂构建",
+        description: "构建漂亮的、复杂的、高性能的完整应用",
+        category: "integration",
+        difficulty: "advanced",
+        tags: ["Vue", "自定义", "渲染", "高级"],
+        code: [
+          {
+            framework: "vue",
+            language: "vue",
+            path: "integration/full-app-vue-2/vue",
+            view: 'preview',
+            dependencies: {
+              "element-plus": "https://esm.sh/element-plus@2.11.2?external=vue",
+              "@element-plus/icons-vue": "https://esm.sh/@element-plus/icons-vue@2.3.2?external=vue",
             }
           }
         ]

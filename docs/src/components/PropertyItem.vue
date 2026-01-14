@@ -28,6 +28,14 @@
       </div>
     </div>
 
+    <!-- 更新记录 -->
+    <div v-if="item.updated && item.updated.length" class="property-updated">
+      <strong>更新记录：</strong>
+      <ul>
+        <li v-for="update in item.updated" :key="update" v-html="highlightSearchTerm(update)" />
+      </ul>
+    </div>
+
     <!-- 子属性 -->
     <div v-if="item.children && item.children.length" class="property-children">
       <PropertyItem
@@ -192,6 +200,25 @@ pre {
   background: var(--bg-secondary);
   border-radius: 8px;
   border-left: 4px solid var(--accent-color);
+}
+
+.property-updated {
+  padding: 1rem 1rem 0.5rem;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  border-left: 2px solid var(--warning-color);
+}
+.property-updated ul {
+  list-style-type: none;
+  margin-top: 0.25rem;
+}
+.property-updated li {
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+}
+:deep(.property-updated code) {
+  background: var(--bg-primary) !important;
 }
 
 /* 内联代码 - 只应用于非代码块中的code */

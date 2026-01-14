@@ -116,16 +116,93 @@
           </div>
         </div>
 
-        <!-- Sandpack 编辑器和预览区域 -->
-        <div class="sandpack-container" :key="sandpackKey">
-          <Sandpack
-            ref="sandpackRef"
+        <!-- Vue 使用 VuePlayground -->
+        <div v-if="currentFramework === 'vue'" class="playground-container" :key="'vue-' + sandpackKey">
+          <!-- 文件目录树开关按钮（左上角，由 VuePlayground 组件自己提供） -->
+          <VuePlayground
+            :files="vuePlaygroundFiles"
+            :main-file="vueMainFile"
+            :dependencies="vuePlaygroundDependencies"
+            :is-dark="isDark"
+          />
+        </div>
+
+        <!-- JavaScript 和 React 使用 Sandpack -->
+        <div
+          v-else
+          class="sandpack-container"
+          :class="{
+            'is-fullscreen': isSandpackFullscreen,
+            'hide-editor': isSandpackFullscreen && !showEditorInFullscreen
+          }"
+          :key="'sandpack-' + sandpackKey"
+          @mouseenter="isSandpackHovered = true"
+          @mouseleave="isSandpackHovered = false"
+        >
+          <!-- 文件目录树开关按钮（左上角，鼠标悬停时显示） -->
+          <button
+            v-show="!isSandpackFullscreen && (isSandpackHovered || showFileExplorer)"
+            class="file-explorer-toggle"
+            :class="{ active: showFileExplorer }"
+            @click="showFileExplorer = !showFileExplorer"
+            title="显示/隐藏文件目录"
+          >
+            <Icon icon="ph:folder-open" width="16" height="16" />
+          </button>
+          <!-- 全屏时编辑器切换按钮（左上角） -->
+          <button
+            v-show="isSandpackFullscreen"
+            class="editor-toggle"
+            :class="{ active: showEditorInFullscreen }"
+            @click="toggleEditorInFullscreen"
+            :title="showEditorInFullscreen ? '隐藏编辑器' : '显示编辑器'"
+          >
+            <Icon
+              :icon="showEditorInFullscreen ? 'ph:code-simple' : 'ph:code'"
+              width="16"
+              height="16"
+            />
+          </button>
+          <!-- 全屏按钮（右上角，鼠标悬停时显示） -->
+          <button
+            v-show="isSandpackHovered || isSandpackFullscreen"
+            class="fullscreen-toggle"
+            @click="toggleSandpackFullscreen"
+            :title="isSandpackFullscreen ? '退出全屏' : '全屏预览'"
+          >
+            <Icon
+              :icon="isSandpackFullscreen ? 'ph:arrows-in' : 'ph:arrows-out'"
+              width="16"
+              height="16"
+            />
+          </button>
+          <SandpackProvider
             :template="sandpackTemplate"
             :theme="sandpackTheme"
             :files="sandpackFiles"
             :custom-setup="sandpackCustomSetup"
-            :options="sandpackOptions"
-          />
+            :options="sandpackProviderOptions"
+          >
+            <SandpackLayout class="sandpack-resizable-layout">
+              <SandpackFileExplorer v-if="showFileExplorer && !isSandpackFullscreen" />
+              <Splitpanes class="default-theme sandpack-splitpanes">
+                <Pane v-show="!isSandpackFullscreen || showEditorInFullscreen" :size="33" :min-size="20">
+                  <SandpackCodeEditor
+                    :show-tabs="true"
+                    :show-line-numbers="true"
+                    :show-inline-errors="true"
+                    :wrap-content="false"
+                    :closable-tabs="false"
+                  />
+                </Pane>
+                <Pane :size="67" :min-size="20">
+                  <SandpackPreview
+                    :show-refresh-button="true"
+                  />
+                </Pane>
+              </Splitpanes>
+            </SandpackLayout>
+          </SandpackProvider>
         </div>
       </div>
     </div>
@@ -137,9 +214,17 @@ import { ref, computed, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { RouterLink } from "vue-router";
 import { Icon } from "@iconify/vue";
-import { Sandpack } from "sandpack-vue3";
+import {
+  SandpackProvider,
+  SandpackLayout,
+  SandpackCodeEditor,
+  SandpackPreview,
+  SandpackFileExplorer
+} from "sandpack-vue3";
 import type { SandpackPredefinedTemplate } from "sandpack-vue3";
 import { githubLight, amethyst } from "@codesandbox/sandpack-themes";
+import { Splitpanes, Pane } from "splitpanes";
+import "splitpanes/dist/splitpanes.css";
 import JSZip from "jszip";
 import { demoCategories, DIFFICULTY_LEVELS } from "@/config/demos/index";
 import { FrameworkKey, useFramework } from "@/composables/useFramework";
@@ -151,6 +236,7 @@ import {
   prepareSandpackFiles,
   BASE_DEMO_PATH
 } from "@/utils/demoLoader";
+import VuePlayground from "@/components/VuePlayground.vue";
 
 interface DemoProps {
   category?: string;
@@ -165,7 +251,48 @@ const { isDark } = useTheme();
 
 // 响应式状态
 const currentFramework = ref<FrameworkKey>("javascript");
-const sandpackKey = ref(0); // 用于强制刷新 Sandpack
+const sandpackKey = ref(0); // 用于强制刷新 Sandpack 或 VuePlayground
+const showFileExplorer = ref(false); // 文件目录树开关
+const isSandpackHovered = ref(false); // Sandpack 容器鼠标悬停状态
+const isSandpackFullscreen = ref(false); // Sandpack 全屏状态
+const showEditorInFullscreen = ref(false); // 全屏时是否显示编辑器
+
+// 切换 Sandpack 全屏模式
+const toggleSandpackFullscreen = () => {
+  isSandpackFullscreen.value = !isSandpackFullscreen.value;
+
+  // 全屏时默认隐藏编辑器
+  if (isSandpackFullscreen.value) {
+    showEditorInFullscreen.value = false;
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+};
+
+// 切换全屏时编辑器的显示/隐藏
+const toggleEditorInFullscreen = () => {
+  showEditorInFullscreen.value = !showEditorInFullscreen.value;
+};
+
+// ESC 键退出全屏
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === "Escape" && isSandpackFullscreen.value) {
+    toggleSandpackFullscreen();
+  }
+};
+
+import { onUnmounted } from "vue";
+
+onMounted(() => {
+  document.addEventListener("keydown", handleKeydown);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", handleKeydown);
+  // 确保退出时恢复 body 滚动
+  document.body.style.overflow = "";
+});
 
 const categoryInfo = demoCategories.find(
   cat => cat.id === props.category || cat.id === route.params.category
@@ -231,11 +358,8 @@ const sandpackFiles = computed(() => {
 const sandpackCustomSetup = computed(() => {
   const dependencies: Record<string, string> = {};
 
-  // 根据框架添加对应的 gantt 包
+  // 根据框架添加对应的 gantt 包（Vue 使用 VuePlayground，这里仅针对 React 和 JS）
   switch (currentFramework.value) {
-    case "vue":
-      dependencies["@xpyjs/gantt-vue"] = "latest";
-      break;
     case "react":
       dependencies["@xpyjs/gantt-react"] = "latest";
       break;
@@ -253,18 +377,37 @@ const sandpackCustomSetup = computed(() => {
   return { dependencies };
 });
 
-const sandpackOptions = computed(() => ({
-  showNavigator: false,
-  showTabs: true,
-  showLineNumbers: true,
-  showInlineErrors: true,
-  showConsole: false,
-  showConsoleButton: false,
-  showRefreshButton: true,
-  wrapContent: false,
-  editorHeight: 500,
-  editorWidthPercentage: 40 // 编辑区宽度占比
+// Sandpack Provider 选项（用于自定义布局）
+const sandpackProviderOptions = computed(() => ({
+  bundlerTimeOut: 120000, // 增加超时时间到 120 秒
+  initMode: "lazy" as const
 }));
+
+// ============= VuePlayground 相关配置 =============
+
+// VuePlayground 文件（原始文件，不需要 Sandpack 模板包装）
+const vuePlaygroundFiles = computed(() => {
+  if (!currentEntry.value || currentFramework.value !== 'vue') return {};
+
+  const files: Record<string, string> = {};
+  for (const [path, content] of Object.entries(filesSource.value)) {
+    if (typeof content === 'string') {
+      files[path] = content;
+    }
+  }
+  return files;
+});
+
+// VuePlayground 主文件
+const vueMainFile = computed(() => {
+  return 'src/App.vue';
+});
+
+// VuePlayground 依赖
+const vuePlaygroundDependencies = computed(() => {
+  if (!currentEntry.value?.dependencies) return {};
+  return currentEntry.value.dependencies;
+});
 
 // 复制代码到剪贴板
 const copyCode = async () => {
@@ -739,12 +882,203 @@ onMounted(() => {
 }
 
 /* Sandpack 容器样式 */
-.sandpack-container {
+.sandpack-container,
+.playground-container {
   border-radius: 0 0 8px 8px;
   overflow: hidden;
   border: 1px solid var(--border-color);
+  border-top: none;
   background: var(--bg-primary);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  min-height: 500px;
+  transition: all 0.3s ease;
+}
+
+/* Sandpack 全屏模式 */
+.sandpack-container.is-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  border-radius: 0;
+  border: none;
+  min-height: 100vh;
+}
+
+.sandpack-container.is-fullscreen :deep(.sp-layout) {
+  height: 100vh !important;
+}
+
+/* 全屏按钮 */
+.fullscreen-toggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.fullscreen-toggle:hover {
+  opacity: 1;
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: var(--bg-primary);
+}
+
+/* 全屏时编辑器切换按钮（左上角） */
+.editor-toggle {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.editor-toggle:hover,
+.editor-toggle.active {
+  opacity: 1;
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+/* 全屏时隐藏编辑器的样式 */
+.sandpack-container.hide-editor :deep(.sandpack-splitpanes .splitpanes__pane:first-child) {
+  display: none !important;
+}
+
+.sandpack-container.hide-editor :deep(.sandpack-splitpanes .splitpanes__splitter) {
+  display: none !important;
+}
+
+.sandpack-container.hide-editor :deep(.sandpack-splitpanes .splitpanes__pane:last-child) {
+  width: 100% !important;
+  flex: 1 !important;
+}
+
+/* Sandpack 布局高度 */
+.sandpack-container :deep(.sp-layout) {
+  height: 500px;
+  border: none;
+  border-radius: 0;
+}
+
+/* Sandpack 可拖拽分割面板样式 */
+.sandpack-container :deep(.sandpack-splitpanes) {
+  flex: 1;
+  height: 100%;
+}
+
+.sandpack-container :deep(.sandpack-splitpanes .splitpanes__pane) {
+  display: flex;
+  overflow: hidden;
+}
+
+.sandpack-container :deep(.sandpack-splitpanes .splitpanes__splitter) {
+  background: var(--border-color);
+  position: relative;
+  z-index: 1;
+  width: 2px;
+}
+
+.sandpack-container :deep(.sandpack-splitpanes .splitpanes__splitter:hover) {
+  /* background: var(--accent-color); */
+}
+
+.sandpack-container :deep(.sandpack-splitpanes .splitpanes__splitter::before) {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+}
+
+/* Sandpack 内部组件高度 */
+.sandpack-container :deep(.sp-stack) {
+  height: 100%;
+}
+
+.sandpack-container :deep(.sp-editor) {
+  height: 100%;
+  flex: 1;
+}
+
+.sandpack-container :deep(.sp-preview) {
+  height: 100%;
+  flex: 2;
+}
+
+.sandpack-container :deep(.sp-code-editor) {
+  height: 100%;
+}
+
+.sandpack-container :deep(.sp-cm) {
+  height: 100%;
+}
+
+.sandpack-container :deep(.cm-editor) {
+  height: 100%;
+}
+
+.sandpack-container :deep(.sp-file-explorer) {
+  height: 100%;
+}
+
+/* 文件目录树开关按钮（左上角） */
+.file-explorer-toggle {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.file-explorer-toggle:hover,
+.file-explorer-toggle.active {
+  opacity: 1;
+  border-color: var(--accent-color);
+  color: var(--accent-color);
 }
 
 /* 隐藏 Sandpack 的底部状态栏和控制按钮 */

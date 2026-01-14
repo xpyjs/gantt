@@ -1,0 +1,411 @@
+/**
+ * XGantt Pro Demo 布局样式
+ */
+
+/* ============================================================
+   布局基础
+   ============================================================ */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ============================================================
+   卡片组件
+   ============================================================ */
+.card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card--flat {
+  box-shadow: none;
+  border: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   顶部导航栏
+   ============================================================ */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 24px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 100;
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar__brand-logo {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border-radius: 10px;
+  font-size: 18px;
+  color: white;
+}
+
+.navbar__brand-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.navbar__brand-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  background: rgba(179, 130, 231, 0.1);
+  color: var(--primary);
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.navbar__center {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ============================================================
+   主内容区
+   ============================================================ */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow: hidden;
+  gap: 16px;
+}
+
+/* ============================================================
+   统计卡片区
+   ============================================================ */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stat-card__icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 24px;
+}
+
+.stat-card__icon--primary {
+  background: rgba(179, 130, 231, 0.1);
+  color: var(--primary);
+}
+
+.stat-card__icon--success {
+  background: rgba(82, 196, 26, 0.1);
+  color: var(--success);
+}
+
+.stat-card__icon--warning {
+  background: rgba(250, 173, 20, 0.1);
+  color: var(--warning);
+}
+
+.stat-card__icon--danger {
+  background: rgba(255, 77, 79, 0.1);
+  color: var(--danger);
+}
+
+.stat-card__content {
+  flex: 1;
+}
+
+.stat-card__value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.stat-card__label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.stat-card__trend {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.stat-card__trend--up {
+  color: var(--success);
+}
+
+.stat-card__trend--down {
+  color: var(--danger);
+}
+
+/* ============================================================
+   甘特图容器
+   ============================================================ */
+.gantt-wrapper {
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.gantt-wrapper__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gantt-wrapper__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gantt-wrapper__title-icon {
+  color: var(--primary);
+}
+
+.gantt-wrapper__tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gantt-wrapper__body {
+  flex: 1;
+  overflow: hidden;
+}
+
+/* XGantt 容器样式 */
+.gantt-wrapper__body .x-gantt-container {
+  height: 100%;
+}
+
+/* ============================================================
+   状态栏
+   ============================================================ */
+.statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  padding: 0 20px;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-color);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.statusbar__left,
+.statusbar__right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.statusbar__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.statusbar__item-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ============================================================
+   右键菜单
+   ============================================================ */
+.context-menu {
+  position: fixed;
+  z-index: 9999;
+  min-width: 180px;
+  background: var(--bg-card);
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  padding: 6px;
+  animation: contextMenuIn 0.15s ease-out;
+}
+
+.context-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: all 0.15s ease;
+}
+
+.context-menu__item:hover {
+  background: rgba(179, 130, 231, 0.08);
+  color: var(--primary);
+}
+
+.context-menu__item--danger {
+  color: var(--danger);
+}
+
+.context-menu__item--danger:hover {
+  background: rgba(255, 77, 79, 0.08);
+  color: var(--danger);
+}
+
+.context-menu__item-icon {
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.context-menu__item-shortcut {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: var(--bg-color);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.context-menu__divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 6px 0;
+}
+
+@keyframes contextMenuIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   暗色模式
+   ============================================================ */
+.dark .app-layout {
+  background: var(--bg-color);
+}
+
+.dark .card {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+.dark .navbar {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+.dark .navbar__brand-name {
+  color: var(--text-primary);
+}
+
+.dark .stat-card__value {
+  color: var(--text-primary);
+}
+
+.dark .gantt-wrapper__header {
+  border-color: var(--border-color);
+}
+
+.dark .gantt-wrapper__title {
+  color: var(--text-primary);
+}
+
+.dark .statusbar {
+  background: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.dark .context-menu {
+  background: var(--bg-card);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.dark .context-menu__item {
+  color: var(--text-primary);
+}
+
+.dark .context-menu__item:hover {
+  background: rgba(179, 130, 231, 0.15);
+}
+
+.dark .context-menu__item-shortcut {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .context-menu__divider {
+  background: var(--border-color);
+}
