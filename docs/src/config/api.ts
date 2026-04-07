@@ -1,4 +1,14 @@
 // API 配置数据结构
+/** Badge 类型：标记参数的变更状态 */
+export type BadgeType = 'new' | 'removed' | 'changed';
+
+export interface ApiBadge {
+  /** 标签类型：new 新增 / removed 删除 / changed 修改 */
+  type: BadgeType;
+  /** 显示文本，如 'v0.1.0' */
+  label: string;
+}
+
 export interface ApiItem {
   id: string; // 完整路径，用于跳转和菜单联动
   key: string; // options 中的键值
@@ -10,6 +20,7 @@ export interface ApiItem {
   options?: string[]; // 可选值
   children?: ApiItem[]; // 子项（当 type 为 object 时）
   category?: string; // 所属分类，用于在 API 页面中分组显示
+  badge?: ApiBadge; // 版本标记徽章
   updated?: string[]; // 更新记录
 }
 
@@ -1291,7 +1302,7 @@ export const apiItems: ApiItem[] = [
         title: "表头高度",
         type: "number",
         defaultValue: "80",
-        description: "表头高度（>= 30）"
+        description: "表头高度（>= 30）。当使用 <code>scaleUnit</code> 并指定每层 <code>height</code> 时，若各层高度之和超过此值，将自动扩展"
       }
     ]
   },
@@ -2124,6 +2135,60 @@ export const apiItems: ApiItem[] = [
     ]
   },
   {
+    id: "scaleUnit",
+    key: "scaleUnit",
+    title: "自定义时间轴刻度",
+    type: "ScaleUnit",
+    description:
+      "自定义时间轴刻度配置。定义 N 层表头，从上（粗粒度）到下（细粒度）排列。提供后将忽略 <code>unit</code>、<code>chart.headerGroupFormat</code>、<code>chart.headerCellFormat</code>",
+    category: "structure",
+    badge: { type: 'new', label: 'v0.1.0' },
+    children: [
+      {
+        id: "scaleUnit-unit",
+        key: "unit",
+        title: "时间单位",
+        type: "DurationUnit",
+        description:
+          "时间单位，支持 <code>minute</code> | <code>hour</code> | <code>day</code> | <code>week</code> | <code>month</code> | <code>quarter</code> | <code>year</code>",
+        required: true
+      },
+      {
+        id: "scaleUnit-step",
+        key: "step",
+        title: "步长",
+        type: "number",
+        defaultValue: "1",
+        description:
+          "每格合并几个 unit。例如 <code>step: 8, unit: 'hour'</code> → 每格 8 小时；<code>step: 2, unit: 'week'</code> → 每格 2 周"
+      },
+      {
+        id: "scaleUnit-format",
+        key: "format",
+        title: "标签格式化",
+        type: 'string | ((date: Date, unit: DurationUnit, step: number) => string)',
+        description:
+          "标签格式化。字符串时使用 dayjs format 语法；函数时接收日期、单位、步长三个参数。未指定时使用默认格式"
+      },
+      {
+        id: "scaleUnit-height",
+        key: "height",
+        title: "层行高",
+        type: "number",
+        description:
+          "该层表头行高（px）。最小 20px，低于时自动钳位。未指定时，由 <code>header.height</code> 减去已指定层的高度后在未指定层中平分。所有层指定高度之和超过 <code>header.height</code> 时，<code>header.height</code> 会自动扩展"
+      },
+      {
+        id: "scaleUnit-cellWidth",
+        key: "cellWidth",
+        title: "底层格宽",
+        type: "number",
+        description:
+          "底层每格的像素宽度。<strong>仅允许在数组最后一项（底层 scale）中设置</strong>。非底层 scale 的宽度由其包含的底层 cell 数量自动计算。优先级：<code>scaleUnit[].cellWidth</code> > <code>chart.cellWidth</code>"
+      }
+    ]
+  },
+  {
     id: "selection",
     key: "selection",
     title: "选择配置",
@@ -2457,7 +2522,7 @@ export const apiItems: ApiItem[] = [
     title: "时间刻度单位",
     type: "XGanttUnit",
     defaultValue: '"day"',
-    description: "时间刻度单位",
+    description: "时间刻度单位。当配置了 <a href='#scaleUnit'>scaleUnit</a> 后，该项将被忽略。如果可以，建议优先使用 <a href='#scaleUnit'>scaleUnit</a> 进行更灵活的时间轴配置",
     options: ["hour", "day", "week", "month", "quarter"],
     category: "structure"
   },

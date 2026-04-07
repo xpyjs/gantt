@@ -159,6 +159,12 @@ export const tutorialConfig: TutorialCategory[] = [
                   description: "时间刻度单位"
                 },
                 {
+                  property: "scaleUnit",
+                  type: "ScaleUnit",
+                  default: "undefined",
+                  description: "自定义时间轴刻度配置"
+                },
+                {
                   property: "width",
                   type: "Number",
                   default: "undefined",
@@ -248,9 +254,90 @@ export const tutorialConfig: TutorialCategory[] = [
                 language: "javascript"
               }
             ]
+          },
+          {
+            title: "自定义时间轴（scaleUnit）",
+            description:
+              "从 v0.1.0 开始，XGantt 支持通过 scaleUnit 配置自定义多层表头，可以灵活组合任意时间单位和步长，实现更精细的时间轴控制。"
+          },
+          {
+            title: "与 unit 的关系",
+            list: [
+              "**`unit`** 是简单模式，只需指定一个单位即可自动生成两层表头",
+              "**`scaleUnit`** 是高级模式，可自定义 N 层表头，每层独立配置单位、步长、格式化、行高等",
+              "两者**互斥**：配置了 `scaleUnit` 后，`unit` 将被忽略",
+              "已有的 `unit` 配置**无需修改**，`scaleUnit` 为新增能力，完全向后兼容",
+              "如果可以，建议优先使用 `scaleUnit` 进行更灵活的时间轴配置"
+            ]
+          },
+          {
+            title: "基础用法",
+            description:
+              "scaleUnit 接收一个数组，从上（粗粒度）到下（细粒度）排列。每项可配置 unit、step、format 等属性。",
+            code: [
+              {
+                framework: "javascript",
+                code: `const options = {
+  // 两层表头：上层按周，下层按天
+  scaleUnit: [
+    { unit: 'week', step: 1, format: 'YYYY 第ww周' },
+    { unit: 'day', step: 1, format: 'DD' }
+  ]
+}`,
+                language: "javascript"
+              }
+            ]
+          },
+          {
+            title: "三层表头 + 自定义步长与行高",
+            description:
+              "下面的示例展示了三层表头配置：月 → 日 → 8小时。底层每格 40px（8小时），月层行高固定 30px，其余两层自动平分。",
+            code: [
+              {
+                framework: "javascript",
+                code: `const options = {
+  scaleUnit: [
+    {
+      unit: 'month',
+      step: 1,
+      format: 'YYYY年MM月',
+      height: 30                         // 固定月层行高为 30px
+    },
+    {
+      unit: 'day',
+      step: 1,
+      format: 'MM-DD ddd'               // 未指定 height，自动平分剩余空间
+    },
+    {
+      unit: 'hour',
+      step: 8,                           // 每格 8 小时
+      format: 'HH:mm',
+      cellWidth: 40                      // 每格宽度 40px（仅底层允许设置）
+    }
+  ]
+}`,
+                language: "javascript"
+              }
+            ]
+          },
+          {
+            description:
+              "渲染效果如下图，三层表头各层独立控制，拖拽扩展时表头保持稳定不偏移："
+          },
+          {
+            customContent: `<img src="/tutorials-scale-unit.png" />`
+          },
+          {
+            title: "配置要点",
+            list: [
+              "**`cellWidth`** 仅允许在数组最后一项（底层 scale）设置，非底层的宽度由其包含的底层 cell 数量自动计算",
+              "**`height`** 可为每层单独指定行高（最小 20px），未指定的层自动平分 `header.height` 剩余空间",
+              "**`step`** 控制每格合并几个 unit，如 `step: 8, unit: 'hour'` 表示每格 8 小时",
+              "当所有层 height 之和超过 `header.height` 时，表头高度会自动扩展"
+            ]
           }
         ],
-        customContent: `完整时间轴的图表区域配置可以参考 <a href="/api/options#chart">Chart API</a>`
+        customContent: `完整时间轴的图表区域配置可以参考 <a href="/api/options#chart">Chart API</a>，自定义时间轴配置可参考 <a href="/api/options#scaleUnit">scaleUnit API</a> 和 <a href="/api/types#ScaleUnit">ScaleUnit 类型定义</a>`
       },
       {
         id: "task-bars",

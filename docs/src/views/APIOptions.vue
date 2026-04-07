@@ -313,9 +313,22 @@ const handleScroll = () => {
   showBackToTop.value = window.pageYOffset > 400;
 };
 
+// 拦截内容区域中 <a href="#xxx"> 锚点链接，改用平滑滚动
+const handleAnchorClick = (e: MouseEvent) => {
+  const target = (e.target as HTMLElement).closest('a');
+  if (!target) return;
+  const href = target.getAttribute('href');
+  if (href && href.startsWith('#')) {
+    e.preventDefault();
+    const sectionId = href.substring(1);
+    scrollToSection(sectionId);
+  }
+};
+
 onMounted(() => {
   initializeMenuState();
   window.addEventListener("scroll", handleScroll);
+  document.querySelector('.api-main')?.addEventListener('click', handleAnchorClick);
   // 检查URL中的hash
   if (window.location.hash) {
     const sectionId = window.location.hash.substring(1);
@@ -327,6 +340,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
+  document.querySelector('.api-main')?.removeEventListener('click', handleAnchorClick);
 });
 </script>
 

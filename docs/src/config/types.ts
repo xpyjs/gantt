@@ -18,6 +18,10 @@ export interface TypeItem {
     description: string;
     /** 原始代码（含注释） */
     code: CodeExample[];
+    /** 额外代码块的描述 */
+    extraDescription?: string;
+    /** 额外代码块 */
+    extraCode?: CodeExample[];
 }
 
 export interface TypesPageConfig {
@@ -31,6 +35,37 @@ export interface TypesPageConfig {
 // 从源码中抽取的类型定义片段（保持与 core 内注释一致），必要时可手动同步
 const codeSnippets = {
     XGanttUnit: `export type XGanttUnit = "hour" | "day" | "week" | "month" | "quarter";`,
+    DurationUnit: `export type DurationUnit = 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year';`,
+    ScaleUnitMain: `/**
+ * 自定义时间轴刻度配置
+ * 元组约束：仅最后一项（底层 scale）允许设置 cellWidth
+ */
+export type ScaleUnit = [...IScaleConfigBase[], IScaleConfigBottom];`,
+    ScaleUnitExtra: `/** 所有支持的时间刻度单位 */
+export type DurationUnit = 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year';
+
+/** 时间轴刻度的基础配置（非底层） */
+export interface IScaleConfigBase {
+  /** 时间单位 */
+  unit: DurationUnit;
+  /** 步长：每格合并几个 unit。默认 1 */
+  step?: number;
+  /** 标签格式化（dayjs format 字符串 或 函数） */
+  format?: string | ((date: Date, unit: DurationUnit, step: number) => string);
+  /** 该层表头行高（px），最小 20 */
+  height?: number;
+  /** 非底层 scale 不允许设置 cellWidth */
+  cellWidth?: never;
+}
+
+/** 底层时间轴刻度配置（scaleUnit 数组最后一项） */
+export interface IScaleConfigBottom extends Omit<IScaleConfigBase, 'cellWidth'> {
+  /** 底层每格的像素宽度（px）。仅对底层 scale 生效 */
+  cellWidth?: number;
+}
+
+/** 单层时间轴刻度配置 */
+export type IScaleConfig = IScaleConfigBase | IScaleConfigBottom;`,
     IOptionConfig: `export type IOptionConfig = {
   /** 是否合并选项 */
   merge?: boolean;
@@ -135,6 +170,14 @@ export const typesPageConfig: TypesPageConfig = {
             name: "LinkType",
             description: "四种依赖类型组合（FS/FF/SS/SF），定义连线在起止任务的锚点位置。",
             code: [{ framework: 'javascript', code: codeSnippets.LinkType, language: 'typescript' }]
+        },
+        {
+            id: "ScaleUnit",
+            name: "ScaleUnit",
+            description: "自定义时间轴刻度配置。元组约束确保仅底层（最后一项）可设置 cellWidth。",
+            code: [{ framework: 'javascript', code: codeSnippets.ScaleUnitMain, language: 'typescript' }],
+            extraDescription: "详细配置类型如下：",
+            extraCode: [{ framework: 'javascript', code: codeSnippets.ScaleUnitExtra, language: 'typescript' }]
         },
         {
             id: "XGanttUnit",

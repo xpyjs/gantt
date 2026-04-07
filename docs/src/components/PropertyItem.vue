@@ -4,6 +4,9 @@
     <component :is="headingTag" class="property-title">
       <span class="property-name">{{ item.key }}</span>
       <span v-if="item.required" class="required">*</span>
+      <span v-if="item.badge" class="property-badge" :class="`badge-${item.badge.type}`">
+        {{ badgePrefix }}{{ item.badge.label }}
+      </span>
       <div class="property-type-info">
         <pre><code v-if="!hasChildren" class="property-type">{{ item.type }}</code></pre>
         <code v-if="item.defaultValue" class="property-default">
@@ -70,6 +73,17 @@ const headingTag = computed(() => {
 // 是否有子项
 const hasChildren = computed(() => {
   return Boolean(props.item.children && props.item.children.length > 0);
+});
+
+// Badge 前缀符号
+const badgePrefix = computed(() => {
+  if (!props.item.badge) return '';
+  switch (props.item.badge.type) {
+    case 'new': return '+';
+    case 'removed': return '-';
+    case 'changed': return '±';
+    default: return '';
+  }
 });
 
 // 高亮搜索词
@@ -145,6 +159,34 @@ h5,h6 {
 .required {
   color: #e53e3e;
   font-weight: bold;
+}
+
+/* 版本标记徽章 */
+.property-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  vertical-align: super;
+  font-family: "Fira Code", "Monaco", "Consolas", monospace;
+  white-space: nowrap;
+}
+.badge-new {
+  background: rgba(82, 196, 26, 0.15);
+  color: var(--success-color);
+  border: 1px solid rgba(82, 196, 26, 0.3);
+}
+.badge-removed {
+  background: rgba(245, 34, 45, 0.1);
+  color: var(--error-color);
+  border: 1px solid rgba(245, 34, 45, 0.25);
+}
+.badge-changed {
+  background: rgba(250, 140, 22, 0.1);
+  color: var(--warning-color);
+  border: 1px solid rgba(250, 140, 22, 0.25);
 }
 
 .property-type-info {

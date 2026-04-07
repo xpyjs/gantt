@@ -57,6 +57,12 @@
               <FrameworkCodeBlock
                 :codeBlocks="t.code"
               />
+              <template v-if="t.extraCode">
+                <p class="type-desc extra-desc">{{ t.extraDescription }}</p>
+                <FrameworkCodeBlock
+                  :codeBlocks="t.extraCode"
+                />
+              </template>
             </section>
         </main>
       </div>
