@@ -2,6 +2,15 @@ import { XGanttUnit } from "./options";
 
 export interface IChartOptions {
   /**
+   * 是否显示垂直网格线
+   *
+   * @default false
+   *
+   * @description 仅对 scaleUnit 参数生效。其余仍然为默认情况。
+   */
+  showVerticalLine?: boolean;
+
+  /**
    * 开始时间。强制设置开始时间，覆盖数据中的开始时间。
    *
    * @description 给定开始时间后，图表将使用该日期作为起始，而不是数据的起始时间

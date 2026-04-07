@@ -7,6 +7,81 @@ import { ITableOptions } from "./table";
 export type XGanttUnit = "hour" | "day" | "week" | "month" | "quarter";
 export type TaskType = "task" | "milestone" | "summary";
 
+/** 所有支持的时间刻度单位 */
+export type DurationUnit = 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year';
+
+/**
+ * 时间轴刻度的基础配置
+ *
+ * @description 用于自定义时间轴的刻度显示。每个配置项定义一个表头层级。
+ * 数组从上（粗粒度）到下（细粒度）排列，最后一项为底层刻度。
+ */
+export interface IScaleConfigBase {
+  /** 时间单位 */
+  unit: DurationUnit;
+
+  /**
+   * 步长：每格合并几个 unit。
+   *
+   * @default 1
+   *
+   * @example step: 8, unit: 'hour' → 每格8小时
+   * @example step: 2, unit: 'week' → 每格2周
+   * @example step: 15, unit: 'day' → 每格15天
+   */
+  step?: number;
+
+  /**
+   * 标签格式化
+   *
+   * @description 字符串：使用 dayjs format 字符串
+   * @description 函数：(date: Date, unit: DurationUnit, step: number) => string
+   * @description 未指定时使用默认格式
+   */
+  format?: string | ((date: Date, unit: DurationUnit, step: number) => string);
+
+  /**
+   * 该层表头行高（px）。
+   *
+   * @description 取值最小为 20px，低于该值会被钳位。
+   * @description 未指定时，由 `header.height` 减去已指定层的高度后在未指定层中平分。
+   * @description 应当确保所有层高总和不小于 `header.height`。
+   * @description 如果所有层指定的高度之和超过 `header.height`，则 `header.height` 会自动扩展。
+   */
+  height?: number;
+
+  /** 非底层 scale 不允许设置 cellWidth */
+  cellWidth?: never;
+}
+
+/**
+ * 最下层时间轴刻度配置（scaleUnit 数组的最后一项）
+ *
+ * @description 底层 scale 允许设置 cellWidth，用于指定每格的像素宽度。
+ */
+export interface IScaleConfigBottom extends Omit<IScaleConfigBase, 'cellWidth'> {
+  /**
+   * 该层每格的宽度（px）。仅对底层 scale（scaleUnit 数组最后一项）生效。
+   *
+   * 非底层 scale 的宽度由其包含的底层 cell 数决定。
+   *
+   * 优先级：`scaleUnit[].cellWidth` > `chart.cellWidth`。
+   * 当底层 scale 指定了 cellWidth 时，将忽略 `chart.cellWidth` 配置；
+   * 未指定时，回退到 `chart.cellWidth` 按最小渲染单位推导。
+   */
+  cellWidth?: number;
+}
+
+/**
+ * 单层时间轴刻度配置
+ */
+export type IScaleConfig = IScaleConfigBase | IScaleConfigBottom;
+
+/**
+ * 自定义时间轴刻度配置
+ */
+export type ScaleUnit = [...IScaleConfigBase[], IScaleConfigBottom];
+
 export interface IGanttOptions {
   /** 日志 level。 默认 warn */
   logLevel?: "debug" | "info" | "warn" | "error" | "none";
@@ -525,8 +600,45 @@ export interface IGanttOptions {
    * 时间刻度
    *
    * @default 'day'
+   *
+   * // TODO: [future-major] unit 字段将被 scaleUnit 替代
    */
   unit: XGanttUnit;
+
+  /**
+   * 自定义时间轴刻度配置。定义 N 层表头，从上（粗粒度）到下（细粒度）排列。
+   *
+   * 提供后将忽略 `unit`、`chart.headerGroupFormat`、`chart.headerCellFormat`。
+   *
+   * @example
+   * // 8小时一格
+   * scaleUnit: [
+   *   { unit: 'day', step: 1, format: 'MM-DD ddd' },
+   *   { unit: 'hour', step: 8, format: 'HH:mm' }
+   * ]
+   *
+   * @example
+   * // 单层表头
+   * scaleUnit: [
+   *   { unit: 'month', step: 1, format: 'YYYY-MM' }
+   * ]
+   *
+   * @example
+   * // 三层表头
+   * scaleUnit: [
+   *   { unit: 'year', step: 1 },
+   *   { unit: 'month', step: 1 },
+   *   { unit: 'day', step: 1 }
+   * ]
+   *
+   * @example
+   * // 指定底层 cellWidth（仅最后一项允许设置）
+   * scaleUnit: [
+   *   { unit: 'week', step: 1, format: 'YYYY 第ww周' },
+   *   { unit: 'day', step: 1, format: 'DD', cellWidth: 50 }
+   * ]
+   */
+  scaleUnit?: ScaleUnit;
 
   /**
    * 显示语言。配置参考 {@link https://day.js.org/docs/en/i18n/i18n|dayjs i18n}

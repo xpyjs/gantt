@@ -109,22 +109,32 @@ export class GridGroup {
 
     if (
       this.context.getOptions().border.show &&
-      ["day", "hour"].includes(this.context.getOptions().unit)
+      this.context.getOptions().chart.showVerticalLine
     ) {
-      // 绘制垂直网格线 - 不要在这里考虑偏移，偏移由 this.verticalLines.x(x) 处理
-      for (let i = visibleStartCol; i <= visibleEndCol; i++) {
-        // 注意这里不再添加 visibleStartX
-        const x = i * cellWidth;
+      // 绘制垂直网格线 - 遍历底层 timeline items
+      const timeAxis = this.context.store.getTimeAxis();
+      const timeline = timeAxis.getTimeline();
+      if (timeline.length > 0) {
+        const bottomLayer = timeline[timeline.length - 1];
+        let x = 0;
+        for (const item of bottomLayer.items) {
+          const itemWidth = item.span * cellWidth;
+          x += itemWidth;
 
-        // 创建垂直线
-        const line = new Konva.Line({
-          points: [x, headerHeight, x, totalHeight + headerHeight],
-          stroke: this.context.getOptions().border.color,
-          strokeWidth: 0.5,
-          name: "vertical-grid-line"
-        });
+          // 只渲染可视范围内的竖线
+          if (x < -this.offsetX - cellWidth * 2) continue;
+          if (x > -this.offsetX + this.width + cellWidth * 2) break;
 
-        this.verticalLines.add(line);
+          // 创建垂直线
+          const line = new Konva.Line({
+            points: [x, headerHeight, x, totalHeight + headerHeight],
+            stroke: this.context.getOptions().border.color,
+            strokeWidth: 0.5,
+            name: "vertical-grid-line"
+          });
+
+          this.verticalLines.add(line);
+        }
       }
     }
 

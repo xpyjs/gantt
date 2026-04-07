@@ -30,7 +30,7 @@ import type { IOptions, IOptionConfig, EmitData } from "./types";
 import type { EventMap } from "./types/event";
 import type { ILink, DataChain, LinkType } from "./types/link";
 import type { ErrorType } from "./event";
-import type { XGanttUnit } from "./types/options";
+import type { XGanttUnit, DurationUnit, IScaleConfig, IScaleConfigBase, IScaleConfigBottom, ScaleUnit } from "./types/options";
 
 export type {
   IOptions,
@@ -40,6 +40,11 @@ export type {
   ILink,
   ErrorType,
   XGanttUnit,
+  DurationUnit,
+  IScaleConfig,
+  IScaleConfigBase,
+  IScaleConfigBottom,
+  ScaleUnit,
   DataChain,
   LinkType
 };

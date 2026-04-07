@@ -6,7 +6,6 @@
  * @Description: 图表部分的表头渲染层
  */
 import Konva from "konva";
-import { isArray } from "lodash-es";
 import { EventName } from "../../event";
 import { autoColor, colorjs } from "../../utils/color";
 import { IContext } from "@/types/render";
@@ -14,8 +13,7 @@ import { type Task } from "@/models/Task";
 
 export class HeaderLayer {
   private background: Konva.Rect; // 表头背景
-  private groupHeader: Konva.Group; // 主表头 (年/月)
-  private cellHeader: Konva.Group; // 次表头 (月/日)
+  private headerGroups: Konva.Group[] = []; // N 层表头组
 
   private cellCache: Map<string, Konva.Rect> = new Map();
 
@@ -34,13 +32,6 @@ export class HeaderLayer {
     });
     this.layer.add(this.background);
 
-    // 创建表头组
-    this.groupHeader = new Konva.Group({ name: "primary-header" });
-    this.cellHeader = new Konva.Group({ name: "secondary-header" });
-
-    this.layer.add(this.groupHeader);
-    this.layer.add(this.cellHeader);
-
     // 注册事件
     this.registerEvents();
   }
@@ -50,7 +41,10 @@ export class HeaderLayer {
    */
   public resize(width: number): void {
     this.width = width;
-    this.height = this.context.getOptions().header.height;
+
+    // 优先使用 TimeAxis 解析后的 header 高度（考虑 scaleUnit 各层 height 配置）
+    const timeAxis = this.context.store.getTimeAxis();
+    this.height = timeAxis.getResolvedHeaderHeight();
 
     this.background.width(width);
     this.background.height(this.height);
@@ -69,9 +63,10 @@ export class HeaderLayer {
     // 更新水平偏移量
     this.offsetX = x;
 
-    // 应用偏移到表头组
-    this.groupHeader.x(x);
-    this.cellHeader.x(x);
+    // 应用偏移到所有表头组
+    for (const group of this.headerGroups) {
+      group.x(x);
+    }
 
     // // 检查是否需要重新计算表头
     this.render();
@@ -121,27 +116,51 @@ export class HeaderLayer {
 
     const timeAxis = this.context.store.getTimeAxis();
     const cellWidth = timeAxis.getCellWidth();
+    const timeline = timeAxis.getTimeline();
+    const layerCount = timeline.length;
+
+    if (layerCount === 0) return;
 
     // 只计算可视范围内
     const visibleStartX = Math.max(0, -this.offsetX);
     const visibleEndX = visibleStartX + this.width;
 
-    // 每一行（共两行）的高度
-    const rowHeight = Math.floor(this.height / 2);
+    // 各层高度（来自 TimeAxis 解析结果）
+    const layerHeights = timeAxis.getLayerHeights();
+
+    // 预计算每层的 Y 偏移
+    const layerYOffsets: number[] = [];
+    let yAccum = 0;
+    for (let i = 0; i < layerCount; i++) {
+      layerYOffsets.push(yAccum);
+      yAccum += layerHeights[i] ?? 0;
+    }
 
     // 获取一些变量
     const borderColor = this.context.getOptions().border.color;
 
-    // 绘制中线
-    this.layer.add(
-      new Konva.Line({
-        points: [0, rowHeight, this.width, rowHeight],
-        stroke: borderColor,
-        strokeWidth: 1
-      })
-    );
+    // 创建 N 个表头组
+    for (let level = 0; level < layerCount; level++) {
+      const group = new Konva.Group({ name: `header-level-${level}` });
+      this.headerGroups.push(group);
+      this.layer.add(group);
 
-    // 绘制底线
+      // 应用当前偏移
+      group.x(this.offsetX);
+    }
+
+    // 绘制层间分隔线（仅绘制层与层之间的线，不绘制最底部的线）
+    for (let i = 1; i < layerCount; i++) {
+      this.layer.add(
+        new Konva.Line({
+          points: [0, layerYOffsets[i], this.width, layerYOffsets[i]],
+          stroke: borderColor,
+          strokeWidth: 1
+        })
+      );
+    }
+
+    // 绘制表头底部分隔线（header 与 body 的分界线）
     this.layer.add(
       new Konva.Line({
         points: [0, this.height, this.width, this.height],
@@ -150,108 +169,49 @@ export class HeaderLayer {
       })
     );
 
-    // 绘制内容
-    const timeline = timeAxis.getTimeline();
-    let startX = 0;
-    for (let i = 0; i < timeline.length; i++) {
-      const item = timeline[i];
+    // 绘制每一层的内容
+    for (let level = 0; level < layerCount; level++) {
+      const layerData = timeline[level];
+      const headerGroup = this.headerGroups[level];
+      const y = layerYOffsets[level];
+      const currentRowHeight = layerHeights[level] ?? 0;
+      const isBottomLayer = level === layerCount - 1;
+      let startX = 0;
 
-      // 上层宽度 = 子项数量 * 每一格宽度
-      const groupWidth = cellWidth * (item.children?.length ?? 0);
+      for (let i = 0; i < layerData.items.length; i++) {
+        const item = layerData.items[i];
+        const itemWidth = item.span * cellWidth;
 
-      // 检查是否在可视范围内。只渲染可视范围内的内容
-      const itemEndX = startX + groupWidth;
-      if (itemEndX < visibleStartX) {
-        startX += groupWidth;
-        continue; // 跳过
-      }
-
-      if (startX > visibleEndX) {
-        break; // 已经超过了可视范围，停止
-      }
-
-      // 绘制上层单元格
-      const group = this.createCell(
-        `group-${item.date.format("YYYY-MM-DD")}`,
-        startX,
-        0,
-        groupWidth,
-        rowHeight,
-        borderColor,
-        item.label
-      );
-      this.groupHeader.add(group);
-
-      // 绘制下层单元格
-      if (isArray(item.children) && item.children.length > 0) {
-        let childStartX = startX;
-
-        for (let j = 0; j < item.children.length;) {
-          const child = item.children[j];
-
-          // 判断 label 内容相同的，直接合并
-          let _x = 1;
-          while (
-            item.children[j + _x] &&
-            child.label === item.children[j + _x].label
-          ) {
-            _x++;
-          }
-          j += _x;
-
-          // 存在跨单位（上层）相同内容的情况（周展示，会有跨月的周），也需要合并处理
-          if (
-            j >= item.children.length &&
-            timeline[i + 1] &&
-            timeline[i + 1].children
-          ) {
-            let _i = 0;
-            while (timeline[i + 1].children![_i]) {
-              if (child.label === timeline[i + 1].children![_i].label) {
-                timeline[i + 1].children![_i].hide = true;
-                _i++;
-              } else {
-                break;
-              }
-            }
-
-            if (_i > 0) {
-              _x += _i;
-            }
-          }
-
-          const _cellWidth = cellWidth * _x;
-
-          // 同样检查是否在可视范围
-          const childEndX = childStartX + _cellWidth;
-          if (childEndX < visibleStartX) {
-            childStartX += _cellWidth;
-            continue; // 跳过
-          }
-
-          if (childStartX > visibleEndX) {
-            break; // 停止
-          }
-
-          const cell = this.createCell(
-            `cell-${child.date.format("YYYY-MM-DD")}`,
-            childStartX,
-            rowHeight,
-            _cellWidth,
-            rowHeight,
-            child.hide ? "transparent" : borderColor,
-            child.hide ? "" : child.label
-          );
-          this.cellHeader.add(cell);
-          if (child.hide) {
-            cell.visible(false);
-          }
-
-          childStartX += _cellWidth;
+        // 可视范围裁剪
+        const itemEndX = startX + itemWidth;
+        if (itemEndX < visibleStartX) {
+          startX += itemWidth;
+          continue;
         }
-      }
+        if (startX > visibleEndX) {
+          break;
+        }
 
-      startX += groupWidth;
+        const cellId = isBottomLayer
+          ? `cell-${item.date.format("YYYY-MM-DD-HH")}`
+          : `group-${level}-${item.date.format("YYYY-MM-DD-HH")}`;
+
+        const cell = this.createCell(
+          cellId,
+          startX,
+          y,
+          itemWidth,
+          currentRowHeight,
+          item.hide ? "transparent" : borderColor,
+          item.hide ? "" : item.label
+        );
+        headerGroup.add(cell);
+        if (item.hide) {
+          cell.visible(false);
+        }
+
+        startX += itemWidth;
+      }
     }
 
     // 高效绘制
@@ -325,8 +285,10 @@ export class HeaderLayer {
    * 清除表头内容
    */
   private clearHeader(): void {
-    this.groupHeader.destroyChildren();
-    this.cellHeader.destroyChildren();
+    for (const group of this.headerGroups) {
+      group.destroy();
+    }
+    this.headerGroups = [];
     this.cellCache.clear();
   }
 
@@ -364,14 +326,16 @@ export class HeaderLayer {
   private handleHighlight(type: "in" | "out", task?: Task) {
     if (!this.context.getOptions().highlight) return;
 
-    // 仅针对 day 单位生效
-    if (this.context.getOptions().unit !== "day") return;
+    // 对底层 scale 为 day 时生效
+    const timeAxis = this.context.store.getTimeAxis();
+    const bottomScale = timeAxis.getBottomScale();
+    if (bottomScale.unit !== "day" || bottomScale.step !== 1) return;
 
     const startCell = this.cellCache.get(
-      `cell-${task?.startTime?.format("YYYY-MM-DD")}`
+      `cell-${task?.startTime?.format("YYYY-MM-DD-HH")}`
     );
     const endCell = this.cellCache.get(
-      `cell-${task?.endTime?.format("YYYY-MM-DD")}`
+      `cell-${task?.endTime?.format("YYYY-MM-DD-HH")}`
     );
 
     const bgColor =

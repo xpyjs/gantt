@@ -157,7 +157,8 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
   },
   chart: {
     autoCellWidth: false,
-    cellWidth: "normal"
+    cellWidth: "normal",
+    showVerticalLine: false
   },
   primaryColor: "#eca710",
   border: {
@@ -259,6 +260,18 @@ export class OptionManager {
       });
 
       this.options.holiday.holidays = res;
+    }
+
+    // showVerticalLine 旧 API 兼容：
+    // 无 scaleUnit 且 unit 为 day/hour 时，未显式设置 showVerticalLine 则默认 true
+    if (
+      options.chart?.showVerticalLine === undefined &&
+      !this.options.scaleUnit
+    ) {
+      const unit = this.options.unit;
+      if (unit === "day" || unit === "hour") {
+        this.options.chart.showVerticalLine = true;
+      }
     }
   }
 

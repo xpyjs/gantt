@@ -45,6 +45,12 @@ export class Store {
     this.timeAxis = new TimeAxis();
     this.timeAxis.init(this.optionManager.getOptions());
 
+    // 如果 scaleUnit 各层 height 导致实际 header 高度变化，同步回 options
+    const resolvedHeaderHeight = this.timeAxis.getResolvedHeaderHeight();
+    if (resolvedHeaderHeight !== this.optionManager.getOptions().header.height) {
+      this.optionManager.getOptions().header.height = resolvedHeaderHeight;
+    }
+
     this.columnManager = new ColumnManager(this.context);
     if (_options.table && _options.table.columns) {
       this.columnManager.init(_options.table.columns);
@@ -125,6 +131,12 @@ export class Store {
     }
 
     this.timeAxis.update(this.optionManager.getOptions());
+
+    // 同步解析后的 header 高度
+    const resolvedHeaderHeight = this.timeAxis.getResolvedHeaderHeight();
+    if (resolvedHeaderHeight !== this.optionManager.getOptions().header.height) {
+      this.optionManager.getOptions().header.height = resolvedHeaderHeight;
+    }
   }
 
   updateTime(start?: Dayjs, end?: Dayjs) {

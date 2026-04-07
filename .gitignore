@@ -27,3 +27,4 @@ pnpm-debug.log*
 *.sw?
 coverage
 .github/instructions
+todos
