@@ -28,6 +28,7 @@ export class Renderer {
   private table: Table;
   private chart: Chart;
   private middleLine: MiddleResizeLine;
+  private guideLine: GuideLine;
   private renderScheduler: RenderScheduler; // 渲染调度器
 
   private _id = generateId();
@@ -67,7 +68,7 @@ export class Renderer {
     this.rootElement.appendChild(this.tableContainer);
 
     // 初始化全局指示线，使用甘特图容器作为指示线容器
-    new GuideLine(this.context, this.container);
+    this.guideLine = new GuideLine(this.context, this.container);
 
     this.middleLine = new MiddleResizeLine(this.context, this.rootElement);
 
@@ -375,6 +376,9 @@ export class Renderer {
     }
     this.renderScheduler.destroy(); // 销毁渲染调度器
     this.scrollbar.destroy(); // 销毁滚动条实例
+    this.guideLine.destroy(); // 销毁指示线
+    this.chart.destroy(); // 销毁图表
+    this.table.destroy(); // 销毁表格
     this.context.event.offAll();
   }
 }

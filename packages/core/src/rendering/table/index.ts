@@ -60,13 +60,21 @@ export class Table {
     this.tableBody.updateTask(task);
   }
 
-  private listenEvents() {
-    this.context.event.on(EventName.UPDATE_TABLE_HEADER, () => {
-      this.tableHeader.render();
-    });
+  private onUpdateTableHeader = () => {
+    this.tableHeader.render();
+  };
 
-    this.context.event.on(EventName.UPDATE_TABLE_BODY, () => {
-      this.tableBody.update();
-    });
+  private onUpdateTableBody = () => {
+    this.tableBody.update();
+  };
+
+  private listenEvents() {
+    this.context.event.on(EventName.UPDATE_TABLE_HEADER, this.onUpdateTableHeader);
+    this.context.event.on(EventName.UPDATE_TABLE_BODY, this.onUpdateTableBody);
+  }
+
+  public destroy() {
+    this.context.event.off(EventName.UPDATE_TABLE_HEADER, this.onUpdateTableHeader);
+    this.context.event.off(EventName.UPDATE_TABLE_BODY, this.onUpdateTableBody);
   }
 }
