@@ -269,8 +269,14 @@ export class DataManager {
       }
     }
 
-    // 从任务映射中移除
+    // 递归清理子任务及其在 taskMap 中的引用
+    if (task.children && task.children.length > 0) {
+      this.removeTasksRecursive(task.children);
+    }
+
+    // 从任务映射中移除当前任务
     this.taskMap.delete(id);
+    this.collapsedTaskIds.delete(id);
     this.invalidateCache(); // 删除任务后，缓存失效
     this.event.emit(EventName.DATA_UPDATE);
     return res;
