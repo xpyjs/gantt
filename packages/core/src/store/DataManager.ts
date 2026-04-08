@@ -350,6 +350,9 @@ export class DataManager {
     // 更新子任务的层级
     this.updateChildrenLevel(task);
 
+    // 重新计算最大层级
+    this.recalculateDataLevel();
+
     this.invalidateCache(); // 移动任务后，缓存失效
     this.event.emit(EventName.VIEW_UPDATE);
 
@@ -508,6 +511,16 @@ export class DataManager {
     task.children.forEach(child => {
       child.level = parentLevel + 1;
       this.updateChildrenLevel(child);
+    });
+  }
+
+  /**
+   * 重新计算所有任务的最大层级
+   */
+  private recalculateDataLevel(): void {
+    this.dataLevel = 0;
+    this.taskMap.forEach(task => {
+      this.dataLevel = Math.max(this.dataLevel, task.level);
     });
   }
 
