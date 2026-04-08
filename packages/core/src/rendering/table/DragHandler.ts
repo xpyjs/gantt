@@ -80,12 +80,7 @@ export class DragHandler {
     // 绑定全局事件
     document.addEventListener('mousemove', this.handleMouseMove);
     document.addEventListener('mouseup', this.handleMouseUp);
-    // 按下 Esc 键取消拖拽
-    document.addEventListener('keydown', (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && this.isDragging) {
-        this.cleanup();
-      }
-    });
+    document.addEventListener('keydown', this.handleKeyDown);
 
     Logger.debug(`Drag started for task ${this.task.id} at index ${this.dragStartIndex}`);
   };
@@ -173,6 +168,13 @@ export class DragHandler {
     }
 
     this.cleanup();
+  };
+
+  /** ESC 取消拖拽的 keydown */
+  private handleKeyDown = (event: KeyboardEvent): void => {
+    if (event.key === 'Escape' && this.isDragging) {
+      this.cleanup();
+    }
   };
 
   /**
@@ -364,6 +366,7 @@ export class DragHandler {
     // 移除全局事件监听
     document.removeEventListener('mousemove', this.handleMouseMove);
     document.removeEventListener('mouseup', this.handleMouseUp);
+    document.removeEventListener('keydown', this.handleKeyDown);
   }
 
   /** 获取元素 */

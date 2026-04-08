@@ -18,6 +18,12 @@ export class GuideLine {
   private container: HTMLElement;
   private visible: boolean = false;
 
+  // EventBus 回调引用
+  private onShowGuideline!: (left: number) => void;
+  private onHideGuideline!: () => void;
+  private onMoveGuideline!: (left: number) => void;
+  private onOptionsUpdate!: () => void;
+
   /**
    * @param container 指示线的容器元素
    */
@@ -64,25 +70,33 @@ export class GuideLine {
    * 初始化事件监听
    */
   private initEvents(): void {
-    // 监听显示指示线事件
-    this.context.event.on(EventName.SHOW_GUIDELINE, (left: number) => {
+    this.onShowGuideline = (left: number) => {
       this.show(left);
-    });
+    };
+
+    this.onHideGuideline = () => {
+      this.hide();
+    };
+
+    this.onMoveGuideline = (left: number) => {
+      this.setLeft(left);
+    };
+
+    this.onOptionsUpdate = () => {
+      this.updateOptions();
+    };
+
+    // 监听显示指示线事件
+    this.context.event.on(EventName.SHOW_GUIDELINE, this.onShowGuideline);
 
     // 监听隐藏指示线事件
-    this.context.event.on(EventName.HIDE_GUIDELINE, () => {
-      this.hide();
-    });
+    this.context.event.on(EventName.HIDE_GUIDELINE, this.onHideGuideline);
 
     // 监听移动指示线事件
-    this.context.event.on(EventName.MOVE_GUIDELINE, (left: number) => {
-      this.setLeft(left);
-    });
+    this.context.event.on(EventName.MOVE_GUIDELINE, this.onMoveGuideline);
 
     // 监听更新事件
-    this.context.event.on(EventName.OPTIONS_UPDATE, () => {
-      this.updateOptions();
-    });
+    this.context.event.on(EventName.OPTIONS_UPDATE, this.onOptionsUpdate);
   }
 
   /**
@@ -164,5 +178,21 @@ export class GuideLine {
       `1px dashed ${this.context.getOptions().border.color}`,
       "important"
     );
+  }
+
+  /**
+   * 销毁指示线，清理事件监听
+   */
+  public destroy(): void {
+    // 移除 EventBus 事件监听
+    this.context.event.off(EventName.SHOW_GUIDELINE, this.onShowGuideline);
+    this.context.event.off(EventName.HIDE_GUIDELINE, this.onHideGuideline);
+    this.context.event.off(EventName.MOVE_GUIDELINE, this.onMoveGuideline);
+    this.context.event.off(EventName.OPTIONS_UPDATE, this.onOptionsUpdate);
+
+    // 移除 DOM 元素
+    if (this.element.parentElement) {
+      this.element.parentElement.removeChild(this.element);
+    }
   }
 }

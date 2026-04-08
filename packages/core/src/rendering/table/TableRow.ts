@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:01:19
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-10 16:14:29
+ * @LastEditTime: 2026-04-08 09:07:08
  * @Description: 表格行渲染管理器
  */
 
@@ -19,6 +19,19 @@ export class TableRow {
 
   // 行内单元格集合
   private cells: TableCell[] = [];
+
+  // DOM 事件处理器引用
+  private handleMouseEnter!: () => void;
+  private handleMouseLeave!: () => void;
+  private handleClick!: (e: MouseEvent) => void;
+  private handleDblClick!: (e: MouseEvent) => void;
+  private handleContextMenu!: (e: MouseEvent) => void;
+
+  // EventBus 回调引用
+  private onRowHighlight!: (id: string) => void;
+  private onRowUnhighlight!: (id: string) => void;
+  private onTaskSelected!: (task: Task) => void;
+  private onTaskUnselected!: (id: string) => void;
 
   /**
    * 创建表格行
@@ -66,61 +79,72 @@ export class TableRow {
    * 绑定触发事件
    */
   private bindEvents(): void {
-    this.element.addEventListener("mouseenter", () => {
+    this.handleMouseEnter = () => {
       this.context.event.emit(EventName.ROW_HIGHLIGHT, this.task.id);
-    });
+    };
 
-    this.element.addEventListener("mouseleave", () => {
+    this.handleMouseLeave = () => {
       this.context.event.emit(EventName.ROW_UNHIGHLIGHT, this.task.id);
-    });
+    };
 
-    this.element.addEventListener("click", e => {
+    this.handleClick = (e: MouseEvent) => {
       if (!this.context.store.getDataManager().isTaskSelected(this.task.id)) {
         this.context.store.getDataManager().selectTask(this.task.id);
       }
       this.context.event.emit(EventName.ROW_CLICK, e, this.task);
-    });
+    };
 
-    this.element.addEventListener("dblclick", e => {
+    this.handleDblClick = (e: MouseEvent) => {
       this.context.event.emit(EventName.ROW_DBL_CLICK, e, this.task);
-    });
+    };
 
-    this.element.addEventListener("contextmenu", e => {
+    this.handleContextMenu = (e: MouseEvent) => {
       e.preventDefault();
       this.context.store.getDataManager().selectTask(this.task.id);
       this.context.event.emit(EventName.ROW_CONTEXTMENU, e, this.task);
-    });
+    };
+
+    this.element.addEventListener("mouseenter", this.handleMouseEnter);
+    this.element.addEventListener("mouseleave", this.handleMouseLeave);
+    this.element.addEventListener("click", this.handleClick);
+    this.element.addEventListener("dblclick", this.handleDblClick);
+    this.element.addEventListener("contextmenu", this.handleContextMenu);
   }
 
   /**
    * 注册全局接收事件
    */
   private registerEvents() {
-    this.context.event.on(EventName.ROW_HIGHLIGHT, (id: string) => {
+    this.onRowHighlight = (id: string) => {
       if (this.task.id === id) {
         this.element.classList.add("hover");
       } else {
         this.element.classList.remove("hover");
       }
-    });
+    };
 
-    this.context.event.on(EventName.ROW_UNHIGHLIGHT, (id: string) => {
+    this.onRowUnhighlight = (id: string) => {
       if (this.task.id === id) {
         this.element.classList.remove("hover");
       }
-    });
+    };
 
-    this.context.event.on(EventName.TASK_SELECTED, (task: Task) => {
+    this.onTaskSelected = (task: Task) => {
       if (this.task.id === task.id) {
         this.element.classList.add("selected");
       }
-    });
+    };
 
-    this.context.event.on(EventName.TASK_UNSELECTED, (id: string) => {
+    this.onTaskUnselected = (id: string) => {
       if (this.task.id === id) {
         this.element.classList.remove("selected");
       }
-    });
+    };
+
+    this.context.event.on(EventName.ROW_HIGHLIGHT, this.onRowHighlight);
+    this.context.event.on(EventName.ROW_UNHIGHLIGHT, this.onRowUnhighlight);
+    this.context.event.on(EventName.TASK_SELECTED, this.onTaskSelected);
+    this.context.event.on(EventName.TASK_UNSELECTED, this.onTaskUnselected);
   }
 
   /**
@@ -375,6 +399,19 @@ export class TableRow {
    * 移除行
    */
   public remove(): void {
+    // 移除 DOM 事件监听
+    this.element.removeEventListener("mouseenter", this.handleMouseEnter);
+    this.element.removeEventListener("mouseleave", this.handleMouseLeave);
+    this.element.removeEventListener("click", this.handleClick);
+    this.element.removeEventListener("dblclick", this.handleDblClick);
+    this.element.removeEventListener("contextmenu", this.handleContextMenu);
+
+    // 移除 EventBus 事件监听
+    this.context.event.off(EventName.ROW_HIGHLIGHT, this.onRowHighlight);
+    this.context.event.off(EventName.ROW_UNHIGHLIGHT, this.onRowUnhighlight);
+    this.context.event.off(EventName.TASK_SELECTED, this.onTaskSelected);
+    this.context.event.off(EventName.TASK_UNSELECTED, this.onTaskUnselected);
+
     // 清除单元格
     this.clearCells();
 

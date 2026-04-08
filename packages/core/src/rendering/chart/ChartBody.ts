@@ -36,6 +36,19 @@ export class BodyGroup {
   private selectedRowId: string | null = null;
   private selectedRect: Konva.Rect | null = null;
 
+  // 存储 bound 事件处理器引用，用于销毁时移除
+  private boundHandleMouseMove: (e: Konva.KonvaEventObject<MouseEvent>) => void;
+  private boundHandleMouseLeave: (e: Konva.KonvaEventObject<MouseEvent>) => void;
+  private boundHandleClick: (e: Konva.KonvaEventObject<MouseEvent>) => void;
+  private boundHandleDblClick: (e: Konva.KonvaEventObject<MouseEvent>) => void;
+  private boundHandleContextMenu: (e: Konva.KonvaEventObject<MouseEvent>) => void;
+
+  // EventBus 回调引用
+  private onRowHighlight: (id: string) => void;
+  private onRowUnhighlight: (id: string) => void;
+  private onTaskSelected: (task: Task) => void;
+  private onTaskUnselected: (id: string) => void;
+
   constructor(
     private context: IContext,
     private stage: Konva.Stage,
@@ -48,6 +61,18 @@ export class BodyGroup {
 
     this.rowBgGroup = new Konva.Group({ name: "chart-body-row-bgs" });
     this.bgLayer.add(this.rowBgGroup);
+
+    // 存储 bound 引用
+    this.boundHandleMouseMove = this.handleMouseMove.bind(this);
+    this.boundHandleMouseLeave = this.handleMouseLeave.bind(this);
+    this.boundHandleClick = this.handleClick.bind(this);
+    this.boundHandleDblClick = this.handleDblClick.bind(this);
+    this.boundHandleContextMenu = this.handleContextMenu.bind(this);
+
+    this.onRowHighlight = (id: string) => this.highlightRow(id);
+    this.onRowUnhighlight = (id: string) => this.unhighlightRow(id);
+    this.onTaskSelected = (task: Task) => this.selectRow(task.id);
+    this.onTaskUnselected = (id: string) => this.unselectRow(id);
 
     // 注册事件监听
     this.registerEvents();
@@ -166,12 +191,12 @@ export class BodyGroup {
    * 添加 body 事件
    */
   private bindEvents(): void {
-    this.stage.on("mousemove", this.handleMouseMove.bind(this));
-    this.stage.on("mouseleave", this.handleMouseLeave.bind(this));
+    this.stage.on("mousemove", this.boundHandleMouseMove);
+    this.stage.on("mouseleave", this.boundHandleMouseLeave);
 
-    this.stage.on("click", this.handleClick.bind(this));
-    this.stage.on("dblclick", this.handleDblClick.bind(this));
-    this.stage.on("contextmenu", this.handleContextMenu.bind(this));
+    this.stage.on("click", this.boundHandleClick);
+    this.stage.on("dblclick", this.boundHandleDblClick);
+    this.stage.on("contextmenu", this.boundHandleContextMenu);
   }
 
   /**
@@ -179,24 +204,16 @@ export class BodyGroup {
    */
   private registerEvents(): void {
     // 监听行高亮事件
-    this.context.event.on(EventName.ROW_HIGHLIGHT, (id: string) => {
-      this.highlightRow(id);
-    });
+    this.context.event.on(EventName.ROW_HIGHLIGHT, this.onRowHighlight);
 
     // 监听取消高亮事件
-    this.context.event.on(EventName.ROW_UNHIGHLIGHT, (id: string) => {
-      this.unhighlightRow(id);
-    });
+    this.context.event.on(EventName.ROW_UNHIGHLIGHT, this.onRowUnhighlight);
 
     // 监听任务选中事件
-    this.context.event.on(EventName.TASK_SELECTED, (task: Task) => {
-      this.selectRow(task.id);
-    });
+    this.context.event.on(EventName.TASK_SELECTED, this.onTaskSelected);
 
     // 监听任务取消选中事件
-    this.context.event.on(EventName.TASK_UNSELECTED, (id: string) => {
-      this.unselectRow(id);
-    });
+    this.context.event.on(EventName.TASK_UNSELECTED, this.onTaskUnselected);
   }
 
   /**
@@ -495,6 +512,23 @@ export class BodyGroup {
    * 销毁层
    */
   public destroy(): void {
+    // 移除 Stage 事件监听
+    this.stage.off("mousemove", this.boundHandleMouseMove);
+    this.stage.off("mouseleave", this.boundHandleMouseLeave);
+    this.stage.off("click", this.boundHandleClick);
+    this.stage.off("dblclick", this.boundHandleDblClick);
+    this.stage.off("contextmenu", this.boundHandleContextMenu);
+
+    // 移除 EventBus 事件监听
+    this.context.event.off(EventName.ROW_HIGHLIGHT, this.onRowHighlight);
+    this.context.event.off(EventName.ROW_UNHIGHLIGHT, this.onRowUnhighlight);
+    this.context.event.off(EventName.TASK_SELECTED, this.onTaskSelected);
+    this.context.event.off(EventName.TASK_UNSELECTED, this.onTaskUnselected);
+
+    // 清理 Konva 对象
+    this.clearHighlight();
+    this.unselectRow(this.selectedRowId ?? undefined);
+    this.rowsCache.forEach(row => row.destroy());
     this.rowsCache.clear();
     this.rowsGroup.destroy();
     this.rowBgGroup.destroy();
