@@ -19,6 +19,12 @@ export class GridGroup {
   private offsetX: number = 0;
   private offsetY: number = 0;
 
+  // 缓冲区跟踪：已渲染的列/行范围
+  private renderedColStart: number = -1;
+  private renderedColEnd: number = -1;
+  private renderedRowStart: number = -1;
+  private renderedRowEnd: number = -1;
+
   constructor(private context: IContext, private layer: Konva.Layer) {
     // 创建网格线组
     this.verticalLines = new Konva.Group({ name: "vertical-grid-lines" });
@@ -38,6 +44,12 @@ export class GridGroup {
     // 清除旧的网格线
     this.clearGrid();
 
+    // 重置缓冲区范围，确保 resize 后一定重建
+    this.renderedColStart = -1;
+    this.renderedColEnd = -1;
+    this.renderedRowStart = -1;
+    this.renderedRowEnd = -1;
+
     // 重新计算网格
     this.calculateGrid();
   }
@@ -54,8 +66,27 @@ export class GridGroup {
     this.verticalLines.x(x);
     this.horizontalLines.y(y);
 
-    // 如果需要重新计算网格
-    this.calculateGrid();
+    // 计算当前纯可视范围（不含缓冲），检查是否仍在已渲染范围内
+    const cellWidth = this.context.store.getTimeAxis().getCellWidth();
+    const cellHeight = this.context.getOptions().row.height;
+    const headerHeight = this.context.getOptions().header.height;
+
+    const visibleColStart = Math.floor(-x / cellWidth);
+    const visibleColEnd = Math.ceil((-x + this.width) / cellWidth);
+    const visibleRowStart = Math.floor((-y + headerHeight) / cellHeight);
+    const visibleRowEnd = Math.ceil((-y + this.height) / cellHeight);
+
+    // 仅在可视范围超出已渲染的缓冲范围时重建
+    if (
+      visibleColStart < this.renderedColStart ||
+      visibleColEnd > this.renderedColEnd ||
+      visibleRowStart < this.renderedRowStart ||
+      visibleRowEnd > this.renderedRowEnd
+    ) {
+      this.calculateGrid();
+    }
+
+    this.layer.batchDraw();
   }
 
   /**
@@ -106,6 +137,12 @@ export class GridGroup {
       totalRows,
       Math.ceil((-this.offsetY + this.height) / cellHeight) + 2
     );
+
+    // 记录已渲染的缓冲范围
+    this.renderedColStart = visibleStartCol;
+    this.renderedColEnd = visibleEndCol;
+    this.renderedRowStart = visibleStartRow;
+    this.renderedRowEnd = visibleEndRow;
 
     if (
       this.context.getOptions().border.show &&
