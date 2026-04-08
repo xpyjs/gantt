@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:02:13
  * @LastEditors: JeremyJone
- * @LastEditTime: 2026-01-10 19:29:39
+ * @LastEditTime: 2026-04-08 11:05:49
  * @Description: 图表部分的表头渲染层
  */
 import Konva from "konva";
@@ -14,8 +14,15 @@ import { type Task } from "@/models/Task";
 export class HeaderLayer {
   private background: Konva.Rect; // 表头背景
   private headerGroups: Konva.Group[] = []; // N 层表头组
+  private separatorLines: Konva.Line[] = []; // 层间分隔线
 
   private cellCache: Map<string, Konva.Rect> = new Map();
+
+  // 缓冲区跟踪：已渲染的 X 范围
+  private renderedStartX: number = 0;
+  private renderedEndX: number = 0;
+  /** 缓冲区比例：视口宽度的30%，左右各多渲染这么宽 */
+  private static readonly BUFFER_FACTOR = 0.3;
 
   // 状态变量
   private width: number = 0;
@@ -68,8 +75,15 @@ export class HeaderLayer {
       group.x(x);
     }
 
-    // // 检查是否需要重新计算表头
-    this.render();
+    // 检查是否滚出缓冲区，仅在滚出时重建 cell 内容
+    const visibleStart = -x;
+    const visibleEnd = visibleStart + this.width;
+
+    if (visibleStart < this.renderedStartX || visibleEnd > this.renderedEndX) {
+      this.renderCells();
+    }
+
+    this.layer.batchDraw();
   }
 
   /**
@@ -96,24 +110,72 @@ export class HeaderLayer {
    * 渲染表头
    */
   public render(): void {
-    this.calculateHeader();
-
-    // if (this.highlightRect) {
-    //   this.highlightRect.destroy();
-    //   this.highlightRect = null;
-    // }
+    this.buildStructure();
+    this.renderCells();
 
     this.layer.moveToTop();
     this.layer.batchDraw();
   }
 
   /**
-   * 计算并绘制表头
+   * 构建表头结构（headerGroups + 分隔线）
+   * 仅在 resize 或数据变化时调用
    */
-  private calculateHeader(): void {
-    // 清除现有表头
+  private buildStructure(): void {
+    // 清除旧的结构
     this.clearHeader();
 
+    const timeAxis = this.context.store.getTimeAxis();
+    const timeline = timeAxis.getTimeline();
+    const layerCount = timeline.length;
+
+    if (layerCount === 0) return;
+
+    const layerHeights = timeAxis.getLayerHeights();
+    const borderColor = this.context.getOptions().border.color;
+
+    // 预计算每层的 Y 偏移
+    const layerYOffsets: number[] = [];
+    let yAccum = 0;
+    for (let i = 0; i < layerCount; i++) {
+      layerYOffsets.push(yAccum);
+      yAccum += layerHeights[i] ?? 0;
+    }
+
+    // 创建 N 个表头组
+    for (let level = 0; level < layerCount; level++) {
+      const group = new Konva.Group({ name: `header-level-${level}` });
+      this.headerGroups.push(group);
+      this.layer.add(group);
+      group.x(this.offsetX);
+    }
+
+    // 绘制层间分隔线
+    for (let i = 1; i < layerCount; i++) {
+      const line = new Konva.Line({
+        points: [0, layerYOffsets[i], this.width, layerYOffsets[i]],
+        stroke: borderColor,
+        strokeWidth: 1
+      });
+      this.layer.add(line);
+      this.separatorLines.push(line);
+    }
+
+    // 绘制表头底部分隔线（header 与 body 的分界线）
+    const bottomLine = new Konva.Line({
+      points: [0, this.height, this.width, this.height],
+      stroke: borderColor,
+      strokeWidth: 1
+    });
+    this.layer.add(bottomLine);
+    this.separatorLines.push(bottomLine);
+  }
+
+  /**
+   * 渲染表头 cell 内容（带缓冲区的可视范围裁剪）
+   * 滚动超出缓冲区时调用，重建 cells 但保留 group 结构
+   */
+  private renderCells(): void {
     const timeAxis = this.context.store.getTimeAxis();
     const cellWidth = timeAxis.getCellWidth();
     const timeline = timeAxis.getTimeline();
@@ -121,11 +183,7 @@ export class HeaderLayer {
 
     if (layerCount === 0) return;
 
-    // 只计算可视范围内
-    const visibleStartX = Math.max(0, -this.offsetX);
-    const visibleEndX = visibleStartX + this.width;
-
-    // 各层高度（来自 TimeAxis 解析结果）
+    // 各层高度
     const layerHeights = timeAxis.getLayerHeights();
 
     // 预计算每层的 Y 偏移
@@ -136,38 +194,18 @@ export class HeaderLayer {
       yAccum += layerHeights[i] ?? 0;
     }
 
-    // 获取一些变量
+    // 计算带缓冲的可视范围
+    const buffer = this.width * HeaderLayer.BUFFER_FACTOR;
+    const visibleStartX = Math.max(0, -this.offsetX - buffer);
+    const visibleEndX = -this.offsetX + this.width + buffer;
+
     const borderColor = this.context.getOptions().border.color;
 
-    // 创建 N 个表头组
-    for (let level = 0; level < layerCount; level++) {
-      const group = new Konva.Group({ name: `header-level-${level}` });
-      this.headerGroups.push(group);
-      this.layer.add(group);
-
-      // 应用当前偏移
-      group.x(this.offsetX);
+    // 清除现有 cells（保留 group 结构）
+    for (const group of this.headerGroups) {
+      group.destroyChildren();
     }
-
-    // 绘制层间分隔线（仅绘制层与层之间的线，不绘制最底部的线）
-    for (let i = 1; i < layerCount; i++) {
-      this.layer.add(
-        new Konva.Line({
-          points: [0, layerYOffsets[i], this.width, layerYOffsets[i]],
-          stroke: borderColor,
-          strokeWidth: 1
-        })
-      );
-    }
-
-    // 绘制表头底部分隔线（header 与 body 的分界线）
-    this.layer.add(
-      new Konva.Line({
-        points: [0, this.height, this.width, this.height],
-        stroke: borderColor,
-        strokeWidth: 1
-      })
-    );
+    this.cellCache.clear();
 
     // 绘制每一层的内容
     for (let level = 0; level < layerCount; level++) {
@@ -214,8 +252,9 @@ export class HeaderLayer {
       }
     }
 
-    // 高效绘制
-    this.layer.batchDraw();
+    // 更新已渲染范围
+    this.renderedStartX = visibleStartX;
+    this.renderedEndX = visibleEndX;
   }
 
   private createCell(
@@ -290,6 +329,16 @@ export class HeaderLayer {
     }
     this.headerGroups = [];
     this.cellCache.clear();
+
+    // 清理分隔线
+    for (const line of this.separatorLines) {
+      line.destroy();
+    }
+    this.separatorLines = [];
+
+    // 重置缓冲区范围
+    this.renderedStartX = 0;
+    this.renderedEndX = 0;
   }
 
   /**
