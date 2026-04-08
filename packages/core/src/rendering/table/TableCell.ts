@@ -9,6 +9,7 @@
 import { IContext } from "@/types/render";
 import { Logger } from "../../utils/logger";
 import { wrapSize } from "../../utils/size";
+import { sanitizeHtml } from "../../utils/sanitize";
 import { Checkbox } from "./Checkbox";
 import { ITableColumnStandard } from "@/types/table";
 import type { Task } from "@/models/Task";
@@ -122,7 +123,7 @@ export class TableCell {
       try {
         const content = this.column.column.render(this.task.getEmitData());
         if (typeof content === "string") {
-          cellContent.innerHTML = content; // 允许HTML内容
+          cellContent.innerHTML = sanitizeHtml(content);
         } else if (content instanceof HTMLElement) {
           cellContent.appendChild(content);
         } else {

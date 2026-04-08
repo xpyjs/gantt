@@ -9,6 +9,7 @@
 import { ITableColumnStandard } from "@/types/table";
 import { EventName } from "../../event";
 import { wrapSize } from "../../utils/size";
+import { sanitizeHtml } from "../../utils/sanitize";
 import { IContext } from "@/types/render";
 import { IColumn } from "@/store/ColumnManager";
 import { autoColor } from "../../utils/color";
@@ -86,7 +87,7 @@ export class TableHeaderCell {
     if (this.column.column.headerRender) {
       const content = this.column.column.headerRender();
       if (typeof content === "string") {
-        cellContent.innerHTML = content;
+        cellContent.innerHTML = sanitizeHtml(content);
       } else if (content instanceof HTMLElement) {
         cellContent.innerHTML = "";
         cellContent.appendChild(content);
