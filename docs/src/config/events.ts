@@ -383,8 +383,8 @@ gantt.on('click:row', (event, rowData, time) => {
 });`,
 
   // 错误处理事件
-  errorEvent: `gantt.on('error', (error) => {
-  console.error('甘特图错误:', error);
+  errorEvent: `gantt.on('error', (error, msg) => {
+  console.error('甘特图错误:', error, msg);
 
   // 根据错误类型处理
   switch (error) {
@@ -406,6 +406,15 @@ gantt.on('click:row', (event, rowData, time) => {
       break;
     case 'LINK_CYCLE':
       showError('依赖关系循环', '请检查任务之间的依赖关系');
+      break;
+    case 'MOVE_INVALID_TARGET':
+      showError('移动目标无效', msg || '请检查拖拽的目标位置');
+      break;
+    case 'MOVE_CIRCULAR_DEPENDENCY':
+      showError('移动产生循环依赖', msg || '不能将任务移动到自身的子任务下');
+      break;
+    case 'MOVE_INVALID_HIERARCHY':
+      showError('移动层级无效', msg || '请检查目标位置的层级关系');
       break;
     default:
       showError('未知错误', \`错误代码: \${error}\`);
@@ -1259,6 +1268,11 @@ export const eventsPageConfig: EventsPageConfig = {
               name: "error",
               type: "ErrorType",
               description: "错误类型"
+            },
+            {
+              name: "msg",
+              type: "string",
+              description: "错误详细描述信息（可选）"
             }
           ],
           notes: [
@@ -1269,7 +1283,10 @@ export const eventsPageConfig: EventsPageConfig = {
             "LINK_EXIST - 当前关联已存在",
             "TASK_NOT_FOUND - 任务不存在",
             "LINK_INVALID_ARG - 依赖关系参数错误",
-            "LINK_CYCLE - 依赖关系循环"
+            "LINK_CYCLE - 依赖关系循环",
+            "MOVE_INVALID_TARGET - 移动目标无效",
+            "MOVE_CIRCULAR_DEPENDENCY - 移动产生循环依赖",
+            "MOVE_INVALID_HIERARCHY - 移动层级无效"
           ],
           examples: [
             {
