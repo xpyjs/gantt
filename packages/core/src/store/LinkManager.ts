@@ -14,6 +14,9 @@ import { Logger } from "../utils/logger";
 
 // ==================== 类型定义 ====================
 
+/** DFS 路径枚举上限，防止钻石依赖图导致路径爆炸 */
+const MAX_CHAIN_PATHS = 1000;
+
 /** 连线操作结果 */
 type LinkOpResult = { ok: true; } | {
   ok: false,
@@ -459,7 +462,12 @@ export class LinkManager {
           const childPaths = dfsForward(child, stack, visited);
           for (const path of childPaths) {
             paths.push([current, ...path]);
+            if (paths.length >= MAX_CHAIN_PATHS) {
+              Logger.warn(`getDataChain: forward paths reached limit (${MAX_CHAIN_PATHS}), truncated`);
+              break;
+            }
           }
+          if (paths.length >= MAX_CHAIN_PATHS) break;
         }
         if (paths.length === 0) {
           paths = [[current]];
@@ -468,8 +476,8 @@ export class LinkManager {
 
       stack.delete(current.id);
 
-      // 缓存结果（仅对路径较短的结果进行缓存）
-      if (paths.length < 100) {
+      // 缓存结果
+      if (paths.length < MAX_CHAIN_PATHS) {
         this.forwardMemo.set(cacheKey, paths);
         this.recordCacheAccess(cacheKey, false);
       }
@@ -502,7 +510,12 @@ export class LinkManager {
           const parentPaths = dfsBackward(parent, stack, visited);
           for (const path of parentPaths) {
             paths.push([...path, current]);
+            if (paths.length >= MAX_CHAIN_PATHS) {
+              Logger.warn(`getDataChain: backward paths reached limit (${MAX_CHAIN_PATHS}), truncated`);
+              break;
+            }
           }
+          if (paths.length >= MAX_CHAIN_PATHS) break;
         }
         if (paths.length === 0) {
           paths = [[current]];
@@ -511,8 +524,8 @@ export class LinkManager {
 
       stack.delete(current.id);
 
-      // 缓存结果（仅对路径较短的结果进行缓存）
-      if (paths.length < 100) {
+      // 缓存结果
+      if (paths.length < MAX_CHAIN_PATHS) {
         this.backwardMemo.set(cacheKey, paths);
         this.recordCacheAccess(cacheKey, false);
       }
