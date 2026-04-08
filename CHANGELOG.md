@@ -1,3 +1,32 @@
+# [0.1.0](https://github.com/xpyjs/gantt/compare/v0.0.3...v0.1.0) (2026-04-08)
+
+
+### Bug Fixes
+
+* add failure feedback for moveTask via existing ERROR event system ([c2a1d44](https://github.com/xpyjs/gantt/commit/c2a1d44bcdef40a967643497f3059152ce9798df))
+* **core:** add safety html ([e84627b](https://github.com/xpyjs/gantt/commit/e84627b871dcad54f173a908b865547b7f961b46))
+* **core:** Adds proper cleanup for chart slider resources ([4069345](https://github.com/xpyjs/gantt/commit/4069345509bb30eb4d88e92d31ee4585155fa755))
+* **core:** complete destroy cleanup chain for Renderer, GuideLine and Table ([e82f7ac](https://github.com/xpyjs/gantt/commit/e82f7ac027b7764c07374a37db5c1a1c68eb5bd2))
+* **core:** Fixes memory leaks by properly cleaning up event listeners ([a23c091](https://github.com/xpyjs/gantt/commit/a23c0916fee918070c0beaf0fee1580e249ae2eb))
+* **core:** Make sure memory is cleared when deleting tasks ([a270a79](https://github.com/xpyjs/gantt/commit/a270a791895d147845fde34b8efd238ca19cd7d5))
+* **core:** recalculate dataLevel after moveTask ([9b1b2f1](https://github.com/xpyjs/gantt/commit/9b1b2f112da3fd6136137f4d2a17f5b1aa06c688))
+* **core:** prevent async pattern stacking via render version counter ([c0488fb](https://github.com/xpyjs/gantt/commit/c0488fbe569de6fce9dddcab861d9b1d5ed158d3))
+* **core:** add path count limit to prevent exponential explosion in getDataChain ([2af6e04](https://github.com/xpyjs/gantt/commit/2af6e047c1ce59fc8c1088cafbe763f9507f7c19))
+* store selectstart handler reference for proper removeEventListener ([1a5544a](https://github.com/xpyjs/gantt/commit/1a5544a194fae36739533fc8003bcc6fd9f27a07))
+
+
+### Features
+
+* **core:** add scaleUnit param. It's for multiple header of chart timeline. ([e43a22b](https://github.com/xpyjs/gantt/commit/e43a22b42acc6b56c65f2e9d89e753a4585b1b4b)), closes [#168](https://github.com/xpyjs/gantt/issues/168) [#160](https://github.com/xpyjs/gantt/issues/160)
+
+
+### Performance Improvements
+
+* **chart-grid:** skip grid rebuild when scroll stays within buffer zone ([8f1b38e](https://github.com/xpyjs/gantt/commit/8f1b38efd2a273da3f61fcd9364e7b1eb7a7c70c))
+* **core:** optimize scroll by adding buffer zone and fix separator line leak ([cb3ca67](https://github.com/xpyjs/gantt/commit/cb3ca672229ab648cdac37fdb6c78aa410ff35a3))
+
+
+
 ## [0.0.3](https://github.com/xpyjs/gantt/compare/v0.0.2...v0.0.3) (2026-01-14)
 
 
