@@ -141,5 +141,11 @@ export enum ErrorType {
   /** 无效参数 */
   LINK_INVALID_ARG = "LINK_INVALID_ARG",
   /** 检测到环 */
-  LINK_CYCLE = "LINK_CYCLE"
+  LINK_CYCLE = "LINK_CYCLE",
+  /** 移动目标无效 */
+  MOVE_INVALID_TARGET = "MOVE_INVALID_TARGET",
+  /** 移动产生循环依赖 */
+  MOVE_CIRCULAR_DEPENDENCY = "MOVE_CIRCULAR_DEPENDENCY",
+  /** 移动层级无效 */
+  MOVE_INVALID_HIERARCHY = "MOVE_INVALID_HIERARCHY"
 }
