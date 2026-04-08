@@ -44,10 +44,14 @@ export class DragHandler {
     this.element.innerHTML = `<svg t="1746781386866" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3253" width="14" height="14"><path d="M384 128m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" fill="currentColor" p-id="3254"></path><path d="M384 512m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" fill="currentColor" p-id="3255"></path><path d="M384 896m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" fill="currentColor" p-id="3256"></path><path d="M704 128m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" fill="currentColor" p-id="3257"></path><path d="M704 512m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" fill="currentColor" p-id="3258"></path><path d="M704 896m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 -0Z" fill="currentColor" p-id="3259"></path></svg>`;
   }
 
+  private handleSelectStart = (e: Event): void => {
+    e.preventDefault();
+  };
+
   private bindEvents(): void {
     this.element.addEventListener('mousedown', this.handleMouseDown);
     // 防止拖拽时选中文本
-    this.element.addEventListener('selectstart', (e) => e.preventDefault());
+    this.element.addEventListener('selectstart', this.handleSelectStart);
   }
 
   private handleMouseDown = (e: MouseEvent): void => {
@@ -382,7 +386,7 @@ export class DragHandler {
 
     // 移除事件监听
     this.element.removeEventListener('mousedown', this.handleMouseDown);
-    this.element.removeEventListener('selectstart', (e) => e.preventDefault());
+    this.element.removeEventListener('selectstart', this.handleSelectStart);
 
     // 移除DOM元素
     if (this.element && this.element.parentNode) {
