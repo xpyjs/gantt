@@ -7,11 +7,12 @@
  */
 
 import type { Dayjs } from "dayjs";
-import { EventName, type EventBus } from "../event";
+import { EventName, ErrorType, type EventBus } from "../event";
 import { Task } from "../models/Task";
 import type { Store } from ".";
 import { Baseline } from "../models/Baseline";
 import { remove } from "lodash-es";
+import { Logger } from "../utils/logger";
 
 export class DataManager {
   /**
@@ -293,12 +294,22 @@ export class DataManager {
     const target = this.getVisibleTasks()[targetIndex];
 
     if (!task || !target) {
+      Logger.warn("moveTask: invalid task or target index", { taskId: task?.id, targetIndex });
+      this.event.emit(EventName.ERROR, ErrorType.MOVE_INVALID_TARGET, `Invalid task or target index: ${targetIndex}`);
       return;
     }
 
     // 防止将任务移动到其子任务下
-    if (type === 'inside' && task.isSomeoneChildren(target)) return;
-    if (type !== 'inside' && task.isSomeoneChildren(target.parent)) return;
+    if (type === 'inside' && task.isSomeoneChildren(target)) {
+      Logger.warn("moveTask: cannot move task inside its own descendant", { taskId: task.id, targetId: target.id });
+      this.event.emit(EventName.ERROR, ErrorType.MOVE_CIRCULAR_DEPENDENCY, `Cannot move task ${task.id} inside its own descendant ${target.id}`);
+      return;
+    }
+    if (type !== 'inside' && task.isSomeoneChildren(target.parent)) {
+      Logger.warn("moveTask: cannot move task to invalid hierarchy", { taskId: task.id, targetId: target.id });
+      this.event.emit(EventName.ERROR, ErrorType.MOVE_INVALID_HIERARCHY, `Cannot move task ${task.id} to invalid hierarchy position`);
+      return;
+    }
 
     const idProp = this.store.getOptionManager().getOptions().fields.id;
     const childProp = this.store.getOptionManager().getOptions().fields.children;
