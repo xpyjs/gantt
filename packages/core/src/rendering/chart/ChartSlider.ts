@@ -1302,4 +1302,18 @@ export class ChartSlider {
 
     anim.start();
   }
+
+  /**
+   * 销毁滑块，清理所有定时器和资源
+   */
+  public destroy(): void {
+    this.stopAutoMove();
+    this.stopAutoScroll();
+    this.stopAutoExpand();
+
+    if (this.slider) {
+      this.slider.destroyChildren();
+      this.slider.destroy();
+    }
+  }
 }

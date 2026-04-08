@@ -43,6 +43,7 @@ export class ChartRow {
   }
 
   public destroy() {
+    this.slider.destroy();
     this.row.destroy();
   }
 }
