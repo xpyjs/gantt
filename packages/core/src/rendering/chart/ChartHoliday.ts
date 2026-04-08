@@ -19,6 +19,9 @@ export class HolidayGroup {
   private holidayGroup: Konva.Group;
   private patternImage = new WeakMap<any, HTMLImageElement | null>();
 
+  /** 渲染版本号，用于丢弃过期的异步结果 */
+  private renderVersion: number = 0;
+
   constructor(private context: IContext, private layer: Konva.Layer) {
     this.holidayGroup = new Konva.Group();
     this.layer.add(this.holidayGroup);
@@ -74,6 +77,7 @@ export class HolidayGroup {
    * 计算假期
    */
   private async calculateHoliday(): Promise<void> {
+    const version = ++this.renderVersion;
     this.clearHoliday();
     if (!this.context.getOptions().holiday.show) return;
 
@@ -134,6 +138,8 @@ export class HolidayGroup {
               ...this.context.getOptions().holiday
             })
           );
+          // 异步完成后检查版本，丢弃过期结果
+          if (version !== this.renderVersion) return;
         }
 
         // 创建背景矩形并应用图案填充

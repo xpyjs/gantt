@@ -19,6 +19,9 @@ export class WeekendGroup {
 
   private patternImage: HTMLImageElement | null = null;
 
+  /** 渲染版本号，用于丢弃过期的异步结果 */
+  private renderVersion: number = 0;
+
   constructor(private context: IContext, private layer: Konva.Layer) {
     this.weekendGroup = new Konva.Group();
     this.layer.add(this.weekendGroup);
@@ -76,13 +79,13 @@ export class WeekendGroup {
 
   private clearWeekend(): void {
     this.weekendGroup.destroyChildren();
-    this.patternImage = null;
   }
 
   /**
    * 计算周末
    */
   private async calculateWeekend(): Promise<void> {
+    const version = ++this.renderVersion;
     this.clearWeekend();
     if (!this.context.getOptions().weekend.show) return;
 
@@ -124,6 +127,8 @@ export class WeekendGroup {
           this.patternImage = await Pattern.createPattern(
             this.context.getOptions().weekend
           );
+          // 异步完成后检查版本，丢弃过期结果
+          if (version !== this.renderVersion) return;
         }
 
         // 创建背景矩形并应用图案填充
