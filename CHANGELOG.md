@@ -1,3 +1,12 @@
+## [0.1.1](https://github.com/xpyjs/gantt/compare/v0.1.0...v0.1.1) (2026-07-24)
+
+
+### Features
+
+* **core:** add work-time method ([c249407](https://github.com/xpyjs/gantt/commit/c24940783b6e41c9af16326a1bcac38e9edb30bb)), closes [#170](https://github.com/xpyjs/gantt/issues/170)
+
+
+
 # [0.1.0](https://github.com/xpyjs/gantt/compare/v0.0.3...v0.1.0) (2026-04-08)
 
 
