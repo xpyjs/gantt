@@ -454,4 +454,4 @@ Also, you can learn more about sponsorship methods through the [Sponsor](./Spons
 
 ---
 
-Made with ❤️ by the Jeremy Jone
+Made with ❤️ by the Xpyjs & Jeremy Jone

@@ -455,4 +455,4 @@ MIT License
 
 ---
 
-Made with ❤️ by the Jeremy Jone
+Made with ❤️ by the Xpyjs & Jeremy Jone
