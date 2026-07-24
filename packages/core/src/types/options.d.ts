@@ -3,6 +3,7 @@ import { IChartOptions } from "./chart";
 import { ILink } from "./link";
 import { IPattern } from "./styles";
 import { ITableOptions } from "./table";
+import { IHolidayOpts, IWeekendOpts, IWorkTimeOpts } from "./calendar";
 
 export type XGanttUnit = "hour" | "day" | "week" | "month" | "quarter";
 export type TaskType = "task" | "milestone" | "summary";
@@ -105,6 +106,21 @@ export interface IGanttOptions {
 
     /** 结束时间字段 */
     endTime: string;
+
+    /**
+     * 持续时间字段。
+     *
+     * @description 该字段不适用于 `day（不含）` 以下单位，仅针对单位为 `day` 及以上的情况有效
+     * @description 与 endTime 字段互斥，endTime 优先级更高
+     * @description 当 workTime.enabled = false 时，duration 按日历日解释
+     * @description 当 workTime.enabled = true 时，duration 按工作日解释
+     *
+     * @example
+     * // 只有 duration 没有 endTime
+     * { id: 1, start: '2024-01-05', duration: 5 }
+     * // endTime 自动计算为 2024-01-10（5个日历日）
+     */
+    duration?: string;
 
     /** 名称字段 */
     name: string;
@@ -980,7 +996,7 @@ export interface IGanttOptions {
      * @default 0.1
      */
     opacity: number;
-  } & IPattern;
+  } & IPattern & IWeekendOpts;
 
   /** 节假日期配置 */
   holiday: {
@@ -992,42 +1008,20 @@ export interface IGanttOptions {
      * 背景颜色。默认使用主色
      */
     backgroundColor?: string;
+
     /**
      * 透明度
      *
      * @default 0.1
      */
     opacity: number;
-    /**
-     * 配置节假日期。可以针对不同节假日配置不同的背景颜色。默认使用统一配置颜色
-     */
-    holidays?: Array<
-      {
-        date: Date | number | string | Array<Date | number | string>;
-        backgroundColor?: string;
-        opacity?: number;
-        /**
-         * 自定义节假日期的文本
-         */
-        text?: {
-          /** 是否显示文本 */
-          show?: boolean;
-          /** 文本内容 */
-          content?: string;
-          /** 文本颜色 */
-          color?: string;
-          /** 背景颜色 */
-          backgroundColor?: string;
-          /** 透明度 */
-          opacity?: number;
-          /** 文本字体大小 */
-          fontSize?: number;
-          /** 文本字体 */
-          fontFamily?: string;
-        }
-      } & IPattern
-    >;
-  } & IPattern;
+
+  } & IPattern & IHolidayOpts;
+
+  /**
+   * 配置工作日模式。启用后可以将任务范围控制在工作日内
+   */
+  workTime?: IWorkTimeOpts;
 
   /** 标志配置。它用于配置一个或多个标志性日期 */
   flag?: {
@@ -1129,4 +1123,4 @@ export interface IGanttOptions {
      */
     animationDuration?: number;
   };
-}
+};

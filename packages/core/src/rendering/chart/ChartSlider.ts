@@ -111,8 +111,10 @@ export class ChartSlider {
     );
 
     const y = (rowHeight - height) / 2;
-    const x = this.context.store.getTimeAxis().getTimeLeft(this.task.startTime);
-    const end = this.context.store.getTimeAxis().getTimeLeft(this.task.endTime);
+    const startTime = this.task.startTime;
+    const endTime = this.task.endTime;
+    const x = this.context.store.getTimeAxis().getTimeLeft(startTime);
+    const end = this.context.store.getTimeAxis().getTimeLeft(endTime);
     const sliderWidth = end - x;
 
     // 获取一些属性
@@ -773,6 +775,8 @@ export class ChartSlider {
 
   /**
    * 移动后更新任务时间
+   * - 整体移动：锚定 startTime，duration 不变，用 duration 算 endTime
+   * - 单侧移动：锚定另一侧，重新计算 duration
    */
   private emitUpdate(direction: "left" | "right" | "both") {
     let start = this.task.startTime!.clone();
@@ -840,7 +844,7 @@ export class ChartSlider {
     }
   }
 
-  private handleDragEnd(e: Konva.KonvaEventObject<MouseEvent>) {
+  private handleDragEnd(e: Konva.KonvaEventObject<MouseEvent>, direction?: "left" | "right" | "both") {
     this.stopAutoMove();
     this.stopAutoScroll();
     this.stopAutoExpand();
@@ -848,6 +852,10 @@ export class ChartSlider {
     this.dragDiffX = 0;
     this.draggingDirection = "none"; // 重置拖拽方向
 
+    // 完成后更新一次数据，是数据可以匹配到工作日视图
+    this.context.store.getDataManager().fitTaskTime(this.task, direction || 'both', this.oldTasks);
+
+    // 抛出移动后的所有数据
     if (this.oldTasks.length > 0) {
       this.context.event.emit(
         EventName.TASK_DRAG_END,
@@ -1150,7 +1158,7 @@ export class ChartSlider {
     };
 
     const handleMouseUp = () => {
-      this.handleDragEnd(e);
+      this.handleDragEnd(e, direction);
 
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);

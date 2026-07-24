@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:01
  * @LastEditors: JeremyJone
- * @LastEditTime: 2026-01-12 11:18:40
+ * @LastEditTime: 2026-07-07 10:09:31
  * @Description: 配置项管理器
  */
 
@@ -130,6 +130,7 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
     name: "name",
     progress: "progress",
     children: "children",
+    duration: 'duration',
     type: "type"
   },
   selection: {
@@ -209,7 +210,8 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
   weekend: {
     show: true,
     backgroundColor: "#c9c9c9",
-    opacity: 0.1
+    opacity: 0.1,
+    days: [0, 6]  // 默认周六、周日为周末
   },
   holiday: {
     opacity: 0.1
@@ -260,6 +262,13 @@ export class OptionManager {
       });
 
       this.options.holiday.holidays = res;
+    }
+
+    // 校验 weekend.days
+    if (this.options.weekend?.days) {
+      this.options.weekend.days = this.options.weekend.days.filter(
+        d => d >= 0 && d <= 6
+      );
     }
 
     // showVerticalLine 旧 API 兼容：

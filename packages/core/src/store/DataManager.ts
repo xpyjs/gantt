@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2026-01-13 10:01:41
+ * @LastEditTime: 2026-07-13 17:51:01
  * @Description: 数据管理器
  */
 
@@ -670,7 +670,7 @@ export class DataManager {
           if (oldTasks.findIndex(t => t.id === parentTask!.id) === -1) {
             oldTasks.push(parentTask.clone());
           }
-          parentTask.updateTime(_st, _et);
+          parentTask.updateTime(_st, _et, true);
         }
       } else if (parent === "strict") {
         if (parentTask.startTime && st.isBefore(parentTask.startTime)) {
@@ -728,7 +728,7 @@ export class DataManager {
             if (oldTasks.findIndex(t => t.id === c.id) === -1) {
               oldTasks.push(c.clone());
             }
-            c.updateTime(_st, _et);
+            c.updateTime(_st, _et, true);
           } else if (direction === "right") {
             // 右移，左侧不动
             _et = _et.add(_endDiff);
@@ -749,7 +749,7 @@ export class DataManager {
             if (oldTasks.findIndex(t => t.id === c.id) === -1) {
               oldTasks.push(c.clone());
             }
-            c.updateTime(_st, _et);
+            c.updateTime(_st, _et, true);
           }
         } else if (child === "fixed") {
           if (direction === "both") {
@@ -779,7 +779,7 @@ export class DataManager {
               if (oldTasks.findIndex(t => t.id === c.id) === -1) {
                 oldTasks.push(c.clone());
               }
-              c.updateTime(_st, _et);
+              c.updateTime(_st, _et, true);
             }
           } else if (direction === "right") {
             // 右移：当前任务时间触及到子项边界，子项跟随移动
@@ -801,7 +801,7 @@ export class DataManager {
               if (oldTasks.findIndex(t => t.id === c.id) === -1) {
                 oldTasks.push(c.clone());
               }
-              c.updateTime(_st, _et);
+              c.updateTime(_st, _et, true);
             }
           }
         }
@@ -817,7 +817,88 @@ export class DataManager {
     if (oldTasks.findIndex(t => t.id === task.id) === -1) {
       oldTasks.push(task.clone());
     }
-    task.updateTime(st, et);
+
+    task.updateTime(st, et, direction === 'left' || direction === 'right');
+  }
+
+  /**
+   * 基于某个任务进行时间适配的调整，并联动其子任务
+   */
+  fitTaskTime(
+    task: Task,
+    direction: "left" | "right" | "both",
+    oldTasks: Task[] = [] // 用于存储旧任务列表
+  ) {
+    if (!task.startTime) return;
+
+    // 按照适配更新当前任务值
+    task.fitWork(direction);
+
+    const child = this.store.getOptionManager().getOptions().bar.move
+      .link.child;
+    const parent = this.store.getOptionManager().getOptions().bar.move
+      .link.parent;
+
+    // 记录子项的两侧极值
+    let leftTime = task.startTime;
+    let rightTime = task.endTime!;
+
+    /**********************/
+    /***** 适配子级联动 *****/
+    /**********************/
+    let childrenTasks = task.children || [];
+    while (child !== "none" && childrenTasks.length > 0) {
+      const _tasks: Task[] = [];
+      childrenTasks.forEach(c => {
+        if (!c.startTime || !c.endTime) return;
+
+        c.fitWork(direction);
+        if (c.startTime.isBefore(leftTime)) {
+          c.fitWork('right', { start: leftTime });
+        } else if (c.endTime.isAfter(rightTime)) {
+          c.fitWork('left', { end: rightTime });
+        }
+
+        leftTime = c.startTime.isBefore(leftTime) ? c.startTime : leftTime;
+        rightTime = c.endTime.isAfter(rightTime) ? c.endTime : rightTime;
+
+        if (c.children && c.children.length > 0) {
+          _tasks.push(...c.children);
+        }
+
+        // 子项不需要添加到 oldTasks，如果子项会移动，那么一定在 slider 中已经添加过？
+      });
+
+      childrenTasks = _tasks;
+    }
+
+    /**********************/
+    /***** 适配父级联动 *****/
+    /**********************/
+    let parentTask = task.parent;
+    while (parent === "expand" && parentTask) {
+      // 查找父级下所有子项（当前任务平级任务）的两侧极值
+      const siblings = parentTask.children;
+      if (siblings && siblings.length > 1) {
+        siblings.forEach(s => {
+          if (s.id === task.id) return;
+          if (!s.startTime || !s.endTime) return;
+
+          leftTime = s.startTime.isBefore(leftTime) ? s.startTime : leftTime;
+          rightTime = s.endTime.isAfter(rightTime) ? s.endTime : rightTime;
+        });
+      }
+
+      if (!leftTime.isSame(parentTask.startTime) || !rightTime.isSame(parentTask.endTime)) {
+        parentTask.updateTime(leftTime, rightTime, true);
+
+        if (oldTasks.findIndex(t => t.id === parentTask!.id) === -1) {
+          oldTasks.push(parentTask.clone());
+        }
+      }
+
+      parentTask = parentTask.parent;
+    }
   }
 
   //** 基线数据操作 */

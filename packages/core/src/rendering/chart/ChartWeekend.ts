@@ -1,5 +1,4 @@
 import Konva from "konva";
-import dayjs from "../../utils/time";
 import { Pattern } from "./Pattern";
 import { IContext } from "@/types/render";
 
@@ -25,13 +24,6 @@ export class WeekendGroup {
   constructor(private context: IContext, private layer: Konva.Layer) {
     this.weekendGroup = new Konva.Group();
     this.layer.add(this.weekendGroup);
-  }
-
-  /**
-   * 检查日期是否为周末
-   */
-  public isWeekend(date: dayjs.Dayjs): boolean {
-    return date.day() === 6 || date.day() === 0;
   }
 
   /**
@@ -102,63 +94,56 @@ export class WeekendGroup {
     const visibleStartX = Math.max(0, -this.offsetX);
     const visibleEndX = visibleStartX + this.width;
 
-    for (let time = startTime; time <= endTime; ) {
-      let width = cellWidth;
-      width = cellWidth * 2 * (unit === "day" ? 1 : 24);
+    // 逐日遍历，处理周末
+    for (let time = startTime; time <= endTime; time = time.add(1, "day")) {
+      if (!this.context.store.getWorkCalendar().isWeekend(time)) continue;
 
-      if (this.isWeekend(time)) {
-        const x = this.context.store.getTimeAxis().getTimeLeft(time);
-        const y = headerHeight;
-        const height = totalHeight;
+      const width = cellWidth * (unit === "day" ? 1 : 24);
+      const x = this.context.store.getTimeAxis().getTimeLeft(time);
+      const y = headerHeight;
+      const height = totalHeight;
 
-        // 检查是否在可视范围内。只渲染可视范围内的内容
-        const itemEndX = x + width;
-        if (itemEndX < visibleStartX) {
-          time = time.add(2, "day");
-          continue; // 跳过
-        }
-
-        if (x > visibleEndX) {
-          break; // 已经超过了可视范围，停止
-        }
-
-        // 获取图案图片
-        if (!this.patternImage && this.context.getOptions().weekend.pattern) {
-          this.patternImage = await Pattern.createPattern(
-            this.context.getOptions().weekend
-          );
-          // 异步完成后检查版本，丢弃过期结果
-          if (version !== this.renderVersion) return;
-        }
-
-        // 创建背景矩形并应用图案填充
-        const backgroundRect = new Konva.Rect({
-          name: "weekend-rect",
-          x,
-          y,
-          width,
-          height,
-          // 根据模式设置填充
-          ...(this.patternImage
-            ? {
-                fillPatternImage: this.patternImage,
-                fillPatternRepeat: "repeat",
-                fillPatternOffset: { x: 0, y: 0 },
-                fillPatternScale: { x: 1, y: 1 }
-              }
-            : {
-                fill:
-                  this.context.getOptions().weekend.backgroundColor || "#c9c9c9"
-              }),
-          opacity: this.context.getOptions().weekend.opacity
-        });
-
-        this.weekendGroup.add(backgroundRect);
-
-        time = time.add(2, "day");
-      } else {
-        time = time.add(1, "day");
+      // 检查是否在可视范围内
+      const itemEndX = x + width;
+      if (itemEndX < visibleStartX) {
+        continue; // 左侧不可见，跳过
       }
+      if (x > visibleEndX) {
+        break; // 已超过可视范围，停止
+      }
+
+      // 获取图案图片
+      if (!this.patternImage && this.context.getOptions().weekend.pattern) {
+        this.patternImage = await Pattern.createPattern(
+          this.context.getOptions().weekend
+        );
+        // 异步完成后检查版本，丢弃过期结果
+        if (version !== this.renderVersion) return;
+      }
+
+      // 创建背景矩形并应用图案填充
+      const backgroundRect = new Konva.Rect({
+        name: "weekend-rect",
+        x,
+        y,
+        width,
+        height,
+        // 根据模式设置填充
+        ...(this.patternImage
+          ? {
+              fillPatternImage: this.patternImage,
+              fillPatternRepeat: "repeat",
+              fillPatternOffset: { x: 0, y: 0 },
+              fillPatternScale: { x: 1, y: 1 }
+            }
+          : {
+              fill:
+                this.context.getOptions().weekend.backgroundColor || "#c9c9c9"
+            }),
+        opacity: this.context.getOptions().weekend.opacity
+      });
+
+      this.weekendGroup.add(backgroundRect);
     }
 
     // 重新渲染

@@ -17,7 +17,6 @@
         .gantt1-container {
             width: 1200px;
             height: 600px;
-            border: 1px solid #000;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -27,6 +26,7 @@
 
         .gantt1-container #gantt1 {
             flex: 1;
+            border: 1px solid #000;
         }
 
         .gantt2-container {
@@ -40,6 +40,20 @@
         }
 
         .gantt2-container #gantt2 {
+            flex: 1;
+        }
+
+        .gantt3-container {
+            margin-top: 100px;
+            width: 100%;
+            height: 800px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gantt3-container #gantt3 {
             flex: 1;
         }
 
@@ -59,9 +73,9 @@
     </div>
     <div id="btn-group2"></div>
 
-    <div>
+    <div class="gantt3-container">
         <h4>Gantt3 Chart</h4>
-        <div id="gantt3-container"></div>
+        <div id="gantt3"></div>
     </div>
 
     <script type="module" src="/src/main.ts"></script>

@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:31
  * @LastEditors: JeremyJone
- * @LastEditTime: 2026-01-12 16:54:12
+ * @LastEditTime: 2026-07-07 15:16:33
  * @Description: Store
  */
 import { OptionManager } from "./OptionManager";
@@ -18,6 +18,7 @@ import { IContext } from "@/types/render";
 import { IOptionConfig, IOptions } from "@/types";
 import { ILink } from "@/types/link";
 import { EventName } from "../event";
+import { WorkCalendar } from "./workCalendar";
 
 export class Store {
   // 声明成员属性类型
@@ -26,6 +27,7 @@ export class Store {
   private columnManager: ColumnManager;
   private linkManager: LinkManager;
   private timeAxis: TimeAxis;
+  private workCalendar: WorkCalendar;
 
   // 使用私有构造函数防止直接创建实例
   constructor(private context: IContext, options?: IOptions) {
@@ -41,6 +43,13 @@ export class Store {
     if (_options.locale) {
       setLocale(_options.locale);
     }
+
+    // 创建 WorkCalendar 实例
+    this.workCalendar = new WorkCalendar(
+      _options.weekend,
+      _options.holiday,
+      _options.workTime
+    );
 
     this.timeAxis = new TimeAxis();
     this.timeAxis.init(this.optionManager.getOptions());
@@ -76,6 +85,10 @@ export class Store {
     return this.optionManager;
   }
 
+  getWorkCalendar() {
+    return this.workCalendar;
+  }
+
   getDataManager() {
     return this.dataManager;
   }
@@ -103,6 +116,12 @@ export class Store {
         task.updateMode();
       });
     }
+
+    this.workCalendar.update({
+      weekendOpts: this.optionManager.getOptions().weekend,
+      holidayOpts: this.optionManager.getOptions().holiday,
+      workTimeOpts: this.optionManager.getOptions().workTime
+    });
 
     this.context.getScrollbar().updateOptions(
       this.context.store.getOptionManager().getOptions().scrollbar || {}

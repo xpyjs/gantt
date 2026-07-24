@@ -90,7 +90,6 @@ export class HolidayGroup {
 
     const startTime = this.context.store.getTimeAxis().getStartTime();
     const endTime = this.context.store.getTimeAxis().getEndTime();
-    const unit = this.context.store.getTimeAxis().getCellUnit();
     const cellWidth = this.context.store.getTimeAxis().getCellWidth();
     const headerHeight = this.context.getOptions().header.height;
     const cellHeight = this.context.getOptions().row.height;
@@ -98,119 +97,118 @@ export class HolidayGroup {
     const totalHeight = totalRows * cellHeight;
 
     for (let time = startTime; time <= endTime; time = time.add(1, "day")) {
-      const holiday = holidays.find(h => {
+      if (!this.context.store.getWorkCalendar().isHoliday(time)) continue;
+
+      const matchedHoliday = holidays.find(h => {
         if (isArray(h.date)) {
-          if (h.date.some(d => dayjs(d).isSame(time, "day"))) {
-            return h;
-          }
-        } else {
-          if (dayjs(h.date).isSame(time, "day")) {
-            return h;
-          }
+          return h.date.some(d => dayjs(d).isSame(time, "day"));
         }
+        return dayjs(h.date).isSame(time, "day");
       });
 
-      if (holiday) {
-        const x = this.context.store.getTimeAxis().getTimeLeft(time);
-        const y = headerHeight;
-        const height = totalHeight;
+      const holiday = matchedHoliday || {
+        date: time.toDate()
+      };
 
-        // 检查是否在可视范围内。只渲染可视范围内的内容
-        const itemEndX = x + cellWidth;
-        if (itemEndX < visibleStartX) {
-          continue; // 跳过
+      const x = this.context.store.getTimeAxis().getTimeLeft(time);
+      const y = headerHeight;
+      const height = totalHeight;
+
+      // 检查是否在可视范围内。只渲染可视范围内的内容
+      const itemEndX = x + cellWidth;
+      if (itemEndX < visibleStartX) {
+        continue; // 跳过
+      }
+
+      if (x > visibleEndX) {
+        break; // 已经超过了可视范围，停止
+      }
+
+      // 获取图案图片
+      if (
+        !this.patternImage.has(holiday) &&
+        (holiday.pattern || this.context.getOptions().holiday.pattern)
+      ) {
+        this.patternImage.set(
+          holiday,
+          await Pattern.createPattern({
+            backgroundColor: this.context.getOptions().primaryColor,
+            ...holiday,
+            ...this.context.getOptions().holiday
+          })
+        );
+        // 异步完成后检查版本，丢弃过期结果
+        if (version !== this.renderVersion) return;
+      }
+
+      // 创建背景矩形并应用图案填充
+      const backgroundRect = new Konva.Rect({
+        name: "holiday-rect",
+        x,
+        y,
+        width: cellWidth,
+        height,
+        // 根据模式设置填充
+        ...(this.patternImage.get(holiday)
+          ? {
+            fillPatternImage: this.patternImage.get(holiday) ?? undefined,
+            fillPatternRepeat: "repeat",
+            fillPatternOffset: { x: 0, y: 0 },
+            fillPatternScale: { x: 1, y: 1 },
+            opacity:
+              holiday.opacity || this.context.getOptions().holiday.opacity
+          }
+          : {
+            fill:
+              holiday.backgroundColor ||
+              this.context.getOptions().holiday.backgroundColor ||
+              this.context.getOptions().primaryColor,
+            opacity:
+              holiday.opacity || this.context.getOptions().holiday.opacity
+          })
+      });
+
+      this.holidayGroup.add(backgroundRect);
+
+      if (holiday.text?.show) {
+        if (isArray(holiday.date)) {
+          // 只渲染第一个日期的文本
+          if (!dayjs(holiday.date[0]).isSame(time, "day")) continue;
         }
 
-        if (x > visibleEndX) {
-          break; // 已经超过了可视范围，停止
-        }
+        const fontSize = holiday.text?.fontSize || 10;
+        const fontFamily = holiday.text?.fontFamily || 'Arial';
+        const textContent = holiday.text?.content || '';
+        const textSize = new Konva.Text({ fontSize, fontFamily }).measureSize(textContent);
 
-        // 获取图案图片
-        if (
-          !this.patternImage.has(holiday) &&
-          (holiday.pattern || this.context.getOptions().holiday.pattern)
-        ) {
-          this.patternImage.set(
-            holiday,
-            await Pattern.createPattern({
-              backgroundColor: this.context.getOptions().primaryColor,
-              ...holiday,
-              ...this.context.getOptions().holiday
-            })
-          );
-          // 异步完成后检查版本，丢弃过期结果
-          if (version !== this.renderVersion) return;
-        }
-
-        // 创建背景矩形并应用图案填充
-        const backgroundRect = new Konva.Rect({
-          name: "holiday-rect",
+        const textColor = holiday.text?.color || 'white';
+        const textBackgroundColor = holiday.text?.backgroundColor || holiday.backgroundColor || this.context.getOptions().holiday?.backgroundColor || this.context.getOptions().primaryColor;
+        const textGroup = new Konva.Group({
+          name: "holiday-text-group",
           x,
           y,
-          width: cellWidth,
-          height,
-          // 根据模式设置填充
-          ...(this.patternImage.get(holiday)
-            ? {
-              fillPatternImage: this.patternImage.get(holiday) ?? undefined,
-              fillPatternRepeat: "repeat",
-              fillPatternOffset: { x: 0, y: 0 },
-              fillPatternScale: { x: 1, y: 1 },
-              opacity:
-                holiday.opacity || this.context.getOptions().holiday.opacity
-            }
-            : {
-              fill:
-                holiday.backgroundColor ||
-                this.context.getOptions().holiday.backgroundColor ||
-                this.context.getOptions().primaryColor,
-              opacity:
-                holiday.opacity || this.context.getOptions().holiday.opacity
-            })
+          opacity: holiday.text?.opacity
         });
 
-        this.holidayGroup.add(backgroundRect);
+        const text = new Konva.Text({
+          text: textContent,
+          fill: textColor,
+          fontSize,
+          fontFamily,
+          padding: 5
+        });
 
-        if (holiday.text?.show) {
-          if (isArray(holiday.date)) {
-            // 只渲染第一个日期的文本
-            if (!dayjs(holiday.date[0]).isSame(time, "day")) continue;
-          }
+        const bg = new Konva.Rect({
+          x: 0,
+          y: 0,
+          width: textSize.width + 12,
+          height: textSize.height + 8,
+          fill: textBackgroundColor,
+        });
 
-          const fontSize = holiday.text?.fontSize || 10;
-          const fontFamily = holiday.text?.fontFamily || 'Arial';
-          const textContent = holiday.text?.content || '';
-          const textSize = new Konva.Text({ fontSize, fontFamily }).measureSize(textContent);
-
-          const textColor = holiday.text?.color || 'white';
-          const textBackgroundColor = holiday.text?.backgroundColor || holiday.backgroundColor || this.context.getOptions().holiday?.backgroundColor || this.context.getOptions().primaryColor;
-          const textGroup = new Konva.Group({
-            name: "holiday-text-group",
-            x,
-            y,
-            opacity: holiday.text?.opacity
-          });
-
-          const text = new Konva.Text({
-            text: textContent,
-            fill: textColor,
-            fontSize,
-            fontFamily,
-            padding: 5
-          });
-
-          const bg = new Konva.Rect({
-            x: 0,
-            y: 0,
-            width: textSize.width + 12,
-            height: textSize.height + 8,
-            fill: textBackgroundColor,
-          });
-
-          textGroup.add(bg);
-          textGroup.add(text);
-          this.holidayGroup.add(textGroup);
-        }
+        textGroup.add(bg);
+        textGroup.add(text);
+        this.holidayGroup.add(textGroup);
       }
     }
 

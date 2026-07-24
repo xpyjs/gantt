@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:59:03
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-10-07 14:03:28
+ * @LastEditTime: 2026-07-13 17:45:41
  * @Description:任务数据模型
  */
 
@@ -10,11 +10,11 @@ import type { Dayjs } from "dayjs";
 import { generateId } from "../utils/id";
 import dayjs from "dayjs";
 import { type EventBus, EventName } from "../event";
-import { cloneDeep, isArray, isObject, isString } from "lodash-es";
+import { cloneDeep, isObject, isString } from "lodash-es";
 import { IGanttOptions, TaskType } from "../types/options";
-import { EmitData } from "@/types";
 import { Store } from "@/store";
 import { clamp } from "../utils/helpers";
+import { Logger } from "../utils/logger";
 
 export class Task {
   __key__ = generateId();
@@ -66,10 +66,15 @@ export class Task {
    * 在扁平化列表中的索引位置，从0开始
    */
   flatIndex: number;
+
   /**
-   * 时间持续间隔
+   * 工时持续时长
+   *
+   * @description 优先取原始 data 中的 duration
+   * @description 若原始数据未提供，则由 endTime - startTime 计算，仅保存在内部，不回填原始数据
    */
-  private duration: number = 0;
+  private _duration: number = 0;
+
   /**
    * 原始数据
    */
@@ -152,7 +157,7 @@ export class Task {
     return isObject(current) ? cloneDeep(current) : current;
   }
 
-  /** 切换展示模式时，需要调整时间 */
+  /** 切换展示模式时，需要调整展示长度 */
   updateMode(): boolean {
     let isChanged = false;
     let changeTime = false;
@@ -166,12 +171,31 @@ export class Task {
       }
     }
 
-    // 更新结束时间
+    const workCalendar = this.store.getWorkCalendar();
+
+    // 更新结束时间（优先级：endTime > duration）
     if (this.data[this.fields.endTime]) {
+      // 有 endTime 字段，优先使用
       if (!this.endTime || !this.endTime.isSame(dayjs(this.data[this.fields.endTime]))) {
         this.endTime = dayjs(this.data[this.fields.endTime]);
         isChanged = true;
         changeTime = true;
+      }
+    } else if (this.fields.duration && this.data[this.fields.duration]) {
+      // 没有 endTime，但有 duration 字段
+      const durationValue = Number(this.data[this.fields.duration]);
+      if (!isNaN(durationValue) && durationValue > 0) {
+        if (this.startTime) {
+          const newEndTime = workCalendar?.workOffset(this.startTime, durationValue);
+          if (!this.endTime || !this.endTime.isSame(newEndTime)) {
+            this.endTime = newEndTime;
+            this._duration = durationValue;
+            isChanged = true;
+            changeTime = true;
+          }
+        }
+      } else {
+        Logger.warn(`The \`${this.fields.duration}\` field should be a positive number, fractional values are allowed.`)
       }
     }
 
@@ -182,8 +206,8 @@ export class Task {
 
     // 更新持续时间
     if (this.startTime && this.endTime) {
-      if (this.duration === 0) {
-        this.duration = this.endTime.diff(this.startTime);
+      if (!this._duration) {
+        this._duration = workCalendar?.workDiff(this.startTime, this.endTime) || this.endTime.diff(this.startTime);
       }
     }
 
@@ -234,23 +258,91 @@ export class Task {
     }
   }
 
-  updateTime(startTime: Dayjs, endTime: Dayjs): void {
-    this.startTime = startTime;
-    this.endTime = this.isMilestone() ? startTime : endTime;
+  /**
+   * 更新 Task 时间并修改原始 data
+   */
+  updateTime(startTime: Dayjs, endTime: Dayjs, updateDuration?: boolean): void {
+    let st = startTime;
+    let et = this.isMilestone() ? st : endTime;
+
+    if (!st || !et) {
+      Logger.warn(`Task [${this.data}] has some error about startTime or endTime.`);
+      return;
+    }
+    this.startTime = st;
+    this.endTime = et;
+
+    // 更新 duration
+    if (updateDuration) {
+      this.updateDuration(st, et);
+    }
 
     const format = this.store?.getOptionManager().getOptions()?.dateFormat;
-
     this.data[this.fields.startTime || "startTime"] =
       this.startTime.format(format);
 
     if (!this.isMilestone()) {
       this.data[this.fields.endTime || "endTime"] = this.endTime.format(format);
     } else {
-      // 里程碑模式下，要保持起止时间的间距，需要使用 duration
-      this.data[this.fields.endTime || "endTime"] = this.startTime.add(this.duration).format(format);
+      this.data[this.fields.endTime || "endTime"] = this.startTime
+        .add(this.duration)
+        .format(format);
     }
 
     this.event.emit(EventName.UPDATE_TASK, this);
+  }
+
+  /**
+   * 更新 Task 持续时间并修改原始 data
+   */
+  updateDuration(startTime: Dayjs, endTime: Dayjs): void {
+    const workCalendar = this.store.getWorkCalendar();
+    this._duration = workCalendar.workDiff(startTime, endTime);
+
+    // 只有原始数据给出字段，才更新 data
+    if (this.fields.duration) {
+      this.data[this.fields.duration] = this._duration;
+    }
+  }
+
+  /**
+   * 按照规则，适配任务时间
+   *
+   * 规则：
+   * - 根据 direction 判断移动内容：left - 开始时间，right - 结束时间，both - 起止时间
+   * - 同时缺失 endTime、duration 的话，直接返回
+   * - 根据 duration 重新计算 endTime
+   * - 启用了跳过非工作日模式，自动调整任务时间，使其落在工作日上
+  */
+  fitWork(direction: "left" | "right" | "both" = 'both', options?: { start?: Dayjs, end?: Dayjs }) {
+    let st = options?.start || this.startTime;
+    let et = options?.end || this.endTime;
+
+    if(!st || !et || !this._duration) return;
+
+    const workCalendar = this.store.getWorkCalendar();
+
+    // 适配工作时间
+    if (direction === 'left') {
+      st = workCalendar.currentWorkTime(workCalendar.workOffset(et, -this._duration), 'before');
+    } else if (direction === 'right') {
+      et = workCalendar.currentWorkTime(workCalendar.workOffset(st, this._duration));
+    } else {
+      st = workCalendar.currentWorkTime(st);
+      et = workCalendar.currentWorkTime(workCalendar.workOffset(st, this._duration));
+    }
+
+    // 特殊处理：里程碑模式，结束时间 = 开始时间
+    if (this.isMilestone()) {
+      et = st;
+    }
+
+    if (st && et) this.updateTime(st, et);
+  }
+
+  /** 获取当前 duration */
+  get duration(): number {
+    return this._duration;
   }
 
   public clone() {
@@ -263,7 +355,7 @@ export class Task {
     );
   }
 
-  public getEmitData(): EmitData {
+  public getEmitData() {
     return {
       data: this.data,
       $index: this.flatIndex,
@@ -276,7 +368,7 @@ export class Task {
     const traverse = (children: Task[]) => {
       children.forEach(child => {
         allChildren.push(child);
-        if (isArray(child.children) && child.children.length > 0) {
+        if (child.children && child.children.length > 0) {
           traverse(child.children);
         }
       });
