@@ -34,7 +34,11 @@ describe('DataManager.moveTask', () => {
         })
       }),
       updateTime: () => void 0,
-      getTimeAxis: () => ({ getCellUnit: () => 'day' })
+      getTimeAxis: () => ({ getCellUnit: () => 'day' }),
+      getWorkCalendar: () => ({
+        workOffset: (start: any, n: number) => start,
+        workDiff: (start: any, end: any) => end.diff(start)
+      })
     };
 
     const event: any = {
