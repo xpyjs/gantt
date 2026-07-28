@@ -415,7 +415,7 @@ export class ChartSlider {
           .toHex();
       // 渲染左右拖拽按钮
       const moveLeft = !!this.unpackFunc(this.context.getOptions().bar.move.single?.left);
-      if (moveLeft) {
+      if (moveLeft && !this.task.isSummary()) {
         if (!this.leftHandleGroup) {
           this.leftHandleGroup = new Konva.Group({
             x: 0,
@@ -477,7 +477,7 @@ export class ChartSlider {
 
       // 右侧拖拽按钮
       const moveRight = !!this.unpackFunc(this.context.getOptions().bar.move.single?.right);
-      if (moveRight) {
+      if (moveRight && !this.task.isSummary()) {
         if (!this.rightHandleGroup) {
           this.rightHandleGroup = new Konva.Group({
             x: 0,
