@@ -35,7 +35,7 @@ export interface IScaleConfigBase {
   /**
    * 标签格式化
    *
-   * @description 字符串：使用 dayjs format 字符串
+   * @description 字符串：使用 dayjs format 字符串。具体格式可以参考 [dayjs format](https://day.js.org/docs/en/display/format)，以及支持 [dayjs plugin AdvancedFormat](https://day.js.org/docs/en/plugin/advanced-format)
    * @description 函数：(date: Date, unit: DurationUnit, step: number) => string
    * @description 未指定时使用默认格式
    */
