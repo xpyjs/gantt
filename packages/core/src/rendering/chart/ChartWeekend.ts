@@ -81,8 +81,8 @@ export class WeekendGroup {
     this.clearWeekend();
     if (!this.context.getOptions().weekend.show) return;
 
-    const startTime = this.context.store.getTimeAxis().getStartTime();
-    const endTime = this.context.store.getTimeAxis().getEndTime();
+    const startTime = this.context.store.getTimeAxis().getStartTime().startOf("day");
+    const endTime = this.context.store.getTimeAxis().getEndTime().endOf("day");
     const unit = this.context.store.getTimeAxis().getCellUnit();
     const cellWidth = this.context.store.getTimeAxis().getCellWidth();
     const headerHeight = this.context.getOptions().header.height;
