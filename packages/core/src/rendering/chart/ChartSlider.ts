@@ -852,6 +852,27 @@ export class ChartSlider {
     this.dragDiffX = 0;
     this.draggingDirection = "none"; // 重置拖拽方向
 
+    // 获取当前视图的坐标范围
+    const stage = e.target.getStage();
+    if (stage) {
+      // 重新计算所有任务项是否在时间轴范围内
+      const stageWidth = stage.width();
+      const cellWidth = this.context.store.getTimeAxis().getCellWidth();
+      const initSliderWidth = e.target.width();
+      const initSliderLeft = e.target.x();
+      const initSliderRight = initSliderLeft + initSliderWidth;
+      const initSliderLeftDiffX = Math.max(0, -this.offsetX - initSliderLeft);
+      const initSliderRightDiffX = Math.max(0, initSliderRight - (-this.offsetX + stageWidth));
+
+      if (initSliderLeftDiffX > 0) {
+        this.context.store.getTimeAxis().expand('left', Math.ceil(initSliderLeftDiffX / cellWidth));
+        this.context.event.emit(EventName.CHART_OFFSET_CHANGE);
+      } else if (initSliderRightDiffX > 0) {
+        this.context.store.getTimeAxis().expand('right', Math.ceil(initSliderRightDiffX / cellWidth));
+        this.context.event.emit(EventName.CHART_OFFSET_CHANGE);
+      }
+    }
+
     // 完成后更新一次数据，是数据可以匹配到工作日视图
     this.context.store.getDataManager().fitTaskTime(this.task, direction || 'both', this.oldTasks);
 
@@ -866,7 +887,6 @@ export class ChartSlider {
     }
 
     // 判断当前鼠标是否在当前行，如果不在当前行，重置所有样式
-    const stage = e.target.getStage();
     if (stage) {
       const mousePos = stage.getPointerPosition();
 

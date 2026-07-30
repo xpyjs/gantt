@@ -159,14 +159,12 @@ const gantt1 = new XGantt(ganttContainer, {
       unit: "week",
       step: 1,
       format: "YYYY 第ww周",
-      height: 24
     },
     {
       unit: "day",
       step: 1,
       format: "DD",
       cellWidth: 50,
-      height: 30
     }
   ],
 
