@@ -1084,6 +1084,14 @@ export const apiItems: ApiItem[] = [
         description: "子任务字段名"
       },
       {
+        id: "fields-duration",
+        key: "duration",
+        title: "持续时间字段",
+        type: "string",
+        description:
+          "持续时间字段。不适用于 `day`（不含）以下单位，仅针对单位为 `day` 及以上的情况有效。与 `endTime` 字段互斥，`endTime` 优先级更高。"
+      },
+      {
         id: "fields-endTime",
         key: "endTime",
         title: "结束时间字段",
@@ -1441,6 +1449,14 @@ export const apiItems: ApiItem[] = [
             ]
           }
         ]
+      },
+      {
+        id: "holiday-isHoliday",
+        key: "isHoliday",
+        title: "自定义节假日判定",
+        type: "((date: Date) => boolean | undefined)",
+        description:
+          "完全自定义节假日的判定方法。优先级高于 holidays 列表。返回 true 表示这天是节假日，没有被判定的日期可以置空"
       },
       {
         id: "holiday-opacity",
@@ -2264,6 +2280,43 @@ export const apiItems: ApiItem[] = [
     ]
   },
   {
+    id: "workTime",
+    key: "workTime",
+    title: "工作日模式",
+    type: "object",
+    description:
+      "配置工作日模式。启用后可以将任务范围控制在工作日内，此时 duration 将按工作日解释",
+    category: "advanced",
+    children: [
+      {
+        id: "workTime-isWorkTime",
+        key: "isWorkTime",
+        title: "自定义工作日判定",
+        type: "((date: Date) => boolean | undefined)",
+        description:
+          "完全自定义工作日的判定方法。优先级高于节假日和周末。返回 true 表示这天是工作日，没有被判定的日期可以置空"
+      },
+      {
+        id: "workTime-skipHolidays",
+        key: "skipHolidays",
+        title: "跳过节假日",
+        type: "boolean",
+        defaultValue: "false",
+        description:
+          "计算日期周期时是否跳过节假日。启用时任务周期会自动跳过节假日"
+      },
+      {
+        id: "workTime-skipWeekends",
+        key: "skipWeekends",
+        title: "跳过周末",
+        type: "boolean",
+        defaultValue: "false",
+        description:
+          "计算日期周期时是否跳过周末。启用时任务周期会自动跳过周末"
+      }
+    ]
+  },
+  {
     id: "table",
     key: "table",
     title: "表格配置",
@@ -2541,6 +2594,23 @@ export const apiItems: ApiItem[] = [
         type: "string",
         defaultValue: '"#c9c9c9"',
         description: "周末的背景颜色"
+      },
+      {
+        id: "weekend-days",
+        key: "days",
+        title: "周末日期",
+        type: "number[]",
+        defaultValue: "[0, 6]",
+        description:
+          "自定义周末日期。默认周六、周日为周末。0=周日, 1=周一, ..., 6=周六（dayjs.day() 语义）"
+      },
+      {
+        id: "weekend-isWeekend",
+        key: "isWeekend",
+        title: "自定义周末判定",
+        type: "((date: Date) => boolean | undefined)",
+        description:
+          "完全自定义周末的判定方法。优先级最高。返回 true 表示这天是周末，没有被判定的日期可以置空"
       },
       {
         id: "weekend-opacity",

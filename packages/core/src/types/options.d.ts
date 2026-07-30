@@ -112,8 +112,6 @@ export interface IGanttOptions {
      *
      * @description 该字段不适用于 `day（不含）` 以下单位，仅针对单位为 `day` 及以上的情况有效
      * @description 与 endTime 字段互斥，endTime 优先级更高
-     * @description 当 workTime.enabled = false 时，duration 按日历日解释
-     * @description 当 workTime.enabled = true 时，duration 按工作日解释
      *
      * @example
      * // 只有 duration 没有 endTime
