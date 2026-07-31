@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-11-17 14:01:47
+ * @LastEditTime: 2026-07-31 14:02:48
  * @Description: Facade Layer for Gantt Component
  */
 import { Logger } from "./utils/logger";
@@ -140,6 +140,15 @@ export class XGanttContext implements IContext {
    */
   public getDataChain(id: string): DataChain {
     return this.store.getLinkManager().getDataChain(id);
+  }
+
+  /**
+   * 重新计算时间轴
+   */
+  public resizeTimeAxis(): void {
+    this.store.reloadTime();
+    this.getScrollbar().scrollTo({ x: 0 });
+    this.render();
   }
 
   // ***** 私有事件 ***** /

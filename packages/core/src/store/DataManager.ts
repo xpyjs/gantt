@@ -2,11 +2,11 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:47:28
  * @LastEditors: JeremyJone
- * @LastEditTime: 2026-07-13 17:51:01
+ * @LastEditTime: 2026-07-31 13:50:41
  * @Description: 数据管理器
  */
 
-import type { Dayjs } from "dayjs";
+import dayjs, { type Dayjs } from "dayjs";
 import { EventName, ErrorType, type EventBus } from "../event";
 import { Task } from "../models/Task";
 import type { Store } from ".";
@@ -52,6 +52,10 @@ export class DataManager {
 
   /** 数据最大层级。 0 开始 */
   dataLevel: number = 0;
+
+  /** 记录任务时间边界（最左时间和最右时间 */
+  private _leftTime?: Dayjs;
+  private _rightTime?: Dayjs;
 
   constructor(private store: Store, private event: EventBus) { }
 
@@ -200,6 +204,43 @@ export class DataManager {
    */
   getData(): any[] {
     return this.rawData;
+  }
+
+  /**
+   * 更新时间边界
+   */
+  updateTimeBoundary(start: Dayjs, end: Dayjs): void {
+    if (!this._leftTime) {
+      this._leftTime = start;
+    } else if (start.isBefore(this._leftTime)) {
+      this._leftTime = start;
+    }
+
+    if (!this._rightTime) {
+      this._rightTime = end;
+    } else if (end.isAfter(this._rightTime)) {
+      this._rightTime = end;
+    }
+  }
+
+  /** 重置时间边界 */
+  resetTimeBoundary(): void {
+    this._leftTime = undefined;
+    this._rightTime = undefined;
+
+    this.visibleTasksCache.forEach((task) => {
+      if (!this._leftTime || task.startTime?.isBefore(this._leftTime)) {
+        this._leftTime = task.startTime;
+      }
+      if (!this._rightTime || task.endTime?.isAfter(this._rightTime)) {
+        this._rightTime = task.endTime;
+      }
+    });
+  }
+
+  /** 获取时间边界 */
+  getTimeBoundary(): [Dayjs, Dayjs] {
+    return [this._leftTime || dayjs(), this._rightTime || this._leftTime || dayjs()];
   }
 
   /**
@@ -899,6 +940,9 @@ export class DataManager {
 
       parentTask = parentTask.parent;
     }
+
+    // 更新时间边界
+    this.updateTimeBoundary(leftTime, rightTime);
   }
 
   //** 基线数据操作 */

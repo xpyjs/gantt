@@ -179,5 +179,13 @@ if (gantt1Container) {
     btn.innerText = '打印';
     btn.addEventListener('click', () => { console.log(gantt.context.store) });
     wrapper.appendChild(btn);
+
+    const btn2 = document.createElement('button');
+    btn2.style = `width: 100px;margin-top: 12px;`;
+    btn2.innerText = '更新';
+    btn2.addEventListener('click', () => {
+      gantt.reloadTimeAxis();
+    })
+    wrapper.appendChild(btn2);
   }
 }

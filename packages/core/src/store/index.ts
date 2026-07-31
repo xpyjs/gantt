@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:31
  * @LastEditors: JeremyJone
- * @LastEditTime: 2026-07-07 15:16:33
+ * @LastEditTime: 2026-07-31 10:43:33
  * @Description: Store
  */
 import { OptionManager } from "./OptionManager";
@@ -160,5 +160,12 @@ export class Store {
 
   updateTime(start?: Dayjs, end?: Dayjs) {
     this.timeAxis.setDate(start, end);
+  }
+
+  reloadTime() {
+    this.dataManager.resetTimeBoundary();
+    this.timeAxis.clear();
+    this.timeAxis.setDate(...this.dataManager.getTimeBoundary());
+    this.timeAxis.update(this.optionManager.getOptions());
   }
 }
