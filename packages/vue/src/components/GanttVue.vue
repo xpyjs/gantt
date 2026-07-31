@@ -159,6 +159,15 @@ defineExpose({
    */
   removeDataById(id: string): boolean {
     return ganttInstance?.removeDataById(id) || false;
+  },
+
+  /**
+   * 重新计算并渲染时间轴。该方法允许用户手动更新时间轴，默认按照任务时间重新计算右侧时间轴的大小，并重新渲染。
+   */
+  resizeTimeAxis() {
+    if (ganttInstance) {
+      ganttInstance.resizeTimeAxis();
+    }
   }
 });
 

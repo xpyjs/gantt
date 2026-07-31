@@ -250,6 +250,15 @@ if (success) {
 }
 `,
 
+  // 重新计算时间轴示例
+  resizeTimeAxis: `// 重新计算并渲染时间轴，使其适配所有任务的时间边界
+gantt.resizeTimeAxis();
+
+// 常见场景：动态添加任务后，让时间轴自动扩展以完整展示所有任务
+appendTask();
+gantt.resizeTimeAxis();
+`,
+
   // 事件解除监听示例
   eventOff: `// 移除特定的任务选择事件监听器
 const selectHandler = (data, checked, all) => {
@@ -536,6 +545,26 @@ export const methodsPageConfig: MethodsPageConfig = {
         {
           framework: "javascript",
           code: codeExamples.removeDataById,
+          language: "javascript"
+        }
+      ]
+    },
+    {
+      id: "resizeTimeAxis",
+      name: "resizeTimeAxis()",
+      type: "重置时间轴",
+      description: "重新计算并渲染时间轴，使其适配所有任务的时间边界",
+      icon: "📐",
+      parameters: [],
+      returnType: "void",
+      notes: [
+        "该方法允许用户手动更新时间轴，默认按照任务时间重新计算右侧时间轴的大小，并重新渲染。",
+        "调用后会重置滚动位置到最左侧。"
+      ],
+      examples: [
+        {
+          framework: "javascript",
+          code: codeExamples.resizeTimeAxis,
           language: "javascript"
         }
       ]

@@ -273,6 +273,13 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             return false;
         }, []);
 
+        // 重新计算并渲染时间轴
+        const resizeTimeAxis = useCallback((): void => {
+            if (ganttInstanceRef.current) {
+                ganttInstanceRef.current.resizeTimeAxis();
+            }
+        }, []);
+
         // 暴露方法给父组件
         useImperativeHandle(ref, () => ({
             getInstance: () => ganttInstanceRef.current,
@@ -281,7 +288,8 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             scrollTo,
             getDataById,
             getDataSize,
-            removeDataById
+            removeDataById,
+            resizeTimeAxis
         }), [jumpTo]);
 
         // 组件挂载时初始化

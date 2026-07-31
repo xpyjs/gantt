@@ -21,6 +21,7 @@ vi.mock('@xpyjs/gantt-core', () => {
     const mockGetDataById = vi.fn().mockReturnValue({ id: '1', name: 'Test Task' });
     const mockGetDataSize = vi.fn().mockReturnValue(5);
     const mockRemoveDataById = vi.fn().mockReturnValue(true);
+    const mockResizeTimeAxis = vi.fn();
 
     const mockInstance = {
         destroy: mockDestroy,
@@ -32,7 +33,8 @@ vi.mock('@xpyjs/gantt-core', () => {
         getDataChain: mockGetDataChain,
         getDataById: mockGetDataById,
         getDataSize: mockGetDataSize,
-        removeDataById: mockRemoveDataById
+        removeDataById: mockRemoveDataById,
+        resizeTimeAxis: mockResizeTimeAxis
     };
 
     const mockXGantt = vi.fn().mockImplementation(() => mockInstance);
@@ -51,7 +53,8 @@ vi.mock('@xpyjs/gantt-core', () => {
         __mockGetDataChain: mockGetDataChain,
         __mockGetDataById: mockGetDataById,
         __mockGetDataSize: mockGetDataSize,
-        __mockRemoveDataById: mockRemoveDataById
+        __mockRemoveDataById: mockRemoveDataById,
+        __mockResizeTimeAxis: mockResizeTimeAxis
     };
 });
 
@@ -311,6 +314,21 @@ describe('XGanttReact', () => {
 
         expect(mockCore.__mockRemoveDataById).toHaveBeenCalledWith('task-1');
         expect(result).toBe(true);
+    });
+
+    it('should call resizeTimeAxis method correctly', () => {
+        const options = { data: [] };
+        const ref = createRef<XGanttReactRef>();
+
+        render(<XGanttReact ref={ref} options={options} />);
+
+        expect(ref.current?.resizeTimeAxis).toBeDefined();
+        expect(typeof ref.current?.resizeTimeAxis).toBe('function');
+
+        ref.current?.resizeTimeAxis();
+
+        expect(mockCore.__mockResizeTimeAxis).toHaveBeenCalledTimes(1);
+        expect(mockCore.__mockResizeTimeAxis).toHaveBeenCalledWith();
     });
 
     it('should call jumpTo without date parameter', () => {

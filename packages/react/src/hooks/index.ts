@@ -96,6 +96,13 @@ export function useXGantt() {
     return ganttRef.current?.removeDataById(id) || false;
   }, []);
 
+  /**
+   * 重新计算并渲染时间轴
+   */
+  const resizeTimeAxis = useCallback((): void => {
+    ganttRef.current?.resizeTimeAxis();
+  }, []);
+
   return {
     ganttRef,
     getInstance,
@@ -104,6 +111,7 @@ export function useXGantt() {
     scrollTo,
     getDataById,
     getDataSize,
-    removeDataById
+    removeDataById,
+    resizeTimeAxis
   };
 }

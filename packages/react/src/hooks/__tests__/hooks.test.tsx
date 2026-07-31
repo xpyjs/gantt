@@ -14,6 +14,7 @@ describe('useXGantt', () => {
         expect(typeof result.current.getDataById).toBe('function');
         expect(typeof result.current.getDataSize).toBe('function');
         expect(typeof result.current.removeDataById).toBe('function');
+        expect(typeof result.current.resizeTimeAxis).toBe('function');
 
         // 确保已删除的方法不存在
         expect((result.current as any).updateGanttOptions).toBeUndefined();
@@ -36,6 +37,10 @@ describe('useXGantt', () => {
         expect(result.current.getDataById('test')).toBeNull();
         expect(result.current.getDataSize()).toBe(0);
         expect(result.current.removeDataById('test')).toBe(false);
+
+        // resizeTimeAxis 在实例未就绪时应为空操作且不抛出异常
+        expect(() => result.current.resizeTimeAxis()).not.toThrow();
+        expect(result.current.resizeTimeAxis()).toBeUndefined();
     });
 
     it('should call scrollTo without parameters', () => {
