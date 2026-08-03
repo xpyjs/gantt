@@ -87,9 +87,8 @@ const projectData = [
 
 // 节假日（劳动节 5/1-5/3）
 const holidayList = [
-  { date: "2025-05-01", backgroundColor: "#ff7875", opacity: 0.15, text: { show: true, content: "劳动节" } },
-  { date: "2025-05-02", backgroundColor: "#ff7875", opacity: 0.15 },
-  { date: "2025-05-03", backgroundColor: "#ff7875", opacity: 0.15 }
+  { date: ["2025-05-01", "2025-05-02", "2025-05-03"], backgroundColor: "#ff7875", opacity: 0.15, text: { show: true, content: "劳动节" } },
+  { date: "2025-05-23", backgroundColor: "#85ff75", opacity: 0.15, text: { show: true, content: "端午节" } }
 ];
 
 // ============================================================
@@ -113,6 +112,7 @@ if (gantt1Container) {
         { field: "duration", label: "时长", width: 100 },
       ]
     },
+    border: { show: true },
     fields: {
       startTime: "start",
       endTime: "end",
@@ -184,7 +184,7 @@ if (gantt1Container) {
     btn2.style = `width: 100px;margin-top: 12px;`;
     btn2.innerText = '更新';
     btn2.addEventListener('click', () => {
-      gantt.reloadTimeAxis();
+      gantt.resizeTimeAxis();
     })
     wrapper.appendChild(btn2);
   }

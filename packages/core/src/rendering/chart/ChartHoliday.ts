@@ -17,14 +17,17 @@ export class HolidayGroup {
 
   // 保存假期
   private holidayGroup: Konva.Group;
+  private textGroup: Konva.Group;
   private patternImage = new WeakMap<any, HTMLImageElement | null>();
 
   /** 渲染版本号，用于丢弃过期的异步结果 */
   private renderVersion: number = 0;
 
-  constructor(private context: IContext, private layer: Konva.Layer) {
+  constructor(private context: IContext, private layer: Konva.Layer, private textLayer: Konva.Layer) {
     this.holidayGroup = new Konva.Group();
+    this.textGroup = new Konva.Group();
     this.layer.add(this.holidayGroup);
+    this.textLayer.add(this.textGroup);
   }
 
   /**
@@ -49,6 +52,7 @@ export class HolidayGroup {
     // 应用偏移到假期组
     this.holidayGroup.x(x);
     // this.holidayGroup.y(y);
+    this.textGroup.x(x);
 
     // 重新计算假期
     this.calculateHoliday();
@@ -60,6 +64,7 @@ export class HolidayGroup {
   public render(): void {
     // 使用批量绘制，减少重绘次数
     this.layer.batchDraw();
+    this.textLayer.batchDraw();
   }
 
   /**
@@ -67,10 +72,12 @@ export class HolidayGroup {
    */
   public destroy(): void {
     this.holidayGroup.destroy();
+    this.textGroup.destroy();
   }
 
   private clearHoliday(): void {
     this.holidayGroup.destroyChildren();
+    this.textGroup.destroyChildren();
   }
 
   /**
@@ -208,11 +215,12 @@ export class HolidayGroup {
 
         textGroup.add(bg);
         textGroup.add(text);
-        this.holidayGroup.add(textGroup);
+        this.textGroup.add(textGroup);
       }
     }
 
     // 重新渲染
     this.layer.batchDraw();
+    this.textLayer.batchDraw();
   }
 }

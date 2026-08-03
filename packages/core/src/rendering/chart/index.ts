@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 11:00:12
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-09-09 09:52:45
+ * @LastEditTime: 2026-08-03 11:18:30
  * @Description: 图表渲染管理器
  */
 import Konva from "konva";
@@ -33,6 +33,7 @@ export class Chart {
 
   private axisLayer: Konva.Layer;
   private bgLayer: Konva.Layer;
+  private bgTextLayer: Konva.Layer;
   private bodyLayer: Konva.Layer;
 
   private width: number = 0;
@@ -48,16 +49,27 @@ export class Chart {
 
     // 创建各个图层
     this.bgLayer = new Konva.Layer();
+    this.bgTextLayer = new Konva.Layer();
     this.weekendGroup = new WeekendGroup(this.context, this.bgLayer);
-    this.holidayGroup = new HolidayGroup(this.context, this.bgLayer);
+    this.holidayGroup = new HolidayGroup(this.context, this.bgLayer, this.bgTextLayer);
     this.flagGroup = new FlagGroup(this.context, this.bgLayer);
     this.gridGroup = new GridGroup(this.context, this.bgLayer);
     this.stage.add(this.bgLayer);
+    this.stage.add(this.bgTextLayer);
 
     this.axisLayer = new Konva.Layer();
     this.headerLayer = new HeaderLayer(this.context, this.axisLayer);
     this.todayLayer = new ChartToday(this.context, this.bgLayer, this.axisLayer);
     this.stage.add(this.axisLayer);
+
+    // 鼠标移入 header 后，高亮所有背景效果，包括节假日、周末、标记等
+    this.axisLayer.on("mouseenter", () => {
+      this.bgTextLayer.moveToTop();
+    });
+    this.axisLayer.on("mouseleave", () => {
+      this.bgTextLayer.moveToBottom();
+      this.bgLayer.moveToBottom(); // 背景层在最底层
+    })
 
     this.bodyLayer = new Konva.Layer();
     this.linkGroup = new LinkGroup(this.context, this.stage, this.bodyLayer);
