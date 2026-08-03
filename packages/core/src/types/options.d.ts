@@ -662,7 +662,7 @@ export interface IGanttOptions {
   locale: string;
 
   /**
-   * 当鼠标选停在具有起止时间的任务行上时，是否高亮对应的表头时间。
+   * 当鼠标悬停在具有起止时间的任务行上时，是否高亮对应的表头时间。
    *
    * @description 仅针对单位为 `day` 时生效
    */
