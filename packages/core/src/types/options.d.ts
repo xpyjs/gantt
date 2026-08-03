@@ -615,7 +615,7 @@ export interface IGanttOptions {
    *
    * @default 'day'
    *
-   * // TODO: [future-major] unit 字段将被 scaleUnit 替代
+   * @deprecated 该方法将在 v2 移除，请使用 scaleUnit 配置自定义时间轴刻度
    */
   unit: XGanttUnit;
 
