@@ -976,45 +976,10 @@ export interface IGanttOptions {
   };
 
   /** 周末配置 */
-  weekend: {
-    /**
-     * 是否展示周
-     * @default true
-     */
-    show: boolean;
-    /**
-     * 周末的背景颜色
-     *
-     * @default #c9c9c9
-     */
-    backgroundColor: string;
-    /**
-     * 透明度
-     *
-     * @default 0.1
-     */
-    opacity: number;
-  } & IPattern & IWeekendOpts;
+  weekend: IPattern & IWeekendOpts;
 
   /** 节假日期配置 */
-  holiday: {
-    /**
-     * 是否展示节假日。
-     */
-    show?: boolean;
-    /**
-     * 背景颜色。默认使用主色
-     */
-    backgroundColor?: string;
-
-    /**
-     * 透明度
-     *
-     * @default 0.1
-     */
-    opacity: number;
-
-  } & IPattern & IHolidayOpts;
+  holiday: IPattern & IHolidayOpts;
 
   /**
    * 配置工作日模式。启用后可以将任务范围控制在工作日内

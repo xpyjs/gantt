@@ -96,7 +96,7 @@ export class WeekendGroup {
 
     // 逐日遍历，处理周末
     for (let time = startTime; time <= endTime; time = time.add(1, "day")) {
-      if (!this.context.store.getWorkCalendar().isWeekend(time)) continue;
+      if (!this.context.store.getWorkCalendar().isWeekend(time, this.context.getOptions().holiday.show)) continue;
 
       const width = cellWidth * (unit === "day" ? 1 : 24);
       const x = this.context.store.getTimeAxis().getTimeLeft(time);

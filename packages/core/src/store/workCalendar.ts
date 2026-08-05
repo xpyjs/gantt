@@ -122,13 +122,13 @@ export class WorkCalendar {
    *
    * @description 判定优先级: isWeekend 钩子 > days > 默认 [0, 6]
    */
-  isWeekend(date: Date | Dayjs): boolean {
+  isWeekend(date: Date | Dayjs, skipHoliday = false): boolean {
     // 检查 isWorkTime 钩子。如果是工作日，则优先级最高
     if (this.workTimeOpts?.isWorkTime) {
       if (this._isWorkTime(date)) return false;
     }
 
-    if (this._isHoliday(date)) return false;
+    if ((skipHoliday || this.holidayOpts?.show) && this._isHoliday(date)) return false;
     return this._isWeekend(date);
   }
 

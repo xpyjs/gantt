@@ -5,6 +5,23 @@ import { IPattern } from "./styles";
  */
 export interface IWeekendOpts {
   /**
+   * 是否展示周
+   * @default true
+   */
+  show: boolean;
+  /**
+   * 周末的背景颜色
+   *
+   * @default #c9c9c9
+   */
+  backgroundColor: string;
+  /**
+   * 透明度
+   *
+   * @default 0.1
+   */
+  opacity: number;
+  /**
    * 自定义周末日期。默认周六、周日为周末
    *
    * @description 0=周日, 1=周一, ..., 6=周六（dayjs.day() 语义）
@@ -32,6 +49,21 @@ export interface IWeekendOpts {
  * 节假日配置选项
  */
 export interface IHolidayOpts {
+  /**
+   * 是否展示节假日。
+   */
+  show?: boolean;
+  /**
+   * 背景颜色。默认使用主色
+   */
+  backgroundColor?: string;
+
+  /**
+   * 透明度
+   *
+   * @default 0.1
+   */
+  opacity: number;
   /**
    * 配置节假日期。可以针对不同节假日配置不同的背景颜色。默认使用统一配置颜色
    */
