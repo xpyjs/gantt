@@ -203,6 +203,29 @@ describe('WorkCalendar', () => {
       const diff = cal.workDiff(FRI_2026_07_31, MONDAY_2026_07_27);
       expect(diff).toBeCloseTo(4);
     });
+
+    it('round-trip: workOffset(st, workDiff(st, et)) === et (endOf=end, 23:59:59, skip holidays)', () => {
+      // 用户场景：endOf='end' 将 endTime 补全到 23:59:59，duration 为 fractional 2.999988（覆盖 04-28/29/30 三天）。
+      // workDiff 保留 6 位小数（4 位会进位成 3），workOffset 的小数部分对齐到秒，
+      // workOffset(st, 2.999988) 还原 et = 04-30 23:59:59，而不是跳过 05-01~04 假期到 05-05。
+      // 2025-04-28(周一) ~ 2025-04-30(周三) 23:59:59，05-01~03 假期，05-04 周日
+      const cal = new WorkCalendar(
+        W(),
+        H({ holidays: [
+          { date: '2025-05-01' }, { date: '2025-05-02' }, { date: '2025-05-03' }
+        ]}),
+        T({ skipWeekends: true, skipHolidays: true })
+      );
+      const st = dayjs('2025-04-28 00:00:00');
+      const et = dayjs('2025-04-30 23:59:59');
+      const diff = cal.workDiff(st, et);
+      // fractional 2.999988，不进位成 3
+      expect(diff).toBeLessThan(3);
+      expect(diff).toBeGreaterThan(2.999);
+      const roundTrip = cal.workOffset(st, diff);
+      // round-trip 精确回到 04-30 23:59:59
+      expect(roundTrip.format('YYYY-MM-DD HH:mm:ss')).toBe('2025-04-30 23:59:59');
+    });
   });
 
   describe('restDays', () => {

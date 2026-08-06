@@ -970,13 +970,58 @@ export const apiItems: ApiItem[] = [
     category: "data"
   },
   {
+    id: "date",
+    key: "date",
+    title: "日期格式",
+    type: "object",
+    description:
+      "日期格式化配置",
+    category: "data",
+    children: [
+      {
+        id: "date-format",
+        key: "format",
+        title: "日期格式化字符串",
+        type: "string",
+        defaultValue: '"YYYY-MM-DD HH:mm:ss"',
+        description:
+          "该属性与 dateFormat 一致，优先级更高。\n日期格式化字符串，用于所有日期字段的显示。参考 dayjs 的 format 文档"
+      },
+      {
+        id: "date-endOf",
+        key: "endOf",
+        title: "设置任务的结束时间",
+        type: "'start' | 'end' | [number, number, number]",
+        description: `取值含义：
+- <code>start</code> 将缺失精度位补为该位的起始值（0）。
+- <code>end</code> 将缺失精度位补为该位的最大值（时=23，分/秒=59）。
+- <code>[时, 分, 秒]</code> 固定三元组，缺失精度位补为对应位的值，已有位保留。
+
+可调位由底层单位决定：底层单位大于 <code>day</code>（含）时，可调位为 [时,分,秒]；底层单位小于 <code>day</code>（不含）时，可调位为 [分,秒]，元组第 0 位（时）被忽略。
+
+默认（<code>endOfAll=false</code>）仅对字符串原始值按其给出精度补全缺失位；Date/number 不调整。拖拽等交互更新后的时间按底层单位网格对齐，视为该精度并补全缺失位。`
+      },
+      {
+        id: "date-endOfAll",
+        key: "endOfAll",
+        title: "强制应用结束时间调整",
+        type: "boolean",
+        defaultValue: "false",
+        description: `是否强制对所有任务结束时间应用 <code>endOf</code> 规则。
+- 默认 <code>false</code>，仅对字符串原始值按其给出精度补全缺失位（Date/number 不调整）。
+- 设置为 <code>true</code> 时，忽略精度感知，对所有任务的结束时间（含 Date/number）强制按底层单位全位应用 <code>endOf</code> 调整。
+该配置同样作用于 Baseline 数据。`
+      },
+    ]
+  },
+  {
     id: "dateFormat",
     key: "dateFormat",
     title: "日期格式",
     type: "string",
     defaultValue: '"YYYY-MM-DD HH:mm:ss"',
     description:
-      "日期格式化字符串，用于所有日期字段的显示。参考 dayjs 的 format 文档",
+      "该属性将在v2版本被移除。\n日期格式化字符串，用于所有日期字段的显示。参考 dayjs 的 format 文档",
     category: "data"
   },
   {
@@ -2575,7 +2620,7 @@ export const apiItems: ApiItem[] = [
     title: "时间刻度单位",
     type: "XGanttUnit",
     defaultValue: '"day"',
-    description: "时间刻度单位。当配置了 <a href='#scaleUnit'>scaleUnit</a> 后，该项将被忽略。如果可以，建议优先使用 <a href='#scaleUnit'>scaleUnit</a> 进行更灵活的时间轴配置",
+    description: "该属性将在v2版本被移除。\n时间刻度单位。当配置了 <a href='#scaleUnit'>scaleUnit</a> 后，该项将被忽略。如果可以，建议优先使用 <a href='#scaleUnit'>scaleUnit</a> 进行更灵活的时间轴配置",
     options: ["hour", "day", "week", "month", "quarter"],
     category: "structure"
   },

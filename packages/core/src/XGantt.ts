@@ -113,10 +113,8 @@ export class XGantt {
    * gantt.update({
    *   unit: 'week',
    *   primaryColor: '#4ecdc4',
-   *   dateFormat: 'YYYY-MM-DD',
-   *   row: {
-   *     height: 40
-   *   }
+   *   date: { format: 'YYYY-MM-DD' },
+   *   row: { height: 40 }
    * });
    *
    * // 完全替换配置（不合并）

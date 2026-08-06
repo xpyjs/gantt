@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-07-30 17:26:18
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-08-04 09:22:05
+ * @LastEditTime: 2026-08-18 10:30:00
  * @Description: 基线数据模型
  */
 import type { Dayjs } from "dayjs";
@@ -34,6 +34,9 @@ export class Baseline {
   /** 是否为指示器对比基线 */
   target = false;
 
+  /** 结束时间的原始值，用于展示层精度识别 */
+  private _endRaw?: unknown;
+
   constructor(private store: Store, private event: EventBus, data: any) {
     const fields = this.store.getOptionManager().getOptions().fields;
     const baselineFields = this.store.getOptionManager().getOptions().baselines.fields;
@@ -50,8 +53,32 @@ export class Baseline {
     if (_st) this.startTime = dayjs(_st);
     const _et = data[fields.endTime] || data[baselineFields.endTime];
     if (_et) this.endTime = dayjs(_et);
+    this._endRaw = _et;
 
     this.data = data;
+  }
+
+  /**
+   * 展示用结束时间
+   *
+   * 应用 `date.endOf` 配置补全缺失精度位，仅用于渲染取值与对比展示，
+   * {@link Baseline.endTime} 始终保持原始解析值。
+   *
+   * 字符串按给出精度补全缺失位；Date/number 由 endOfAll 控制。
+   */
+  getDisplayEndTime(): Dayjs | undefined {
+    if (!this.endTime) return this.endTime;
+
+    const options = this.store.getOptionManager().getOptions();
+    const endOf = options.date?.endOf;
+    if (endOf === undefined) return this.endTime; // 未配置，不调整
+
+    return this.endTime.complementEndOf({
+      endOf,
+      raw: this._endRaw,
+      endOfAll: options.date?.endOfAll === true,
+      unit: this.store.getTimeAxis().getCellUnit() // "hour" | "day"
+    });
   }
 
   getField(field: string): any {
@@ -69,6 +96,9 @@ export class Baseline {
 
   /**
    * 获取基线与任务的时间差异分析
+   *
+   * 结束时间的对比使用展示端（含 endOf 补全），使 ahead/ontime/delayed
+   * 的判定与任务条、基线条的视觉位置一致。
    */
   getTimeDiff(): BaselineDiff | null {
     if (!this.validate()) return null;
@@ -77,8 +107,11 @@ export class Baseline {
     if (!task || !task.startTime || !task.endTime) return null;
 
     const unit = this.store.getTimeAxis().getCellUnit();
+    const blEnd = this.getDisplayEndTime()!;
+    const taskEnd = task.getDisplayEndTime()!;
+
     const startDiff = this.startTime!.diff(task.startTime!, unit, true);
-    const endDiff = this.endTime!.diff(task.endTime!, unit, true);
+    const endDiff = blEnd.diff(taskEnd, unit, true);
 
     const tolerance = this.store.getOptionManager().getOptions().baselines.compare.tolerance; // 0.5 个单位内认为是准时的
 
@@ -86,8 +119,8 @@ export class Baseline {
     const endStatus: BaselineDiffStatus = endDiff < -tolerance ? 'delayed' : endDiff > tolerance ? 'ahead' : 'ontime';
 
     // 计算偏差百分比
-    const blDuration = this.endTime!.diff(this.startTime!, unit, true);
-    const taskDuration = task.endTime!.diff(task.startTime!, unit, true);
+    const blDuration = blEnd.diff(this.startTime!, unit, true);
+    const taskDuration = taskEnd.diff(task.startTime!, unit, true);
     const progressDiff = blDuration > 0 ? ((taskDuration - blDuration) / blDuration) * 100 : 0;
 
     return { startDiff, endDiff, startStatus, endStatus, progressDiff, unit };

@@ -203,7 +203,7 @@ export class LinkGroup {
           .getTimeLeft(task.startTime);
         const right = this.context.store
           .getTimeAxis()
-          .getTimeLeft(task.endTime);
+          .getTimeLeft(task.getDisplayEndTime()!);
 
         let gap = this.context.getOptions().links.gap;
         if (task.isMilestone()) {
@@ -365,13 +365,13 @@ export class LinkGroup {
       // 只计算可视范围内
       const visibleStartX = Math.max(0, -this.offsetX);
       const visibleEndX = visibleStartX + this.width;
-      if (this.context.store.getTimeAxis().getTimeLeft(link.type?.[0] === 'S' ? fromTask.startTime! : fromTask.endTime!) < visibleStartX &&
-        this.context.store.getTimeAxis().getTimeLeft(link.type?.[1] === 'F' ? toTask.endTime! : toTask.startTime!) < visibleStartX) {
+      if (this.context.store.getTimeAxis().getTimeLeft(link.type?.[0] === 'S' ? fromTask.startTime! : fromTask.getDisplayEndTime()!) < visibleStartX &&
+        this.context.store.getTimeAxis().getTimeLeft(link.type?.[1] === 'F' ? toTask.getDisplayEndTime()! : toTask.startTime!) < visibleStartX) {
         // 全都在左边，不显示
         return;
       }
-      if (this.context.store.getTimeAxis().getTimeLeft(link.type?.[0] === 'S' ? fromTask.startTime! : fromTask.endTime!) > visibleEndX &&
-        this.context.store.getTimeAxis().getTimeLeft(link.type?.[1] === 'F' ? toTask.endTime! : toTask.startTime!) > visibleEndX) {
+      if (this.context.store.getTimeAxis().getTimeLeft(link.type?.[0] === 'S' ? fromTask.startTime! : fromTask.getDisplayEndTime()!) > visibleEndX &&
+        this.context.store.getTimeAxis().getTimeLeft(link.type?.[1] === 'F' ? toTask.getDisplayEndTime()! : toTask.startTime!) > visibleEndX) {
         // 全都在右边，不显示
         return;
       }
@@ -646,7 +646,7 @@ export class LinkGroup {
         .getTimeLeft(fromTask.startTime) - fromGap;
       const fromEnd = this.context.store
         .getTimeAxis()
-        .getTimeLeft(fromTask.endTime) + fromGap;
+        .getTimeLeft(fromTask.getDisplayEndTime()!) + fromGap;
 
       const toGap = toTask.isMilestone() ? rowHeight / 2 : 0;
       const toX = this.context.store
@@ -654,7 +654,7 @@ export class LinkGroup {
         .getTimeLeft(toTask.startTime) - toGap;
       const toEnd = this.context.store
         .getTimeAxis()
-        .getTimeLeft(toTask.endTime) + toGap;
+        .getTimeLeft(toTask.getDisplayEndTime()!) + toGap;
 
       let points: number[] = [];
       const type = link.type || "FS";
@@ -972,7 +972,7 @@ export class LinkGroup {
           .getTimeLeft(task.startTime);
         const right = this.context.store
           .getTimeAxis()
-          .getTimeLeft(task.endTime);
+          .getTimeLeft(task.getDisplayEndTime()!);
         const middle = (right + left) / 2 + this.offsetX;
 
         // 计算鼠标位置，并计算目标类型应当放在当前任务的起始位置还是结束位置
@@ -1137,7 +1137,7 @@ export class LinkGroup {
           .getTimeLeft(task.startTime);
         const right = this.context.store
           .getTimeAxis()
-          .getTimeLeft(task.endTime);
+          .getTimeLeft(task.getDisplayEndTime()!);
         const middle = (right + left) / 2 + this.offsetX;
 
         // 计算鼠标位置，并计算目标类型应当放在当前任务的起始位置还是结束位置

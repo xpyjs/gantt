@@ -547,8 +547,62 @@ export interface IGanttOptions {
    * @description 该格式将用于所有日期字段的格式化。至少需要格式化到指定单位的粒度，否则会丢失精度，导致出现渲染异常。
    *
    * @see 参考 dayjs 的 {@link https://day.js.org/docs/en/display/format|format} 文档
+   *
+   * @deprecated 该配置将在 v2 移除，请使用 date.format 配置自定义日期格式
    */
   dateFormat: string;
+
+  /** 时间日期配置 */
+  date: {
+    /**
+     * 日期格式化格式。所有展示日期的地方都使用该格式化格式
+     *
+     * @default 'YYYY-MM-DD HH:mm:ss'
+     *
+     * @description 该参数同 dateFormat，优先级高于 dateFormat。
+     *
+     * @description 该格式将用于所有日期字段的格式化。至少需要格式化到指定单位的粒度，否则会丢失精度，导致出现渲染异常。
+     *
+     * @see 参考 dayjs 的 {@link https://day.js.org/docs/en/display/format|format} 文档
+     */
+    format: string;
+    /**
+     * 设置任务的结束时间。该属性用于处理给定单位之下的具体截止时间。
+     *
+     * @description 仅影响界面展示，不修改原始数据。
+     * @description 仅当结束时间未给出时分秒等更细精度时生效，已给出的精度位不会被替换。
+     *
+     * 取值含义：
+     * @params 'start' - 将缺失精度位补为该位的起始值（0）
+     * @params 'end' - 将缺失精度位补为该位的最大值（时=23，分/秒=59）
+     * @params [时, 分, 秒] - 固定三元组，缺失精度位补为对应位的值，已有位保留
+     *
+     * @description 底层单位为大于'day'（含）时，可调位为 [时, 分, 秒]。
+     * @description 底层单位为小于'day'（不含）时，可调位为 [分, 秒]，元组第 0 位（时）被忽略。
+     *
+     * @example
+     * ```ts
+     * // 任务集合，unit 配置为 'day'，以 天 为单位展示。
+     * tasks = [
+     *   { name: '任务1', startTime: '2024-01-01', endTime: '2024-01-01' }
+     * ]
+     * // 'end' => 任务1 的任务条视觉上占满 '2024-01-01 23:59:59' 当天，数据仍为 '2024-01-01'
+     * // [0, 12, 30] => 任务1 的任务条展示到 '2024-01-01 00:12:30' 处
+     * ```
+     */
+    endOf?: 'start' | 'end' | [number, number, number];
+    /**
+     * 是否强制对所有任务结束时间应用 endOf 展示补全。
+     *
+     * @default false
+     *
+     * @description 默认为 false，仅对字符串原始值按其给出精度补全缺失位（Date/number 不调整）。
+     * @description 设置为 true 时，忽略精度感知，对所有任务的结束时间（含 Date/number）强制按底层单位全位补全展示。
+     *
+     * @description 该配置同样作用于 Baseline 数据。
+     */
+    endOfAll?: boolean;
+  }
 
   /** 展开配置 */
   expand: {

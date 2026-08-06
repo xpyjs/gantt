@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:56:31
  * @LastEditors: JeremyJone
- * @LastEditTime: 2026-07-31 10:43:33
+ * @LastEditTime: 2026-08-06 09:20:30
  * @Description: Store
  */
 import { OptionManager } from "./OptionManager";
@@ -19,6 +19,7 @@ import { IOptionConfig, IOptions } from "@/types";
 import { ILink } from "@/types/link";
 import { EventName } from "../event";
 import { WorkCalendar } from "./workCalendar";
+import { IHolidayOpts, IWeekendOpts } from "@/types/calendar";
 
 export class Store {
   // 声明成员属性类型
@@ -46,8 +47,8 @@ export class Store {
 
     // 创建 WorkCalendar 实例
     this.workCalendar = new WorkCalendar(
-      _options.weekend,
-      _options.holiday,
+      _options.weekend as IWeekendOpts,
+      _options.holiday as IHolidayOpts,
       _options.workTime
     );
 

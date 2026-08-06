@@ -7,7 +7,8 @@ import type { IHolidayOpts, IWeekendOpts, IWorkTimeOpts } from '../types/calenda
 import { isBoolean, round } from 'lodash-es';
 import { Logger } from '../utils/logger';
 
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
+const SECONDS_PER_DAY = 24 * 60 * 60;
+const MS_PER_DAY = SECONDS_PER_DAY * 1000;
 
 /**
  * 工作日历统一管理类
@@ -120,15 +121,18 @@ export class WorkCalendar {
   /**
    * 判断日期是否为周末
    *
-   * @description 判定优先级: isWeekend 钩子 > days > 默认 [0, 6]
+   * @description 判定优先级: isWorkTime 钩子 > 节假日 > isWeekend 钩子 > days > 默认 [0, 6]
+   * @param ignoreHoliday - 是否忽略节假日优先级。默认节假日会覆盖周末判定（配置了节假日
+   *                        的日期不再算周末）。渲染层在隐藏节假日背景时置为 true，
+   *                        让恰好落在周末的节假日仍按周末渲染
    */
-  isWeekend(date: Date | Dayjs, skipHoliday = false): boolean {
+  isWeekend(date: Date | Dayjs, ignoreHoliday = false): boolean {
     // 检查 isWorkTime 钩子。如果是工作日，则优先级最高
     if (this.workTimeOpts?.isWorkTime) {
       if (this._isWorkTime(date)) return false;
     }
 
-    if ((skipHoliday || this.holidayOpts?.show) && this._isHoliday(date)) return false;
+    if (!ignoreHoliday && this._isHoliday(date)) return false;
     return this._isWeekend(date);
   }
 
@@ -166,7 +170,10 @@ export class WorkCalendar {
       }
     }
 
-    return d.add(fracPart * MS_PER_DAY * step, 'millisecond');
+    // 小数部分对齐到秒。workDiff 的小数存在截断误差，直接按毫秒补偿会差出约 1 秒，
+    // 凑整到秒后与 workDiff 互为逆运算
+    const fracSeconds = round(fracPart * SECONDS_PER_DAY);
+    return d.add(fracSeconds * 1000 * step, 'millisecond');
   }
 
   /**
@@ -183,8 +190,9 @@ export class WorkCalendar {
 
     const count = this.restDays(st, et);
 
-    // 使用两个日期的详细 diff 差值，减去非工作日天数，得到详细的工作时长
-    return Math.max(round(et.diff(st) / MS_PER_DAY - count, 4), 1);
+    // 使用两个日期的详细 diff 差值，减去非工作日天数，得到详细的工作时长。
+    // 保留 6 位小数（秒级精度）：4 位时 23:59:59 会进位成整 3 天，反向计算时多出一天
+    return Math.max(round(et.diff(st) / MS_PER_DAY - count, 6), 1);
   }
 
   /**

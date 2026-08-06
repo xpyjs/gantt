@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:59:03
  * @LastEditors: JeremyJone
- * @LastEditTime: 2026-07-31 11:25:27
+ * @LastEditTime: 2026-08-18 10:30:00
  * @Description:任务数据模型
  */
 
@@ -175,9 +175,10 @@ export class Task {
 
     // 更新结束时间（优先级：endTime > duration）
     if (this.data[this.fields.endTime]) {
-      // 有 endTime 字段，优先使用
-      if (!this.endTime || !this.endTime.isSame(dayjs(this.data[this.fields.endTime]))) {
-        this.endTime = dayjs(this.data[this.fields.endTime]);
+      // 有 endTime 字段，优先使用。保持原始解析值，endOf 只在展示层生效
+      const newEndTime = dayjs(this.data[this.fields.endTime]);
+      if (!this.endTime || !this.endTime.isSame(newEndTime)) {
+        this.endTime = newEndTime;
         isChanged = true;
         changeTime = true;
       }
@@ -186,6 +187,7 @@ export class Task {
       const durationValue = Number(this.data[this.fields.duration]);
       if (!isNaN(durationValue) && durationValue > 0) {
         if (this.startTime) {
+          // duration 推导的是排他边界（如 3 天任务的结束时间是第 4 天 0 点），保持原样
           const newEndTime = workCalendar?.workOffset(this.startTime, durationValue);
           if (!this.endTime || !this.endTime.isSame(newEndTime)) {
             this.endTime = newEndTime;
@@ -220,6 +222,53 @@ export class Task {
     }
 
     return isChanged;
+  }
+
+  /**
+   * 展示用结束时间
+   *
+   * 应用 `date.endOf` 配置补全缺失精度位，仅用于渲染取值
+   * （任务条宽度、连线锚点、基线对比等），duration 计算与数据回写
+   * 始终使用 {@link Task.endTime} 原始值。
+   *
+   * 规则：
+   * - 里程碑的结束时间就是开始时间，不做补全
+   * - 原始数据未给出 endTime（由 duration 推导）时，结束时间是排他边界，不做补全
+   * - 字符串按给出精度补全缺失位；Date/number 由 endOfAll 控制
+   */
+  getDisplayEndTime(): Dayjs | undefined {
+    if (!this.endTime) return this.endTime;
+    if (this.isMilestone()) return this.endTime;
+
+    const rawEnd = this.data[this.fields.endTime];
+    if (!rawEnd) return this.endTime;
+
+    const options = this.store.getOptionManager().getOptions();
+    const endOf = options.date?.endOf;
+    if (endOf === undefined) return this.endTime; // 未配置，不调整
+
+    return this.endTime.complementEndOf({
+      endOf,
+      raw: rawEnd,
+      endOfAll: options.date?.endOfAll === true,
+      unit: this.store.getTimeAxis().getCellUnit() // "hour" | "day"
+    });
+  }
+
+  /**
+   * 结束时间回写 data 时的格式化
+   *
+   * endOf 为 'end' 且 format 精度不足秒位时，直接格式化排他边界
+   * （如 3 天任务的次日 0 点）会丢失时间位，重新解析后按“含当日”
+   * 语义补全会比回写前多出一天。这里退回 1 毫秒，让重解析后的
+   * 展示位置与回写前一致。
+   */
+  private formatEndTime(endTime: Dayjs, format: string): string {
+    const endOf = this.store.getOptionManager().getOptions().date?.endOf;
+    if (endOf === "end" && !/[sS]/.test(format)) {
+      return endTime.subtract(1, "millisecond").format(format);
+    }
+    return endTime.format(format);
   }
 
   updateData(data: any): void {
@@ -260,6 +309,9 @@ export class Task {
 
   /**
    * 更新 Task 时间并修改原始 data
+   *
+   * 交互（拖拽/缩放）产生的时间是网格对齐的完整时刻，直接作为原始值保存，
+   * 不做 endOf 补全；展示层的补全由 {@link Task.getDisplayEndTime} 处理。
    */
   updateTime(startTime: Dayjs, endTime: Dayjs, updateDuration?: boolean): void {
     let st = startTime;
@@ -269,6 +321,7 @@ export class Task {
       Logger.warn(`Task [${this.data}] has some error about startTime or endTime.`);
       return;
     }
+
     this.startTime = st;
     this.endTime = et;
 
@@ -277,16 +330,17 @@ export class Task {
       this.updateDuration(st, et);
     }
 
-    const format = this.store?.getOptionManager().getOptions()?.dateFormat;
+    const format = this.store?.getOptionManager().getOptions()?.date?.format || this.store?.getOptionManager().getOptions()?.dateFormat;
     this.data[this.fields.startTime || "startTime"] =
       this.startTime.format(format);
 
     if (!this.isMilestone()) {
-      this.data[this.fields.endTime || "endTime"] = this.endTime.format(format);
+      this.data[this.fields.endTime || "endTime"] = this.formatEndTime(et, format);
     } else {
-      this.data[this.fields.endTime || "endTime"] = this.startTime
-        .add(this.duration)
-        .format(format);
+      this.data[this.fields.endTime || "endTime"] = this.formatEndTime(
+        this.startTime.add(this.duration),
+        format
+      );
     }
 
     this.event.emit(EventName.UPDATE_TASK, this);
@@ -313,7 +367,7 @@ export class Task {
    * - 同时缺失 endTime、duration 的话，直接返回
    * - 根据 duration 重新计算 endTime
    * - 启用了跳过非工作日模式，自动调整任务时间，使其落在工作日上
-  */
+   */
   fitWork(direction: "left" | "right" | "both" = 'both', options?: { start?: Dayjs, end?: Dayjs }) {
     let st = options?.start || this.startTime;
     let et = options?.end || this.endTime;

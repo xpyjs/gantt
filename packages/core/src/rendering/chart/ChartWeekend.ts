@@ -94,9 +94,11 @@ export class WeekendGroup {
     const visibleStartX = Math.max(0, -this.offsetX);
     const visibleEndX = visibleStartX + this.width;
 
-    // 逐日遍历，处理周末
+    // 逐日遍历，处理周末。节假日背景隐藏时忽略节假日优先级，
+    // 让落在周末的节假日仍然渲染周末背景
+    const ignoreHoliday = !this.context.getOptions().holiday.show;
     for (let time = startTime; time <= endTime; time = time.add(1, "day")) {
-      if (!this.context.store.getWorkCalendar().isWeekend(time, this.context.getOptions().holiday.show)) continue;
+      if (!this.context.store.getWorkCalendar().isWeekend(time, ignoreHoliday)) continue;
 
       const width = cellWidth * (unit === "day" ? 1 : 24);
       const x = this.context.store.getTimeAxis().getTimeLeft(time);

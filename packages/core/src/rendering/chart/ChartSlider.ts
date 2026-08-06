@@ -112,7 +112,8 @@ export class ChartSlider {
 
     const y = (rowHeight - height) / 2;
     const startTime = this.task.startTime;
-    const endTime = this.task.endTime;
+    // 任务条宽度按展示端取值，日粒度结束时间在 endOf 配置下占满当天
+    const endTime = this.task.getDisplayEndTime()!;
     const x = this.context.store.getTimeAxis().getTimeLeft(startTime);
     const end = this.context.store.getTimeAxis().getTimeLeft(endTime);
     const sliderWidth = end - x;
@@ -146,7 +147,8 @@ export class ChartSlider {
               min = parentLeft;
             }
             if (this.task.parent.endTime) {
-              const parentEnd = this.task.parent.endTime;
+              // 按父级展示端钳制，避免补全语义下子级越出父级视觉边界
+              const parentEnd = this.task.parent.getDisplayEndTime()!;
               const parentRight = this.context.store
                 .getTimeAxis()
                 .getTimeLeft(parentEnd);

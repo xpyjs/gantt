@@ -15,6 +15,7 @@ import quarterOfYear from "dayjs/plugin/quarterOfYear";
 import Timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
 import { Logger } from "./logger";
+import { complementEndOfPlugin } from "./timePlugins/complementEndOf";
 
 export type { Dayjs } from "dayjs";
 
@@ -55,6 +56,7 @@ dayjs.extend(quarterOfYear);
 dayjs.extend(Timezone);
 dayjs.extend(utc);
 dayjs.extend(autoLocalePlugin);
+dayjs.extend(complementEndOfPlugin);
 
 export default dayjs;
 

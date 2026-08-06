@@ -147,6 +147,9 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
     targetOpacity: 0.2
   },
   dateFormat: "YYYY-MM-DD HH:mm:ss",
+  date: {
+    format: "YYYY-MM-DD HH:mm:ss",
+  },
   locale: "en",
   unit: "day",
   table: {

@@ -12,7 +12,7 @@ const projectData = [
     name: "电商大促项目",
     start: "2025-04-25", // 周五
     end:   "2025-05-15", // 周四（跨 4 个周末 + 3 天假期）
-    progress: 0,
+    type: 'summary',
     subtask: [
       {
         id: "t1",
@@ -112,15 +112,24 @@ if (gantt1Container) {
         { field: "duration", label: "时长", width: 100 },
       ]
     },
-    border: { show: true },
+    chart: {
+
+    },
+
+    // border: { show: true },
     fields: {
       startTime: "start",
       endTime: "end",
       children: "subtask",
       duration: "duration"
     },
-    dateFormat: "YYYY-MM-DD HH:mm:ss",
-    primaryColor: "#1890ff",
+    // dateFormat: "YYYY-MM-DD HH:mm:ss",
+    date: {
+      format: 'YYYY-MM-DD',
+      endOf: 'end'
+    },
+    locale: "zh",
+    // primaryColor: "#1890ff",
 
     expand: { show: true, enabled: true },
     row: { height: 34 },
@@ -147,12 +156,12 @@ if (gantt1Container) {
     weekend: {
       show: true,
       days: [0, 6],
-      backgroundColor: "#1890ff",
-      opacity: 0.08
+      // backgroundColor: "#1890ff",
+      // opacity: 0.08
     },
 
     holiday: {
-      show: true,
+      show: false,
       backgroundColor: "#ff7875",
       opacity: 0.15,
       holidays: holidayList
@@ -160,7 +169,7 @@ if (gantt1Container) {
 
     workTime: {
       skipWeekends: true,
-      skipHolidays: true
+      skipHolidays: false
     },
 
     today: { show: true },
