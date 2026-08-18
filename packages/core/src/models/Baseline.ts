@@ -5,7 +5,7 @@
  * @LastEditTime: 2026-08-18 10:30:00
  * @Description: 基线数据模型
  */
-import type { Dayjs } from "dayjs";
+import type { ConfigType, Dayjs } from "dayjs";
 import { Store } from "@/store";
 import { generateId } from "../utils/id";
 import dayjs from "dayjs";
@@ -34,9 +34,6 @@ export class Baseline {
   /** 是否为指示器对比基线 */
   target = false;
 
-  /** 结束时间的原始值，用于展示层精度识别 */
-  private _endRaw?: unknown;
-
   constructor(private store: Store, private event: EventBus, data: any) {
     const fields = this.store.getOptionManager().getOptions().fields;
     const baselineFields = this.store.getOptionManager().getOptions().baselines.fields;
@@ -52,33 +49,33 @@ export class Baseline {
     const _st = data[fields.startTime] || data[baselineFields.startTime];
     if (_st) this.startTime = dayjs(_st);
     const _et = data[fields.endTime] || data[baselineFields.endTime];
-    if (_et) this.endTime = dayjs(_et);
-    this._endRaw = _et;
+    if (_et) this.endTime = this.parseEndTime(_et);
 
     this.data = data;
   }
 
   /**
-   * 展示用结束时间
+   * 解析基线的结束时间
    *
-   * 应用 `date.endOf` 配置补全缺失精度位，仅用于渲染取值与对比展示，
-   * {@link Baseline.endTime} 始终保持原始解析值。
-   *
-   * 字符串按给出精度补全缺失位；Date/number 由 endOfAll 控制。
+   * 与 {@link Task.parseEndTime} 同一语义：`date.endOf` 在解析时生效，
+   * 'end' 含尾语义下按数据给出精度补全缺失位，结束时间保持在尾单位
+   * 内（如 18日 23:59:59）。基线的渲染位置、与任务的对比都基于
+   * 同一含尾时间
    */
-  getDisplayEndTime(): Dayjs | undefined {
-    if (!this.endTime) return this.endTime;
-
+  private parseEndTime(raw: unknown): Dayjs {
+    let et = dayjs(raw as ConfigType);
     const options = this.store.getOptionManager().getOptions();
     const endOf = options.date?.endOf;
-    if (endOf === undefined) return this.endTime; // 未配置，不调整
-
-    return this.endTime.complementEndOf({
-      endOf,
-      raw: this._endRaw,
-      endOfAll: options.date?.endOfAll === true,
-      unit: this.store.getTimeAxis().getCellUnit() // "hour" | "day"
-    });
+    if (endOf !== undefined) {
+      const unit = this.store.getTimeAxis?.()?.getCellUnit?.() ?? "day";
+      et = et.complementEndOf({
+        endOf,
+        raw,
+        endOfAll: options.date?.endOfAll === true,
+        unit
+      });
+    }
+    return et;
   }
 
   getField(field: string): any {
@@ -97,7 +94,7 @@ export class Baseline {
   /**
    * 获取基线与任务的时间差异分析
    *
-   * 结束时间的对比使用展示端（含 endOf 补全），使 ahead/ontime/delayed
+   * 起止时间均为含 endOf 解析语义的存储时间，ahead/ontime/delayed
    * 的判定与任务条、基线条的视觉位置一致。
    */
   getTimeDiff(): BaselineDiff | null {
@@ -107,8 +104,8 @@ export class Baseline {
     if (!task || !task.startTime || !task.endTime) return null;
 
     const unit = this.store.getTimeAxis().getCellUnit();
-    const blEnd = this.getDisplayEndTime()!;
-    const taskEnd = task.getDisplayEndTime()!;
+    const blEnd = this.endTime!;
+    const taskEnd = task.endTime;
 
     const startDiff = this.startTime!.diff(task.startTime!, unit, true);
     const endDiff = blEnd.diff(taskEnd, unit, true);

@@ -180,7 +180,7 @@ export class WorkCalendar {
    * 基于两个日期，计算之间的工作日时长
    *
    * @param start - 起始日期
-   * @param end - 结束日期
+   * @param end - 结束日期（含尾语义下为计算边界，即尾单位最后一秒的下 1 秒）
    */
   workDiff(start: Date | Dayjs, end: Date | Dayjs): number {
     let st = dayjs(start);
@@ -191,8 +191,10 @@ export class WorkCalendar {
     const count = this.restDays(st, et);
 
     // 使用两个日期的详细 diff 差值，减去非工作日天数，得到详细的工作时长。
-    // 保留 6 位小数（秒级精度）：4 位时 23:59:59 会进位成整 3 天，反向计算时多出一天
-    return Math.max(round(et.diff(st) / MS_PER_DAY - count, 6), 1);
+    // 保留 6 位小数（秒级精度）：4 位时 23:59:59 会进位成整 3 天，反向计算时多出一天。
+    // 下限为 0 而非 1：不足尾单位最后一秒的时长（如 23:50:20）是 0.xxx，
+    // 保底 1 天会把它抬成整数，与含尾时长的语义相悖
+    return Math.max(round(et.diff(st) / MS_PER_DAY - count, 6), 0);
   }
 
   /**

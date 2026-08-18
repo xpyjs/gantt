@@ -13,6 +13,7 @@ import { EventName, EventBus } from "../../event";
 import { colorjs } from "../../utils/color";
 import { IContext } from "@/types/render";
 import type { Task } from "@/models/Task";
+import type { Dayjs } from "dayjs";
 import { EmitData } from "@/types";
 import { Logger } from "../../utils/logger";
 import { HandlerIcon } from "../../utils/svg";
@@ -49,6 +50,11 @@ export class ChartSlider {
 
   // 记录拖拽时的原始数据
   private oldTasks: Task[] = [];
+
+  // 整体移动的吸附锚点：拖拽开始时的原始起止时间。
+  // byUnit 移动吸附的是位移量，起止时间由锚点平移整数单位得出
+  private dragAnchorStart?: Dayjs;
+  private dragAnchorEnd?: Dayjs;
 
   constructor(
     private context: IContext,
@@ -112,8 +118,9 @@ export class ChartSlider {
 
     const y = (rowHeight - height) / 2;
     const startTime = this.task.startTime;
-    // 任务条宽度按展示端取值，日粒度结束时间在 endOf 配置下占满当天
-    const endTime = this.task.getDisplayEndTime()!;
+    // endTime 为含尾末尾（'end' 语义下是尾单位最后一秒），宽度即
+    // 整数个格子（差 1 秒像素，视觉不可见）
+    const endTime = this.task.endTime!;
     const x = this.context.store.getTimeAxis().getTimeLeft(startTime);
     const end = this.context.store.getTimeAxis().getTimeLeft(endTime);
     const sliderWidth = end - x;
@@ -147,8 +154,7 @@ export class ChartSlider {
               min = parentLeft;
             }
             if (this.task.parent.endTime) {
-              // 按父级展示端钳制，避免补全语义下子级越出父级视觉边界
-              const parentEnd = this.task.parent.getDisplayEndTime()!;
+              const parentEnd = this.task.parent.endTime;
               const parentRight = this.context.store
                 .getTimeAxis()
                 .getTimeLeft(parentEnd);
@@ -792,6 +798,51 @@ export class ChartSlider {
         .getTimeByLeft(this.slider.x() + this.slider.width());
     }
 
+    const unit = this.context.store.getTimeAxis().getCellUnit();
+
+    // 按单位吸附分两种语义，共同点是吸附位移量而非绝对位置：
+    // - 整体移动：吸附位移量而非绝对位置。任务起止可能不在单位网格上
+    //   （如 8:00 起），直接 startOf 会抹掉相位：起始贴零、时长膨胀，回
+    //   写后任务条重渲染到贴零位置，与 Konva 拖拽基准（鼠标位置）冲突，
+    //   会在两个位置间反复横跳。改为将拖拽锚点平移整数个单位，相位与
+    //   时长保持不变（主流组件的通用做法：移动保持任务形状，只换位置）
+    // - 边缘缩放：被拖动边缘同样由锚点平移整数单位（8:00 的左缘停在
+    //   8:00、20:00:59 的右缘停在 20:00:59）。吸附到绝对网格会先跳到
+    //   0 点，从锚定边缘起算整数单位则会跳到次日同一时刻
+    if (!!this.context.getOptions().bar.move.byUnit) {
+      if (direction === "both") {
+        const anchorStart = this.dragAnchorStart ?? start;
+        const anchorEnd = this.dragAnchorEnd ?? end;
+        const steps = Math.round(start.diff(anchorStart, unit, true));
+        start = anchorStart.add(steps, unit);
+        end = anchorEnd.add(steps, unit);
+      } else if (direction === "left") {
+        const anchor = this.dragAnchorStart ?? start;
+        start = anchor.add(Math.round(start.diff(anchor, unit, true)), unit);
+        // 相位吸附下的最小尺寸：起止各自停在相位节点上，步进是整数
+        // 单位，最小跨度由相位间距决定（如 8:00~20:00:59 的任务最小
+        // 保持 12 小时），不再强制 1 个整单位
+        if (start.isSameOrAfter(end)) start = start.subtract(1, unit);
+      } else {
+        const anchor = this.dragAnchorEnd ?? end;
+        end = anchor.add(Math.round(end.diff(anchor, unit, true)), unit);
+        if (end.isSameOrBefore(start)) end = end.add(1, unit);
+      }
+    } else {
+      // 自由缩放保底一个最小单位，写入前按时间再钳一次。结束时间
+      // 落在尾单位最后一秒（含尾）时，最晚开始时间是该单位的起点
+      // 而不是再退一个整单位，否则左缘缩到 1 格会被钳回 2 格
+      const endAtUnitEnd = end
+        .add(1, "second")
+        .isSame(end.startOf(unit).add(1, unit));
+      const minStart = endAtUnitEnd ? end.startOf(unit) : end.subtract(1, unit);
+      if (direction === "left" && start.isAfter(minStart)) {
+        start = minStart;
+      } else if (direction === "right" && end.isBefore(start.add(1, unit))) {
+        end = start.add(1, unit);
+      }
+    }
+
     if (
       !start?.isSame(this.task.startTime) ||
       !end?.isSame(this.task.endTime)
@@ -808,6 +859,8 @@ export class ChartSlider {
 
     this.isDragging = true;
     this.oldTasks = [];
+    this.dragAnchorStart = this.task.startTime?.clone();
+    this.dragAnchorEnd = this.task.endTime?.clone();
     this.context.event.emit(EventName.SLIDER_DRAGGING, true);
     stage.container().style.cursor = "grabbing";
 
@@ -852,6 +905,8 @@ export class ChartSlider {
     this.stopAutoExpand();
     this.isDragging = false;
     this.dragDiffX = 0;
+    this.dragAnchorStart = undefined;
+    this.dragAnchorEnd = undefined;
     this.draggingDirection = "none"; // 重置拖拽方向
 
     // 获取当前视图的坐标范围
@@ -1014,6 +1069,8 @@ export class ChartSlider {
     const stage = e.target.getStage();
     if (!stage) return;
     this.isDragging = true;
+    this.dragAnchorStart = this.task.startTime?.clone();
+    this.dragAnchorEnd = this.task.endTime?.clone();
     this.context.event.emit(EventName.SLIDER_DRAGGING, true);
 
     let startX = stage.getPointerPosition()?.x || 0;
@@ -1021,6 +1078,38 @@ export class ChartSlider {
     const cellWidth = this.context.store.getTimeAxis().getCellWidth();
     const dragLock = !!this.context.getOptions().bar.move.lock;
     const stageWidth = stage.width();
+
+    // 缩放下限在时间轴上取值，按吸附模式分两种：
+    // - 相位吸附（byUnit）：被拖动边缘只能停在锚点的整数单位平移点
+    //   上，最早/最晚的有效相位点由锚点间距决定（如 8:00~20:00:59 的
+    //   任务右缘最早退到 20:00:59、左缘最晚进到 8:00），像素下限与
+    //   emitUpdate 的相位钳制一致，拖拽中视觉不会越过极值再弹回
+    // - 自由缩放：整单位宽度差 1 秒像素达不到边界，下限向内退让 1
+    //   秒的像素量，越界部分由 emitUpdate 按时间兜底
+    const timeAxis = this.context.store.getTimeAxis();
+    const unit = timeAxis.getCellUnit();
+    const secondPx = cellWidth / (unit === "day" ? 86400 : 3600);
+    let minLeftEdge: number;
+    let minRightEdge: number;
+    if (moveStep) {
+      const anchorStart = this.dragAnchorStart ?? this.task.startTime!;
+      const anchorEnd = this.dragAnchorEnd ?? this.task.endTime!;
+      // 右缘最小：anchorEnd 向前退整数单位后仍需晚于 anchorStart
+      const rightSteps = Math.ceil(anchorStart.diff(anchorEnd, unit, true) + 1e-9);
+      // 左缘最大：anchorStart 向后推整数单位后仍需早于 anchorEnd
+      const leftSteps = Math.floor(anchorEnd.diff(anchorStart, unit, true) - 1e-9);
+      minRightEdge = timeAxis.getTimeLeft(anchorEnd.add(rightSteps, unit));
+      minLeftEdge = timeAxis.getTimeLeft(anchorStart.add(leftSteps, unit));
+    } else {
+      minLeftEdge = timeAxis.getTimeLeft(this.task.endTime!.subtract(1, unit)) + secondPx;
+      minRightEdge = timeAxis.getTimeLeft(this.task.startTime!.add(1, unit)) - secondPx;
+    }
+
+    // 像素比较容差：下限与拖拽可达位置（原始边缘 ± 整数格宽）数学上
+    // 相等，但两条计算路径的浮点舍入不同，可能差 1ulp。无容差时“恰好
+    // 到达最小相位点”会被判越界，右缘卡在一步之外（左缘因比较方向不
+    // 同碰巧放行），整体移动后绝对像素变化又可能恢复，表现为时好时坏
+    const pxTol = secondPx;
 
     // 移动时使用，贴边需要重置值
     let leftScrollDiff = 0;
@@ -1111,8 +1200,9 @@ export class ChartSlider {
         const step = moveStep ? -cellWidth : -this.SCROLL_STEP;
         this.startAutoScroll(step, moveStep, () => {
           rightScrollDiff += step;
-          this.slider.width(Math.max(this.slider.width(), cellWidth));
-          if (this.slider.width() > cellWidth) {
+          const minWidth = minRightEdge - this.slider.x();
+          this.slider.width(Math.max(this.slider.width(), minWidth));
+          if (this.slider.width() > minWidth) {
             this.slider.x(this.slider.x() + step);
           }
 
@@ -1127,8 +1217,9 @@ export class ChartSlider {
         const step = moveStep ? cellWidth : this.SCROLL_STEP;
         this.startAutoScroll(step, moveStep, () => {
           leftScrollDiff += step;
-          this.slider.width(Math.max(this.slider.width(), cellWidth));
-          if (this.slider.width() > cellWidth) {
+          const minWidth = this.slider.x() + this.slider.width() - minLeftEdge;
+          this.slider.width(Math.max(this.slider.width(), minWidth));
+          if (this.slider.width() > minWidth) {
             this.slider.x(this.slider.x() + step);
           }
 
@@ -1160,7 +1251,8 @@ export class ChartSlider {
 
       if (lastX === undefined || lastX !== diffX) {
         if (direction === "left") {
-          if (targetStartWidth - diffX - leftScrollDiff >= cellWidth) {
+          // 左缘最晚顶到结束时间前一个单位
+          if (targetStartX + diffX + leftScrollDiff <= minLeftEdge + pxTol) {
             if (currentX < stageWidth - this.EDGE_THRESHOLD) {
               this.slider.width(targetStartWidth - diffX - leftScrollDiff);
               this.slider.x(targetStartX + diffX + leftScrollDiff);
@@ -1168,7 +1260,8 @@ export class ChartSlider {
             }
           }
         } else {
-          if (targetStartWidth + diffX + rightScrollDiff >= cellWidth) {
+          // 右缘最早顶到开始时间后一个单位
+          if (targetStartX + targetStartWidth + diffX + rightScrollDiff >= minRightEdge - pxTol) {
             if (currentX > this.EDGE_THRESHOLD) {
               this.slider.width(targetStartWidth + diffX + rightScrollDiff);
               this.emitUpdate("right");

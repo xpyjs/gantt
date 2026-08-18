@@ -972,10 +972,10 @@ export const apiItems: ApiItem[] = [
   {
     id: "date",
     key: "date",
-    title: "日期格式",
+    title: "日期配置",
     type: "object",
     description:
-      "日期格式化配置",
+      "日期格式化与结束时间解析配置",
     category: "data",
     children: [
       {
@@ -990,16 +990,30 @@ export const apiItems: ApiItem[] = [
       {
         id: "date-endOf",
         key: "endOf",
-        title: "设置任务的结束时间",
+        title: "结束时间解析语义",
         type: "'start' | 'end' | [number, number, number]",
-        description: `取值含义：
-- <code>start</code> 将缺失精度位补为该位的起始值（0）。
-- <code>end</code> 将缺失精度位补为该位的最大值（时=23，分/秒=59）。
-- <code>[时, 分, 秒]</code> 固定三元组，缺失精度位补为对应位的值，已有位保留。
+        description: `设置任务的结束时间。该属性用于处理给定单位之下的具体截止时间，在<strong>解析时</strong>补全缺失精度位。
 
-可调位由底层单位决定：底层单位大于 <code>day</code>（含）时，可调位为 [时,分,秒]；底层单位小于 <code>day</code>（不含）时，可调位为 [分,秒]，元组第 0 位（时）被忽略。
+取值含义：
+- <code>'start'</code>：缺失精度位补为该位的起始值（0）。
+- <code>'end'</code>：缺失精度位补为该位的最大值（时=23，分/秒=59）。含尾语义：结束时间保持在尾单位内（如 day 粒度的 <code>'2026-08-18'</code> 解析为 <code>2026-08-18 23:59:59</code>），时长按“从起始秒起数的完整秒数”计算，整单位任务的 duration 为整数；不足尾单位最后一秒的为小数。
+- <code>[时, 分, 秒]</code>：固定三元组，缺失精度位补为对应位的值。已有位保留。
 
-默认（<code>endOfAll=false</code>）仅对字符串原始值按其给出精度补全缺失位；Date/number 不调整。拖拽等交互更新后的时间按底层单位网格对齐，视为该精度并补全缺失位。`
+可调位由底层单位决定：底层单位为大于 <code>'day'</code>（含）时，可调位为 [时, 分, 秒]；底层单位为小于 <code>'day'</code>（不含）时，可调位为 [分, 秒]，元组第 0 位（时）被忽略。
+
+补全规则：
+- 默认（<code>endOfAll=false</code>）仅对字符串原始值按其给出精度补全缺失位，已有位保留；Date/number 不调整。无缺失位时不补全，保持原始解析值。
+- 未配置 <code>endOf</code> 时，所有结束时间保持原始解析值。
+- 拖拽等交互产生的时间按最小单位网格对齐，更新的数据会被一并抛出供外部处理保存。
+
+示例（unit 配置为 <code>'day'</code>，以 天 为单位展示）：
+<pre>tasks = [
+  { name: '任务1', startTime: '2024-01-01', endTime: '2024-01-01' },
+  { name: '任务2', startTime: '2024-01-01 13:00:00', duration: 1 }
+]</pre>
+- <code>'end'</code>：任务1 占满 <code>'2024-01-01'</code> 当天，结束时间为 <code>'2024-01-01 23:59:59'</code>，duration 为 1、视觉宽度为 1 格。原始数据 <code>'2024-01-01'</code> 不变。
+- <code>'end'</code>：任务2 的结束时间为 <code>'2024-01-02 12:59:59'</code>（13:00:00 为第一秒，数满 1 天），duration 为 1。
+- <code>[0, 12, 30]</code>：任务1 解析为 <code>'2024-01-01 00:12:30'</code>，duration 不足 1 天。`
       },
       {
         id: "date-endOfAll",
@@ -1007,7 +1021,7 @@ export const apiItems: ApiItem[] = [
         title: "强制应用结束时间调整",
         type: "boolean",
         defaultValue: "false",
-        description: `是否强制对所有任务结束时间应用 <code>endOf</code> 规则。
+        description: `是否强制对所有任务结束时间应用 <code>endOf</code> 解析规则。
 - 默认 <code>false</code>，仅对字符串原始值按其给出精度补全缺失位（Date/number 不调整）。
 - 设置为 <code>true</code> 时，忽略精度感知，对所有任务的结束时间（含 Date/number）强制按底层单位全位应用 <code>endOf</code> 调整。
 该配置同样作用于 Baseline 数据。`

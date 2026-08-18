@@ -82,8 +82,9 @@ export function getStringPrecision(
  *
  * 调用方式：`dayjs(endTime).complementEndOf({ endOf, raw, endOfAll, unit })`
  *
- * 该方法只服务于展示层（任务条、连线、基线等渲染取值），
- * 不参与 duration 计算与数据回写。
+ * 在解析层生效：Task / Baseline 解析结束时间时调用，解析结果即存储的
+ * 结束时间。'end' 含尾语义下结束时间保持在尾单位内（如 23:59:59），
+ * duration 计算由 Task 层补 1 秒还原计算边界，本插件不关心时长。
  *
  * 调整规则：
  * - 可调位由底层单位 U 决定：U='day' → [时,分,秒]；U='hour' → [分,秒]（时位不可调，元组第 0 位忽略）。
@@ -148,7 +149,8 @@ declare module "dayjs" {
     /**
      * 根据 endOf 配置补全当前时间的缺失精度位。
      *
-     * 仅用于展示层取值，不得用于 duration 计算或数据回写。
+     * 解析层取值：Task / Baseline 解析结束时间时调用。
+     * duration 计算不在本方法内，由 Task 层补 1 秒还原计算边界。
      *
      * @param options 调整配置
      * @returns 调整后的新 Dayjs 实例；未配置或不满足调整条件时返回原实例

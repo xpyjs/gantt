@@ -2,11 +2,11 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:59:03
  * @LastEditors: JeremyJone
- * @LastEditTime: 2026-08-18 10:30:00
+ * @LastEditTime: 2026-08-19 11:20:00
  * @Description:任务数据模型
  */
 
-import type { Dayjs } from "dayjs";
+import type { ConfigType, Dayjs } from "dayjs";
 import { generateId } from "../utils/id";
 import dayjs from "dayjs";
 import { type EventBus, EventName } from "../event";
@@ -175,8 +175,10 @@ export class Task {
 
     // 更新结束时间（优先级：endTime > duration）
     if (this.data[this.fields.endTime]) {
-      // 有 endTime 字段，优先使用。保持原始解析值，endOf 只在展示层生效
-      const newEndTime = dayjs(this.data[this.fields.endTime]);
+      // 有 endTime 字段，优先使用。endOf 在解析时生效：按数据给出精度
+      // 补全缺失位，'end' 语义下结束时间保持在尾单位内（如 1 天任务
+      // 为 18日 23:59:59），duration 计算与视觉宽度由此对齐
+      const newEndTime = this.parseEndTime(this.data[this.fields.endTime]);
       if (!this.endTime || !this.endTime.isSame(newEndTime)) {
         this.endTime = newEndTime;
         isChanged = true;
@@ -187,8 +189,10 @@ export class Task {
       const durationValue = Number(this.data[this.fields.duration]);
       if (!isNaN(durationValue) && durationValue > 0) {
         if (this.startTime) {
-          // duration 推导的是排他边界（如 3 天任务的结束时间是第 4 天 0 点），保持原样
-          const newEndTime = workCalendar?.workOffset(this.startTime, durationValue);
+          // duration 推导出计算边界（如 1 天任务为次日 0 点），
+          // 含尾语义下退 1 秒收回尾单位内存储
+          const edge = workCalendar ? this.workEdge(this.startTime, durationValue) : undefined;
+          const newEndTime = edge ? this.fromEdge(edge) : undefined;
           if (!this.endTime || !this.endTime.isSame(newEndTime)) {
             this.endTime = newEndTime;
             this._duration = durationValue;
@@ -206,10 +210,16 @@ export class Task {
       this.store.updateTime(this.startTime, this.endTime);
     }
 
-    // 更新持续时间
+    // 更新持续时间。endTime 优先级高于 duration 字段，起止时间变化时必须
+    // 重算，否则 updateData 换时间后 duration 会残留旧值
     if (this.startTime && this.endTime) {
-      if (!this._duration) {
-        this._duration = workCalendar?.workDiff(this.startTime, this.endTime) || this.endTime.diff(this.startTime);
+      if (changeTime || !this._duration) {
+        const edge = this.toEdge(this.endTime);
+        // duration 以“天”为单位；无工作日历时退化为日历天数。
+        // workDiff 可能为 0（起止同一时刻），不能用 || 兜底，否则会混入毫秒单位
+        this._duration = workCalendar
+          ? workCalendar.workDiff(this.startTime, edge)
+          : edge.diff(this.startTime, "day", true);
       }
     }
 
@@ -225,49 +235,103 @@ export class Task {
   }
 
   /**
-   * 展示用结束时间
+   * 解析数据的结束时间
    *
-   * 应用 `date.endOf` 配置补全缺失精度位，仅用于渲染取值
-   * （任务条宽度、连线锚点、基线对比等），duration 计算与数据回写
-   * 始终使用 {@link Task.endTime} 原始值。
+   * `date.endOf` 在这里生效，按原始值的给出精度补全缺失位：
+   * - 'end'：含尾语义。day 粒度的 "2026-08-18" 表示当天结束，补全为
+   *   2026-08-18 23:59:59。结束时间保持在尾单位内，不落到下一单位
+   *   边界，格子高亮、跳过非工作日的判定不会越界；时长计算由
+   *   {@link Task.toEdge} 补 1 秒还原计算边界
+   * - 'start' / 元组：按配置补全缺失位，已有位保留
+   * - 未配置：保持原始解析值
    *
-   * 规则：
-   * - 里程碑的结束时间就是开始时间，不做补全
-   * - 原始数据未给出 endTime（由 duration 推导）时，结束时间是排他边界，不做补全
-   * - 字符串按给出精度补全缺失位；Date/number 由 endOfAll 控制
+   * 补全只在存在缺失位时生效；dayjs 实例不保留原始输入的精度信息，
+   * 因此 raw 需由调用方传入。
    */
-  getDisplayEndTime(): Dayjs | undefined {
-    if (!this.endTime) return this.endTime;
-    if (this.isMilestone()) return this.endTime;
-
-    const rawEnd = this.data[this.fields.endTime];
-    if (!rawEnd) return this.endTime;
-
+  private parseEndTime(raw: unknown): Dayjs {
+    let et = dayjs(raw as ConfigType);
     const options = this.store.getOptionManager().getOptions();
     const endOf = options.date?.endOf;
-    if (endOf === undefined) return this.endTime; // 未配置，不调整
+    if (endOf !== undefined) {
+      const unit = this.store.getTimeAxis?.()?.getCellUnit?.() ?? "day";
+      et = et.complementEndOf({
+        endOf,
+        raw,
+        endOfAll: options.date?.endOfAll === true,
+        unit
+      });
+    }
+    return et;
+  }
 
-    return this.endTime.complementEndOf({
-      endOf,
-      raw: rawEnd,
-      endOfAll: options.date?.endOfAll === true,
-      unit: this.store.getTimeAxis().getCellUnit() // "hour" | "day"
-    });
+  /** 是否为含尾语义（endOf='end'）：结束时间是尾单位内的最后一秒 */
+  private isInclusiveEnd(): boolean {
+    return this.store.getOptionManager().getOptions().date?.endOf === "end";
+  }
+
+  /**
+   * 存储的结束时间 → 时长计算边界
+   *
+   * 含尾语义下结束时间是尾单位内的最后一秒（如 1 天任务为
+   * 18日 23:59:59），时长按"从起始秒起数的完整秒数"计：补 1 秒得到
+   * 下一单位边界再求差。因此 18日 0 点 - 18日 23:59:59 的时长为 1；
+   * 不足最后一秒（如 23:50:20）则为 0.xxx 小数
+   */
+  private toEdge(et: Dayjs): Dayjs {
+    return this.isInclusiveEnd() ? et.add(1, "second") : et;
+  }
+
+  /**
+   * 时长计算边界 → 存储的结束时间
+   *
+   * 由 duration 推导的边界（如 1 天任务的次日 0 点）退 1 秒收回
+   * 尾单位内存储（18日 23:59:59）。非 0 点起始同样成立：13:00:00
+   * 起 1 天，结束时间为次日 12:59:59
+   */
+  private fromEdge(edge: Dayjs): Dayjs {
+    return this.isInclusiveEnd() ? edge.subtract(1, "second") : edge;
+  }
+
+  /**
+   * 归一化交互产生的结束时间为存储值
+   *
+   * 拖拽反推的时间有两种来源：按单位吸附得到的是计算边界（恰落在
+   * 单位起点，如次日 0 点），退 1 秒收尾存储；自由拖拽反推的是右缘
+   * 时刻（本身已是含尾末尾），原样存储，避免每次交互累计偏移
+   */
+  private normalizeEnd(et: Dayjs): Dayjs {
+    if (!this.isInclusiveEnd()) return et;
+    const unit = this.store.getTimeAxis?.()?.getCellUnit?.() ?? "day";
+    return et.isSame(et.startOf(unit)) ? this.fromEdge(et) : et;
+  }
+
+  /**
+   * 由起始时间与 duration 推导计算边界
+   *
+   * 单位起点整起始（如 0 点）且 duration 为整数时，任务的最后一个
+   * 单位是完整的工作日，边界落在该工作日的末尾。直接用
+   * workOffset(st, duration) 推进会在尾日紧邻周末时把边界多推一个
+   * 工作日（如周五起 1 天的任务被扩到下周一）；改为定位到最后一个
+   * 工作日再取次日 0 点。非单位起点（如 13:00）或小数 duration 的
+   * 时长按工作时间推进，仍由 workOffset 直接计算（如 13:00 起 1 天，
+   * 边界为下一个工作日的 13:00）
+   */
+  private workEdge(st: Dayjs, duration: number): Dayjs {
+    const workCalendar = this.store.getWorkCalendar();
+    const unit = this.store.getTimeAxis?.()?.getCellUnit?.() ?? "day";
+    if (st.isSame(st.startOf(unit)) && Number.isInteger(duration)) {
+      return workCalendar.workOffset(st, duration - 1).add(1, "day");
+    }
+    return workCalendar.workOffset(st, duration);
   }
 
   /**
    * 结束时间回写 data 时的格式化
    *
-   * endOf 为 'end' 且 format 精度不足秒位时，直接格式化排他边界
-   * （如 3 天任务的次日 0 点）会丢失时间位，重新解析后按“含当日”
-   * 语义补全会比回写前多出一天。这里退回 1 毫秒，让重解析后的
-   * 展示位置与回写前一致。
+   * 存储的结束时间已在尾单位内，直接格式化即可，重解析后由
+   * {@link Task.parseEndTime} 补全回同一时间，保证回写前后一致
    */
   private formatEndTime(endTime: Dayjs, format: string): string {
-    const endOf = this.store.getOptionManager().getOptions().date?.endOf;
-    if (endOf === "end" && !/[sS]/.test(format)) {
-      return endTime.subtract(1, "millisecond").format(format);
-    }
     return endTime.format(format);
   }
 
@@ -310,8 +374,9 @@ export class Task {
   /**
    * 更新 Task 时间并修改原始 data
    *
-   * 交互（拖拽/缩放）产生的时间是网格对齐的完整时刻，直接作为原始值保存，
-   * 不做 endOf 补全；展示层的补全由 {@link Task.getDisplayEndTime} 处理。
+   * 交互（拖拽/缩放）产生的起止时间经 {@link Task.normalizeEnd} 归一化
+   * 后存储；回写经 {@link Task.formatEndTime} 直接格式化，重解析后
+   * 还原同一时间
    */
   updateTime(startTime: Dayjs, endTime: Dayjs, updateDuration?: boolean): void {
     let st = startTime;
@@ -323,11 +388,12 @@ export class Task {
     }
 
     this.startTime = st;
-    this.endTime = et;
+    // 里程碑的结束时间就是开始时间，不参与含尾收尾
+    this.endTime = this.isMilestone() ? et : this.normalizeEnd(et);
 
     // 更新 duration
     if (updateDuration) {
-      this.updateDuration(st, et);
+      this.updateDuration(st, this.endTime);
     }
 
     const format = this.store?.getOptionManager().getOptions()?.date?.format || this.store?.getOptionManager().getOptions()?.dateFormat;
@@ -335,7 +401,7 @@ export class Task {
       this.startTime.format(format);
 
     if (!this.isMilestone()) {
-      this.data[this.fields.endTime || "endTime"] = this.formatEndTime(et, format);
+      this.data[this.fields.endTime || "endTime"] = this.formatEndTime(this.endTime, format);
     } else {
       this.data[this.fields.endTime || "endTime"] = this.formatEndTime(
         this.startTime.add(this.duration),
@@ -348,10 +414,13 @@ export class Task {
 
   /**
    * 更新 Task 持续时间并修改原始 data
+   *
+   * endTime 为存储的结束时间，含尾语义下由 {@link Task.toEdge} 补
+   * 1 秒还原计算边界后求差，整单位任务的 duration 为整数
    */
   updateDuration(startTime: Dayjs, endTime: Dayjs): void {
     const workCalendar = this.store.getWorkCalendar();
-    this._duration = workCalendar.workDiff(startTime, endTime);
+    this._duration = workCalendar.workDiff(startTime, this.toEdge(endTime));
 
     // 只有原始数据给出字段，才更新 data
     if (this.fields.duration) {
@@ -378,12 +447,15 @@ export class Task {
 
     // 适配工作时间
     if (direction === 'left') {
-      st = workCalendar.currentWorkTime(workCalendar.workOffset(et, -this._duration), 'before');
+      // 存储的结束时间先补 1 秒还原计算边界，再向前推 duration
+      st = workCalendar.currentWorkTime(workCalendar.workOffset(this.toEdge(et), -this._duration), 'before');
     } else if (direction === 'right') {
-      et = workCalendar.currentWorkTime(workCalendar.workOffset(st, this._duration));
+      // 边界落在最后一个工作日的末尾（次日 0 点），允许紧邻周末，
+      // 不做工作时间修正，避免把任务尾部再推过一个周末
+      et = this.fromEdge(this.workEdge(st, this._duration));
     } else {
       st = workCalendar.currentWorkTime(st);
-      et = workCalendar.currentWorkTime(workCalendar.workOffset(st, this._duration));
+      et = this.fromEdge(this.workEdge(st, this._duration));
     }
 
     // 特殊处理：里程碑模式，结束时间 = 开始时间

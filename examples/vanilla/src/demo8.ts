@@ -28,8 +28,8 @@ const projectData = [
           },
           {
             id: "t1-2", name: "输出需求文档",
-            start: "2025-04-28", // 周一
-            end:   "2025-04-30", // 周三
+            start: "2025-04-28 8:00", // 周一
+            end:   "2025-04-30 20:00", // 周三
           },
           {
             id: "t1-3", name: "评审会议",
@@ -125,7 +125,7 @@ if (gantt1Container) {
     },
     // dateFormat: "YYYY-MM-DD HH:mm:ss",
     date: {
-      format: 'YYYY-MM-DD',
+      // format: 'YYYY-MM-DD HH:mm:ss',
       endOf: 'end'
     },
     locale: "zh",

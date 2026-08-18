@@ -178,7 +178,7 @@ describe('WorkCalendar', () => {
   });
 
   describe('workDiff', () => {
-    // workDiff = (end - start in days) - restDays, min 1
+    // workDiff = (end - start in days) - restDays, min 0
     it('should compute work days Mon-Fri with skipWeekends', () => {
       const cal = new WorkCalendar(W(), H(), T({ skipWeekends: true }));
       // Mon 07-27 -> Fri 07-31 = 4 calendar days, 0 rest days => 4
@@ -193,9 +193,19 @@ describe('WorkCalendar', () => {
       expect(diff).toBeCloseTo(2);
     });
 
-    it('should handle same start/end (returns 1)', () => {
+    it('should handle same start/end (returns 0)', () => {
       const cal = new WorkCalendar(W(), H(), T({ skipWeekends: true }));
-      expect(cal.workDiff(MONDAY_2026_07_27, MONDAY_2026_07_27)).toBeCloseTo(1);
+      expect(cal.workDiff(MONDAY_2026_07_27, MONDAY_2026_07_27)).toBeCloseTo(0);
+    });
+
+    it('should return fractional (not clamped to 1) for less than a full day', () => {
+      // 含尾语义：存储的结束时间 23:50:20 差 9 分 41 秒不满一天，时长应为 0.xxx
+      const cal = new WorkCalendar();
+      const st = dayjs('2025-08-18 00:00:00');
+      const et = dayjs('2025-08-18 23:50:20');
+      const diff = cal.workDiff(st, et);
+      expect(diff).toBeGreaterThan(0.99);
+      expect(diff).toBeLessThan(1);
     });
 
     it('should handle reversed dates (swap internally)', () => {
@@ -204,8 +214,8 @@ describe('WorkCalendar', () => {
       expect(diff).toBeCloseTo(4);
     });
 
-    it('round-trip: workOffset(st, workDiff(st, et)) === et (endOf=end, 23:59:59, skip holidays)', () => {
-      // 用户场景：endOf='end' 将 endTime 补全到 23:59:59，duration 为 fractional 2.999988（覆盖 04-28/29/30 三天）。
+    it('round-trip: workOffset(st, workDiff(st, et)) === et (fractional end, skip holidays)', () => {
+      // 用户场景：结束时间带秒级尾巴（如 23:59:59）时 duration 为 fractional 2.999988（覆盖 04-28/29/30 三天）。
       // workDiff 保留 6 位小数（4 位会进位成 3），workOffset 的小数部分对齐到秒，
       // workOffset(st, 2.999988) 还原 et = 04-30 23:59:59，而不是跳过 05-01~04 假期到 05-05。
       // 2025-04-28(周一) ~ 2025-04-30(周三) 23:59:59，05-01~03 假期，05-04 周日

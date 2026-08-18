@@ -383,8 +383,15 @@ export class HeaderLayer {
     const startCell = this.cellCache.get(
       `cell-${task?.startTime?.format("YYYY-MM-DD-HH")}`
     );
+
+    // 高亮任务覆盖的最后一个格子：结束时间可能是尾单位最后一秒（含尾），
+    // 也可能是下一单位起点（排他），右缘退 1 毫秒再落格；
+    // 零时长（里程碑）不退，直接落在起始格子
+    const lastCellTime = task!.endTime!.isAfter(task!.startTime!)
+      ? task!.endTime!.subtract(1, "millisecond")
+      : task!.endTime!;
     const endCell = this.cellCache.get(
-      `cell-${task?.endTime?.format("YYYY-MM-DD-HH")}`
+      `cell-${lastCellTime.format("YYYY-MM-DD-HH")}`
     );
 
     const bgColor =

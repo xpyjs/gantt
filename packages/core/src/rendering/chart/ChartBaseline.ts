@@ -145,8 +145,8 @@ export class ChartBaseline {
           if (!bl.validate()) return;
 
           const left = this.context.store.getTimeAxis().getTimeLeft(bl.startTime!);
-          // 基线条按展示端绘制，与任务条的 endOf 语义保持一致
-          const right = this.context.store.getTimeAxis().getTimeLeft(bl.getDisplayEndTime()!);
+          // 基线条与任务条同为含尾末尾（endOf 解析时已生效）
+          const right = this.context.store.getTimeAxis().getTimeLeft(bl.endTime!);
           const group = new Konva.Group({ id: `baseline-group-${bl.id}` });
 
           // 按照模式渲染基线
@@ -333,7 +333,7 @@ export class ChartBaseline {
     let color = options.backgroundColor;
 
     const taskLeft = this.context.store.getTimeAxis().getTimeLeft(task.startTime!);
-    const taskRight = this.context.store.getTimeAxis().getTimeLeft(task.getDisplayEndTime()!);
+    const taskRight = this.context.store.getTimeAxis().getTimeLeft(task.endTime!);
     let y = (rowHeight - height) / 2 + rowHeight * task.flatIndex + headerHeight;
 
     // 指示器的位置
