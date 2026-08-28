@@ -4,8 +4,9 @@ import type { IOptions, ILink, ErrorType, Dayjs } from "@xpyjs/gantt-core";
 export type XGanttVueEmits = {
   loaded: [];
   error: [error: ErrorType];
-  "update:link": [link: ILink];
+  "update:link": [link: ILink, old: ILink];
   "create:link": [link: ILink];
+  "delete:link": [link: ILink];
   "select:link": [add: ILink | null, cancel: ILink | null, all: ILink[]];
   "contextmenu:link": [e: MouseEvent, link: ILink];
   select: [data: any[], checked: boolean, all: any[]];
