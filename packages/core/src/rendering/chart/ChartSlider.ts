@@ -144,8 +144,9 @@ export class ChartSlider {
           let max = _end + this.offsetX - this.slider.width();
 
           // 严格父级模式下，移动时需要判定不能超过父级边界
+          // split 父的时间是段的包络派生值，随段移动，不能反向约束段
           const parent = this.context.getOptions().bar.move.link.parent;
-          if (parent === "strict" && this.task.parent) {
+          if (parent === "strict" && this.task.parent && !this.task.parent.isSplit()) {
             if (this.task.parent.startTime) {
               const parentStart = this.task.parent.startTime;
               const parentLeft = this.context.store
@@ -159,6 +160,16 @@ export class ChartSlider {
                 .getTimeAxis()
                 .getTimeLeft(parentEnd);
               max = Math.abs(parentRight - this.slider.width());
+            }
+          }
+
+          // forbid 策略：段移动不能越过相邻段边界（与数据层夹取一致）。
+          // 视觉钳制让段顶住边界后保持静止，鼠标移回有效范围后恢复移动
+          if (this.isDragging) {
+            const fb = this.getForbidPixelBounds();
+            if (fb) {
+              min = Math.max(min, fb.minX);
+              max = Math.min(max, fb.maxX);
             }
           }
           return {
@@ -782,6 +793,66 @@ export class ChartSlider {
   }
 
   /**
+   * forbid 策略下相邻段的边界时间
+   *
+   * 左边界 = 左侧相邻段的最晚结束，右边界 = 右侧相邻段的最早开始。
+   * 判定基准与 DataManager.clampSegmentByOverlap 一致（当前任务时间）：
+   * 结束不晚于段起始的是左段、开始不早于段结束的是右段，
+   * 初始就交叠的段不参与约束（避免无解交叠中死锁）。
+   * 其他策略 / 非段任务返回 null，不产生任何约束
+   */
+  private getForbidNeighborBounds(): {
+    left: Dayjs | null;
+    right: Dayjs | null;
+  } | null {
+    const options = this.context.getOptions();
+    if (options.split?.overlap !== "forbid") return null;
+
+    const parent = this.task.parent;
+    if (!parent?.isSplit()) return null;
+    if (!this.task.startTime || !this.task.endTime) return null;
+
+    let left: Dayjs | null = null;
+    let right: Dayjs | null = null;
+    parent.getSegments().forEach(seg => {
+      if (seg.id === this.task.id || !seg.startTime || !seg.endTime) return;
+
+      if (seg.endTime.isSameOrBefore(this.task.startTime)) {
+        if (!left || seg.endTime.isAfter(left)) left = seg.endTime;
+      } else if (seg.startTime.isSameOrAfter(this.task.endTime)) {
+        if (!right || seg.startTime.isBefore(right)) right = seg.startTime;
+      }
+    });
+    return { left, right };
+  }
+
+  /**
+   * forbid 策略下整条段（移动拖拽）可停留的像素区间
+   *
+   * 用于拖拽中的视觉钳制：段顶到相邻段边界后不再跟随鼠标（保持
+   * 静止），鼠标移回有效范围后恢复移动，避免「鼠标位置」与
+   * 「数据位置」交替渲染的闪烁。间隙容不下整条段时钉在当前位置，
+   * 与数据层「放不进间隙保持不动」一致
+   */
+  private getForbidPixelBounds(): { minX: number; maxX: number } | null {
+    const nb = this.getForbidNeighborBounds();
+    if (!nb || (!nb.left && !nb.right)) return null;
+
+    const timeAxis = this.context.store.getTimeAxis();
+    const minX = nb.left ? timeAxis.getTimeLeft(nb.left) : -Infinity;
+    const maxX = nb.right
+      ? timeAxis.getTimeLeft(nb.right) - this.slider.width()
+      : Infinity;
+
+    if (minX > maxX) {
+      if (!this.task.startTime) return null;
+      const cur = timeAxis.getTimeLeft(this.task.startTime);
+      return { minX: cur, maxX: cur };
+    }
+    return { minX, maxX };
+  }
+
+  /**
    * 移动后更新任务时间
    * - 整体移动：锚定 startTime，duration 不变，用 duration 算 endTime
    * - 单侧移动：锚定另一侧，重新计算 duration
@@ -896,6 +967,15 @@ export class ChartSlider {
       const cellWidth = this.context.store.getTimeAxis().getCellWidth();
       const standardValue = getStandardValue(currentX, cellWidth);
       e.target.x(standardValue - this.dragDiffX);
+    }
+
+    // byUnit 吸附可能把位置推过相邻段边界（相位点越界），
+    // 夹回边界保持静止，与 dragBoundFunc 的钳制结果一致。
+    // 端侧段单侧无相邻段时该侧边界为 ±Infinity，通用 clamp 对
+    // 非有限数有保护分支（会错误返回 min 或 0），须用 Math 直接夹取
+    const fb = this.getForbidPixelBounds();
+    if (fb) {
+      e.target.x(Math.max(fb.minX, Math.min(fb.maxX, e.target.x())));
     }
   }
 
@@ -1053,6 +1133,14 @@ export class ChartSlider {
         // 普通移动（在视图内）或方向不匹配
         this.stopAutoExpand();
         this.stopAutoScroll();
+      }
+
+      // 自动滚动的位置补偿可能把段推过相邻段边界，夹回边界。
+      // 端侧段单侧无相邻段时该侧边界为 ±Infinity，通用 clamp 对
+      // 非有限数有保护分支（会错误返回 min 或 0），须用 Math 直接夹取
+      const fb = this.getForbidPixelBounds();
+      if (fb) {
+        e.target.x(Math.max(fb.minX, Math.min(fb.maxX, e.target.x())));
       }
 
       this.emitUpdate("both");
@@ -1250,12 +1338,21 @@ export class ChartSlider {
       }
 
       if (lastX === undefined || lastX !== diffX) {
+        // forbid 策略：缩放边缘不能越过相邻段边界（判定基准为当前
+        // 任务时间，与数据层夹取一致）
+        const nb = this.getForbidNeighborBounds();
         if (direction === "left") {
           // 左缘最晚顶到结束时间前一个单位
           if (targetStartX + diffX + leftScrollDiff <= minLeftEdge + pxTol) {
             if (currentX < stageWidth - this.EDGE_THRESHOLD) {
-              this.slider.width(targetStartWidth - diffX - leftScrollDiff);
-              this.slider.x(targetStartX + diffX + leftScrollDiff);
+              let newX = targetStartX + diffX + leftScrollDiff;
+              if (nb?.left) {
+                const forbidX = timeAxis.getTimeLeft(nb.left);
+                if (newX < forbidX) newX = forbidX;
+              }
+              // 右缘固定（targetStartX + targetStartWidth），宽度随左缘收缩
+              this.slider.width(targetStartWidth - (newX - targetStartX));
+              this.slider.x(newX);
               this.emitUpdate("left");
             }
           }
@@ -1263,7 +1360,12 @@ export class ChartSlider {
           // 右缘最早顶到开始时间后一个单位
           if (targetStartX + targetStartWidth + diffX + rightScrollDiff >= minRightEdge - pxTol) {
             if (currentX > this.EDGE_THRESHOLD) {
-              this.slider.width(targetStartWidth + diffX + rightScrollDiff);
+              let newRight = targetStartX + targetStartWidth + diffX + rightScrollDiff;
+              if (nb?.right) {
+                const forbidX = timeAxis.getTimeLeft(nb.right);
+                if (newRight > forbidX) newRight = forbidX;
+              }
+              this.slider.width(newRight - this.slider.x());
               this.emitUpdate("right");
             }
           }

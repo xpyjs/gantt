@@ -176,13 +176,15 @@ export class BodyGroup {
    * 更新任务
    */
   public updateTask(task: Task) {
-    const row = this.rowsCache.get(`chart-row-${task.id}`);
+    // split 段不占行，更新重定向到父行，由行内同步对应段
+    const rowTask = task.parent?.isSplit() ? task.parent : task;
+    const row = this.rowsCache.get(`chart-row-${rowTask.id}`);
     if (row) {
       row.update(
         0,
-        task.flatIndex * this.context.getOptions().row.height +
+        rowTask.flatIndex * this.context.getOptions().row.height +
         this.context.getOptions().header.height,
-        task
+        rowTask
       );
     }
   }

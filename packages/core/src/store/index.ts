@@ -118,6 +118,10 @@ export class Store {
       });
     }
 
+    if (_options.split?.enabled !== undefined) {
+      this.dataManager.refreshSplitState();
+    }
+
     this.workCalendar.update({
       weekendOpts: this.optionManager.getOptions().weekend,
       holidayOpts: this.optionManager.getOptions().holiday,

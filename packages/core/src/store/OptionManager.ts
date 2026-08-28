@@ -131,7 +131,12 @@ const DEFAULT_OPTIONS: () => IGanttOptions = () => ({
     progress: "progress",
     children: "children",
     duration: 'duration',
-    type: "type"
+    type: "type",
+    split: "split"
+  },
+  split: {
+    enabled: false,
+    overlap: "free"
   },
   selection: {
     enabled: false,

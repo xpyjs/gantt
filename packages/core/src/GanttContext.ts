@@ -176,11 +176,16 @@ export class XGanttContext implements IContext {
     });
 
     this.event.on(EventName.TASK_DRAG_END, (task: Task, old: Task[]) => {
+      const dm = this.store.getDataManager();
       this._emit(
         "move",
         old.map(item => {
           return {
-            row: this.store.getDataManager().getTaskById(item.id)?.data,
+            // 段被 merge 合并移除后 getTaskById 落空，回退指向
+            // 其数据现在所在的段，保证撤销数据（old）始终有 row 可对照
+            row:
+              dm.getTaskById(item.id)?.data ??
+              dm.getMergedSegmentTarget(item.id)?.data,
             old: item.data
           };
         })
@@ -207,12 +212,16 @@ export class XGanttContext implements IContext {
       );
     });
 
-    this.event.on(EventName.UPDATE_LINK, (link: ILink) => {
-      this._emit("update:link", link);
+    this.event.on(EventName.UPDATE_LINK, (link: ILink, old: ILink) => {
+      this._emit("update:link", link, old);
     });
 
     this.event.on(EventName.CREATE_LINK, (link: ILink) => {
       this._emit("create:link", link);
+    });
+
+    this.event.on(EventName.DELETE_LINK, (link: ILink) => {
+      this._emit("delete:link", link);
     });
 
     this.event.on(

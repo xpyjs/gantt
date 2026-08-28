@@ -11,7 +11,7 @@ import { EventName, ErrorType, type EventBus } from "../event";
 import { Task } from "../models/Task";
 import type { Store } from ".";
 import { Baseline } from "../models/Baseline";
-import { remove } from "lodash-es";
+import { cloneDeep, remove } from "lodash-es";
 import { Logger } from "../utils/logger";
 
 export class DataManager {
@@ -57,6 +57,13 @@ export class DataManager {
   private _leftTime?: Dayjs;
   private _rightTime?: Dayjs;
 
+  /**
+   * 记录被合并移除的段 -> 合并后所在的段（id 映射）。
+   * move 事件的 row 回查用：段被合并后 getTaskById 落空，
+   * 通过该映射兜底指向其数据现在的归属
+   */
+  private mergedSegmentTargets: Map<string, string> = new Map();
+
   constructor(private store: Store, private event: EventBus) { }
 
   /**
@@ -79,6 +86,7 @@ export class DataManager {
       this.tasks = [];
       this.taskMap.clear();
       this.collapsedTaskIds.clear();
+      this.mergedSegmentTargets.clear();
 
       this.rawData.forEach(data => {
         this.tasks.push(this.createTask(data));
@@ -110,6 +118,9 @@ export class DataManager {
 
     this.taskMap.set(task.id, task);
     this.dataLevel = Math.max(this.dataLevel, task.level);
+
+    // split 生效时，父任务时间为段的包络派生值
+    task.updateEnvelope();
 
     return task;
   }
@@ -159,6 +170,9 @@ export class DataManager {
           task.children = [];
         }
       }
+
+      // split 生效时，段集合变化后重算包络
+      task.updateEnvelope();
 
       // 将处理好的任务按新顺序加入列表
       tasks.push(task);
@@ -319,6 +333,12 @@ export class DataManager {
     // 从任务映射中移除当前任务
     this.taskMap.delete(id);
     this.collapsedTaskIds.delete(id);
+
+    // 被删除的是 split 段时，父包络收缩
+    if (task.parent?.isSplit()) {
+      task.parent.updateEnvelope();
+    }
+
     this.invalidateCache(); // 删除任务后，缓存失效
     this.event.emit(EventName.DATA_UPDATE);
     return res;
@@ -421,6 +441,14 @@ export class DataManager {
       return false;
     }
 
+    // split 任务没有展开语义，子级永远内联渲染
+    if (task.isSplit()) {
+      Logger.warn(
+        `Task [${id}] is a split task. Its children always render inline and cannot be expanded.`
+      );
+      return false;
+    }
+
     task.expanded = !task.expanded;
 
     if (!task.expanded) {
@@ -501,6 +529,15 @@ export class DataManager {
         result.push(task);
       }
 
+      // split 生效：子级作为段内联渲染在当前行，永不拍平为独立行。
+      // 段的 flatIndex 与父保持一致（连线、基线的 Y 坐标依赖 flatIndex）
+      if (task.isSplit()) {
+        task.children.forEach(seg => {
+          seg.flatIndex = task.flatIndex;
+        });
+        return;
+      }
+
       if (task.expanded && task.children && task.children.length > 0) {
         task.children.forEach(child => processTask(child, isParentExpanded));
       }
@@ -512,6 +549,24 @@ export class DataManager {
     this.visibleTasksCache = result;
     this.isDirty = false;
 
+    return result;
+  }
+
+  /**
+   * 获取可渲染任务列表：可见行任务 + split 内联段
+   *
+   * @description 行渲染（图表行/表格行）使用 {@link getVisibleTasks}，
+   * @description 段不占行；连线锚点与基线渲染使用本方法，段可获得与父行
+   * @description 一致的定位（flatIndex 已预置）
+   */
+  getRenderTasks(): Task[] {
+    const result: Task[] = [];
+    this.getVisibleTasks().forEach(task => {
+      result.push(task);
+      if (task.isSplit()) {
+        result.push(...task.getSegments());
+      }
+    });
     return result;
   }
 
@@ -581,6 +636,19 @@ export class DataManager {
    */
   private invalidateCache(): void {
     this.isDirty = true;
+  }
+
+  /**
+   * 重新应用 split 语义
+   *
+   * @description `split.enabled` 运行时切换后调用：重算所有任务的包络
+   * @description 并使可见列表缓存失效
+   */
+  refreshSplitState(): void {
+    this.getTasks(false).forEach(task => {
+      task.updateEnvelope();
+    });
+    this.invalidateCache();
   }
 
   /**
@@ -692,6 +760,13 @@ export class DataManager {
     // 父级联动
     let parentTask = task.parent;
     while (parent !== "none" && parentTask) {
+      // split 父的起止时间是段的包络派生值，不走 expand/strict 联动，
+      // 由方法末尾的 updateEnvelope 统一精确跟随（可扩可缩）
+      if (parentTask.isSplit()) {
+        parentTask = parentTask.parent;
+        continue;
+      }
+
       if (parent === "expand") {
         let _st = parentTask.startTime || st;
         let _et = parentTask.endTime || et;
@@ -732,7 +807,9 @@ export class DataManager {
     }
 
     // 子级联动
-    let childrenTasks = task.children || [];
+    // split 父的子级是段：父时间是段的包络派生值，直接写入父时间会被
+    // 包络覆盖，段不随父时间缩放/夹取
+    let childrenTasks = task.isSplit() ? [] : task.children || [];
     while (child !== "none" && childrenTasks.length > 0) {
       const _tasks: Task[] = [];
       childrenTasks.forEach(c => {
@@ -855,11 +932,242 @@ export class DataManager {
       childrenTasks = _tasks;
     }
 
+    // forbid 策略：段的新时间被相邻段边界夹取后再写入
+    [st, et] = this.clampSegmentByOverlap(task, st, et, direction);
+
+    // 夹取后与当前时间一致：段被相邻段挡住，本次不产生任何变化。
+    // 跳过写入与事件（不触发重渲染），避免拖拽中「鼠标位置」与
+    // 「数据位置」交替渲染造成的闪烁，视图保持静止，直到产生新的
+    // 有效位置
+    if (task.startTime?.isSame(st) && task.endTime?.isSame(et)) {
+      return;
+    }
+
     if (oldTasks.findIndex(t => t.id === task.id) === -1) {
       oldTasks.push(task.clone());
     }
 
     task.updateTime(st, et, direction === 'left' || direction === 'right');
+
+    // 时间更新后重算 split 包络：父任务是段的派生值，直接写入的时间
+    // 会被包络覆盖，保证「数据 = 视图」的一致性。
+    // isSplit 保证段无子级，因此 split 祖先至多一层（task 或其直接父）
+    if (task.isSplit()) {
+      task.updateEnvelope();
+    }
+    let splitParent = task.parent;
+    while (splitParent) {
+      if (splitParent.isSplit()) {
+        // merge 策略在拖拽结束（fitTaskTime）时统一执行，拖拽过程中
+        // 段保持分离、可自由移动；这里只跟随重算包络
+        splitParent.updateEnvelope();
+        break;
+      }
+      splitParent = splitParent.parent;
+    }
+  }
+
+  /**
+   * forbid 策略：段的新时间被相邻段的边界夹取
+   *
+   * @description 仅当 `split.overlap` 为 `forbid` 且 task 是段时生效。
+   * @description 相邻段的左右判定以拖拽前的位置为基准（段不会相互穿越）：
+   * @description 结束不晚于段原起始的是左段，开始不早于段原结束的是右段；
+   * @description 初始数据就交叠的段不参与夹取，避免在无解的交叠中死锁。
+   * @description 夹取允许贴边（共享边界时刻），夹取后若跨度塌缩为非正
+   * @description（间隙容不下该段），保持原时间不动。
+   */
+  private clampSegmentByOverlap(
+    task: Task,
+    st: Dayjs,
+    et: Dayjs,
+    direction?: "left" | "right" | "both",
+    basis?: { start?: Dayjs; end?: Dayjs }
+  ): [Dayjs, Dayjs] {
+    const options = this.store.getOptionManager().getOptions();
+    if (options.split?.overlap !== "forbid") return [st, et];
+
+    const splitParent = task.parent;
+    if (!splitParent?.isSplit()) return [st, et];
+
+    // 左右段判定基准：拖拽场景是 task 当前时间（尚未写入新值）；
+    // 工作日适配场景 task 时间已被 fitWork 改写，需显式传入适配前位置
+    const oldSt = basis?.start || task.startTime;
+    const oldEt = basis?.end || task.endTime;
+    if (!oldSt || !oldEt) return [st, et];
+
+    let leftBound: Dayjs | null = null;
+    let rightBound: Dayjs | null = null;
+    splitParent.getSegments().forEach(seg => {
+      if (seg.id === task.id || !seg.startTime || !seg.endTime) return;
+
+      if (seg.endTime.isSameOrBefore(oldSt)) {
+        if (!leftBound || seg.endTime.isAfter(leftBound)) {
+          leftBound = seg.endTime;
+        }
+      } else if (seg.startTime.isSameOrAfter(oldEt)) {
+        if (!rightBound || seg.startTime.isBefore(rightBound)) {
+          rightBound = seg.startTime;
+        }
+      }
+    });
+
+    if (direction === "left") {
+      if (leftBound && st.isBefore(leftBound)) st = leftBound;
+    } else if (direction === "right") {
+      if (rightBound && et.isAfter(rightBound)) et = rightBound;
+    } else {
+      // 整体移动：保持时长平移，优先满足左边界，再回退右边界
+      const duration = et.diff(st);
+      if (leftBound && st.isBefore(leftBound)) {
+        st = leftBound;
+        et = st.add(duration);
+      }
+      if (rightBound && et.isAfter(rightBound)) {
+        et = rightBound;
+        st = et.subtract(duration);
+      }
+      // 右边界回退可能重新压过左边界（间隙小于段时长），
+      // 此时该段放不进间隙，保持当前时间不动
+      if (leftBound && st.isBefore(leftBound)) {
+        return [task.startTime!, task.endTime!];
+      }
+    }
+
+    if (st.isSameOrAfter(et)) {
+      // 间隙容不下该段，保持 task 当前时间（拖拽前 / 适配后）不动
+      return [task.startTime!, task.endTime!];
+    }
+
+    return [st, et];
+  }
+
+  /**
+   * merge 策略：段接触或交叠时自动合并为一个段
+   *
+   * @description 仅当 `split.overlap` 为 `merge` 时生效。按开始时间排序
+   * @description 依次检查相邻段对，接触（共享边界时刻）或交叠即合并：
+   * @description 保留前段位置，取两段的更宽范围，被合并的段从父级与
+   * @description 原始数据中移除；链式交叠会迭代合并至稳定。
+   * @description 合并在拖拽结束（fitTaskTime）时统一执行，鼠标未松开前
+   * @description 段保持分离状态。
+   */
+  private mergeSegmentOverlaps(
+    splitParent: Task,
+    oldTasks: Task[]
+  ): boolean {
+    const options = this.store.getOptionManager().getOptions();
+    if (options.split?.overlap !== "merge") return false;
+    if (!splitParent.isSplit()) return false;
+
+    let mergedAny = false;
+    let merged = true;
+    while (merged) {
+      merged = false;
+      const segments = splitParent.getSegments();
+      for (let i = 1; i < segments.length; i++) {
+        const prev = segments[i - 1];
+        const cur = segments[i];
+        if (!prev.startTime || !prev.endTime || !cur.startTime || !cur.endTime) {
+          continue;
+        }
+
+        if (cur.startTime.isSameOrBefore(prev.endTime)) {
+          const newEnd = prev.endTime.isAfter(cur.endTime)
+            ? prev.endTime
+            : cur.endTime;
+
+          if (oldTasks.findIndex(t => t.id === prev.id) === -1) {
+            oldTasks.push(prev.clone());
+          }
+          if (oldTasks.findIndex(t => t.id === cur.id) === -1) {
+            oldTasks.push(cur.clone());
+          }
+
+          prev.updateTime(prev.startTime, newEnd, true);
+          this.mergedSegmentTargets.set(cur.id, prev.id);
+
+          // 连线重定向：被合并段的连线转移到保留段，避免死引用。
+          // 重定向就是普通的连线变更，逐条以 update/delete 事件即时
+          // 抛出（携带变更前旧数据快照）：updated 走 UPDATE_LINK，
+          // 自连/重复/成环被移除的走 DELETE_LINK；没有连线受影响时
+          // 不抛任何事件。链式合并中同一连线可能先后经历多次变更，
+          // 每次事件均为当时的真实状态，撤销时逆序应用各事件的旧
+          // 数据即可完整还原
+          const redirect = this.store
+            .getLinkManager()
+            .redirectTaskLinks(cur.id, prev.id);
+          for (const removedLink of redirect.removed) {
+            this.event.emit(EventName.DELETE_LINK, cloneDeep(removedLink));
+          }
+          for (const { link, old } of redirect.updated) {
+            this.event.emit(
+              EventName.UPDATE_LINK,
+              cloneDeep(link),
+              cloneDeep(old)
+            );
+          }
+
+          this.removeSegment(splitParent, cur);
+          mergedAny = true;
+          merged = true;
+          break; // 段集合已变化，重新排序检查
+        }
+      }
+    }
+
+    // 合并改变了段集合（有段被移除），需要一次行级刷新让视图同步：
+    // 上面 prev 的 UPDATE_TASK 触发段同步时被合并的段还在数据中，
+    // 其滑块不会被销毁；包络不变（如合并中间段）时 updateEnvelope
+    // 也不抛事件，视图会停留在旧状态直到下次全量刷新
+    if (mergedAny) {
+      this.event.emit(EventName.UPDATE_TASK, splitParent);
+    }
+
+    return mergedAny;
+  }
+
+  /**
+   * 查询段被合并进了哪个任务
+   *
+   * @description move 事件（撤销数据契约）的 row 回查兜底：段被 merge
+   * @description 移除后 getTaskById 落空，通过该映射指向其数据现在的
+   * @description 归属段。未被合并移除的段返回 undefined
+   */
+  getMergedSegmentTarget(id: string): Task | undefined {
+    const targetId = this.mergedSegmentTargets.get(id);
+    if (!targetId) return undefined;
+    return this.taskMap.get(targetId);
+  }
+
+  /**
+   * 从 split 父级移除一个段（merge 合并的内部操作）
+   *
+   * @description 同步清理 Task 树、原始数据与任务映射；
+   * @description 渲染刷新由合并段的 updateTime 事件链自动触发
+   * @description （ChartRow 的段同步会移除该段的滑块）
+   */
+  private removeSegment(splitParent: Task, segment: Task): void {
+    const fields = this.store.getOptionManager().getOptions().fields;
+
+    const idx = splitParent.children.findIndex(s => s.id === segment.id);
+    if (idx > -1) {
+      splitParent.children.splice(idx, 1);
+    }
+
+    const parentData = splitParent.data[fields.children];
+    if (Array.isArray(parentData)) {
+      const di = parentData.findIndex(
+        (t: any) => t[fields.id] === segment.id
+      );
+      if (di > -1) {
+        parentData.splice(di, 1);
+      }
+    }
+
+    this.taskMap.delete(segment.id);
+    this.collapsedTaskIds.delete(segment.id);
+    this.invalidateCache();
   }
 
   /**
@@ -871,6 +1179,10 @@ export class DataManager {
     oldTasks: Task[] = [] // 用于存储旧任务列表
   ) {
     if (!task.startTime) return;
+
+    // forbid 夹取的左右段判定以适配前的位置为基准
+    const preFitSt = task.startTime;
+    const preFitEt = task.endTime;
 
     // 按照适配更新当前任务值
     task.fitWork(direction);
@@ -943,6 +1255,36 @@ export class DataManager {
 
     // 更新时间边界
     this.updateTimeBoundary(leftTime, rightTime);
+
+    // 工作日适配后重算 split 包络（task 自身或祖先为 split 父时）
+    if (task.isSplit()) {
+      task.updateEnvelope();
+    }
+    let splitParent = task.parent;
+    while (splitParent) {
+      if (splitParent.isSplit()) {
+        // forbid 策略：工作日适配可能把段推入相邻段，夹取回边界
+        if (task.startTime && task.endTime) {
+          const [st, et] = this.clampSegmentByOverlap(
+            task,
+            task.startTime,
+            task.endTime,
+            "both",
+            { start: preFitSt, end: preFitEt }
+          );
+          if (!st.isSame(task.startTime) || !et.isSame(task.endTime)) {
+            task.updateTime(st, et);
+          }
+        }
+        // merge 策略：拖拽结束（鼠标松开）时统一合并。
+        // 拖拽过程中段保持分离、可自由穿越；此处处理松开前形成的
+        // 接触/交叠，以及工作日适配造成的接触/交叠
+        this.mergeSegmentOverlaps(splitParent, oldTasks);
+        splitParent.updateEnvelope();
+        break;
+      }
+      splitParent = splitParent.parent;
+    }
   }
 
   //** 基线数据操作 */

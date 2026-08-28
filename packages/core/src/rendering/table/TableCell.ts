@@ -207,7 +207,9 @@ export class TableCell {
     if (
       this.context.getOptions().expand.show &&
       this.task.children &&
-      this.task.children.length > 0
+      this.task.children.length > 0 &&
+      // split 任务的子级内联渲染为同行多段，没有展开语义
+      !this.task.isSplit()
     ) {
       const expandContainer = document.createElement("div");
       expandContainer.className = "x-gantt-table-cell__expand";
