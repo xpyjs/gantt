@@ -2,7 +2,7 @@
  * @Author: JeremyJone
  * @Date: 2025-04-18 10:58:36
  * @LastEditors: JeremyJone
- * @LastEditTime: 2025-11-04 09:48:07
+ * @LastEditTime: 2026-08-28 10:43:04
  * @Description: 事件总线
  */
 
@@ -76,8 +76,8 @@ export enum EventName {
   UPDATE_CHART_HEADER = "update_chart_header",
   UPDATE_TASK = "update_task",
   UPDATE_LINK = "update_link",
-
   CREATE_LINK = "create_link",
+  DELETE_LINK = "delete_link",
 
   // 选中相关
   TASK_SELECTED = "task_selected",

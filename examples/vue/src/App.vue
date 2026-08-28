@@ -7,6 +7,7 @@
       <button @click="jumpToToday">跳转到今天</button>
       <button @click="addTask">添加任务</button>
       <button @click="refreshData">刷新数据</button>
+      <button @click="toggleSplit">切换split({{ splitOptions.enabled ? "开" : "关" }})</button>
     </div>
 
     <div class="gantt-wrapper">
@@ -19,6 +20,7 @@
           chart: chartConfig,
           fields: fieldsConfig,
           links: linksConfig,
+          split: splitOptions,
           primaryColor: primaryColor,
           unit: currentUnit,
           locale: 'zh',
@@ -190,6 +192,28 @@ const ganttData = ref([
     startTime: "2024-04-01",
     endTime: "2024-04-15",
     progress: 0
+  },
+  {
+    id: "5",
+    name: "设备采购（分期）",
+    split: true,
+    progress: 60,
+    children: [
+      {
+        id: "5-s1",
+        name: "第一批采购",
+        startTime: "2024-04-16",
+        endTime: "2024-04-25",
+        progress: 100
+      },
+      {
+        id: "5-s2",
+        name: "第二批采购",
+        startTime: "2024-05-06",
+        endTime: "2024-05-15",
+        progress: 30
+      }
+    ]
   }
 ]);
 
@@ -246,7 +270,9 @@ const linksConfig = reactive({
     { id: "link2", from: "1-2", to: "1-3", type: "FS" },
     { id: "link3", from: "1", to: "2", type: "FS" },
     { id: "link4", from: "2-3", to: "2-1", type: "FS" },
-    { id: "link5", from: "2-3", to: "2-2", type: "FS" }
+    { id: "link5", from: "2-3", to: "2-2", type: "FS" },
+    { id: "link6", from: "4", to: "5-s1", type: "FS" },
+    { id: "link7", from: "5-s1", to: "5-s2", type: "FS" }
   ],
   key: "id",
   show: true,
@@ -268,6 +294,17 @@ const linksConfig = reactive({
   },
   radius: 3
 });
+
+// split 配置
+const splitOptions = reactive({
+  enabled: true,
+  overlap: "free" as const
+});
+
+const toggleSplit = () => {
+  splitOptions.enabled = !splitOptions.enabled;
+  addLog("切换split", { enabled: splitOptions.enabled });
+};
 
 // 事件处理函数
 const onTaskMove = (moved: Array<{ row: any; old: any }>) => {

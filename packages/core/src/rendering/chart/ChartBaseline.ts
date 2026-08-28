@@ -130,7 +130,17 @@ export class ChartBaseline {
     const opacity = this.context.getOptions().baselines.opacity;
     const bgColor = this.context.getOptions().baselines.backgroundColor;
 
+    // split 段不占行，但段可以携带自己的基线：
+    // 段与父行 flatIndex 一致，基线渲染在正确的行上
+    const baselineTasks: Task[] = [];
     this.tasks.forEach(task => {
+      baselineTasks.push(task);
+      if (task.isSplit()) {
+        baselineTasks.push(...task.getSegments());
+      }
+    });
+
+    baselineTasks.forEach(task => {
       if (
         this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, task)
       ) {

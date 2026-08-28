@@ -69,6 +69,14 @@ interface CycleInfo {
   sccs: string[][];
 }
 
+/** 连线重定向结果（merge 合并段时转移连线） */
+export interface LinkRedirectResult {
+  /** 被移除的连线（合并后自连 / 重复 / 成环），为移除前的旧数据 */
+  removed: ILink[];
+  /** 被重定向的连线：link 为重定向后的新数据，old 为重定向前旧数据 */
+  updated: { link: ILink; old: ILink }[];
+}
+
 /** 环检测报告 */
 interface CycleReport extends CycleInfo {
   hasCycle: boolean;
@@ -213,6 +221,100 @@ export class LinkManager {
   /** 更新各种缓存配置 */
   public update() {
     this.setLinks(this.links, true);
+  }
+
+  /**
+   * 将指向 mergedId 的连线端点重定向到 targetId
+   *
+   * @description 用于 merge 策略合并段后转移被合并段的连线，避免死引用：
+   * @description - mergedId 与 targetId 之间的连线合并后变为自连，直接移除
+   * @description - 其余引用 mergedId 的端点替换为 targetId，替换后与其他
+   * @description   连线重复（同端点同类型）或成环的移除
+   * @description 仅重定向数据，不触发视图刷新，由调用方负责。
+   *
+   * @returns removed / updated 均携带重定向前旧数据，供外部同步数据源
+   * @returns 与实现撤销（撤销时用 old 恢复、删除 link）
+   */
+  public redirectTaskLinks(
+    mergedId: string,
+    targetId: string
+  ): LinkRedirectResult {
+    const result: LinkRedirectResult = { removed: [], updated: [] };
+    if (mergedId === targetId || this.links.length === 0) {
+      return result;
+    }
+
+    const unchanged: ILink[] = [];
+    const pending: { link: ILink; old: ILink }[] = [];
+
+    for (const link of this.links) {
+      const from = link.from === mergedId ? targetId : link.from;
+      const to = link.to === mergedId ? targetId : link.to;
+
+      if (from === link.from && to === link.to) {
+        unchanged.push(link);
+        continue;
+      }
+      // mergedId 与 targetId 之间的连线合并后自连，直接移除
+      if (from === to) {
+        result.removed.push(link);
+        continue;
+      }
+      pending.push({ link: { ...link, from, to }, old: link });
+    }
+
+    // 逐条提交重定向连线（顺序遍历，重复时保留先提交者）
+    const newLinks = [...unchanged];
+    for (const item of pending) {
+      const { link } = item;
+      const isDup = newLinks.some(
+        l =>
+          l.from === link.from &&
+          l.to === link.to &&
+          (l.type || "FS") === (link.type || "FS")
+      );
+      if (isDup) {
+        result.removed.push(item.old);
+        continue;
+      }
+      if (this.wouldCycleIn(newLinks, link.from, link.to)) {
+        result.removed.push(item.old);
+        continue;
+      }
+      newLinks.push(link);
+      result.updated.push(item);
+    }
+
+    if (result.removed.length > 0 || result.updated.length > 0) {
+      this.setLinks(newLinks);
+    }
+    return result;
+  }
+
+  /** 在给定连线集合中检查新增 from→to 是否成环（to 经集合可达 from） */
+  private wouldCycleIn(
+    links: ILink[],
+    from: string,
+    to: string
+  ): boolean {
+    const adjacency = new Map<string, string[]>();
+    for (const l of links) {
+      if (!adjacency.has(l.from)) adjacency.set(l.from, []);
+      adjacency.get(l.from)!.push(l.to);
+    }
+
+    const visited = new Set<string>();
+    const stack = [to];
+    while (stack.length > 0) {
+      const current = stack.pop()!;
+      if (current === from) return true;
+      if (visited.has(current)) continue;
+      visited.add(current);
+      for (const next of adjacency.get(current) || []) {
+        stack.push(next);
+      }
+    }
+    return false;
   }
 
   /** 检查连线是否存在 */

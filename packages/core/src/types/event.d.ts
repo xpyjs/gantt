@@ -7,10 +7,17 @@ export interface EventMap {
   loaded: () => void;
   /** 错误事件 */
   error: (error: ErrorType, msg?: string) => void;
-  /** 关联线更新事件 */
-  "update:link": (link: ILink) => void;
+  /** 关联线更新事件。当连线被修改（拖拽连线端点、merge 合并段后
+   * 重定向）时触发。link 为更新后的连线数据，old 为更新前的连线
+   * 数据，二者成对提供，可用于同步外部数据源与实现撤销/重做
+   * （撤销时恢复 old）。 */
+  "update:link": (link: ILink, old: ILink) => void;
   /** 创建关联线事件 */
   "create:link": (link: ILink) => void;
+  /** 关联线删除事件。当连线被移除（merge 合并段后自连/重复/成环）
+   * 时触发。link 为被删除的连线数据（删除前状态），可用于同步外部
+   * 数据源与实现撤销/重做（撤销时重新添加）。 */
+  "delete:link": (link: ILink) => void;
   /** 关联线被选中事件，支持多个选中 */
   "select:link": (
     /** 当前被新选中的关连线 */
@@ -38,7 +45,11 @@ export interface EventMap {
   "dblclick:slider": (e: MouseEvent, data: any) => void;
   /** 任务条右键点击事件 */
   "contextmenu:slider": (e: MouseEvent, data: any) => void;
-  /** 任务拖拽事件。当且仅当任务条拖拽结束时被触发 */
+  /** 任务拖拽事件。当且仅当任务条拖拽结束时被触发。
+   * row 为任务当前数据，old 为拖拽前的旧数据，二者成对提供，
+   * 可用于实现撤销/重做。
+   * split 段被 merge 策略合并移除时，该段的 row 指向合并后
+   * 其数据所在的段（撤销时应将 old 重新插入父级 children） */
   move: (data: { row: any; old: any }[]) => void;
   /** 鼠标移入任务条事件 */
   "enter:slider": (e: MouseEvent, data: any) => void;

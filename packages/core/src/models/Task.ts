@@ -517,6 +517,89 @@ export class Task {
     return false;
   }
 
+  /**
+   * 是否为单行多任务（split）
+   *
+   * 生效条件（全部满足，任一不满足则按普通树形结构处理）：
+   * - 全局 `split.enabled` 开启
+   * - 数据中 split 字段可被判定为真（Boolean 语义，任意真值均可）
+   * - 任务类型为普通 task（非 summary / milestone）
+   * - 存在直接子级，且子级均无自己的子级（无更深层级）
+   */
+  public isSplit(): boolean {
+    const options = this.store.getOptionManager().getOptions();
+    if (options.split?.enabled !== true) return false;
+
+    const splitField = this.fields.split;
+    if (!splitField || !this.data[splitField]) return false;
+
+    if (this.type !== "task") return false;
+
+    if (!this.children || this.children.length === 0) return false;
+
+    return this.children.every(
+      c => !c.children || c.children.length === 0
+    );
+  }
+
+  /**
+   * 获取段列表（split 任务的直接子级）
+   *
+   * @description 按 startTime 升序排列，缺失时间的段排在末尾。
+   * @description 排序仅用于渲染顺序与包络锚点，段与段之间没有语义上的先后依赖
+   */
+  public getSegments(): Task[] {
+    if (!this.isSplit()) return [];
+
+    return [...this.children].sort((a, b) => {
+      if (a.startTime && b.startTime) {
+        return a.startTime.valueOf() - b.startTime.valueOf();
+      }
+      if (a.startTime) return -1;
+      if (b.startTime) return 1;
+      return 0;
+    });
+  }
+
+  /**
+   * 由段时间极值更新父任务包络
+   *
+   * @description 父任务的起止时间是段的派生值：startTime = min(段.start)，
+   * @description endTime = max(段.end)。写回 data 并按现有机制抛出更新事件。
+   * @description 无有效段（全部缺失时间或无子级）时保持原值并告警。
+   * @returns 包络是否发生变化
+   */
+  public updateEnvelope(): boolean {
+    if (!this.isSplit()) return false;
+
+    const segments = this.children.filter(c => c.startTime && c.endTime);
+    if (segments.length === 0) {
+      Logger.warn(
+        `Task [${this.id}] is marked as split but has no segment with valid time range.`
+      );
+      return false;
+    }
+
+    let start = segments[0].startTime!;
+    let end = segments[0].endTime!;
+    segments.forEach(seg => {
+      if (seg.startTime!.isBefore(start)) start = seg.startTime!;
+      if (seg.endTime!.isAfter(end)) end = seg.endTime!;
+    });
+
+    const changed =
+      !this.startTime ||
+      !this.endTime ||
+      !this.startTime.isSame(start) ||
+      !this.endTime.isSame(end);
+
+    if (changed) {
+      this.updateTime(start, end, true);
+    }
+
+    return changed;
+  }
+
   public isSomeoneChildren(parent: Task | undefined): boolean {
     let p = parent;
     while (p) {

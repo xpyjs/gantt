@@ -322,11 +322,12 @@ gantt.on('click:row', (event, rowData, time) => {
 });`,
 
   // 更新依赖关系事件
-  updateLinkEvent: `gantt.on('update:link', (link) => {
+  updateLinkEvent: `gantt.on('update:link', (link, old) => {
   console.log('更新依赖关系:', link);
+  console.log('更新前的依赖关系:', old);
 
   // 在数据源中更新
-  const index = links.findIndex(l => l.id === link.id);
+  const index = links.findIndex(l => l.id === old.id);
   if (index !== -1) {
     links[index] = link;
 
@@ -335,6 +336,20 @@ gantt.on('click:row', (event, rowData, time) => {
 
     // 显示更新提示
     showInfo('依赖关系已更新');
+  }
+});`,
+
+  // 删除依赖关系事件
+  deleteLinkEvent: `gantt.on('delete:link', (link) => {
+  console.log('删除依赖关系:', link);
+
+  // 从数据源中移除
+  const index = links.findIndex(l => l.id === link.id);
+  if (index !== -1) {
+    links.splice(index, 1);
+
+    // 同步到服务器
+    deleteLinkOnServer(link.id);
   }
 });`,
 
@@ -442,6 +457,7 @@ gantt.on('click:row', (event, rowData, time) => {
       @move="handleMove"
       @create:link="handleCreateLink"
       @update:link="handleUpdateLink"
+      @delete:link="handleDeleteLink"
       @select:link="handleSelectLink"
       @contextmenu:link="handleContextMenuLink"
       @error="handleError"
@@ -529,6 +545,7 @@ const GanttComponent: React.FC = () => {
       onMove={handleMove}
       onCreateLink={handleCreateLink}
       onUpdateLink={handleUpdateLink}
+      onDeleteLink={handleDeleteLink}
       onSelectLink={handleSelectLink}
       onContextMenuLink={handleContextMenuLink}
       onError={handleError}
@@ -560,6 +577,7 @@ class GanttEventManager {
     // 依赖关系事件
     this.gantt.on('create:link', this.handleCreateLink.bind(this));
     this.gantt.on('update:link', this.handleUpdateLink.bind(this));
+    this.gantt.on('delete:link', this.handleDeleteLink.bind(this));
     this.gantt.on('select:link', this.handleSelectLink.bind(this));
     this.gantt.on('contextmenu:link', this.handleContextMenuLink.bind(this));
 
@@ -1155,19 +1173,52 @@ export const eventsPageConfig: EventsPageConfig = {
           id: "update:link",
           name: "update:link",
           type: "更新依赖关系",
-          description: "依赖关系被修改时触发",
-          trigger: "依赖关系被修改时",
+          description: "依赖关系被修改时触发。携带更新前后的数据快照，可直接用于实现撤销/重做",
+          trigger: "拖拽连线端点修改依赖关系，或 split 段合并（merge 策略）后连线重定向时",
           parameters: [
             {
               name: "linkData",
               type: "ILink",
               description: "更新后的依赖关系数据"
+            },
+            {
+              name: "old",
+              type: "ILink",
+              description: "更新前的依赖关系数据（变更前快照），可用于实现撤销"
             }
+          ],
+          notes: [
+            "split 段以 merge 策略合并时，指向被合并段的连线会重定向到保留段，每条重定向连线都会触发一次该事件",
+            "连线变更先于 move 事件触发，可将两者合并为同一次拖拽的撤销步骤"
           ],
           examples: [
             {
               framework: "javascript",
               code: codeExamples.updateLinkEvent,
+              language: "javascript"
+            }
+          ]
+        },
+        {
+          id: "delete:link",
+          name: "delete:link",
+          type: "删除依赖关系",
+          description: "依赖关系被删除时触发。携带被删除连线的完整数据，可直接用于实现撤销/重做",
+          trigger: "split 段合并（merge 策略）后，产生自连、重复或成环的连线被移除时",
+          parameters: [
+            {
+              name: "linkData",
+              type: "ILink",
+              description: "被删除的依赖关系数据（删除前快照），可用于实现撤销"
+            }
+          ],
+          notes: [
+            "目前由 split 段合并触发；重定向后的连线更新通过 update:link 事件单独抛出"
+          ],
+          examples: [
+            {
+              framework: "javascript",
+              code: codeExamples.deleteLinkEvent,
               language: "javascript"
             }
           ]

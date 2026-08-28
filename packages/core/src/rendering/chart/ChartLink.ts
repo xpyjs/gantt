@@ -76,6 +76,16 @@ export class LinkGroup {
    * 注册事件
    */
   private registerEvents(): void {
+    // 连线数据变更（拖拽端点修改、merge 合并段后重定向/移除）后
+    // 局部更新（updateTask）依赖按任务 id 查询当前连线集合，查不到
+    // 已变更的旧连线，旧节点会残留，因此走全量重绘统一清理与重建
+    this.context.event.on(EventName.UPDATE_LINK, () => {
+      this.calculateLinks();
+    });
+    this.context.event.on(EventName.DELETE_LINK, () => {
+      this.calculateLinks();
+    });
+
     // 监听行高亮事件
     this.context.event.on(EventName.ROW_HIGHLIGHT, (id: string) => {
       this.highlightPoint(id);
@@ -167,9 +177,15 @@ export class LinkGroup {
     }
 
     if (currentTask) {
-      // 仅更新该任务的点
-      this.pointGroup.findOne(`#point-${currentTask.id}-left`)?.destroy();
-      this.pointGroup.findOne(`#point-${currentTask.id}-right`)?.destroy();
+      // 仅更新该任务的点（split 父联动其全部段）
+      const ids = [currentTask.id];
+      if (currentTask.isSplit()) {
+        currentTask.getSegments().forEach(seg => ids.push(seg.id));
+      }
+      ids.forEach(id => {
+        this.pointGroup.findOne(`#point-${id}-left`)?.destroy();
+        this.pointGroup.findOne(`#point-${id}-right`)?.destroy();
+      });
     } else {
       // 清除现有点组
       this.pointGroup.destroyChildren();
@@ -190,8 +206,30 @@ export class LinkGroup {
       .toHex();
     const strokeWidth = this.context.getOptions().links.create.width;
 
+    // split 段不占行，但拥有独立的连线锚点：Y 与父行一致（flatIndex 相同），
+    // X 取段自身的时间边界，支持段与任意任务之间建立依赖。
+    // split 父自身不渲染条形，不创建锚点，避免出现无条形依托的悬空连接点
+    const pointTasks: Task[] = [];
     this.tasks.forEach(task => {
-      if (currentTask && task.id !== currentTask.id) return;
+      if (task.isSplit()) {
+        pointTasks.push(...task.getSegments());
+      } else {
+        pointTasks.push(task);
+      }
+    });
+
+    // 更新单个任务时，split 父的锚点更新需联动其全部段
+    // （段时间变化由包络派生反向触达父更新路径）
+    let currentIds: Set<string> | null = null;
+    if (currentTask) {
+      currentIds = new Set([currentTask.id]);
+      if (currentTask.isSplit()) {
+        currentTask.getSegments().forEach(seg => currentIds!.add(seg.id));
+      }
+    }
+
+    pointTasks.forEach(task => {
+      if (currentIds && !currentIds.has(task.id)) return;
 
       if (
         this.context.store.getOptionManager().unpackFunc(this.context.getOptions().bar.show, task) &&
@@ -700,6 +738,16 @@ export class LinkGroup {
       0.05 + y + rowHeight * fromTask.flatIndex
     ];
 
+    // 同一行（split 段间连线）：没有相邻行可绕，纵向折返会垂到行外，
+    // 直接直线连接。返回三个共线点，保证渲染层拆分前后两半段都可绘制
+    if (fromTask.flatIndex === toTask.flatIndex) {
+      const yTo = y + rowHeight * toTask.flatIndex;
+      const endX = toX - gap;
+      points.push(...[(fromEnd + gap + endX) / 2, yTo]);
+      points.push(...[endX, yTo]);
+      return points;
+    }
+
     // 过程点
     {
       const distance: number = link.distance
@@ -871,6 +919,16 @@ export class LinkGroup {
       fromX - gap,
       0.05 + y + rowHeight * fromTask.flatIndex
     ];
+
+    // 同一行（split 段间连线）：没有相邻行可绕，纵向折返会垂到行外，
+    // 直接直线连接。返回三个共线点，保证渲染层拆分前后两半段都可绘制
+    if (fromTask.flatIndex === toTask.flatIndex) {
+      const yTo = y + rowHeight * toTask.flatIndex;
+      const endX = toEnd + gap;
+      points.push(...[(fromX - gap + endX) / 2, yTo]);
+      points.push(...[endX, yTo]);
+      return points;
+    }
 
     // 过程点
     {
@@ -1054,9 +1112,14 @@ export class LinkGroup {
           (_link.type?.slice(1) === "S" && allowLeft) ||
           (_link.type?.slice(1) === "F" && allowRight)
         ) {
-          this.context.event.emit(EventName.UPDATE_LINK, _link);
+          // 携带变更前旧数据成对抛出，供外部同步数据源与实现撤销。
+          // 连线重绘由 UPDATE_LINK 监听统一触发，无需在此显式调用
+          this.context.event.emit(
+            EventName.UPDATE_LINK,
+            _link,
+            cloneDeep(link)
+          );
           this.context.store.getLinkManager().update();
-          this.calculateLinks();
         } else {
           this.context.event.emit(EventName.ERROR, reason || ErrorType.LINK_NOT_ALLOWED);
         }
@@ -1246,7 +1309,32 @@ export class LinkGroup {
     );
 
     const visibleTasks = this.context.store.getDataManager().getVisibleTasks();
-    return visibleTasks[flatIndex] || null;
+    const rowTask = visibleTasks[flatIndex] || null;
+    if (!rowTask) return null;
+
+    // split 行不渲染父条形，按 x 坐标定位到中点距离最近的段，
+    // 使拖拽连线可以精确落在某个段上
+    if (rowTask.isSplit()) {
+      const segments = rowTask
+        .getSegments()
+        .filter(seg => seg.startTime && seg.endTime);
+      if (segments.length === 0) return null;
+
+      const adjustedX = pos.x - this.offsetX;
+      const timeAxis = this.context.store.getTimeAxis();
+      const midOf = (seg: Task) =>
+        (timeAxis.getTimeLeft(seg.startTime!) +
+          timeAxis.getTimeLeft(seg.endTime!)) /
+        2;
+
+      return segments.reduce((nearest, seg) =>
+        Math.abs(adjustedX - midOf(seg)) < Math.abs(adjustedX - midOf(nearest))
+          ? seg
+          : nearest
+      );
+    }
+
+    return rowTask;
   }
 
   /**

@@ -49,6 +49,7 @@ const registerEventListeners = () => {
     "error",
     "update:link",
     "create:link",
+    "delete:link",
     "select:link",
     "contextmenu:link",
     "select",

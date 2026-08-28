@@ -323,6 +323,21 @@ export const demoCategories: DemoCategory[] = [
         ]
       },
       {
+        id: "split-segment",
+        title: "单行多任务（split）",
+        description: "将任务的子级作为多个时间段渲染在同一行，支持运行时开关、重叠策略切换与基于 move / update:link / delete:link 事件的撤销",
+        category: "advanced",
+        difficulty: "advanced",
+        tags: ["单行多任务", "split", "segment", "撤销", "高级"],
+        code: [
+          {
+            framework: "javascript",
+            language: "typescript",
+            path: "advanced/split-segment/javascript"
+          }
+        ]
+      },
+      {
         id: "cell-render",
         title: "表格的自定义渲染",
         description: "利用高级配置实现表格的自定义渲染",

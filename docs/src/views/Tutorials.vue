@@ -180,6 +180,27 @@ onUnmounted(() => {
 .tutorials-sidebar {
   position: sticky;
   top: 100px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+/* 滚动条样式 */
+.tutorials-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tutorials-sidebar::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.tutorials-sidebar::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.tutorials-sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
 }
 
 .tutorials-nav {
@@ -413,6 +434,8 @@ code:not(pre code) {
 
   .tutorials-sidebar {
     position: static;
+    max-height: none;
+    overflow-y: visible;
   }
 
   .tutorials-nav {

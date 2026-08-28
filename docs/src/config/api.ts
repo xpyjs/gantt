@@ -1179,6 +1179,16 @@ export const apiItems: ApiItem[] = [
         description: "进度字段名"
       },
       {
+        id: "fields-split",
+        key: "split",
+        title: "单行多任务标记字段",
+        type: "string",
+        defaultValue: "'split'",
+        badge: { type: 'new', label: 'v0.1.3' },
+        description:
+          "单行多任务（split）标记字段名。仅当全局 <code>split.enabled</code> 开启时生效；数据中该字段可被判定为真的任务，其直接子级将内联渲染为同一行的多个时间段"
+      },
+      {
         id: "fields-startTime",
         key: "startTime",
         title: "开始时间字段",
@@ -2285,6 +2295,39 @@ export const apiItems: ApiItem[] = [
         type: "boolean",
         defaultValue: "true",
         description: "右键点击时是否包含自身"
+      }
+    ]
+  },
+  {
+    id: "split",
+    key: "split",
+    title: "单行多任务配置",
+    type: "object",
+    description:
+      "单行多任务（split）配置。开启后，数据中 <code>split</code> 字段（字段名可通过 <code>fields.split</code> 配置）为真值的任务，其直接子级将作为多个时间段（段，segment）内联渲染在同一行中，而非树形展开。父任务起止时间无需提供，由所有段的最早开始与最晚结束自动派生（包络）。生效条件：任务类型为普通 task、存在直接子级且无更深层级；标记了 split 的任务不渲染展开按钮，其展开相关配置不生效。可通过 <code>update()</code> 在运行时动态开关",
+    category: "advanced",
+    badge: { type: 'new', label: 'v0.1.3' },
+    children: [
+      {
+        id: "split-enabled",
+        key: "enabled",
+        title: "启用单行多任务",
+        type: "boolean",
+        defaultValue: "false",
+        badge: { type: 'new', label: 'v0.1.3' },
+        description:
+          "全局开关。关闭时，即使数据中携带 split 字段，也按普通树形结构渲染，所有行为与未引入该配置时完全一致。开启后仅对数据中 split 字段为真值的任务生效"
+      },
+      {
+        id: "split-overlap",
+        key: "overlap",
+        title: "段重叠策略",
+        type: "'free' | 'forbid' | 'merge'",
+        defaultValue: "'free'",
+        options: ["free", "forbid", "merge"],
+        badge: { type: 'new', label: 'v0.1.3' },
+        description:
+          "拖拽/缩放与跳过非工作日适配之后的段重叠处理方式：<code>free</code> - 不做约束，段之间允许任意交叠；<code>forbid</code> - 禁止交叠，交互被相邻段边界夹取；<code>merge</code> - 段接触或交叠时自动合并为一个段，合并后连线重定向到保留段（自连、重复、成环的连线被移除），并通过 <code>update:link</code> / <code>delete:link</code> 事件携带新旧数据抛出以支持撤销"
       }
     ]
   },

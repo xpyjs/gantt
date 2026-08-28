@@ -131,6 +131,18 @@ export interface IGanttOptions {
 
     /** 任务类型字段 */
     type: string;
+
+    /**
+     * 单行多任务（split）标记字段
+     *
+     * @default 'split'
+     *
+     * @description 仅当全局 `split.enabled` 开启时生效；数据中该字段
+     * @description 可被判定为真（Boolean 语义，任意真值均可）的任务按
+     * @description 单行多段渲染，未标记的任务（含 children 时）保持普通
+     * @description 树形展开语义
+     */
+    split?: string;
   };
 
   /** 关联配置 */
@@ -630,6 +642,53 @@ export interface IGanttOptions {
      * @default true
      */
     enabled: boolean;
+  };
+
+  /**
+   * 单行多任务（split）配置
+   *
+   * @description 将任务的直接子级作为多个时间段，内联渲染在同一行中。
+   * @description 全局开关开启后，数据中 `split` 字段（字段名可通过
+   * @description `fields.split` 配置）可被判定为真的任务生效；未标记的
+   * @description 任务（含 children 时）保持普通树形展开语义。
+   * @description 生效条件还包括：任务类型为普通 task、存在直接子级且无更深层级。
+   *
+   * @example
+   * ```ts
+   * // 开启后，任务1 的两段 children 将渲染在同一行
+   * split: { enabled: true },
+   * data: [
+   *   {
+   *     id: '1', name: '任务1', split: true,
+   *     children: [
+   *       { id: '1-1', startTime: '2026-07-25', endTime: '2026-07-30' },
+   *       { id: '1-2', startTime: '2026-08-03', endTime: '2026-08-05' }
+   *     ]
+   *   }
+   * ]
+   * ```
+   */
+  split?: {
+    /**
+     * 是否启用单行多任务
+     *
+     * @default false
+     *
+     * @description 关闭时，即使数据中携带 split 字段，也按普通树形结构渲染，
+     * @description 所有行为与未引入该配置时完全一致
+     */
+    enabled?: boolean;
+    /**
+     * 段重叠策略
+     *
+     * @default 'free'
+     *
+     * @description 拖拽/缩放与跳过非工作日适配之后的重叠处理方式：
+     * - `free` - 不做约束，段之间允许任意交叠
+     * - `forbid` - 禁止交叠，交互被相邻段边界夹取
+     * - `merge` - 段接触或交叠时自动合并为一个段
+     */
+    overlap?: "free" | "forbid" | "merge";
   };
 
   /** 选择配置 */
