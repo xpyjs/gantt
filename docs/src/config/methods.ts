@@ -165,6 +165,14 @@ gantt.update({
   primaryColor: '#ff6b6b'
 });
 
+// 运行时开关单行多任务（split）及其重叠策略
+gantt.update({
+  split: {
+    enabled: true,
+    overlap: 'merge'
+  }
+});
+
 // 批量更新多个配置
 gantt.update({
   unit: 'week',
@@ -575,6 +583,9 @@ export const methodsPageConfig: MethodsPageConfig = {
       type: "配置更新",
       description: "动态更新甘特图的配置选项",
       icon: "⚙️",
+      notes: [
+        "支持运行时切换单行多任务（split）配置，如 gantt.update({ split: { enabled: false } }) 可随时在单行多段与普通树形展开之间切换"
+      ],
       parameters: [
         {
           name: "options",

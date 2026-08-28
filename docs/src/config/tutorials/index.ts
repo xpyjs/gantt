@@ -728,6 +728,64 @@ gantt.on('create:link', (data) => {
     title: "高级功能",
     sections: [
       {
+        id: "split-tasks",
+        title: "单行多任务",
+        description:
+          "单行多任务（split）允许把一个任务的多个时间段（段，segment）渲染在同一行中，而不是展开为树形的多行。适用于施工排期、轮班计划等同一责任人在时间上断续推进的场景。",
+        subsections: [
+          {
+            description:
+              "开启 split 后，数据中 split 字段为真值的任务，其直接子级将作为段内联渲染在同一行：",
+            list: [
+              "父任务无需提供起止时间，由所有段的最早开始与最晚结束自动派生（包络）",
+              "表格中 split 行不出现展开箭头，展开相关配置对其无效",
+              "未标记 split 的父任务保持普通树形展开语义，可与 split 任务共存",
+              "段与段、段与普通任务或里程碑之间均可建立依赖线，基线也可指向段"
+            ]
+          },
+          {
+            description:
+              "生效条件为：任务类型为普通 task、存在直接子级且无更深层级。字段名可通过 fields.split 自定义。",
+            code: [
+              {
+                framework: "javascript",
+                code: `const options = {
+  split: {
+    enabled: true,        // 全局开关，可运行时通过 update() 切换
+    overlap: "merge"      // 段重叠策略：free / forbid / merge
+  },
+  data: [
+    {
+      id: "p1",
+      name: "装修施工",
+      split: true,         // 仅需一个真值标记
+      children: [
+        // 以下三段将渲染在同一行
+        { id: "p1-s1", name: "水电改造", start: "2026-07-20", end: "2026-07-25", progress: 100 },
+        { id: "p1-s2", name: "瓦工进场", start: "2026-08-03", end: "2026-08-08", progress: 60 },
+        { id: "p1-s3", name: "木工收尾", start: "2026-08-17", end: "2026-08-20", progress: 0 }
+      ]
+    }
+  ]
+}`,
+                language: "javascript"
+              }
+            ]
+          },
+          {
+            description:
+              "段的重叠策略（split.overlap）决定拖拽/缩放时段之间发生接触或交叠时的行为：free 不做约束；forbid 禁止交叠，交互被相邻段边界夹取；merge 在段接触时自动合并为一个段。"
+          },
+          {
+            description:
+              "merge 策略合并段时，指向被合并段的连线会重定向到保留段，自连、重复、成环的连线被移除。这些连线变更通过 update:link（携带 link 与 old 新旧数据）和 delete:link（携带被删连线）两个标准事件逐条抛出，可直接用于实现撤销。任务时间的变化则由 move 事件携带 { row, old }[] 数据提供。"
+          },
+          {
+            customContent: `完整配置与事件说明可以参考 <a href="/api/options#split">Split API</a>，可运行的完整示例见 <a href="/demo/advanced/split-segment">单行多任务 Demo</a>`
+          }
+        ]
+      },
+      {
         id: "custom-table",
         title: "定制表格",
         description:
