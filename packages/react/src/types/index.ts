@@ -50,8 +50,9 @@ export interface XGanttReactProps
   /**
    * 关联线更新事件回调
    *
-   * @description 当关联线被更新时触发
-   * @param link 更新的关联线对象
+   * @description 当关联线被更新时触发（拖拽连线端点、merge 合并段后重定向）
+   * @param link 更新后的关联线对象
+   * @param old 更新前的关联线对象，可用于实现撤销/重做
    */
   onUpdateLink?: EventMap["update:link"];
 
@@ -62,6 +63,14 @@ export interface XGanttReactProps
    * @param link 新创建的关联线对象
    */
   onCreateLink?: EventMap["create:link"];
+
+  /**
+   * 关联线删除事件回调
+   *
+   * @description 当关联线被删除时触发（merge 合并段后自连/重复/成环被移除）
+   * @param link 被删除的关联线对象（删除前状态），可用于实现撤销/重做
+   */
+  onDeleteLink?: EventMap["delete:link"];
 
   /**
    * 关联线选择事件回调

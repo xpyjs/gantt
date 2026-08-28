@@ -71,6 +71,7 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onError,
             onUpdateLink,
             onCreateLink,
+            onDeleteLink,
             onSelectLink,
             onContextMenuLink,
             onSelect,
@@ -116,6 +117,9 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             }
             if (onCreateLink) {
                 instance.on("create:link", onCreateLink);
+            }
+            if (onDeleteLink) {
+                instance.on("delete:link", onDeleteLink);
             }
             if (onSelectLink) {
                 instance.on("select:link", onSelectLink);
@@ -179,6 +183,7 @@ export const XGanttReact = forwardRef<XGanttReactRef, XGanttReactProps>(
             onError,
             onUpdateLink,
             onCreateLink,
+            onDeleteLink,
             onSelectLink,
             onContextMenuLink,
             onSelect,

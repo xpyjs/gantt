@@ -190,6 +190,7 @@ describe('XGanttReact', () => {
             onError: vi.fn(),
             onUpdateLink: vi.fn(),
             onCreateLink: vi.fn(),
+            onDeleteLink: vi.fn(),
             onSelectLink: vi.fn(),
             onContextMenuLink: vi.fn(),
             onSelect: vi.fn(),
@@ -217,6 +218,7 @@ describe('XGanttReact', () => {
         expect(mockCore.__mockOn).toHaveBeenCalledWith('error', handlers.onError);
         expect(mockCore.__mockOn).toHaveBeenCalledWith('update:link', handlers.onUpdateLink);
         expect(mockCore.__mockOn).toHaveBeenCalledWith('create:link', handlers.onCreateLink);
+        expect(mockCore.__mockOn).toHaveBeenCalledWith('delete:link', handlers.onDeleteLink);
         expect(mockCore.__mockOn).toHaveBeenCalledWith('select:link', handlers.onSelectLink);
         expect(mockCore.__mockOn).toHaveBeenCalledWith('contextmenu:link', handlers.onContextMenuLink);
         expect(mockCore.__mockOn).toHaveBeenCalledWith('select', handlers.onSelect);
